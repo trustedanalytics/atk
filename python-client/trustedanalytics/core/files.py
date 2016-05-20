@@ -847,7 +847,6 @@ class JdbcTable(object):
             raise ValueError("Incorrect table name")
 
         self.table_name = table_name
-        self.connector_type = connector_type
 
     def to_json(self):
         return {"table_name": self.table_name,

@@ -16,7 +16,25 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import java.util.Properties
 import com.typesafe.config.ConfigFactory
+
+/**
+ * Helper class to pass relevant information from the config to the jdbc connection
+ */
+case class JdbcConnectionInfo(connector: String) {
+
+  def userPassProperties() = {
+    val properties = new Properties()
+    properties.setProperty("username", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".username"))
+    properties.setProperty("password", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".password"))
+    properties
+  }
+
+  def urlString() = {
+    ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url")
+  }
+}
 
 /**
  * Helper class for creating an RDD from jdbc
@@ -27,15 +45,13 @@ object JdbcFunctions extends Serializable {
    * Builds connection url for cluster/cloud deployment.
    * @return a connection url, the username, and the password
    */
-  def buildUrl(connectorType: String): (String, String, String) = {
+  def buildUrl(connectorType: String) = {
     val connector = connectorType match {
       case "postgres" => "connection-postgres"
       case "mysql" => "connection-mysql"
       case _ => throw new IllegalArgumentException("value must be postgres or mysql")
     }
+    JdbcConnectionInfo(connector)
 
-    (ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url"),
-      ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".username"),
-      ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".password"))
   }
 }

@@ -593,6 +593,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
   }
 
+  implicit val jdbcargsFormat = jsonFormat3(LoadFromJdbcArgs)
+
   implicit val seamlessGraphMetaFormat = jsonFormat2(SeamlessGraphMeta)
 
   implicit val binColumnResultFormat = jsonFormat2(BinColumnResults)
@@ -600,8 +602,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val hBaseArgsSchemaFormat = jsonFormat3(HBaseSchemaArgs)
 
   implicit val hBaseArgsFormat = jsonFormat5(HBaseArgs)
-
-  implicit val jdbcArgsFormat = jsonFormat3(LoadHdfsJdbcArgs)
 
   implicit val hiveArgsFormat = jsonFormat2(HiveArgs)
 

@@ -17,7 +17,6 @@
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
 import java.sql.SQLException
-import java.util.Properties
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.{ ExportHdfsJdbcArgs }
 import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
@@ -65,12 +64,8 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
     val dataFrame = frame.rdd.toDataFrame
 
     // Set up the connection string
-    val (dbConnectionString, username, password) = JdbcFunctions.buildUrl(arguments.connectorType)
+    val dbConnection = JdbcFunctions.buildUrl(arguments.connectorType)
 
-    val connect = new Properties()
-    connect.setProperty("username", username)
-    connect.setProperty("password", password)
-
-    dataFrame.write.jdbc(dbConnectionString, arguments.tableName, connect)
+    dataFrame.write.jdbc(dbConnection.urlString, arguments.tableName, dbConnection.userPassProperties)
   }
 }

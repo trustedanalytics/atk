@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 
 import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.domain.frame.load.{ LoadHdfsJdbcArgs }
+import org.trustedanalytics.atk.domain.frame.load.{ LoadFromJdbcArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
@@ -32,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Append data from a JDBC table into an existing (possibly empty) frame",
   extended = "Append data from a JDBC table into an existing (possibly empty) frame",
   returns = "the initial frame with the JDBC data appended")
-class LoadFromJdbcPlugin extends SparkCommandPlugin[LoadHdfsJdbcArgs, FrameEntity] {
+class LoadFromJdbcPlugin extends SparkCommandPlugin[LoadFromJdbcArgs, FrameEntity] {
 
   /**
    * Command name
@@ -43,7 +43,7 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[LoadHdfsJdbcArgs, FrameEntit
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(load: LoadHdfsJdbcArgs)(implicit invocation: Invocation) = 8
+  override def numberOfJobs(load: LoadFromJdbcArgs)(implicit invocation: Invocation) = 8
 
   /**
    * Parsing data to load and append to data frames
@@ -54,7 +54,7 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[LoadHdfsJdbcArgs, FrameEntit
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: LoadHdfsJdbcArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: LoadFromJdbcArgs)(implicit invocation: Invocation): FrameEntity = {
     val destinationFrame: SparkFrame = arguments.destination
 
     // run the operation
