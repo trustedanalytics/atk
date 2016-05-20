@@ -30,7 +30,7 @@ case class ExportOrientDbGraphReturn(@ArgDoc(
     |and the corresponding statistics of exported vertices.""") exportedVertices: Map[String, Statistics],
                                      @ArgDoc(
                                        """a dictionary of edge classname,
-                                         |and the corresponding statistics of exported edges.""") exportedEdges: Map[String, Statistics],
+                                         and the corresponding statistics of exported edges.""") exportedEdges: Map[String, Statistics],
                                      @ArgDoc("""The URI to the OrientDB graph .""") dbUri: String)
 
 /**

@@ -433,8 +433,6 @@ Default is None.""")
             self.uri = _info.uri
         else:
             self.uri = self._backend.create(self, name, 'atk/frame', _info)
-        if isinstance(source, OrientDBGraph):
-            self._backend._import_orientdb(self,source)
 
         self._vertices = GraphFrameCollection(self, "vertices", self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self, "edges", self._get_edge_frame, self._get_edge_frames)
