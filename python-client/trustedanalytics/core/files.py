@@ -818,7 +818,7 @@ class JdbcTable(object):
     Define the object to retrieve the data from an jdbc table.
     """
 
-    def __init__(self, table_name):
+    def __init__(self, table_name, connector_type):
         """
         Define the object to retrieve the data from an jdbc table.
 
@@ -826,6 +826,8 @@ class JdbcTable(object):
         ----------
         table_name : str
             the table name
+        connector_type : str
+            (optional) either postgres or mysql, the type of database to use. Default is postgres
 
         Returns
         -------
@@ -847,6 +849,7 @@ class JdbcTable(object):
             raise ValueError("Incorrect table name")
 
         self.table_name = table_name
+        self.connector_type = connector_type
 
     def to_json(self):
         return {"table_name": self.table_name,
