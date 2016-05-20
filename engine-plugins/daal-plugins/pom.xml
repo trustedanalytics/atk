@@ -48,11 +48,11 @@
             <groupId>com.intel.daal</groupId>
             <artifactId>daal-core</artifactId>
         </dependency>
-        <!-- END Intel DAAL dependencies -->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>daal-utils</artifactId>
         </dependency>
+        <!-- END Intel DAAL dependencies -->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>module-loader</artifactId>

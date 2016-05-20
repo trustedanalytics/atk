@@ -27,10 +27,10 @@
 <progress>
 >>> result = graph.export_to_orientdb("OrientDbDocTest",5)
 <progress>
->>> result['vertices']
- {u'source': 5}
->>> result['edges']
- {u'edges': 5}
+>>> result
+    {u'db_uri': u'remote:hostname:2424/OrientDbTest',
+    u'exported_edges': {u'edges': {u'exported_count': 5, u'failure_count': 0}},
+    u'exported_vertices': {u'source': {u'exported_count': 5,u'failure_count': 0}}}
 
 
 

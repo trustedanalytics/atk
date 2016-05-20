@@ -15,12 +15,13 @@
  */
 package org.trustedanalytics.atk.engine.daal.plugins.covariance
 
-import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
-import org.trustedanalytics.atk.engine.daal.plugins.tables.{ IndexedNumericTable, DistributedNumericTable }
-import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
-import org.apache.spark.rdd.RDD
 import com.intel.daal.algorithms.covariance._
 import com.intel.daal.services.DaalContext
+import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
+import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
+import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
 /**
  * Distributed algorithm for computing covariance matrix with Intel DAAL
@@ -40,16 +41,12 @@ case class DaalCovarianceAlgorithm(featureTable: DistributedNumericTable)
    * @return Variance-covariance matrix or correlation matrix
    */
   def computeCovariance(matrixType: ResultId): Array[Array[Double]] = {
-    val context = new DaalContext
-
-    val partialResults = computePartialResults()
-    val results = mergePartialResults(context, partialResults)
-
-    val covarianceTable = IndexedNumericTable(0.toLong, results.get(matrixType))
-    val covarianceMatrix = covarianceTable.getUnpackedTable(context).toArrayOfDoubleArray()
-
-    context.dispose()
-    covarianceMatrix
+    withDaalContext { context =>
+      val partialResults = computePartialResults()
+      val results = mergePartialResults(context, partialResults)
+      val covarianceTable = IndexedNumericTable(0.toLong, results.get(matrixType))
+      covarianceTable.getUnpackedTable(context).toArrayOfDoubleArray()
+    }.elseError("Could not compute covariance matrix")
   }
 
   /**
@@ -59,14 +56,13 @@ case class DaalCovarianceAlgorithm(featureTable: DistributedNumericTable)
    */
   override def computePartialResults(): RDD[PartialResult] = {
     featureTable.rdd.map { table =>
-      val context = new DaalContext
-      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense)
-      local.input.set(InputId.data, table.getUnpackedTable(context))
-      val partialResult = local.compute
-      partialResult.pack()
-
-      context.dispose()
-      partialResult
+      withDaalContext { context =>
+        val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense)
+        local.input.set(InputId.data, table.getUnpackedTable(context))
+        val partialResult = local.compute
+        partialResult.pack()
+        partialResult
+      }.elseError("Could not compute partial results for covariance matrix ")
     }
   }
 

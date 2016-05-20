@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- * scala test for VertexFrameWriter, checking the number of exported vertices
- */
 class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
     setupOrientDb()
@@ -36,7 +33,7 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
 
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
-      val dbConfig = new DbConfigurations(dbUri, "admin", "admin", "port", "host")
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val vertices: List[Row] = List(
@@ -44,14 +41,19 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
         new GenericRow(Array(2L, "l1", "Alice", "SFO", "SEA", 465)),
         new GenericRow(Array(3L, "l1", "Fred", "NYC", "PIT", 675)),
         new GenericRow(Array(4L, "l1", "Lucy", "LAX", "PDX", 450)))
-
       val batchSize = 4
       val rowRdd = sparkContext.parallelize(vertices)
+      if (orientFileGraph.getVertexType(schema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oVertexType = schemaWriter.createVertexSchema(schema)
+      }
       val vertexFrameRdd = new VertexFrameRdd(schema, rowRdd)
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
+      //Tested method
       val verticesCount = vertexFrameWriter.exportVertexFrame(batchSize)
-      val loadedVerticesCount = orientFileGraph.countVertices()
-      verticesCount shouldEqual loadedVerticesCount
+      //Results validation
+      val exportedVertices = orientFileGraph.countVertices()
+      verticesCount shouldEqual exportedVertices
 
     }
   }

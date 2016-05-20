@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- *  scala test for EdgeFrameWriter, checking the number of exported edges
- */
 class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 
   override def beforeEach() {
@@ -38,8 +35,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbName = "OrientDbTest"
-      val dbConfig = new DbConfigurations(dbUri, "admin", "admin", "port", "host")
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
@@ -51,6 +47,10 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val vRowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(vSchema, vRowRdd)
       val vBatchSize = 4
+      if (orientFileGraph.getVertexType(vSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oVertexType = schemaWriter.createVertexSchema(vSchema)
+      }
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
       val verticesCountRdd = vertexFrameWriter.exportVertexFrame(vBatchSize)
 
@@ -64,10 +64,16 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val eRowRdd = sparkContext.parallelize(edges)
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
       val batchSize = 3
+      if (orientFileGraph.getEdgeType(eSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oEdgeType = schemaWriter.createEdgeSchema(eSchema)
+      }
       val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
+      // call method under test
       val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize)
-      val loadedEdgesCount = orientFileGraph.countEdges()
-      edgesCount shouldEqual (3)
+      //validate results
+      val exportedEdges = orientFileGraph.countEdges()
+      edgesCount shouldEqual exportedEdges
 
     }
   }

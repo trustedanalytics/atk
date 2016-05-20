@@ -16,9 +16,7 @@
 package org.trustedanalytics.atk.testutils
 
 import java.io.File
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
-import org.scalatest.mock.MockitoSugar
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
 
 /**
  * setup for testing export to OrientDB plugin functions
@@ -28,28 +26,29 @@ trait TestingOrientDb {
   var tmpDir: File = null
   var dbUri: String = null
   var dbName: String = "OrientDbTest"
-  var orientMemoryGraph: OrientGraph = null
-  var orientFileGraph: OrientGraph = null
+  var dbUserName = "admin"
+  var dbPassword = "admin"
+  var rootPassword = "root"
+  var orientMemoryGraph: OrientGraphNoTx = null
+  var orientFileGraph: OrientGraphNoTx = null
 
   /**
    * create in memory Orient graph database
    */
   def setupOrientDbInMemory(): Unit = {
     val uuid = java.util.UUID.randomUUID.toString
-    orientMemoryGraph = new OrientGraph("memory:OrientTestDb" + uuid)
+    orientMemoryGraph = new OrientGraphNoTx("memory:OrientTestDb" + uuid)
   }
 
   /**
-   *
+   * create plocal Orient graph database
    */
   def setupOrientDb(): Unit = {
 
     tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
     dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
-    val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbUri)
-    orientDocDb.create()
-    orientFileGraph = new OrientGraph(orientDocDb)
-
+    val factory = new OrientGraphFactory(dbUri, dbUserName, dbPassword)
+    orientFileGraph = factory.getNoTx
   }
 
   /**

@@ -18,14 +18,15 @@ package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
 
-import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
-import com.intel.daal.services.DaalContext
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.FrameSchema
-
-import scala.collection.mutable.ListBuffer
+import org.apache.spark.mllib.linalg.{ DenseVector, Vector }
+import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
+import com.intel.daal.services.DaalContext
+import scala.collection.mutable.{ ArrayBuffer, ListBuffer }
 
 /**
  * DAAL numeric table with index
@@ -65,6 +66,8 @@ case class IndexedNumericTable(index: Long, table: NumericTable) extends Seriali
    * Convert DAAL numeric table into iterator of Spark SQL rows
    *
    * @param context DAAL context
+   * @param frameSchema Optional frame schema converts columns to specified data types.
+   *                    If no schema is provided, data is converted to Double
    * @return Row iterator
    */
   def toRowIter(context: DaalContext, frameSchema: Option[FrameSchema] = None): Iterator[Row] = {
@@ -93,6 +96,31 @@ case class IndexedNumericTable(index: Long, table: NumericTable) extends Seriali
   }
 
   /**
+   * Convert table to iterator of Spark MLlib vectors
+   *
+   * @param context DAAL context
+   * @return Iterator of vector
+   */
+  def toVectorIterator(context: DaalContext): Iterator[Vector] = {
+    if (isEmpty) return List.empty[Vector].iterator
+
+    val unpackedTable = getUnpackedTable(context)
+    val buffer = DoubleBuffer.allocate(numRows * numCols)
+    val doubleBuffer = unpackedTable.getBlockOfRows(0, numRows, buffer)
+    val rowBuffer = new ListBuffer[Vector]()
+
+    for (i <- 0 until numRows) {
+      val rowArray = new Array[Double](numCols)
+      for (j <- 0 until numCols) {
+        rowArray(j) = doubleBuffer.get(i * numCols + j)
+      }
+      rowBuffer += new DenseVector(rowArray)
+    }
+
+    rowBuffer.iterator
+  }
+
+  /**
    * Check if table is empty
    */
   def isEmpty: Boolean = numRows < 1
@@ -105,12 +133,14 @@ object IndexedNumericTable extends Serializable {
    */
   def createTable(index: Long, matrix: Array[Array[Double]]): IndexedNumericTable = {
     require(matrix != null && matrix.length > 0, "Array must not be null or empty")
-    val context = new DaalContext()
-    val numRows = matrix.length
-    val array = matrix.flatten
-    val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
-    val indexedTable = IndexedNumericTable(index, table)
-    context.dispose()
+
+    val indexedTable: IndexedNumericTable = withDaalContext { context =>
+      val numRows = matrix.length
+      val array = matrix.flatten
+      val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
+      IndexedNumericTable(index, table)
+    }.elseError("Could not create numeric table from matrix")
+
     indexedTable
   }
 }

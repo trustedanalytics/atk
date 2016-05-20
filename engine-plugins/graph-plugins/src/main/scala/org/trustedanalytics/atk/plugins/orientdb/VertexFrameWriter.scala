@@ -16,14 +16,16 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.VertexFrameRdd
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
  * Exports VertexFrameRdd to OrientDB
  *
- * @param vertexFrameRdd  vertices frame to be exported to Orient
+ * @param vertexFrameRdd vertices frame to be exported to OrientDB
+ * @param dbConfigurations OrientDB configurations
  */
 
-class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfiguration) extends Serializable with EventLogging {
 
   /**
    * Method to export vertex frame to OrientDb
@@ -34,6 +36,7 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
   def exportVertexFrame(batchSize: Int): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
+
       val orientGraph = GraphDbFactory.graphDbConnector(dbConfigurations)
       try {
         while (iter.hasNext) {
@@ -50,7 +53,8 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
       catch {
         case e: Exception => {
           orientGraph.rollback()
-          throw new RuntimeException("Unable to add edges to OrientDB graph", e)
+          error(s"Unable to add vertices to OrientDB graph", exception = e)
+          throw new RuntimeException(s"Unable to add vertices to OrientDB graph: ${e.getMessage}")
         }
       }
       finally {

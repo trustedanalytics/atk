@@ -21,7 +21,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol.VectorFormat
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.regression._
-import org.trustedanalytics.atk.engine.model.plugins.survivalanalysis.{ MultivariateCoxPredictArgs, MultivariateCoxData, MultivariateCoxTrainReturn, MultivariateCoxTrainArgs }
+import org.trustedanalytics.atk.engine.model.plugins.survivalanalysis.{ CoxPhPredictArgs, CoxPhData, CoxPhTrainReturn, CoxPhTrainArgs }
 import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 import spray.json._
 
@@ -91,10 +91,10 @@ object MLJsonProtocol {
   implicit val linearRegressionMlModelTestArgs = jsonFormat4(LinearRegressionTestArgs)
   implicit val linearRegressionMlModelTestReturn = jsonFormat5(LinearRegressionTestReturn)
 
-  implicit val coxMlModelTrainArgs = jsonFormat7(MultivariateCoxTrainArgs)
-  implicit val coxMlModelTrainReturn = jsonFormat2(MultivariateCoxTrainReturn)
-  implicit val coxMlModelDataFormat = jsonFormat4(MultivariateCoxData)
-  implicit val coxMlModelPredictArgs = jsonFormat4(MultivariateCoxPredictArgs)
+  implicit val coxMlModelTrainArgs = jsonFormat7(CoxPhTrainArgs)
+  implicit val coxMlModelTrainReturn = jsonFormat2(CoxPhTrainReturn)
+  implicit val coxMlModelDataFormat = jsonFormat4(CoxPhData)
+  implicit val coxMlModelPredictArgs = jsonFormat4(CoxPhPredictArgs)
 
 }
 class InvalidJsonException(message: String) extends RuntimeException(message)

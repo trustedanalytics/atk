@@ -19,9 +19,23 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import scala.collection.immutable.Map
 
 /**
- * the returned arguments of ExportOrientDbGraphPlugin
+ * returns the output arguments of ExportOrientDbGraphPlugin
+ * @param exportedVertices a dictionary of vertex classname and the corresponding statistics of exported vertices
+ * @param exportedEdges a dictionary of edge classname and the corresponding statistics of exported edges.
+ * @param dbUri the database URI
  */
 
-case class ExportOrientDbGraphReturn(@ArgDoc("""a dictionary of vertex classname and the corresponding counts of exported vertices.""") vertices: Map[String, Long],
-                                     @ArgDoc("""a dictionary of edge classname and the corresponding counts of exported edges.""") edges: Map[String, Long],
+case class ExportOrientDbGraphReturn(@ArgDoc(
+                                       """a dictionary of vertex classname,
+    |and the corresponding statistics of exported vertices.""") exportedVertices: Map[String, Statistics],
+                                     @ArgDoc(
+                                       """a dictionary of edge classname,
+                                         and the corresponding statistics of exported edges.""") exportedEdges: Map[String, Statistics],
                                      @ArgDoc("""The URI to the OrientDB graph .""") dbUri: String)
+
+/**
+ * returns statistics for the exported graph elements
+ * @param exportedCount the number of the exported elements
+ * @param failureCount the number of elements failed to be exported.
+ */
+case class Statistics(exportedCount: Long, failureCount: Long)
