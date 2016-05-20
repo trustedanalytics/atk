@@ -1,7 +1,7 @@
 .. _ad_scoring_engine:
 Scoring Engine
 ==============
-The Scoring Engine is a simple REST server capable of loading trained models published by ATK.
+The Scoring Engine is a simple REST server capable of loading trained models published by ATK using ModelPublishFormat.
 This section covers deployment and running the scoring engine in TAP environment.
 
 
@@ -13,6 +13,7 @@ In the TAP console:
 1) Navigate to **Services -> Marketplace**.
 2) Select **scoring_engine** => **Create new isntance**.
 3) Fill in an instance name of your choice *(given below as **my-svm-model**)*.
+    The model has already been trained in ATK and published using ModelPublishFormat, so it is available in HDFS.
 4) Select **+ Add variable**.
 5) Fill in two values: key **TAR_ARCHIVE**; value is the URI of the model you wish to use.
 
