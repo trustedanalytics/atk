@@ -507,6 +507,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         </properties>
                         <excludes>
                             <exclude>findbugs-exclude.xml</exclude>
+                            <exclude>engine-plugins/model-plugins/src/main/scala/org/apache/spark/ml/feature/Instance.scala</exclude>
+                            <exclude>engine-plugins/model-plugins/src/main/scala/org/apache/spark/ml/param/params.scala</exclude>
+                            <exclude>engine-plugins/model-plugins/src/main/scala/org/apache/spark/ml/util/ReadWrite.scala</exclude>
+                            <exclude>engine-plugins/model-plugins/src/main/scala/org/apache/spark/mllib/linalg/Vectors.scala</exclude>
+                            <exclude>engine-plugins/model-plugins/src/main/scala/org/apache/spark/sql/catalyst/util/GenericArrayData.scala</exclude>
                             <exclude>scalastyle-config.xml</exclude>
                             <exclude>checkstyle.xml</exclude>
                             <exclude>**/pom.xml</exclude>

@@ -41,6 +41,7 @@ class ConnectedComponentsPluginGraphXDefaultTest extends FlatSpec with Matchers 
       val vertexIdToComponentMap = rddOfComponentLabeledVertices.collect().toMap
 
       vertexIdToComponentMap(2) shouldEqual vertexIdToComponentMap(6)
+
       vertexIdToComponentMap(2) shouldEqual vertexIdToComponentMap(4)
 
       vertexIdToComponentMap(7) shouldEqual vertexIdToComponentMap(5)

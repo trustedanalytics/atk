@@ -13,15 +13,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards
 
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+package org.trustedanalytics.atk.engine.model.plugins.survivalanalysis
 
-/** Json conversion for arguments and return value case classes */
-object CoxProportionalHazardJSonFormat {
+import org.apache.spark.ml.regression.CoxModel
 
-  implicit val coxProportionalHazardTrainFormat = jsonFormat8(CoxProportionalHazardTrainArgs)
-  implicit val coxProportionalHazardPredictFormat = jsonFormat1(CoxProportionalHazardsPredictArgs)
-  implicit val coxProportionalHazardTrainReturn = jsonFormat2(CoxProportionalHazardTrainReturn)
+case class CoxPhData(coxModel: CoxModel, featureColumns: List[String], timeColumn: String, censorColumn: String) {
+  require(featureColumns != null && featureColumns.nonEmpty, "featureColumns must not be null nor empty")
+  require(coxModel != null, "coxModel must not be null")
 }
