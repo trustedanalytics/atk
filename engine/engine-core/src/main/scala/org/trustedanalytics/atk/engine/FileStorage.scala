@@ -27,6 +27,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs._
 import org.apache.hadoop.hdfs.DistributedFileSystem
 import org.trustedanalytics.atk.moduleloader.Module
+import org.trustedanalytics.hadoop.config.client.oauth.TapOauthToken
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, Future }
@@ -43,7 +44,6 @@ class FileStorage extends EventLogging {
 
   private val securedConfiguration = withContext("HDFSFileStorage.configuration") {
     info("fsRoot: " + EngineConfig.fsRoot)
-    KerberosAuthenticator.loginAsAuthenticatedUser()
 
     val configuration = KerberosAuthenticator.loginConfigurationWithClassLoader()
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
@@ -62,10 +62,13 @@ class FileStorage extends EventLogging {
   private val fileSystem = {
     try {
       import org.trustedanalytics.hadoop.config.client.helper.Hdfs
-      Hdfs.newInstance().createFileSystem()
+      val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
+      val jwtToken = KerberosAuthenticator.getJwtToken()
+      Hdfs.newInstance().createFileSystem(new TapOauthToken(jwtToken))
     }
     catch {
-      case _ =>
+      case t: Throwable =>
+        t.printStackTrace()
         info("Failed to create HDFS instance using hadoop-library. Default to FileSystem")
         FileSystem.get(configuration)
     }
@@ -148,7 +151,8 @@ class FileStorage extends EventLogging {
 
   def createDirectory(directory: Path): Unit = withContext("file.createDirectory") {
     val adjusted = absolutePath(directory.toString)
-    hdfs.mkdirs(adjusted, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+    hdfs.mkdirs(adjusted)
+    hdfs.setPermission(adjusted, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
   }
 
   /**

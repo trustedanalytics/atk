@@ -25,20 +25,6 @@ jq=$DIR/../jq
 echo "make jq executable"
 chmod +x $jq
 
-
-export KRB5_BASE64=1
-
-if [ "$KRB5_BASE64" ]; then
-    export KERBEROS_ENABLED=true
-    export KRB5_CONFIG=$DIR/../krb5jwt/etc/krb5.conf
-    export YARN_AUTHENTICATED_USERNAME=cf
-    export YARN_AUTHENTICATED_PASSWORD=cf1
-    export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
-    export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
-else
-    export KERBEROS_ENABLED=false
-fi
-
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
 export HADOOP_CONF_DIR=$YARN_CONF_DIR
@@ -56,7 +42,14 @@ export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
 export USE_HTTP=true
 
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.uri')
+export FS_TECHNICAL_USER_NAME=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.user')
+export FS_TECHNICAL_USER_PASSWORD=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.password')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
+
+export KRB5_CONFIG=$DIR/../krb5jwt/etc/krb5.conf
+export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
+export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+# Make a curl request to UAA and get the PRINCIPAL name for the cloud foundry technical user
 
 # uncomment the following lines if a binding to the zookeeper is needed
 #export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')

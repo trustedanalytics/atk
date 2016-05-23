@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.apache.hadoop.fs.permission.{ FsPermission, FsAction }
-import org.apache.hadoop.fs.{ FileStatus, Path }
+import org.apache.hadoop.fs.{ FileSystem, FileStatus, Path }
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.trustedanalytics.atk.moduleloader.Module
 
@@ -28,16 +28,30 @@ class HdfsLibSync(fs: FileStorage) extends EventLogging {
 
   implicit val eventContext = EventContext.enter("HdfsLibSync")
 
+  def create_base_dirs(): Unit = withContext("create_base_dirs") {
+
+    val fsRootPath = fs.absolutePath(EngineConfig.fsRoot)
+    if (fs.exists(fsRootPath) == false) {
+      FileSystem.mkdirs(fs.hdfs, fsRootPath, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+    }
+    val trustedAnalyticsSubDirectory = fs.absolutePath(s"${EngineConfig.fsRoot}/trustedanalytics")
+    if (fs.exists(trustedAnalyticsSubDirectory) == false) {
+      FileSystem.mkdirs(fs.hdfs, trustedAnalyticsSubDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+    }
+  }
+
   /**
    * Synchronize local-lib folders to hdfs-lib by copying jars to HDFS.
    */
   def syncLibs(): Unit = {
+    create_base_dirs()
     val destDir = fs.absolutePath(EngineConfig.hdfsLib)
     val localLibs = Module.libs.map(url => new Path(url.toURI))
     info(s"hdfs-lib: $destDir")
     if (!fs.hdfs.exists(destDir)) {
       info(s"Creating $destDir")
-      fs.hdfs.mkdirs(destDir, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+      fs.hdfs.mkdirs(destDir)
+      fs.hdfs.setPermission(destDir, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
     }
     require(fs.hdfs.isDirectory(destDir), s"Not a directory $destDir, please configure hdfs-lib")
     localLibs.foreach(localLib => {

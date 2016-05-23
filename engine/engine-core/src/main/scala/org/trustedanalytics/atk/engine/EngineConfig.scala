@@ -295,8 +295,6 @@ trait EngineConfig extends EventLogging {
   lazy val gcInterval = config.getDuration("trustedanalytics.atk.engine.gc.interval", TimeUnit.MILLISECONDS)
   lazy val gcStaleAge = config.getDuration("trustedanalytics.atk.engine.gc.stale-age", TimeUnit.MILLISECONDS)
 
-  val enableKerberos: Boolean = config.getBoolean("trustedanalytics.atk.engine.hadoop.kerberos.enabled")
-
   /**
    * Path to effective application.conf (includes overrides passed in at runtime
    * that will need to be sent to Yarn)

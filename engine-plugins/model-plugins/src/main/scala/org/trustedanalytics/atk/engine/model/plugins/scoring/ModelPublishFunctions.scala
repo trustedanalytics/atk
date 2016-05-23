@@ -20,18 +20,16 @@ import java.io._
 import java.net.URI
 import java.util.UUID
 
-import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveOutputStream }
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import java.io.File
 import org.apache.commons.lang3.StringUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.permission.{ FsPermission, FsAction }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
-import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.engine.FileStorage
 import org.trustedanalytics.atk.moduleloader.Module
-import org.trustedanalytics.atk
 import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
 
 object ModelPublishJsonProtocol {
@@ -83,6 +81,7 @@ object ModelPublish {
       val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())
       val localPath = new Path(tarFile.getAbsolutePath)
       hdfsFileSystem.copyFromLocalFile(false, true, localPath, hdfsPath)
+      hdfsFileSystem.setPermission(hdfsPath, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
       ModelPublishArtifact(tarFileName, hdfsFileSystem.getContentSummary(hdfsPath).getLength)
     }
     finally {

@@ -52,11 +52,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // make sure hdfs libs have been uploaded
         BackgroundInit.waitTillCompleted
 
-        val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
-          case true => (s"",
-            s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
-          case false => ("", "")
-        }
+        val kerbOptions = s"-Djavax.security.auth.useSubjectCredsOnly=false"
 
         val sparkMaster = Array(s"--master", s"${EngineConfig.sparkMaster}")
         val jobName = Array(s"--name", s"${jobContext.getYarnAppName}")
@@ -69,7 +65,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
         // the pound symbol '#' is used to rename a file during upload e.g. "/some/path/oldname#newname"
         val confFile = EngineConfig.effectiveApplicationConf
-        val pluginDependencyFiles = Array("--files", s"$confFile$kerbFile$pythonDependencyPath,${EngineConfig.daalDynamicLibraries}")
+        val pluginDependencyFiles = Array("--files", s"$confFile$pythonDependencyPath,${EngineConfig.daalDynamicLibraries}")
         val executionParams = Array(
           "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions -Dconfig.resource=${EngineConfig.effectiveApplicationConfFileName}")
 
