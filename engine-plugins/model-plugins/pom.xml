@@ -57,7 +57,6 @@
                         <exclude>**/*.conf</exclude>
                         <exclude>pom.xml</exclude>
                         <exclude>src/main/scala/org/apache/spark/README.txt</exclude>
-                        <exclude>src/main/scala/org/apache/spark/ml/regression/Cox.scala</exclude>
                         <exclude>src/main/scala/org/apache/spark/ml/feature/Instance.scala</exclude>
                         <exclude>src/main/scala/org/apache/spark/ml/param/params.scala</exclude>
                         <exclude>src/main/scala/org/apache/spark/ml/util/ReadWrite.scala</exclude>
