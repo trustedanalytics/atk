@@ -78,8 +78,9 @@ trustedanalytics.atk {
       spark.executor.memory = "invalid executor memory"
 
       # These class paths need to be uncommented and be present on YARN nodes
-      // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
-      // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+      spark.driver.extraClassPath = ":mysql-connector-java-5.1.6.jar:.:"
+      spark.executor.extraClassPath = ":mysql-connector-java-5.1.6.jar:postgresql-9.1-901.jdbc4.jar:"
+
 
       # Preferably spark.yarn.jar is installed in HDFS
       # In Cloudera Manager,
