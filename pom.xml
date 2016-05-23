@@ -31,6 +31,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     <name>TrustedAnalytics Parent</name>
     <description>TrustedAnalytics : Large Scale Graph Analytics</description>
     <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
 
     <repositories>
@@ -39,6 +45,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -53,6 +60,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
@@ -68,6 +76,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://repository.apache.org/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -78,6 +87,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://oss.sonatype.org/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -495,6 +505,24 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </configuration>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.8</version>
+                    <configuration>
+
+                        <includeTransitiveDependencies>false</includeTransitiveDependencies>
+                        <includedLicenses>true</includedLicenses>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>download-licenses</id>
+                            <goals>
+                                <goal>download-licenses</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <!-- Update and correct open source license block comments -->
                 <plugin>
                     <groupId>com.mycila</groupId>
