@@ -487,7 +487,7 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 <h2><a class="toc-backref" href="#id4">JdbcTable</a><a class="headerlink" href="#jdbctable" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="trustedanalytics.JdbcTable">
-<em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">JdbcTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">JdbcTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the object to retrieve the data from an jdbc table.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -503,7 +503,7 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 </table>
 <dl class="method">
 <dt id="trustedanalytics.JdbcTable.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the object to retrieve the data from an jdbc table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -515,15 +515,7 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 </div></blockquote>
 <p><strong>connector_type</strong> : str</p>
 <blockquote>
-<div><p>the connector type</p>
-</div></blockquote>
-<p><strong>url</strong> : str</p>
-<blockquote>
-<div><p>Jdbc connection string (as url)</p>
-</div></blockquote>
-<p><strong>driver_name</strong> : str</p>
-<blockquote>
-<div><p>An optional driver name</p>
+<div><p>(optional) either postgres or mysql, the type of database to use. Default is postgres</p>
 </div></blockquote>
 </td>
 </tr>
@@ -538,10 +530,7 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 <p class="rubric">Examples</p>
 <div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="k">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
-<span class="go">                              &quot;jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord&quot;,</span>
-<span class="go">                              &quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;,</span>
-<span class="go">                              &quot;select * FROM SomeTable&quot;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;postgres&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">jdbcTable</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>

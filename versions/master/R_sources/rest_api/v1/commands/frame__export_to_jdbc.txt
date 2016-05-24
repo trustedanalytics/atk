@@ -46,27 +46,11 @@ Request
 
 
 
-    **connector_type** : unicode (default=None)
+    **connector_type** : unicode (default=postgres)
 
     ..
 
-        (optional) JDBC connector type
-
-
-
-    **driver_name** : unicode (default=None)
-
-    ..
-
-        (optional) driver name
-
-
-
-    **query** : unicode (default=None)
-
-    ..
-
-        (optional) query for filtering. Not supported yet.
+        (optional) JDBC connector, either mysql or postgres. Default is postgres
 
 
 

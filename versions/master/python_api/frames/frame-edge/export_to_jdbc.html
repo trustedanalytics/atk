@@ -129,7 +129,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="export_to_jdbc">
-<code class="descname">export_to_jdbc</code><span class="sig-paren">(</span><em>self</em>, <em>table_name</em>, <em>connector_type=None</em>, <em>driver_name=None</em>, <em>query=None</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_jdbc" title="Permalink to this definition">¶</a></dt>
+<code class="descname">export_to_jdbc</code><span class="sig-paren">(</span><em>self</em>, <em>table_name</em>, <em>connector_type='postgres'</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_jdbc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write current frame to JDBC table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -139,17 +139,9 @@
 <blockquote>
 <div><p>JDBC table name</p>
 </div></blockquote>
-<p><strong>connector_type</strong> : unicode (default=None)</p>
-<blockquote>
-<div><p>(optional) JDBC connector type</p>
-</div></blockquote>
-<p><strong>driver_name</strong> : unicode (default=None)</p>
-<blockquote>
-<div><p>(optional) driver name</p>
-</div></blockquote>
-<p><strong>query</strong> : unicode (default=None)</p>
+<p><strong>connector_type</strong> : unicode (default=postgres)</p>
 <blockquote class="last">
-<div><p>(optional) query for filtering. Not supported yet.</p>
+<div><p>(optional) JDBC connector, either mysql or postgres. Default is postgres</p>
 </div></blockquote>
 </td>
 </tr>
