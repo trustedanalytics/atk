@@ -235,9 +235,6 @@ trustedanalytics.atk {
 
           # Allow user defined functions (UDF's) to be overwritten
           spark.files.overwrite = true
-          # These class paths need to be uncommented and be present on YARN nodes
-          spark.driver.extraClassPath += ":mysql-connector-java-5.1.6.jar:.:"
-          spark.executor.extraClassPath += ":mysql-connector-java-5.1.6.jar:postgresql-9.1-901.jdbc4.jar:"
 
           # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
           // spark.driver.extraLibraryPath = "."
