@@ -23,7 +23,7 @@ You will be able to see your scoring engine under the Applications page.
 Scoring Client
 --------------
 
-Below is a sample Python script to send requests to the scoring engine:
+Below is a sample Python script to send requests to the scoring engine containing trained Libsvm Model:
 
 .. code::
 
@@ -59,20 +59,20 @@ Below is a sample Python script to send requests to the scoring engine:
     u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
 
 
-Header 
-------
+Posting Requests to ATK Models
+------------------------------
 
--   `Autoregressive Exogenous Model (ARX)  <python_api/models/model-arx/publish.html>`_
--   `Autoregressive Integrated Moving Average Model (ARIMA) <python_api/models/model-arima/publish.html>`_
--   `K Means <python_api/models/model-k_means/publish.html>`_
--   `Label Propagation <python_api/graphs/graph-/label_propagation.html>`_
--   `Latent Dirichlet Allocation (LDA) <python_api/models/model-lda/publish.html>`_
--   `Lib SVM <python_api/models/model-libsvm/publish.html>`_
--   `Linear Regression <python_api/models/model-linear_regression/publish.html>`_
--   `Loopy Belief Propagation <python_api/graphs/graph-/loopy_belief_propagation.html>`_
--   `Naive Bayes <python_api/models/model-naive_bayes/publish.html>`_
--   `Principal Component Analysis <python_api/models/model-principal_components/publish.html>`_
--   `Random Forest Classifier <python_api/models/model-random_forest_classifier/publish.html>`_
--   `Random Forest Regressor <python_api/models/model-random_forest_regressor/publish.html>`_
--   `SVM with SGD <python_api/models/model-svm/publish.html>`_
+For more examples of invoking other ATK published models running in Scoring Engine, please see the links below:
+
+-   `Autoregressive Exogenous Model (ARX)  <python_api/models/model-arx/index.html>`_
+-   `Autoregressive Integrated Moving Average Model (ARIMA) <python_api/models/model-arima/index.html>`_
+-   `K Means <python_api/models/model-k_means/index.html>`_
+-   `Latent Dirichlet Allocation (LDA) <python_api/models/model-lda/index.html>`_
+-   `Lib SVM <python_api/models/model-libsvm/index.html>`_
+-   `Linear Regression <python_api/models/model-linear_regression/index.html>`_
+-   `Naive Bayes <python_api/models/model-naive_bayes/index.html>`_
+-   `Principal Component Analysis <python_api/models/model-principal_components/index.html>`_
+-   `Random Forest Classifier <python_api/models/model-random_forest_classifier/index.html>`_
+-   `Random Forest Regressor <python_api/models/model-random_forest_regressor/index.html>`_
+-   `SVM with SGD <python_api/models/model-svm/index.html>`_
 
