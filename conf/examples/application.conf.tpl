@@ -39,7 +39,7 @@ trustedanalytics.atk {
     //connection-postgresql.database = "postgresql-datastore"
     //connection-postgresql.username = "postgresql-user"
     //connection-postgresql.password = "postgresql-password"
-    connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}"?user="${trustedanalytics.atk.datastore.connection-postgresql.username}"&password="${trustedanalytics.atk.datastore.connection-postgresql.password}
+    connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
 
     # MYSQL
     //connection-mysql.host = "invalid-mysql-host"
@@ -47,15 +47,7 @@ trustedanalytics.atk {
     //connection-mysql.database = "mysql-datastore"
     //connection-mysql.username = "mysql-user"
     //connection-mysql.password = "mysql-password"
-    connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}"?user="${trustedanalytics.atk.datastore.connection-mysql.username}"&password="${trustedanalytics.atk.datastore.connection-mysql.password}
-
-    # SQLSERVER
-    //connection-sqlserver.host = "invalid-sqlserver-host"
-    //connection-sqlserver.port = "invalid-sqlserver-port"
-    //connection-sqlserver.database = "invalid-sqlserver-database"
-    //connection-sqlserver.username = "invalid-sqlserver-username"
-    //connection-sqlserver.password = "invalid-sqlserver-password"
-    //connection-sqlserver.url = "invalid-sqlserver-url"
+    connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
 
      # OrientDB
     //connection-orientdb.host = "invalid-orientdb-host"
@@ -86,9 +78,7 @@ trustedanalytics.atk {
       # Values should generally be in gigabytes, e.g. "64g"
       spark.executor.memory = "invalid executor memory"
 
-      # These class paths need to be uncommented and be present on YARN nodes
-      // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
-      // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+
 
       # Preferably spark.yarn.jar is installed in HDFS
       # In Cloudera Manager,
@@ -246,11 +236,6 @@ trustedanalytics.atk {
 
           # Allow user defined functions (UDF's) to be overwritten
           spark.files.overwrite = true
-
-          # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
-          # Verify that the path below exist across all yarn master/worker nodes.
-          // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
-          // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
 
           # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
           // spark.driver.extraLibraryPath = "."

@@ -16,8 +16,12 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 
+import org.apache.commons.lang3.StringUtils
+import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.apache.spark._
+import org.apache.spark.sql.{ DataFrame, SQLContext }
 import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
@@ -25,6 +29,28 @@ import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkComm
 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
+
+object LoadFromJdbcArgsFormat {
+  implicit val jdbcargsFormat = jsonFormat3(LoadFromJdbcArgs)
+}
+
+import LoadFromJdbcArgsFormat._
+
+/**
+ * Jdbc argument class
+ * @param destination destination frame
+ * @param tableName table name to read from
+ * @param driverName optional driver name
+ */
+case class LoadFromJdbcArgs(
+    @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
+    @ArgDoc("""table name""") tableName: String,
+    @ArgDoc("""(optional) connector type""") connectorType: String = "postgres") {
+
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
+  require(connectorType == "postgres" || connectorType == "mysql", "connector type must be postgres or mysql")
+}
 
 /**
  * Parsing data to load and append to data frames
@@ -32,13 +58,10 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Append data from a JDBC table into an existing (possibly empty) frame",
   extended = "Append data from a JDBC table into an existing (possibly empty) frame",
   returns = "the initial frame with the JDBC data appended")
-class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
+class LoadFromJdbcPlugin extends SparkCommandPlugin[LoadFromJdbcArgs, FrameEntity] {
 
   /**
-   * The name of the command, e.g. graph/loopy_belief_propagation
-   *
-   * The format of the name determines how the plugin gets "installed" in the client layer
-   * e.g Python client via code generation.
+   * Command name
    */
   override def name: String = "frame/_loadjdbc"
 
@@ -46,7 +69,7 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(load: JdbcArgs)(implicit invocation: Invocation) = 8
+  override def numberOfJobs(load: LoadFromJdbcArgs)(implicit invocation: Invocation) = 8
 
   /**
    * Parsing data to load and append to data frames
@@ -57,12 +80,24 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: JdbcArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: LoadFromJdbcArgs)(implicit invocation: Invocation): FrameEntity = {
     val destinationFrame: SparkFrame = arguments.destination
 
     // run the operation
-    val dataFrame = LoadJdbcImpl.createDataFrame(sc, arguments)
+    val dataFrame = createDataFrame(sc, arguments)
     LoadRddFunctions.unionAndSave(destinationFrame, FrameRdd.toFrameRdd(dataFrame))
+  }
+
+  /**
+   * Create a data frame from an jdbc compatible database
+   * @param sc default spark context
+   * @param arguments arguments for jdbc connection (including the initial data filtering)
+   */
+  def createDataFrame(sc: SparkContext, arguments: LoadFromJdbcArgs): DataFrame = {
+    val sqlContext = new SQLContext(sc)
+    val dbConnection = JdbcFunctions.buildUrl(arguments.connectorType)
+
+    sqlContext.read.jdbc(dbConnection.urlString, arguments.tableName, dbConnection.userPassProperties)
   }
 
 }
