@@ -30,7 +30,7 @@ object MatcherUtils extends Matchers {
    * Array(0.12, 0.25) should  equalWithTolerance(Array(0.122, 0.254), 0.01)
    * </pre>
    */
-  def equalWithTolerance(right: Array[Double], tolerance: Double = 1E-6) =
+  def equalWithTolerance(right: Array[Double], tolerance: Double = 1E-5) =
     Matcher { (left: Array[Double]) =>
       MatchResult(
         (left zip right) forall { case (a, b) => a === (b +- tolerance) },
@@ -46,7 +46,7 @@ object MatcherUtils extends Matchers {
    * DenseMatrix((1330d, 480d)) should  equalWithTolerance(DenseMatrix((1330.02, 480d.09)), 0.1)
    * </pre>
    */
-  def equalWithToleranceMatrix(right: DenseMatrix[Double], tolerance: Double = 1E-6) =
+  def equalWithToleranceMatrix(right: DenseMatrix[Double], tolerance: Double = 1E-5) =
     Matcher { (left: DenseMatrix[Double]) =>
       MatchResult(
         if (left.size === right.size) {

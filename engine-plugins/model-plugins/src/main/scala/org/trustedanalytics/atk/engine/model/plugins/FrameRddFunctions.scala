@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins
 
 import org.apache.spark.frame.FrameRdd
+import org.apache.spark.mllib.linalg.distributed.IndexedRowMatrix
 import org.apache.spark.mllib.linalg.{ Vectors, VectorUDT, DenseVector }
 import org.apache.spark.mllib.regression.{ LabeledPoint, LabeledPointWithFrequency }
 import org.apache.spark.rdd.RDD
@@ -24,6 +25,7 @@ import org.apache.spark.sql.{ Row, SQLContext, DataFrame }
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.apache.spark.sql.types.{ DoubleType, StructField, StructType }
 import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
 
 /**
  * Functions for extending frames with model-related methods.
@@ -87,4 +89,36 @@ class FrameRddFunctions(self: FrameRdd) {
     new SQLContext(self.sparkContext).createDataFrame(rowRdd, schema)
   }
 
+  /**
+   * Convert FrameRdd to DataFrame with features of type Vector, time of type double and censor of type double
+   */
+  def toCoxDataFrame(featureColumnNames: List[String], timeColumn: String, censorColumn: String): DataFrame = {
+    val rdd: RDD[(org.apache.spark.mllib.linalg.Vector, Double, Double)] = self.mapRows(row => {
+      val features = row.valuesAsDoubleArray(featureColumnNames)
+      (new DenseVector(features), DataTypes.toDouble(row.value(timeColumn)), DataTypes.toDouble(row.value(censorColumn)))
+    })
+    val rowRdd: RDD[Row] = rdd.map(entry => new GenericRow(Array[Any](entry._1, entry._2, entry._3)))
+    val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("time", DoubleType, true), StructField("censor", DoubleType, true)))
+    new SQLContext(self.sparkContext).createDataFrame(rowRdd, schema)
+  }
+  /**
+   * Check flag and mean center the input RDD
+   * @param meanCentered Flag indicating whether the frame is to be mean centered
+   * @param principalComponentData Trained PrincipalComponents model data
+   * @param predictColumns Frame's column(s) to be used for principal components computation
+   * @param indexedFrameRdd
+   * @return
+   */
+  def toIndexedRowMatrix(meanCentered: Boolean, principalComponentData: PrincipalComponentsData,
+                         predictColumns: List[String], indexedFrameRdd: RDD[(Long, Row)]): IndexedRowMatrix = {
+    new IndexedRowMatrix(
+      if (meanCentered) {
+        FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, self.frameSchema,
+          predictColumns, principalComponentData.meanVector)
+      }
+      else {
+        FrameRdd.toIndexedRowRdd(indexedFrameRdd, self.frameSchema, predictColumns)
+      }
+    )
+  }
 }

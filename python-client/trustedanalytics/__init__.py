@@ -28,7 +28,7 @@ from trustedanalytics.core.loggers import loggers
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
 from trustedanalytics.core.errorhandle import errors
-from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
+from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows, OrientDBGraph
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.rest.udfdepends import udf # todo: deprecated, pls. remove
 from trustedanalytics.core.frame import Frame, VertexFrame

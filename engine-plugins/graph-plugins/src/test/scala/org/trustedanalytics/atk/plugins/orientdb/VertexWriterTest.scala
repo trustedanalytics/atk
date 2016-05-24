@@ -22,10 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- * scala test for VertexWriter, for add vertex method: checking the exported vertex classname, properties and key index.
- * for findOrCreateVertex method : checking an existing vertex and creates a new vertex if not found
- */
 class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
 
   override def beforeEach() {

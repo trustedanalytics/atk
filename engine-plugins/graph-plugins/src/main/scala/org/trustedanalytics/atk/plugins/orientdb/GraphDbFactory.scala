@@ -19,13 +19,14 @@ import com.orientechnologies.orient.client.remote.OServerAdmin
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
+import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Failure, Success, Try }
 
 /**
  * OrientDB graph factory
  */
 
-object GraphDbFactory {
+object GraphDbFactory extends EventLogging {
 
   val rootUserName = "root"
 
@@ -35,7 +36,7 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional OrientDB graph database instance
    */
-  def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  def graphDbConnector(dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
     val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:")) {
       if (!new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).existsDatabase()) {
@@ -63,7 +64,7 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional Orient graph database instance
    */
-  def createGraphDb(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  def createGraphDb(dbConfigurations: DbConfiguration): OrientGraphNoTx = {
 
     val graph = Try {
       val factory = new OrientGraphFactory(dbConfigurations.dbUri, dbConfigurations.dbUserName, dbConfigurations.dbPassword)
@@ -72,7 +73,9 @@ object GraphDbFactory {
       factory.getNoTx
     } match {
       case Success(orientGraph) => orientGraph
-      case Failure(ex) => throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
+      case Failure(ex) =>
+        error(s"Unable to create database", exception = ex)
+        throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
     graph
   }
@@ -83,13 +86,15 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional Orient graph database instance
    */
-  private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     Try {
       val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbUserName)
       db
     } match {
       case Success(db) => new OrientGraphNoTx(db)
-      case Failure(ex) => throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
+      case Failure(ex) =>
+        error(s"Unable to open database", exception = ex)
+        throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
   }
 

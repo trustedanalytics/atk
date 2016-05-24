@@ -22,7 +22,7 @@ import org.apache.spark.rdd.RDD
 /**
  * Interface for DAAL distributed algorithms
  */
-trait DistributedAlgorithm[P <: PartialResult, R <: Result] {
+trait DistributedAlgorithm[P, R] {
 
   /**
    * Compute partial results for algorithm on slave nodes

@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- * scala test for VertexFrameWriter, checking the number of exported vertices
- */
 class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
     setupOrientDb()
@@ -36,7 +33,7 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
 
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
-      val dbConfig = new DbConfigurations(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val vertices: List[Row] = List(

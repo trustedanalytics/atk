@@ -34,4 +34,25 @@ do
   done
 done
 
+for init in `find . -name "__init__.html"`
+do
+    name=$(basename $init)
+    fullDir=$(dirname $init)
+    echo rename file: $init to $fullDir/$PREFIX$name
+
+    mv $init $fullDir/$PREFIX$name
+done
+
+IFS=$'\n'
+for file in `grep -raIn "__init__.html"`
+do
+   #echo $file
+   f=$(echo $file | tr ":" " " | awk '{print $1}')
+   echo $f
+   grep -raIn "R__init__.html" $f > /dev/null
+   if [ $? -eq 1 ]; then
+      sed -i "s|__init__.html|R__init__.html|g" $f
+   fi
+done
+
 popd

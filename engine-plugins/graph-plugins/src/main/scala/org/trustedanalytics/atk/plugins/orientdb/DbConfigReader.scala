@@ -29,7 +29,7 @@ object DbConfigReader extends Serializable {
    * @return database configurations
    */
 
-  def extractConfigurations(dbName: String): DbConfigurations = {
+  def extractConfigurations(dbName: String): DbConfiguration = {
 
     val userName = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.username")
     val password = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.password")
@@ -38,6 +38,6 @@ object DbConfigReader extends Serializable {
     val portNumber = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.port")
     val dbDir = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.url")
     val dbUri = dbDir + "/" + dbName
-    DbConfigurations(dbUri, userName, password, portNumber, dbHost, rootPassword)
+    DbConfiguration(dbUri, userName, password, portNumber, dbHost, rootPassword)
   }
 }
