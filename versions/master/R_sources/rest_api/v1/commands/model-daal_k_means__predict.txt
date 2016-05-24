@@ -4,7 +4,7 @@
 :doc:`Commands <index>` model:daal_k_means/predict
 --------------------------------------------------
 
-|ALPHA|
+|BETA|
 Predict the cluster assignments for the data points.
 
 POST /v1/commands/

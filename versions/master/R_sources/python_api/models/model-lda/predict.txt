@@ -7,7 +7,6 @@
 
 .. function:: predict(self, document)
 
-    |ALPHA|
     Predict conditional probabilities of topics given document.
 
 

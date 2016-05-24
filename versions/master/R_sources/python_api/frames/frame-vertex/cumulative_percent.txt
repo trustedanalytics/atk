@@ -7,7 +7,6 @@
 
 .. function:: cumulative_percent(self, sample_col)
 
-    |BETA|
     Add column to frame with cumulative percent sum.
 
 

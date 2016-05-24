@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -135,7 +132,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-randomforestclassifiermodel">
-<h1><a class="reference internal" href="../index.html"><em>Models</em></a> RandomForestClassifierModel<a class="headerlink" href="#models-randomforestclassifiermodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> RandomForestClassifierModel<a class="headerlink" href="#models-randomforestclassifiermodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -150,13 +147,13 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
 <td>Read-only property - Last time this model&#8217;s data was accessed.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
 <td>Set or get the name of the model object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
 <td>Read-only property - Current model life cycle status.</td>
 </tr>
 </tbody>
@@ -168,20 +165,20 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#randomforestclassifiermodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#randomforestclassifiermodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
 <td>Create a &#8216;new&#8217; instance of a Random Forest Classifier model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the labels for the data points.</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, frame[, observation_columns])</td>
+<td>Predict the labels for the data points.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
+<td>Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, label_column[, observation_columns])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
+<tr class="row-even"><td><a class="reference internal" href="test.html"><span class="doc">test</span></a>(self, frame, label_column[, observation_columns])</td>
+<td>Predict test frame labels and return metrics.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, num_classes, ...])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build Random Forests Classifier model.</td>
+<tr class="row-odd"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, frame, label_column, observation_columns[, num_classes, ...])</td>
+<td>Build Random Forests Classifier model.</td>
 </tr>
 </tbody>
 </table>
@@ -209,34 +206,34 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r1" id="id1">[R1]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="#r25" id="id1">[R25]</a> is a supervised ensemble learning algorithm
 which can be used to perform binary and multi-class classification.
 The Random Forest Classifier model is initialized, trained on columns of a
 frame, used to predict the labels of observations in a frame, and tests the
 predicted labels against the true labels.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r2" id="id2">[R2]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r26" id="id2">[R26]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, each tree&#8217;s prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes.
 During testing, labels of the observations are predicted and tested against the true labels
 using built-in binary and multi-class Classification Metrics.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r1" rules="none">
+<table class="docutils citation" frame="void" id="r25" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R25]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r2" rules="none">
+<table class="docutils citation" frame="void" id="r26" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R2]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R26]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2</span>
 <span class="go">=======================================</span>
 <span class="go">[0]      1  19.8446136104  2.2985856384</span>
@@ -281,6 +278,29 @@ using built-in binary and multi-class Classification Metrics.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;Random Forest Classifier Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.RandomForestClassifierScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.RandomForestClassifierModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;Dim_1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Dim_2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;Dim_1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Dim_2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
+<p># Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446">http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446</a>, 2.2985856&#8217;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;1.0&#8217;</p>
+<p># Posting a request to version 1 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446">http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446</a>, 2.2985856&amp;data=46.1810010826, 3.1611961917&#8217;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;1.0,0.0&#8217;</p>
+<p># Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;Dim_1&#8221;: 19.8446, &#8220;Dim_2&#8221;: 2.2985856}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;Dim_1&#8221;:19.8446,&#8221;Dim_2&#8221;:2.2985856,&#8221;Prediction&#8221;:1.0}]}&#8217;</p>
+<p># posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;Dim_1&#8221;: 19.8446, &#8220;Dim_2&#8221;: 2.2985856}, {&#8220;Dim_1&#8221;: 46.1810010826, &#8220;Dim_2&#8221;: 3.1611961917}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;Dim_1&#8221;:19.8446,&#8221;Dim_2&#8221;:2.2985856,&#8221;Prediction&#8221;:1.0},{&#8220;Dim_1&#8221;:46.1810010826,&#8221;Dim_2&#8221;:3.1611961917,&#8221;Prediction&#8221;:0.0}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -306,7 +326,7 @@ using built-in binary and multi-class Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

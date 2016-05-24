@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:linear_regression/predict
 -------------------------------------------------------
 
-|ALPHA|
 <Missing Doc>
 
 POST /v1/commands/

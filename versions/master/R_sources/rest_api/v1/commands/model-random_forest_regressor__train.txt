@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:random_forest_regressor/train
 -----------------------------------------------------------
 
-|ALPHA|
 Build Random Forests Regressor model.
 
 POST /v1/commands/
@@ -95,7 +94,7 @@ Request
 
 
 
-    **seed** : int32 (default=-1101043361)
+    **seed** : int32 (default=-1041181374)
 
     ..
 

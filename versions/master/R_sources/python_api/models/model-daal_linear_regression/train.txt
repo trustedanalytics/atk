@@ -7,7 +7,7 @@
 
 .. function:: train(self, frame, value_column, observation_columns, fit_intercept=True)
 
-    |ALPHA|
+    |BETA|
     Build Intel DAAL linear regression model.
 
 

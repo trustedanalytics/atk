@@ -43,7 +43,7 @@
     <script type="text/javascript" src="R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
-    <link rel="up" title="User Manual" href="ds_over.html" >
+    <link rel="up" title="Process Flow Examples" href="ds_pflw.html" >
     <link rel="next" title="Graphs" href="ds_graph.html" >
     <link rel="prev" title="Naive Bayes" href="ds_naive_bayes.html" > 
   </head>
@@ -66,7 +66,8 @@
 	
         <li class="active"><a href="index.html">Trusted Analytics</a></li>
 	
-          <li class="active"><a href="ds_over.html" accesskey="U">User Manual</a></li> 
+          <li class="active"><a href="ds_over.html" >User Manual</a></li>
+          <li class="active"><a href="ds_pflw.html" accesskey="U">Process Flow Examples</a></li> 
     </ul>
               
               
@@ -101,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -111,11 +109,8 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ds_pflw.html">Process Flow Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Latent Dirichlet Allocation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -140,10 +135,10 @@
 For example, given a number of documents, LDA can group the texts on similar topics together based on whether they contain similar words. LDA is an unsupervised algorithm, meaning that the groups are created based on the similarity to each other, rather than by comparing them to an idealized or standardized dataset.</p>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<p>Establish a connection to the ATK Rest Server.
+<p>Establish a connection to the ATK REST Server.
 This handle will be used for the remainder of the script.</p>
 <p>Get server URL and credentials file from the TAP administrator.</p>
-<p>Set the server, and use the credentials to connect to the ATK.</p>
+<p>Set the server, and use the credentials to connect to the ATK REST server.</p>
 <div class="section" id="workflow">
 <h3>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h3>
 <p>The standard workflow is: build a frame, build a model, train the model on the frame, predict on the model.
@@ -152,9 +147,9 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 </div>
 <div class="section" id="construct-a-frame">
 <h2>Construct a Frame<a class="headerlink" href="#construct-a-frame" title="Permalink to this headline">¶</a></h2>
-<p>Construct a frame to be uploaded, this is done using Python lists uploaded to the server</p>
-<p>In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<p>Construct a frame to be uploaded, this is done using Python lists uploaded to the server.</p>
+<p>In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
                             <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word12&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
                             <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
                             <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word14&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
@@ -174,34 +169,32 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 
 <span class="n">frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">rows_frame</span><span class="p">)</span>
 
-<span class="k">print</span> <span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="nb">print</span> <span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="build-a-model">
 <h2>Build a Model<a class="headerlink" href="#build-a-model" title="Permalink to this headline">¶</a></h2>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">lda_model</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">lda_model</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="train-the-model">
 <h2>Train the Model<a class="headerlink" href="#train-the-model" title="Permalink to this headline">¶</a></h2>
 <p>This LDA model will be trained using the frame above.</p>
-<p>[FIX THIS]Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
+<p>Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
 The final argument is the number of topics to search for.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">lda_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">lda_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="predict-on-the-model">
 <h2>Predict on the Model<a class="headerlink" href="#predict-on-the-model" title="Permalink to this headline">¶</a></h2>
-<p>Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">cluster1</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">])</span>
+<p>Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">cluster1</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">])</span>
 <span class="n">cluster2</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s2">&quot;word21&quot;</span><span class="p">,</span> <span class="s2">&quot;word23&quot;</span><span class="p">])</span>
-<span class="k">print</span> <span class="n">cluster1</span>
-<span class="k">print</span> <span class="n">cluster2</span>
-
-<span class="bp">self</span><span class="o">.</span><span class="n">assertNotEqual</span><span class="p">(</span><span class="n">cluster1</span><span class="p">,</span> <span class="n">cluster2</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">cluster1</span>
+<span class="nb">print</span> <span class="n">cluster2</span>
 </pre></div>
 </div>
 </div>
@@ -228,7 +221,7 @@ The final argument is the number of topics to search for.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

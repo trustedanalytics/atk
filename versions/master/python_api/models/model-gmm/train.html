@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="gmmmodel-train">
-<h1><a class="reference internal" href="index.html"><em>GmmModel</em></a>  train<a class="headerlink" href="#gmmmodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">GmmModel</span></a>  train<a class="headerlink" href="#gmmmodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>column_scalings</em>, <em>k=2</em>, <em>max_iterations=100</em>, <em>convergence_tol=0.01</em>, <em>seed=-4974093262556369132</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Creates a GMM Model from the train frame.</p>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>column_scalings</em>, <em>k=2</em>, <em>max_iterations=100</em>, <em>convergence_tol=0.01</em>, <em>seed=3452667845848018014</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GMM Model from the train frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -164,7 +160,7 @@ observation column.</p>
 <blockquote>
 <div><p>Largest change in log-likelihood at which convergence iis considered to have occurred.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int64 (default=-4974093262556369132)</p>
+<p><strong>seed</strong> : int64 (default=3452667845848018014)</p>
 <blockquote>
 <div><p>Random seed</p>
 </div></blockquote>
@@ -176,11 +172,11 @@ observation column.</p>
 <dt>dict</dt>
 <dd><p class="first last">Returns a dictionary the following fields</p>
 </dd>
-<dt>cluster_size <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">with the key being a string of the form &#8216;Cluster:Id&#8217; storing the number of elements in cluster number &#8216;Id&#8217;</p>
+<dt>cluster_size</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">with the key being a string of the form &#8216;Cluster:Id&#8217; storing the number of elements in cluster number &#8216;Id&#8217;</p>
 </dd>
-<dt>gaussians <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first last">Stores the &#8216;mu&#8217; and &#8216;sigma&#8217; corresponding to the Multivariate Gaussian (Normal) Distribution for each Gaussian</p>
+<dt>gaussians</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first last">Stores the &#8216;mu&#8217; and &#8216;sigma&#8217; corresponding to the Multivariate Gaussian (Normal) Distribution for each Gaussian</p>
 </dd>
 </dl>
 </div></blockquote>
@@ -190,7 +186,7 @@ observation column.</p>
 </table>
 <p>At training the &#8216;k&#8217; cluster centers are computed.</p>
 <p class="rubric">Examples</p>
-<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
+<p>See <a class="reference internal" href="new.html"><span class="doc">here</span></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -216,7 +212,7 @@ observation column.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

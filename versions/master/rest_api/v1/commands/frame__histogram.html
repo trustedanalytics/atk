@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands frame/invert_matrix" href="frame__invert_matrix.html" >
+    <link rel="next" title="Commands frame/quantiles" href="frame__quantiles.html" >
     <link rel="prev" title="Commands frame/group_by" href="frame__group_by.html" > 
   </head>
   <body>
@@ -77,7 +77,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="frame__invert_matrix.html" title="Commands frame/invert_matrix"
+        <a href="frame__quantiles.html" title="Commands frame/quantiles"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -127,9 +124,8 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-frame-histogram">
-<h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/histogram<a class="headerlink" href="#commands-frame-histogram" title="Permalink to this headline">¶</a></h1>
-<p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Compute the histogram for a column in a frame.</p>
+<h1><a class="reference internal" href="index.html"><span class="doc">Commands</span></a> frame/histogram<a class="headerlink" href="#commands-frame-histogram" title="Permalink to this headline">¶</a></h1>
+<p>Compute the histogram for a column in a frame.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -138,7 +134,7 @@ Compute the histogram for a column in a frame.</p>
 <div class="section" id="request">
 <h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>POST /v1/commands/
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">POST</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -181,8 +177,8 @@ Defaults is &#8220;equalwidth&#8221;.</p>
 <div class="line"><br /></div>
 </div>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -207,7 +203,7 @@ belong to the same bin.</p>
 <div class="section" id="response">
 <h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -219,14 +215,14 @@ belong to the same bin.</p>
 <div class="section" id="id2">
 <h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
 <p>(None)</p>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -236,7 +232,7 @@ Content-type: application/json
 <div class="section" id="id3">
 <h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -246,12 +242,12 @@ Content-type: application/json
 <dt>histogram</dt>
 <dd>A Histogram object containing the result set.
 The data returned is composed of multiple components:</dd>
-<dt>cutoffs <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd>A list containing the edges of each bin.</dd>
-<dt>hist <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd>A list containing count of the weighted observations found in each bin.</dd>
-<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd>A list containing a decimal containing the percentage of
+<dt>cutoffs</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd>A list containing the edges of each bin.</dd>
+<dt>hist</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd>A list containing count of the weighted observations found in each bin.</dd>
+<dt>density</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd>A list containing a decimal containing the percentage of
 observations found in the total set per bin.</dd>
 </dl>
 </div></blockquote>
@@ -280,7 +276,7 @@ observations found in the total set per bin.</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-categorical-summary">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  categorical_summary<a class="headerlink" href="#edgeframe-categorical-summary" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  categorical_summary<a class="headerlink" href="#edgeframe-categorical-summary" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="categorical_summary">
 <code class="descname">categorical_summary</code><span class="sig-paren">(</span><em>self</em>, <em>*column_inputs</em><span class="sig-paren">)</span><a class="headerlink" href="#categorical_summary" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Compute a summary of the data in a column(s) for categorical or numerical data types.</p>
+<dd><p>Compute a summary of the data in a column(s) for categorical or numerical data types.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -173,7 +169,7 @@ with their frequency and percentage occurrence with respect to the total rows in
 </dl>
 </div></blockquote>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">categorical_summary</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">categorical_summary</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">categorical_summary</span><span class="p">((</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;top_k&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">categorical_summary</span><span class="p">((</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;threshold&#39;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">}))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">categorical_summary</span><span class="p">((</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;top_k&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">}),</span> <span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span>
@@ -181,7 +177,7 @@ with their frequency and percentage occurrence with respect to the total rows in
 </pre></div>
 </div>
 <p>Sample output (for last example above):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s1">u&#39;categorical_summary&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">u&#39;column&#39;</span><span class="p">:</span> <span class="s1">u&#39;source&#39;</span><span class="p">,</span> <span class="s1">u&#39;levels&#39;</span><span class="p">:</span> <span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="s1">u&#39;categorical_summary&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s1">u&#39;column&#39;</span><span class="p">:</span> <span class="s1">u&#39;source&#39;</span><span class="p">,</span> <span class="s1">u&#39;levels&#39;</span><span class="p">:</span> <span class="p">[</span>
 <span class="gp">... </span><span class="p">{</span><span class="s1">u&#39;percentage&#39;</span><span class="p">:</span> <span class="mf">0.32142857142857145</span><span class="p">,</span> <span class="s1">u&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">u&#39;level&#39;</span><span class="p">:</span> <span class="s1">u&#39;thing&#39;</span><span class="p">},</span>
 <span class="gp">... </span><span class="p">{</span><span class="s1">u&#39;percentage&#39;</span><span class="p">:</span> <span class="mf">0.32142857142857145</span><span class="p">,</span> <span class="s1">u&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span> <span class="s1">u&#39;level&#39;</span><span class="p">:</span> <span class="s1">u&#39;abstraction&#39;</span><span class="p">},</span>
 <span class="gp">... </span><span class="p">{</span><span class="s1">u&#39;percentage&#39;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="s1">u&#39;frequency&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">u&#39;level&#39;</span><span class="p">:</span> <span class="s1">u&#39;physical_entity&#39;</span><span class="p">},</span>
@@ -229,7 +225,7 @@ with their frequency and percentage occurrence with respect to the total rows in
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

@@ -7,7 +7,6 @@
 
 .. function:: predict(self, frame, input_source_column_name, input_dest_column_name, output_user_column_name='user', output_product_column_name='product', output_rating_column_name='rating')
 
-    |BETA|
     Collaborative Filtering Predict (ALS).
 
 

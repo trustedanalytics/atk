@@ -31,7 +31,6 @@
     cumulative_percent
     cumulative_sum
     daal_covariance_matrix
-    daal_pca
     dot_product
     download
     drop_columns
@@ -48,10 +47,8 @@
     flatten_columns
     get_error_frame
     group_by
-    helloworld
     histogram
     inspect
-    invert_matrix
     join
     last_read_date
     name
@@ -69,7 +66,6 @@
     timeseries_slice
     top_k
     unflatten_columns
-    wordcount
 
 .. class:: Frame
 
@@ -100,7 +96,7 @@
     :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
     :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.
     :doc:`bin_column_equal_width <bin_column_equal_width>`\ (self, column_name[, num_bins, ...])          Classify column into same-width groups.
-    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             |ALPHA| Compute a summary of the data in a column(s) for categorical or numerical data types.
+    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             Compute a summary of the data in a column(s) for categorical or numerical data types.
     :doc:`classification_metrics <classification_metrics>`\ (self, label_column, pred_column[, ...])      Model statistics of accuracy, precision, and others.
     :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
     :doc:`column_mode <column_mode>`\ (self, data_column[, weights_column, max_modes_returned])           Evaluate the weights assigned to rows.
@@ -111,11 +107,10 @@
     :doc:`count <count>`\ (self, where)                                                                   Counts the number of rows which meet given criteria.
     :doc:`covariance <covariance>`\ (self, data_column_names)                                             Calculate covariance for exactly two columns.
     :doc:`covariance_matrix <covariance_matrix>`\ (self, data_column_names[, matrix_name])                Calculate covariance matrix for two or more columns.
-    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    |BETA| Add column to frame with cumulative percent sum.
-    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            |BETA| Add column to frame with cumulative percent sum.
-    :doc:`daal_covariance_matrix <daal_covariance_matrix>`\ (self, data_column_names[, matrix_name])      Calculate covariance matrix for two or more columns.
-    :doc:`daal_pca <daal_pca>`\ (self, column_names[, method])                                            |ALPHA| Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).
-    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           |ALPHA| Calculate dot product for each row in current frame.
+    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    Add column to frame with cumulative percent sum.
+    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            Add column to frame with cumulative percent sum.
+    :doc:`daal_covariance_matrix <daal_covariance_matrix>`\ (self, data_column_names[, matrix_name])      |BETA| Calculate covariance matrix for two or more columns.
+    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           Calculate dot product for each row in current frame.
     :doc:`download <download>`\ (self[, n, offset, columns])                                              Download frame data from the server into client workspace as a pandas dataframe
     :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
     :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Modify the current frame, removing duplicate rows.
@@ -130,24 +125,21 @@
     :doc:`filter <filter>`\ (self, predicate)                                                             Select all rows which satisfy a predicate.
     :doc:`flatten_columns <flatten_columns>`\ (self, columns[, delimiters])                               Spread data to multiple rows based on cell data.
     :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
-    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
-    :doc:`helloworld <helloworld>`\ (self[, msg])                                                         This is a Hello World Plugin for Frame.
-    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
+    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         Create summarized frame.
+    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           Compute the histogram for a column in a frame.
     :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
-    :doc:`invert_matrix <invert_matrix>`\ (self, column_names)                                            |ALPHA| Inverts a matrix.
-    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
+    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     Join operation on one or two frames, creating a new frame.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns
-    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      |BETA| Sort the data in a frame.
-    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                |ALPHA| Get a sorted subset of the data.
+    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      Sort the data in a frame.
+    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                Get a sorted subset of the data.
     :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
-    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   |BETA| Count number of times a value is seen.
-    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   |BETA| Compute a cumulative percent count.
+    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   Count number of times a value is seen.
+    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   Compute a cumulative percent count.
     :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
     :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
     :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.
-    :doc:`wordcount <wordcount>`\ (self)                                                                  Counts and reports the top 10 words across all columns with string data in a frame.
     ====================================================================================================  ====================================================================================================
 
 .. _Frame__init__:

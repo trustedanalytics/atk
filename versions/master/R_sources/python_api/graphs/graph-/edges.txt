@@ -12,6 +12,8 @@
 
     :Parameters:
 
+    Acts like a dictionary where the edge type is the key, returning the particular EdgeFrame
+
     Examples
     --------
     See :doc:`here <__init__>` for example usage in graph construction.

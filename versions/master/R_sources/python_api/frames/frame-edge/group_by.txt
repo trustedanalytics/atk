@@ -7,7 +7,6 @@
 
 .. function:: group_by(self, group_by_columns, *aggregation_arguments)
 
-    |BETA|
     Create summarized frame.
 
 

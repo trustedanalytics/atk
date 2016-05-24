@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models DaalKMeansModel" href="index.html" >
-    <link rel="next" title="Models PrincipalComponentsModel" href="../model-principal_components/index.html" >
+    <link rel="next" title="Models DaalNaiveBayesModel" href="../model-daal_naive_bayes/index.html" >
     <link rel="prev" title="DaalKMeansModel status" href="status.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="../model-principal_components/index.html" title="Models PrincipalComponentsModel"
+        <a href="../model-daal_naive_bayes/index.html" title="Models DaalNaiveBayesModel"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,12 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="daalkmeansmodel-train">
-<h1><a class="reference internal" href="index.html"><em>DaalKMeansModel</em></a>  train<a class="headerlink" href="#daalkmeansmodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">DaalKMeansModel</span></a>  train<a class="headerlink" href="#daalkmeansmodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>k=2</em>, <em>max_iterations=50</em>, <em>column_scalings=None</em>, <em>label_column='cluster'</em>, <em>initialization_mode='random'</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>column_scalings=None</em>, <em>k=2</em>, <em>max_iterations=100</em>, <em>label_column='predicted_cluster'</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
 Creates DAAL KMeans Model from train frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,32 +145,26 @@ Creates DAAL KMeans Model from train frame.</p>
 <div><p>Columns containing the
 observations.</p>
 </div></blockquote>
-<p><strong>k</strong> : int32 (default=2)</p>
-<blockquote>
-<div><p>Desired number of clusters.
-Default is 2.</p>
-</div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=50)</p>
-<blockquote>
-<div><p>Number of iterations for which the algorithm should run.
-Default is 20.</p>
-</div></blockquote>
 <p><strong>column_scalings</strong> : list (default=None)</p>
 <blockquote>
 <div><p>Optional column scalings for each of the observation columns.
 The scaling value is multiplied by the corresponding value in the
 observation column.</p>
 </div></blockquote>
-<p><strong>label_column</strong> : unicode (default=cluster)</p>
+<p><strong>k</strong> : int32 (default=2)</p>
+<blockquote>
+<div><p>Desired number of clusters.
+Default is 2.</p>
+</div></blockquote>
+<p><strong>max_iterations</strong> : int32 (default=100)</p>
+<blockquote>
+<div><p>Number of iterations for which the algorithm should run.
+Default is 20.</p>
+</div></blockquote>
+<p><strong>label_column</strong> : unicode (default=predicted_cluster)</p>
 <blockquote>
 <div><p>Optional name of output column with
 index of cluster each observation belongs to.</p>
-</div></blockquote>
-<p><strong>initialization_mode</strong> : unicode (default=random)</p>
-<blockquote>
-<div><p>Optional initialization mode for cluster centroids.
-random - Random choice of k feature vectors from the data set.
-deterministic - Choice of first k feature vectors from the data set.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -191,9 +182,10 @@ deterministic - Choice of first k feature vectors from the data set.</p>
 </tr>
 </tbody>
 </table>
-<p>Creating a DAAL KMeans Model using the observation columns.</p>
+<p>Creating a DAAL KMeans Model using the observation columns.
+The algorithm chooses random observations as the initial cluster centers.</p>
 <p class="rubric">Examples</p>
-<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
+<p>See <a class="reference internal" href="new.html"><span class="doc">here</span></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -219,7 +211,7 @@ deterministic - Choice of first k feature vectors from the data set.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

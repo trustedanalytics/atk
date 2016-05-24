@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, label_column, observation_columns, lambda_parameter=1.0)
 
-    |ALPHA|
     Build a naive bayes model.
 
 

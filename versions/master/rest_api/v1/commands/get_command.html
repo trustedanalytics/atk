@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -132,28 +129,28 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-get-command">
-<h1><a class="reference internal" href="index.html"><em>Commands</em></a>  Get Command<a class="headerlink" href="#commands-get-command" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Commands</span></a>  Get Command<a class="headerlink" href="#commands-get-command" title="Permalink to this headline">¶</a></h1>
 <p>Gets information about a specific command.</p>
 <div class="section" id="get-v1-commands-id">
 <h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="request">
 <h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">25</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">25</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
 <p>(None)</p>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="response">
 <h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -203,104 +200,104 @@ command including number of retries</td>
 <div class="line"><br /></div>
 </div>
 <p>Example response body for command 18, &#8216;assign_sample&#8217; on frame 16 which is in the middle of execution:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span> {
-   &quot;id&quot;: 18,
-   &quot;name&quot;: &quot;frame/assign_sample&quot;,
-   &quot;correlation_id&quot;: &quot;&quot;,
-   &quot;arguments&quot;: {
-     &quot;sample_labels&quot;: [&quot;train&quot;, &quot;test&quot;, &quot;validate&quot;],
-     &quot;frame&quot;: 16,
-     &quot;random_seed&quot;: null,
-     &quot;sample_percentages&quot;: [0.5, 0.3, 0.2],
-     &quot;output_column&quot;: null
-   },
-   &quot;progress&quot;: [{
-      &quot;progress&quot;: 33.33000183105469,
-      &quot;tasks_info&quot;: {
-        &quot;retries&quot;: 0
-      }
-   }],
-   &quot;complete&quot;: false,
-   &quot;links&quot;: [{
-     &quot;rel&quot;: &quot;self&quot;,
-     &quot;uri&quot;: &quot;http://localhost:9099/v1/commands/18&quot;,
-     &quot;method&quot;: &quot;GET&quot;
-   }]
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span>
+   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+   <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;frame/assign_sample&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;correlation_id&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;sample_labels&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;validate&quot;</span><span class="p">],</span>
+     <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+     <span class="s2">&quot;random_seed&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+     <span class="s2">&quot;sample_percentages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+     <span class="s2">&quot;output_column&quot;</span><span class="p">:</span> <span class="n">null</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">33.33000183105469</span><span class="p">,</span>
+      <span class="s2">&quot;tasks_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="p">}</span>
+   <span class="p">}],</span>
+   <span class="s2">&quot;complete&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+   <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/commands/18&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span>
+   <span class="p">}]</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>Example response body for command 17, a &#8216;load&#8217; on frame 16 which has completed:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span> {
-   &quot;id&quot;: 17,
-   &quot;name&quot;: &quot;frame:/load&quot;,
-   &quot;correlation_id&quot;: &quot;3d074058-54bd-4170-a8a7-2219e6e3a894&quot;,
-   &quot;arguments&quot;: {
-     &quot;source&quot;: {
-       &quot;source_type&quot;: &quot;file&quot;,
-       &quot;parser&quot;: {
-         &quot;name&quot;: &quot;builtin/line/separator&quot;,
-         &quot;arguments&quot;: {
-           &quot;separator&quot;: &quot;,&quot;,
-           &quot;skip_rows&quot;: 0,
-           &quot;schema&quot;: {
-             &quot;columns&quot;: [[&quot;c&quot;, &quot;int32&quot;], [&quot;number&quot;, &quot;unicode&quot;]]
-           }
-         }
-       },
-       &quot;data&quot;: null,
-       &quot;uri&quot;: &quot;/join_left.csv&quot;
-     },
-     &quot;destination&quot;: 16
-   },
-   &quot;progress&quot;: [{
-     &quot;progress&quot;: 100.0,
-     &quot;tasks_info&quot;: {
-       &quot;retries&quot;: 0
-     }
-   }],
-   &quot;complete&quot;: true,
-   &quot;result&quot;: {
-     &quot;id&quot;: 16,
-     &quot;name&quot;: &quot;super_frame&quot;,
-     &quot;schema&quot;: {
-       &quot;columns&quot;: [{
-         &quot;name&quot;: &quot;c&quot;,
-         &quot;data_type&quot;: &quot;int32&quot;,
-         &quot;index&quot;: 0
-       }, {
-         &quot;name&quot;: &quot;number&quot;,
-         &quot;data_type&quot;: &quot;string&quot;,
-         &quot;index&quot;: 1
-       }]
-     },
-     &quot;status&quot;: 1,
-     &quot;created_on&quot;: &quot;2015-05-15T14:58:23.369-07:00&quot;,
-     &quot;modified_on&quot;: &quot;2015-05-15T14:58:35.272-07:00&quot;,
-     &quot;storage_format&quot;: &quot;file/parquet&quot;,
-     &quot;storage_location&quot;: &quot;hdfs://paulsimon.hf.trustedanalytics.com/user/atkuser/trustedanalytics/frames/16&quot;,
-     &quot;row_count&quot;: 3,
-     &quot;modified_by&quot;: 1,
-     &quot;materialized_on&quot;: &quot;2015-05-15T14:58:32.611-07:00&quot;,
-     &quot;materialization_complete&quot;: &quot;2015-05-15T14:58:35.258-07:00&quot;,
-     &quot;last_read_date&quot;: &quot;2015-05-15T14:58:23.369-07:00&quot;,
-     &quot;uri&quot;: &quot;frames/16&quot;,
-     &quot;entity_type&quot;: &quot;frame:&quot;
-   },
-   &quot;links&quot;: [{
-     &quot;rel&quot;: &quot;self&quot;,
-     &quot;uri&quot;: &quot;http://localhost:9099/v1/commands/17&quot;,
-     &quot;method&quot;: &quot;GET&quot;
-   }]
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span>
+   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+   <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:/load&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;correlation_id&quot;</span><span class="p">:</span> <span class="s2">&quot;3d074058-54bd-4170-a8a7-2219e6e3a894&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;source_type&quot;</span><span class="p">:</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;parser&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;builtin/line/separator&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;separator&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;skip_rows&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;unicode&quot;</span><span class="p">]]</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+       <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/join_left.csv&quot;</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="mi">16</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+     <span class="s2">&quot;tasks_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">0</span>
+     <span class="p">}</span>
+   <span class="p">}],</span>
+   <span class="s2">&quot;complete&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+   <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;super_frame&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">0</span>
+       <span class="p">},</span> <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">1</span>
+       <span class="p">}]</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+     <span class="s2">&quot;created_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:23.369-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;modified_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:35.272-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;storage_format&quot;</span><span class="p">:</span> <span class="s2">&quot;file/parquet&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;storage_location&quot;</span><span class="p">:</span> <span class="s2">&quot;hdfs://paulsimon.hf.trustedanalytics.com/user/atkuser/trustedanalytics/frames/16&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;row_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+     <span class="s2">&quot;modified_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+     <span class="s2">&quot;materialized_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:32.611-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;materialization_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:35.258-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;last_read_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:23.369-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;frames/16&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:&quot;</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/commands/17&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span>
+   <span class="p">}]</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Content-Length: 405
-Content-Type: application/json; charset=UTF-8
-Date: Thu, 14 May 2015 23:42:27 GMT
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">405</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="p">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">14</span> <span class="n">May</span> <span class="mi">2015</span> <span class="mi">23</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mi">27</span> <span class="n">GMT</span>
 </pre></div>
 </div>
 <p><strong>Note</strong></p>
@@ -330,7 +327,7 @@ Date: Thu, 14 May 2015 23:42:27 GMT
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

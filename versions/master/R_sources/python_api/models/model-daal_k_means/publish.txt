@@ -7,7 +7,7 @@
 
 .. function:: publish(self)
 
-    |ALPHA|
+    |BETA|
     Creates a tar file that will be used as input to the scoring engine
 
 

@@ -33,11 +33,11 @@
     .. rubric:: Methods
 
     ====================================================================================================  ====================================================================================================
-    :ref:`__init__ <DaalLinearRegressionModel__init__>`\ (self[, name, _info])                            |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
-    :doc:`predict <predict>`\ (self, frame[, value_column, observation_columns])                          |ALPHA| Predict labels for a test frame using trained Intel DAAL linear regression model.
-    :doc:`publish <publish>`\ (self)                                                                      |ALPHA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`test <test>`\ (self, frame[, value_column, observation_columns])                                |ALPHA| Compute test metrics for trained Intel DAAL linear regression model.
-    :doc:`train <train>`\ (self, frame, value_column, observation_columns[, fit_intercept])               |ALPHA| Build Intel DAAL linear regression model.
+    :ref:`__init__ <DaalLinearRegressionModel__init__>`\ (self[, name, _info])                            |BETA| Create a 'new' instance of a DAAL Linear Regression model.
+    :doc:`predict <predict>`\ (self, frame[, value_column, observation_columns])                          |BETA| Predict labels for a test frame using trained Intel DAAL linear regression model.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`test <test>`\ (self, frame[, value_column, observation_columns])                                |BETA| Compute test metrics for trained Intel DAAL linear regression model.
+    :doc:`train <train>`\ (self, frame, value_column, observation_columns[, fit_intercept])               |BETA| Build Intel DAAL linear regression model.
     ====================================================================================================  ====================================================================================================
 
 .. _DaalLinearRegressionModel__init__:
@@ -45,7 +45,7 @@
 
 .. function:: __init__(self, name=None)
 
-    |ALPHA|
+    |BETA|
     Create a 'new' instance of a DAAL Linear Regression model.
 
 

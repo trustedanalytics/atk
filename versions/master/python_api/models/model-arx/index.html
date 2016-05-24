@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -135,7 +132,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-arxmodel">
-<h1><a class="reference internal" href="../index.html"><em>Models</em></a> ArxModel<a class="headerlink" href="#models-arxmodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> ArxModel<a class="headerlink" href="#models-arxmodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -150,13 +147,13 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
 <td>Read-only property - Last time this model&#8217;s data was accessed.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
 <td>Set or get the name of the model object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
 <td>Read-only property - Current model life cycle status.</td>
 </tr>
 </tbody>
@@ -168,16 +165,16 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#arxmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#arxmodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Create a &#8216;new&#8217; instance of a AutoRegressive Exogenous model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame, timeseries_column, x_columns)</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, frame, timeseries_column, x_columns)</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> New frame with column of predicted y values</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, timeseries_column, x_columns, y_max_lag, x_max_lag[, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, frame, timeseries_column, x_columns, y_max_lag, x_max_lag[, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates AutoregressionX (ARX) Model from train frame.</td>
 </tr>
 </tbody>
@@ -211,7 +208,7 @@ Create a &#8216;new&#8217; instance of a AutoRegressive Exogenous model.</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.
 The frame has five columns where &#8220;y&#8221; is the time series value and &#8220;vistors&#8221;, &#8220;wkends&#8221;,
 &#8220;incidentRate&#8221;, and &#8220;seasonality&#8221; are exogenous inputs.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  y      visitors  wkends  incidentRate  seasonality</span>
 <span class="go">===========================================================</span>
 <span class="go">[0]   68.0     278.0     0.0          28.0  0.0151327580791</span>
@@ -226,15 +223,15 @@ The frame has five columns where &#8220;y&#8221; is the time series value and &#
 <span class="go">[9]   89.0     320.0     0.0          29.0  0.0269026810295</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArxModel</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArxModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{u&#39;c&#39;: 0.0,</span>
 <span class="go"> u&#39;coefficients&#39;: [0.27583285049358186,</span>
 <span class="go">  -13.096710518563603,</span>
@@ -242,15 +239,15 @@ The frame has five columns where &#8220;y&#8221; is the time series value and &#
 <span class="go">  -103.8264674349643]}</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">column_names</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">column_names</span>
 <span class="go">[u&#39;y&#39;, u&#39;visitors&#39;, u&#39;wkends&#39;, u&#39;incidentRate&#39;, u&#39;seasonality&#39;, u&#39;predicted_y&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;predicted_y&quot;</span><span class="p">))</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;predicted_y&quot;</span><span class="p">))</span>
 <span class="go">[#]  y      predicted_y</span>
 <span class="go">=========================</span>
 <span class="go">[0]   68.0  74.2459276772</span>
@@ -265,10 +262,24 @@ The frame has five columns where &#8220;y&#8221; is the time series value and &#
 <span class="go">[9]   89.0  84.5780055922</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># Post a request to get the metadata about the model
+&gt;&gt;&gt; r = requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;ARX Model&#8221;,&#8221;model_class&#8221;:&#8221;com.cloudera.sparkts.models.ARXModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;y&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;x_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;y&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;x_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;score&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}]}&#8217;</p>
+<p># The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
+# that was trained and published in the example above.  To keep things simple, we just send the first three rows of
+# &#8216;y&#8217; values and the corresponding &#8216;x_values&#8217; (visitors, wkends, incidentRate, and seasonality).
+r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8216;,json={&#8220;records&#8221;:[{&#8220;y&#8221;:[68.0,89.0,96.0],&#8221;x_values&#8221;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})</p>
+<p># The &#8216;score&#8217; value contains an array of predicted y values.
+r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;y&#8221;:[68.0,89.0,96.0],&#8221;x_values&#8221;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],&#8221;score&#8221;:[74.24592767720993,87.31024788358613,84.8763748215895]}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -294,7 +305,7 @@ The frame has five columns where &#8220;y&#8221; is the time series value and &#
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

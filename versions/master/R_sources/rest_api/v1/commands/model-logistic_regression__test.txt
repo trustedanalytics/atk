@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:logistic_regression/test
 ------------------------------------------------------
 
-|ALPHA|
 Predict test frame labels and return metrics.
 
 POST /v1/commands/

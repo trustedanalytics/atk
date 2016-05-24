@@ -7,7 +7,6 @@
 
 .. function:: predict(self, frame, mean_centered=True, t_squared_index=False, observation_columns=None, c=None, name=None)
 
-    |ALPHA|
     Predict using principal components model.
 
 

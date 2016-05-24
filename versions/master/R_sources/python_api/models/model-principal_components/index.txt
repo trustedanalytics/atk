@@ -33,8 +33,8 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <PrincipalComponentsModel__init__>`\ (self[, name, _info])                             Create a 'new' instance of a Principal Components model.
-    :doc:`predict <predict>`\ (self, frame[, mean_centered, t_squared_index, observation_columns, ...])   |ALPHA| Predict using principal components model.
-    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`predict <predict>`\ (self, frame[, mean_centered, t_squared_index, observation_columns, ...])   Predict using principal components model.
+    :doc:`publish <publish>`\ (self)                                                                      Creates a tar file that will be used as input to the scoring engine
     :doc:`train <train>`\ (self, frame, observation_columns[, mean_centered, k])                          Build principal components model.
     ====================================================================================================  ====================================================================================================
 
@@ -127,3 +127,33 @@
     [4]  -0.163359836968   0.719188122813
     >>> model.publish()
     [===Job Progress===]
+
+    # Take the path to the published model and run it in the Scoring Engine
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    # posting a request to get the metadata about the model
+    >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"Principal Components Model","model_class":"org.trustedanalytics.atk.scoring.models.PrincipalComponentsScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.PrincipalComponentsModelReaderPlugin","custom_values":{}},"input":[{"name":"1","value":"Double"},{"name":"2","value":"Double"},{"name":"3","value":"Double"},{"name":"4","value":"Double"},{"name":"5","value":"Double"},{"name":"6","value":"Double"}],"output":[{"name":"1","value":"Double"},{"name":"2","value":"Double"},{"name":"3","value":"Double"},{"name":"4","value":"Double"},{"name":"5","value":"Double"},{"name":"6","value":"Double"},{"name":"principal_components","value":"List[Double]"},{"name":"t_squared_index","value":"Double"}]}'
+
+    # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.6,  1.7,  0.3,  1.5,  0.8,  0.7', headers=headers)
+    >>> r.text
+    u'0.8000000000000014'
+
+    # Posting a request to version 1 with multiple records to score:
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.6,  1.7,  0.3,  1.5,  0.8,  0.7&data=1.5,  1.2,  0.5,  1.4,  0.6,  0.4', headers=headers)
+    >>> r.text
+    u'0.8000000000000014,0.7999999999999993'
+
+    # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"1": 2.6, "2": 1.7, "3": 0.3, "4": 1.5, "5": 0.8, "6": 0.7}]})
+    >>> r.text
+    u'{"data":[{"t_squared_index":0.8000000000000014,"4":1.5,"5":0.8,"6":0.7,"1":2.6,"principal_components":[0.31473869501177154,-0.18375354922552106,0.31256156011289404,0.11260310008656331,-1.8388068845354155E-16,2.0816681711721685E-16],"2":1.7,"3":0.3}]}'
+
+    # posting a request to version 2 with multiple records to score:
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"1": 2.6, "2": 1.7, "3": 0.3, "4": 1.5, "5": 0.8, "6": 0.7}, {"1": 1.5, "2": 1.2, "3": 0.5, "4": 1.4, "5": 0.6, "6":0.4}]})
+    >>> r.text
+    u'{"data":[{"t_squared_index":0.8000000000000014,"4":1.5,"5":0.8,"6":0.7,"1":2.6,"principal_components":[0.31473869501177154,-0.18375354922552106,0.31256156011289404,0.11260310008656331,-1.8388068845354155E-16,2.0816681711721685E-16],"2":1.7,"3":0.3},{"t_squared_index":0.7999999999999993,"4":1.4,"5":0.6,"6":0.4,"1":1.5,"principal_components":[1.4449861805807689,0.15050931919479138,-0.16335983696811784,-0.04330642483363326,7.632783294297951E-17,6.938893903907228E-17],"2":1.2,"3":0.5}]}'
+

@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-copy">
-<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  copy<a class="headerlink" href="#frame-copy" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  copy<a class="headerlink" href="#frame-copy" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="copy">
@@ -163,7 +160,7 @@
 <p>Copy frame or certain frame columns entirely or filtered.
 Useful for frame query.</p>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
 <span class="go">Frame &lt;unnamed&gt;</span>
 <span class="go">row_count = 4</span>
 <span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]</span>
@@ -181,7 +178,7 @@ Useful for frame query.</p>
 <span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
 </pre></div>
 </div>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame4</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;tenure&#39;</span><span class="p">:</span> <span class="s1">&#39;years&#39;</span><span class="p">},</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame4</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;tenure&#39;</span><span class="p">:</span> <span class="s1">&#39;years&#39;</span><span class="p">},</span>
 <span class="gp">... </span>                    <span class="n">where</span><span class="o">=</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame4</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
@@ -216,7 +213,7 @@ Useful for frame query.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

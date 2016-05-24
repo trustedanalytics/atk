@@ -7,7 +7,6 @@
 
 .. function:: join(self, right, left_on, right_on=None, how='inner', name=None)
 
-    |BETA|
     Join operation on one or two frames, creating a new frame.
 
 

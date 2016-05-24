@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:random_forest_classifier/train
 ------------------------------------------------------------
 
-|ALPHA|
 Build Random Forests Classifier model.
 
 POST /v1/commands/
@@ -103,7 +102,7 @@ Request
 
 
 
-    **seed** : int32 (default=-1234673525)
+    **seed** : int32 (default=-1678275798)
 
     ..
 

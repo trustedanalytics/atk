@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-cumulative-percent">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  cumulative_percent<a class="headerlink" href="#vertexframe-cumulative-percent" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  cumulative_percent<a class="headerlink" href="#vertexframe-cumulative-percent" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="cumulative_percent">
 <code class="descname">cumulative_percent</code><span class="sig-paren">(</span><em>self</em>, <em>sample_col</em><span class="sig-paren">)</span><a class="headerlink" href="#cumulative_percent" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Add column to frame with cumulative percent sum.</p>
+<dd><p>Add column to frame with cumulative percent sum.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -159,7 +155,7 @@ negative percentages).</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em> accessing a frame that contains a single
 column named <em>obs</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs</span>
 <span class="go">========</span>
 <span class="go">[0]    0</span>
@@ -171,7 +167,7 @@ column named <em>obs</em>:</p>
 </pre></div>
 </div>
 <p>The cumulative percent sum for column <em>obs</em> is obtained by:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s1">&#39;obs&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s1">&#39;obs&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
@@ -179,7 +175,7 @@ column named <em>obs</em>:</p>
 <em>obsCumulativePercentSum</em>.
 They contain the original data and the cumulative percent sum,
 respectively:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs  obs_cumulative_percent</span>
 <span class="go">================================</span>
 <span class="go">[0]    0                     0.0</span>
@@ -215,7 +211,7 @@ respectively:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

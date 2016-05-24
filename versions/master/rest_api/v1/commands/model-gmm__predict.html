@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -127,9 +124,8 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-model-gmm-predict">
-<h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:gmm/predict<a class="headerlink" href="#commands-model-gmm-predict" title="Permalink to this headline">¶</a></h1>
-<p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Predict the cluster assignments for the data points.</p>
+<h1><a class="reference internal" href="index.html"><span class="doc">Commands</span></a> model:gmm/predict<a class="headerlink" href="#commands-model-gmm-predict" title="Permalink to this headline">¶</a></h1>
+<p>Predict the cluster assignments for the data points.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -138,7 +134,7 @@ Predict the cluster assignments for the data points.</p>
 <div class="section" id="request">
 <h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>POST /v1/commands/
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">POST</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -173,8 +169,8 @@ The columns are scaled using the same values used when training the model.</p>
 <div class="line"><br /></div>
 </div>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -189,7 +185,7 @@ Content-type: application/json
 <div class="section" id="response">
 <h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -201,14 +197,14 @@ Content-type: application/json
 <div class="section" id="id2">
 <h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
 <p>(None)</p>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -218,7 +214,7 @@ Content-type: application/json
 <div class="section" id="id3">
 <h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -227,8 +223,8 @@ Content-type: application/json
 <div><dl class="docutils">
 <dt>Frame</dt>
 <dd>A new frame consisting of the existing columns of the frame and a new column:</dd>
-<dt>predicted_cluster <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Integer containing the cluster assignment.</dd>
+<dt>predicted_cluster</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Integer containing the cluster assignment.</dd>
 </dl>
 </div></blockquote>
 </div>
@@ -256,7 +252,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

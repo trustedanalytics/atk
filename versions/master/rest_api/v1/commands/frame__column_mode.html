@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -127,7 +124,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-frame-column-mode">
-<h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/column_mode<a class="headerlink" href="#commands-frame-column-mode" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Commands</span></a> frame/column_mode<a class="headerlink" href="#commands-frame-column-mode" title="Permalink to this headline">¶</a></h1>
 <p>Evaluate the weights assigned to rows.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
@@ -137,7 +134,7 @@
 <div class="section" id="request">
 <h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>POST /v1/commands/
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">POST</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -174,8 +171,8 @@ Default is 1.</p>
 <div class="line"><br /></div>
 </div>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -199,7 +196,7 @@ max_modes_returned, a larger number of modes can be returned.</p>
 <div class="section" id="response">
 <h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -211,14 +208,14 @@ max_modes_returned, a larger number of modes can be returned.</p>
 <div class="section" id="id2">
 <h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
 <p>(None)</p>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -228,7 +225,7 @@ Content-type: application/json
 <div class="section" id="id3">
 <h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -237,8 +234,8 @@ Content-type: application/json
 <div><dl class="docutils">
 <dt>Dictionary containing summary statistics.</dt>
 <dd>The data returned is composed of multiple components:</dd>
-<dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">A mode is a data element of maximum net weight.</span></dt>
-<dd>A set of modes is returned.
+<dt>mode</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">A mode is a data element of maximum net weight.</span><dd>A set of modes is returned.
 The empty set is returned when the sum of the weights is 0.
 If the number of modes is less than or equal to the parameter
 max_modes_returned, then all modes of the data are
@@ -246,17 +243,17 @@ returned.
 If the number of modes is greater than the max_modes_returned
 parameter, only the first max_modes_returned many modes (per a
 canonical ordering) are returned.</dd>
-<dt>weight_of_mode <span class="classifier-delimiter">:</span> <span class="classifier">Weight of a mode.</span></dt>
-<dd>If there are no data elements of finite weight greater than 0,
+<dt>weight_of_mode</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Weight of a mode.</span><dd>If there are no data elements of finite weight greater than 0,
 the weight of the mode is 0.
 If no weights column is given, this is the number of appearances
 of each mode.</dd>
-<dt>total_weight <span class="classifier-delimiter">:</span> <span class="classifier">Sum of all weights in the weight column.</span></dt>
-<dd>This is the row count if no weights are given.
+<dt>total_weight</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Sum of all weights in the weight column.</span><dd>This is the row count if no weights are given.
 If no weights column is given, this is the number of rows in
 the table with non-zero weight.</dd>
-<dt>mode_count <span class="classifier-delimiter">:</span> <span class="classifier">The number of distinct modes in the data.</span></dt>
-<dd>In the case that the data is very multimodal, this number may
+<dt>mode_count</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">The number of distinct modes in the data.</span><dd>In the case that the data is very multimodal, this number may
 exceed max_modes_returned.</dd>
 </dl>
 </div></blockquote>
@@ -285,7 +282,7 @@ exceed max_modes_returned.</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

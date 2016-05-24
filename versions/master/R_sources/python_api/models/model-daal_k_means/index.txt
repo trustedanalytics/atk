@@ -32,10 +32,10 @@
     .. rubric:: Methods
 
     ====================================================================================================  ====================================================================================================
-    :ref:`__init__ <DaalKMeansModel__init__>`\ (self[, name, _info])                                      Create a 'new' instance of a DAAL k-means model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns, label_column])                          |ALPHA| Predict the cluster assignments for the data points.
-    :doc:`publish <publish>`\ (self)                                                                      |ALPHA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`train <train>`\ (self, frame, observation_columns[, k, max_iterations, column_scalings, ...])   |ALPHA| Creates DAAL KMeans Model from train frame.
+    :ref:`__init__ <DaalKMeansModel__init__>`\ (self[, name, _info])                                      |BETA| Create a 'new' instance of a DAAL k-means model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns, label_column])                          |BETA| Predict the cluster assignments for the data points.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, observation_columns[, column_scalings, k, max_iterations, ...])   |BETA| Creates DAAL KMeans Model from train frame.
     ====================================================================================================  ====================================================================================================
 
 .. _DaalKMeansModel__init__:
@@ -43,6 +43,7 @@
 
 .. function:: __init__(self, name=None)
 
+    |BETA|
     Create a 'new' instance of a DAAL k-means model.
 
 
@@ -106,12 +107,12 @@
     [===Job Progress===]
     >>> train_output
     {u'centroids': {u'Cluster:0': [120.0], u'Cluster:1': [3.6666666666666665]},
-     u'cluster_sizes': {u'Cluster:0': 1, u'Cluster:1': 9}}
+     u'cluster_size': {u'Cluster:0': 1, u'Cluster:1': 9}}
     >>> predicted_frame = model.predict(frame, ["data"])
     [===Job Progress===]
     >>> predicted_frame.inspect()
-    [#]  data   name     distance_from_cluster_0  distance_from_cluster_1  cluster
-    ==============================================================================
+    [#]  data   name     distance_from_cluster_0  distance_from_cluster_1  predicted_cluster
+    ========================================================================================
     [0]    2.0  ab                       13924.0            2.77777777778        1
     [1]    1.0  cd                       14161.0            7.11111111111        1
     [2]    7.0  ef                       12769.0            11.1111111111        1

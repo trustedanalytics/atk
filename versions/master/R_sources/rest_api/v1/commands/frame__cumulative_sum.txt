@@ -4,7 +4,6 @@
 :doc:`Commands <index>` frame/cumulative_sum
 --------------------------------------------
 
-|BETA|
 Add column to frame with cumulative percent sum.
 
 POST /v1/commands/

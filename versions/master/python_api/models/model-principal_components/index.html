@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
     <link rel="next" title="PrincipalComponentsModel __init__" href="new.html" >
-    <link rel="prev" title="DaalKMeansModel train" href="../model-daal_k_means/train.html" > 
+    <link rel="prev" title="DaalNaiveBayesModel train" href="../model-daal_naive_bayes/train.html" > 
   </head>
   <body>
 
@@ -73,7 +73,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="../model-daal_k_means/train.html" title="DaalKMeansModel train"
+        <a href="../model-daal_naive_bayes/train.html" title="DaalNaiveBayesModel train"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -135,7 +132,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-principalcomponentsmodel">
-<h1><a class="reference internal" href="../index.html"><em>Models</em></a> PrincipalComponentsModel<a class="headerlink" href="#models-principalcomponentsmodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> PrincipalComponentsModel<a class="headerlink" href="#models-principalcomponentsmodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -150,13 +147,13 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
 <td>Read-only property - Last time this model&#8217;s data was accessed.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
 <td>Set or get the name of the model object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
 <td>Read-only property - Current model life cycle status.</td>
 </tr>
 </tbody>
@@ -168,16 +165,16 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#principalcomponentsmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#principalcomponentsmodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
 <td>Create a &#8216;new&#8217; instance of a Principal Components model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, mean_centered, t_squared_index, observation_columns, ...])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict using principal components model.</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, frame[, mean_centered, t_squared_index, observation_columns, ...])</td>
+<td>Predict using principal components model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
+<td>Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, observation_columns[, mean_centered, k])</td>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, frame, observation_columns[, mean_centered, k])</td>
 <td>Build principal components model.</td>
 </tr>
 </tbody>
@@ -206,43 +203,43 @@
 </tr>
 </tbody>
 </table>
-<p>Principal component analysis <a class="reference internal" href="#r21" id="id1">[R21]</a> is a statistical algorithm
+<p>Principal component analysis <a class="reference internal" href="#r19" id="id1">[R19]</a> is a statistical algorithm
 that converts possibly correlated features to linearly uncorrelated variables
 called principal components.
 The number of principal components is less than or equal to the number of
 original variables.
 This implementation of computing Principal Components is done by Singular
-Value Decomposition <a class="reference internal" href="#r22" id="id2">[R22]</a> of the data, providing the user with an option to
+Value Decomposition <a class="reference internal" href="#r20" id="id2">[R20]</a> of the data, providing the user with an option to
 mean center the data.
 The Principal Components model is initialized; trained on
 specifying the observation columns of the frame and the number of components;
 used to predict principal components.
-The MLLib Singular Value Decomposition <a class="reference internal" href="#r23" id="id3">[R23]</a> implementation has been used for
+The MLLib Singular Value Decomposition <a class="reference internal" href="#r21" id="id3">[R21]</a> implementation has been used for
 this, with additional features to 1) mean center the data during train and
 predict and 2) compute the t-squared index during prediction.</p>
 <p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R20]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="r21" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r22" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R22]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r23" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R23]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R21]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing six columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  1    2    3    4    5    6</span>
 <span class="go">=================================</span>
 <span class="go">[0]  2.6  1.7  0.3  1.5  0.8  0.7</span>
@@ -252,13 +249,13 @@ predict and 2) compute the t-squared index during prediction.</p>
 <span class="go">[4]  1.5  1.2  0.5  1.4  0.6  0.4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PrincipalComponentsModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">],</span> <span class="n">mean_centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">],</span> <span class="n">mean_centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{u&#39;k&#39;: 6, u&#39;column_means&#39;: [2.92, 1.48, 0.4, 1.3, 0.7, 0.52], u&#39;observation_columns&#39;: [u&#39;1&#39;, u&#39;2&#39;, u&#39;3&#39;, u&#39;4&#39;, u&#39;5&#39;, u&#39;6&#39;], u&#39;mean_centered&#39;: True, u&#39;right_singular_vectors&#39;: [[-0.9906468642089332, 0.11801374544146297, 0.025647010353320242, 0.048525096275535286, -0.03252674285233843, 0.02492194235385788], [-0.07735139793384983, -0.6023104604841424, 0.6064054412059493, -0.4961696216881456, -0.12443126544906798, -0.042940400527513106], [0.028850639537397756, 0.07268697636708575, -0.2446393640059097, -0.17103491337994586, -0.9368360903028429, 0.16468461966702994], [0.10576208410025369, 0.5480329468552815, 0.75230590898727, 0.2866144016081251, -0.20032699877119212, 0.015210798298156058], [-0.024072151446194606, -0.30472267167437633, -0.01125936644585159, 0.48934541040601953, -0.24758962014033054, -0.7782533654748628], [-0.0061729539518418355, -0.47414707747028795, 0.07533458226215438, 0.6329307498105832, -0.06607181431092408, 0.6037419362435869]], u&#39;singular_values&#39;: [1.8048170096632419, 0.8835344148403882, 0.7367461843294286, 0.15234027471064404, 5.90167578565564e-09, 4.478916578455115e-09]}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;column_means&#39;</span><span class="p">]</span>
 <span class="go">[2.92, 1.48, 0.4, 1.3, 0.7, 0.52]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">mean_centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">t_squared_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">observation_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">mean_centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">t_squared_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">observation_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  1    2    3    4    5    6    p_1              p_2</span>
@@ -280,6 +277,29 @@ predict and 2) compute the t-squared index during prediction.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;Principal Components Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.PrincipalComponentsScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.PrincipalComponentsModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;3&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;4&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;5&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;6&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;3&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;4&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;5&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;6&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;principal_components&#8221;,&#8221;value&#8221;:&#8221;List[Double]&#8221;},{&#8220;name&#8221;:&#8221;t_squared_index&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
+<p># Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=2.6">http://mymodel.demotrustedanalytics.com/v1/score?data=2.6</a>,  1.7,  0.3,  1.5,  0.8,  0.7&#8217;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;0.8000000000000014&#8217;</p>
+<p># Posting a request to version 1 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=2.6">http://mymodel.demotrustedanalytics.com/v1/score?data=2.6</a>,  1.7,  0.3,  1.5,  0.8,  0.7&amp;data=1.5,  1.2,  0.5,  1.4,  0.6,  0.4&#8217;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;0.8000000000000014,0.7999999999999993&#8217;</p>
+<p># Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;1&#8221;: 2.6, &#8220;2&#8221;: 1.7, &#8220;3&#8221;: 0.3, &#8220;4&#8221;: 1.5, &#8220;5&#8221;: 0.8, &#8220;6&#8221;: 0.7}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;t_squared_index&#8221;:0.8000000000000014,&#8221;4&#8221;:1.5,&#8221;5&#8221;:0.8,&#8221;6&#8221;:0.7,&#8221;1&#8221;:2.6,&#8221;principal_components&#8221;:[0.31473869501177154,-0.18375354922552106,0.31256156011289404,0.11260310008656331,-1.8388068845354155E-16,2.0816681711721685E-16],&#8221;2&#8221;:1.7,&#8221;3&#8221;:0.3}]}&#8217;</p>
+<p># posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;1&#8221;: 2.6, &#8220;2&#8221;: 1.7, &#8220;3&#8221;: 0.3, &#8220;4&#8221;: 1.5, &#8220;5&#8221;: 0.8, &#8220;6&#8221;: 0.7}, {&#8220;1&#8221;: 1.5, &#8220;2&#8221;: 1.2, &#8220;3&#8221;: 0.5, &#8220;4&#8221;: 1.4, &#8220;5&#8221;: 0.6, &#8220;6&#8221;:0.4}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;t_squared_index&#8221;:0.8000000000000014,&#8221;4&#8221;:1.5,&#8221;5&#8221;:0.8,&#8221;6&#8221;:0.7,&#8221;1&#8221;:2.6,&#8221;principal_components&#8221;:[0.31473869501177154,-0.18375354922552106,0.31256156011289404,0.11260310008656331,-1.8388068845354155E-16,2.0816681711721685E-16],&#8221;2&#8221;:1.7,&#8221;3&#8221;:0.3},{&#8220;t_squared_index&#8221;:0.7999999999999993,&#8221;4&#8221;:1.4,&#8221;5&#8221;:0.6,&#8221;6&#8221;:0.4,&#8221;1&#8221;:1.5,&#8221;principal_components&#8221;:[1.4449861805807689,0.15050931919479138,-0.16335983696811784,-0.04330642483363326,7.632783294297951E-17,6.938893903907228E-17],&#8221;2&#8221;:1.2,&#8221;3&#8221;:0.5}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -305,7 +325,7 @@ predict and 2) compute the t-squared index during prediction.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
     <link rel="next" title="Extending Trusted Analytics Platform" href="dev_over.html" >
-    <link rel="prev" title="Graphs" href="ds_graph.html" > 
+    <link rel="prev" title="Algorithms" href="ds_algorithms.html" > 
   </head>
   <body>
 
@@ -72,7 +72,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="ds_graph.html" title="Graphs"
+        <a href="ds_algorithms.html" title="Algorithms"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -101,9 +101,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -111,12 +108,9 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_pflw.html">Process Flow Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Best Known Methods (User)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Best Known Methods (User)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
@@ -151,14 +145,14 @@
 <div class="section" id="server-connection">
 <h3>Server Connection<a class="headerlink" href="#server-connection" title="Permalink to this headline">¶</a></h3>
 <p>Ping the server:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="k">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
 <span class="go">Successful ping to Trusted Analytics ATK at http://localhost:9099/info</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>View and edit the server connection:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
 <span class="go">------------------------------------------------------------------------------</span>
 <span class="go">headers        : {u&#39;Content-type&#39;: u&#39;application/json&#39;, u&#39;Authorization&#39;: u...</span>
 <span class="go">scheme         : http</span>
@@ -170,8 +164,8 @@
 <span class="go">&#39;localhost&#39;</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;10.54.99.99&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
 <span class="go">host:    10.54.99.99</span>
 <span class="go">port:    None</span>
 <span class="go">scheme:  http</span>
@@ -179,8 +173,8 @@
 </pre></div>
 </div>
 <p>Reset configuration back to defaults:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">server</span>
 <span class="go">host:    localhost</span>
 <span class="go">port:    9099</span>
 <span class="go">scheme:  http</span>
@@ -194,15 +188,15 @@
 occur.
 To see the full Python stack trace of the last (in other words, the most
 recent) exception:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">last</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">last</span>
 </pre></div>
 </div>
 <p>To enable always printing the full Python stack trace, set the <em>show_details</em>
 property:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="k">as</span> <span class="nn">ta</span>
 
 <span class="go"># show full stack traces</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">show_details</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">show_details</span> <span class="o">=</span> <span class="kc">True</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 
@@ -238,7 +232,7 @@ issues, etc.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

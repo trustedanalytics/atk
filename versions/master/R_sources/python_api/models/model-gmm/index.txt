@@ -32,8 +32,8 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <GmmModel__init__>`\ (self[, name, _info])                                             Create a 'new' instance of a gmm model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |BETA| Predict the cluster assignments for the data points.
-    :doc:`train <train>`\ (self, frame, observation_columns, column_scalings[, k, max_iterations, ...])   |BETA| Creates a GMM Model from the train frame.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        Predict the cluster assignments for the data points.
+    :doc:`train <train>`\ (self, frame, observation_columns, column_scalings[, k, max_iterations, ...])   Creates a GMM Model from the train frame.
     ====================================================================================================  ====================================================================================================
 
 .. _GmmModel__init__:

@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:random_forest_classifier/publish
 --------------------------------------------------------------
 
-|BETA|
 Creates a tar file that will be used as input to the scoring engine
 
 POST /v1/commands/

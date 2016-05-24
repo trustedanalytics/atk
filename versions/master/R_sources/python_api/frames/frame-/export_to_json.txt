@@ -46,15 +46,15 @@
 
         ..
 
-
+            The URI of the created file
     Export the frame to a file in JSON format as a Hadoop file.
 
     Examples
     --------
-    Consider Frame *my_frame*:
 
     .. code::
 
-        >>> my_frame.export_to_json('covarianceresults')
-
+        >>> frame.export_to_json('covarianceresults')
+        [===Job Progress===]
+        "hdfs://hostname/user/user1/covarianceresults"
 

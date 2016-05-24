@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-histogram">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  histogram<a class="headerlink" href="#edgeframe-histogram" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  histogram<a class="headerlink" href="#edgeframe-histogram" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="histogram">
 <code class="descname">histogram</code><span class="sig-paren">(</span><em>self</em>, <em>column_name</em>, <em>num_bins=None</em>, <em>weight_column_name=None</em>, <em>bin_type='equalwidth'</em><span class="sig-paren">)</span><a class="headerlink" href="#histogram" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Compute the histogram for a column in a frame.</p>
+<dd><p>Compute the histogram for a column in a frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -168,14 +164,14 @@ Defaults is &#8220;equalwidth&#8221;.</p>
 <dd><p class="first last">A Histogram object containing the result set.
 The data returned is composed of multiple components:</p>
 </dd>
-<dt>cutoffs <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd><p class="first last">A list containing the edges of each bin.</p>
+<dt>cutoffs</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd><p class="first last">A list containing the edges of each bin.</p>
 </dd>
-<dt>hist <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd><p class="first last">A list containing count of the weighted observations found in each bin.</p>
+<dt>hist</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd><p class="first last">A list containing count of the weighted observations found in each bin.</p>
 </dd>
-<dt>density <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span></dt>
-<dd><p class="first last">A list containing a decimal containing the percentage of
+<dt>density</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array of float</span><dd><p class="first last">A list containing a decimal containing the percentage of
 observations found in the total set per bin.</p>
 </dd>
 </dl>
@@ -197,7 +193,7 @@ This is due to a restriction that elements with an identical value must
 belong to the same bin.</p>
 <p class="rubric">Examples</p>
 <p>Consider the following sample data set:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  a  b</span>
 <span class="go">    =========</span>
 <span class="go">    [0]  a  2</span>
@@ -208,10 +204,10 @@ belong to the same bin.</p>
 </pre></div>
 </div>
 <p>A simple call for 3 equal-width bins gives:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">hist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">hist</span>
 <span class="go">Histogram:</span>
 <span class="go">cutoffs: [1.0, 3.6666666666666665, 6.333333333333333, 9.0],</span>
 <span class="go">hist: [3.0, 0.0, 2.0],</span>
@@ -219,10 +215,10 @@ belong to the same bin.</p>
 </pre></div>
 </div>
 <p>Switching to equal depth gives:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">bin_type</span><span class="o">=</span><span class="s1">&#39;equaldepth&#39;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hist</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">bin_type</span><span class="o">=</span><span class="s1">&#39;equaldepth&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">hist</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">hist</span>
 <span class="go">Histogram:</span>
 <span class="go">cutoffs: [1.0, 2.0, 7.0, 9.0],</span>
 <span class="go">hist: [1.0, 2.0, 2.0],</span>
@@ -256,7 +252,7 @@ belong to the same bin.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

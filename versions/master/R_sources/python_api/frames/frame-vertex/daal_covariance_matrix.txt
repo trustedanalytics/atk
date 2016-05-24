@@ -7,6 +7,7 @@
 
 .. function:: daal_covariance_matrix(self, data_column_names, matrix_name=None)
 
+    |BETA|
     Calculate covariance matrix for two or more columns.
 
 

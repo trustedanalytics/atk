@@ -30,7 +30,6 @@
     name
     status
     vertex_count
-    vertex_outdegree
     vertices
 
 .. class:: Graph
@@ -60,33 +59,40 @@
     .. rubric:: Methods
 
     ====================================================================================================  ====================================================================================================
-    :ref:`__init__ <Graph__init__>`\ (self[, name, _info])                                                Initialize the graph.
+    :ref:`__init__ <Graph__init__>`\ (self[, source, name, _info])                                        Initialize the graph.
     :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
     :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
     :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
     :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
     :doc:`define_edge_type <define_edge_type>`\ (self, label, src_vertex_label, dest_vertex_label)        Define an edge type.
     :doc:`define_vertex_type <define_vertex_type>`\ (self, label)                                         Define a vertex type by label.
-    :doc:`export_to_orientdb <export_to_orientdb>`\ (self, db_name[, batch_size])                         Export graph to OrientDB
+    :doc:`export_to_orientdb <export_to_orientdb>`\ (self, graph_name[, batch_size])                      |ALPHA| Exports graph to OrientDB
     :doc:`graphx_connected_components <graphx_connected_components>`\ (self[, ...])                       Implements the connected components computation on a graph by invoking graphx api.
     :doc:`graphx_label_propagation <graphx_label_propagation>`\ (self[, max_steps, ...])                  |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
-    :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.
+    :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |BETA| Find groups of vertices with similar attributes.
     :doc:`label_propagation <label_propagation>`\ (self, prior_property, posterior_property, ...)         Classification on sparse data using Belief Propagation.
     :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, prior_property, ...[, ...])        Classification on sparse data using Belief Propagation.
-    :doc:`vertex_outdegree <vertex_outdegree>`\ (self)                                                    Counts the out-degree of vertices in a graph.
     ====================================================================================================  ====================================================================================================
 
 .. _Graph__init__:
 
 
-.. function:: __init__(self, name=None)
+.. function:: __init__(self, source=None, name=None)
 
     Initialize the graph.
 
 
     :Parameters:
+
+        **source** : OrientDBGraph | None (default=None)
+
+        ..
+
+            A source of initial data.
+
+
 
         **name** : str (default=None)
 
@@ -218,7 +224,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2016, 4, 28, 11, 25, 11, 76044)
+    datetime.datetime(2016, 5, 24, 8, 41, 0, 173543)
 
     >>> graph
     Graph <unnamed>

@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-timeseries-from-observations">
-<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  timeseries_from_observations<a class="headerlink" href="#frame-timeseries-from-observations" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  timeseries_from_observations<a class="headerlink" href="#frame-timeseries-from-observations" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="timeseries_from_observations">
@@ -171,7 +168,7 @@ correspond to the date/time index.</dd>
 <p>In this example, we will use a frame of observations of resting heart rate for
 three individuals over three days.  The data is accessed from Frame object
 called <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">row_count</span> <span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">row_count</span> <span class="p">)</span>
 <span class="go">[#]  name     date                      resting_heart_rate</span>
 <span class="go">==========================================================</span>
 <span class="go">[0]  Edward   2016-01-01T12:00:00.000Z                62.0</span>
@@ -188,7 +185,7 @@ called <em>my_frame</em>:</p>
 which will be used when creating the time series.  Since our data
 is for three days, our date/time index will just contain those
 three dates:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2016-01-01T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-02T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-03T12:00:00.000Z&quot;</span><span class="p">]</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2016-01-01T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-02T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-03T12:00:00.000Z&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Then we can create our time series frame by specifying our date/time
@@ -196,12 +193,12 @@ index along with the name of our timestamp column (in this example, it&#8217;s</
 <blockquote>
 <div>&#8220;date&#8221;), key column (in this example, it&#8217;s &#8220;name&#8221;), and value column (in</div></blockquote>
 <p>this example, it&#8217;s &#8220;resting_heart_rate&#8221;).</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">timeseries_from_observations</span><span class="p">(</span><span class="n">datetimeindex</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;resting_heart_rate&quot;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">timeseries_from_observations</span><span class="p">(</span><span class="n">datetimeindex</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;resting_heart_rate&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>Take a look at the resulting time series frame schema and contents:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">schema</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">schema</span>
 <span class="go">[(u&#39;name&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;resting_heart_rate&#39;, vector(3))]</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
@@ -237,7 +234,7 @@ index along with the name of our timestamp column (in this example, it&#8217;s</
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

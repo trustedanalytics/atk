@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, value_column, observation_columns, elastic_net_parameter=0.0, fit_intercept=True, max_iterations=100, reg_param=0.0, standardization=True, tolerance=1e-06)
 
-    |ALPHA|
     Build linear regression model.
 
 

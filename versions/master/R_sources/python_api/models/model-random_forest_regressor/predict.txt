@@ -7,7 +7,6 @@
 
 .. function:: predict(self, frame, observation_columns=None)
 
-    |ALPHA|
     Predict the values for the data points.
 
 

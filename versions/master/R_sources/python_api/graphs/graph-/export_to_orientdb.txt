@@ -5,14 +5,15 @@
 ------
 
 
-.. function:: export_to_orientdb(self, db_name, batch_size=1000)
+.. function:: export_to_orientdb(self, graph_name, batch_size=1000)
 
-    Export graph to OrientDB
+    |ALPHA|
+    Exports graph to OrientDB
 
 
     :Parameters:
 
-        **db_name** : unicode
+        **graph_name** : unicode
 
         ..
 
@@ -35,5 +36,14 @@
 
         ..
 
-            OrientDB file, statistics for the exported vertices and edges.
-    Exports the graph to OrientDB database located in the given dbURI.
+            The location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
+                  for vertices dictionary:
+                         it returns the vertex class name, the number of the exported vertices and the number of vertices failed to be exported.
+                  for the edges dictionary:
+                         it returns the edge class name, the number of the exported edges and the number of edges that failed to be exported.
+    Creates OrientDB database using the parameters provided in the configurations file.
+
+          OrientDB database will be created in the given host name and port number,
+          and with the given user credentials after checking the user authorization to create or access OrientDB database.
+
+          Exports the graph edges and vertices to the OrientDB database. Each vertex or edge type in the graph corresponds to a vertex or edge class in OrientDB.

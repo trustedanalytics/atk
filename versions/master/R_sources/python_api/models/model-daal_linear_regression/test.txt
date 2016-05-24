@@ -7,7 +7,7 @@
 
 .. function:: test(self, frame, value_column=None, observation_columns=None)
 
-    |ALPHA|
+    |BETA|
     Compute test metrics for trained Intel DAAL linear regression model.
 
 

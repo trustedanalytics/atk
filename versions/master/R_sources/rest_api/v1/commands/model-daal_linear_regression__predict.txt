@@ -4,7 +4,7 @@
 :doc:`Commands <index>` model:daal_linear_regression/predict
 ------------------------------------------------------------
 
-|ALPHA|
+|BETA|
 Predict labels for a test frame using trained Intel DAAL linear regression model.
 
 POST /v1/commands/

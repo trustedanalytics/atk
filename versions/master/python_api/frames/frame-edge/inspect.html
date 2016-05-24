@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
-    <link rel="next" title="EdgeFrame invert_matrix" href="invert_matrix.html" >
+    <link rel="next" title="EdgeFrame join" href="join.html" >
     <link rel="prev" title="EdgeFrame histogram" href="histogram.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="invert_matrix.html" title="EdgeFrame invert_matrix"
+        <a href="join.html" title="EdgeFrame join"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-inspect">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  inspect<a class="headerlink" href="#edgeframe-inspect" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  inspect<a class="headerlink" href="#edgeframe-inspect" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="inspect">
@@ -190,7 +187,7 @@ by python REPL (i.e. using the object&#8217;s __repr__).  If running in a script
 to be printed, then it must be explicitly printed, then <cite>print frame.inspect()</cite></p>
 <p class="rubric">Examples</p>
 <p>To look at the first 4 rows of data in a frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="go">[#]  animal    name    age  weight</span>
 <span class="go">==================================</span>
 <span class="go">[0]  human     George    8   542.5</span>
@@ -199,17 +196,17 @@ to be printed, then it must be explicitly printed, then <cite>print frame.inspec
 <span class="go">[3]  elephant  Shep      5  8630.0</span>
 </pre></div>
 </div>
-<p># For other examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-inspect"><span>Inspect the Data</span></a>.</p>
+<p># For other examples, see <span class="xref std std-ref">example_frame.inspect</span>.</p>
 <p>Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
 running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
 this problem, explicitly print the unicode of the returned object:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
 </pre></div>
 </div>
 <p><strong>Global Settings</strong></p>
 <p>If not specified, the arguments that control formatting receive default values from
 &#8216;trustedanalytics.inspect_settings&#8217;.  Make changes there to affect all calls to inspect.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="k">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate       None</span>
@@ -226,7 +223,7 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width           120</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># return value back to default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># return value back to default</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate         16</span>
@@ -269,7 +266,7 @@ this problem, explicitly print the unicode of the returned object:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:principal_components/predict
 ----------------------------------------------------------
 
-|ALPHA|
 Predict using principal components model.
 
 POST /v1/commands/

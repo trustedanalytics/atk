@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame last_read_date" href="last_read_date.html" >
-    <link rel="prev" title="Frame invert_matrix" href="invert_matrix.html" > 
+    <link rel="prev" title="Frame inspect" href="inspect.html" > 
   </head>
   <body>
 
@@ -74,7 +74,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="invert_matrix.html" title="Frame invert_matrix"
+        <a href="inspect.html" title="Frame inspect"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-join">
-<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  join<a class="headerlink" href="#frame-join" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  join<a class="headerlink" href="#frame-join" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="join">
 <code class="descname">join</code><span class="sig-paren">(</span><em>self</em>, <em>right</em>, <em>left_on</em>, <em>right_on=None</em>, <em>how='inner'</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#join" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Join operation on one or two frames, creating a new frame.</p>
+<dd><p>Join operation on one or two frames, creating a new frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -201,7 +197,7 @@ Keep in mind that unicode in column names will likely cause the
 drop_frames() method (and others) to fail!</p>
 <p class="rubric">Examples</p>
 <p>Consider two frames: codes and colors</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  numbers</span>
 <span class="go">============</span>
 <span class="go">[0]        1</span>
@@ -214,7 +210,7 @@ drop_frames() method (and others) to fail!</p>
 <span class="go">[7]        3</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  numbers  color</span>
 <span class="go">====================</span>
 <span class="go">[0]        1  red</span>
@@ -224,11 +220,11 @@ drop_frames() method (and others) to fail!</p>
 </pre></div>
 </div>
 <p>Join them on the &#8216;numbers&#8217; column (&#8216;inner&#8217; join by default)</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  numbers  color</span>
 <span class="go">====================</span>
 <span class="go">[0]        1  red</span>
@@ -241,11 +237,11 @@ drop_frames() method (and others) to fail!</p>
 </div>
 <p>(The join adds an extra column <a href="#id1"><span class="problematic" id="id2">*</span></a>_R which is the join column from the right frame; it may be disregarded)</p>
 <p>Try a &#8216;left&#8217; join, which includes all the rows of the codes frame.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  numbers_L  color</span>
 <span class="go">======================</span>
 <span class="go">[0]          1  red</span>
@@ -259,11 +255,11 @@ drop_frames() method (and others) to fail!</p>
 </pre></div>
 </div>
 <p>And an outer join:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  numbers_L  color</span>
 <span class="go">======================</span>
 <span class="go">[0]          0  None</span>
@@ -278,7 +274,7 @@ drop_frames() method (and others) to fail!</p>
 </pre></div>
 </div>
 <p>Consider two frames: country_codes_frame and country_names_frame</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_codes_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_codes_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col_0  col_1  col_2</span>
 <span class="go">========================</span>
 <span class="go">[0]      1    354  a</span>
@@ -289,7 +285,7 @@ drop_frames() method (and others) to fail!</p>
 <span class="go">[5]      5     50  c</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_names_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_names_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col_0  col_1     col_2</span>
 <span class="go">===========================</span>
 <span class="go">[0]      1  Iceland   a</span>
@@ -301,11 +297,11 @@ drop_frames() method (and others) to fail!</p>
 </pre></div>
 </div>
 <p>Join them on the &#8216;col_0&#8217; and &#8216;col_2&#8217; columns (&#8216;inner&#8217; join by default)</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span> <span class="o">=</span> <span class="n">country_codes_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">country_names_frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span> <span class="o">=</span> <span class="n">country_codes_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">country_names_frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col_0  col_1_L  col_2  col_1_R</span>
 <span class="go">====================================</span>
 <span class="go">[0]      1      354  a      Ice-land</span>
@@ -315,7 +311,7 @@ drop_frames() method (and others) to fail!</p>
 <span class="go">[4]      4      968  c      Oman</span>
 </pre></div>
 </div>
-<p>More examples can be found in the <a class="reference internal" href="../../../ds_dflw.html#example-frame-join"><span>user manual</span></a>.</p>
+<p>More examples can be found in the <span class="xref std std-ref">user manual</span>.</p>
 </dd></dl>
 
 </div>
@@ -341,7 +337,7 @@ drop_frames() method (and others) to fail!</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

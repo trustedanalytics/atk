@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, label_column, observation_columns, svm_type=2, kernel_type=2, weight_label=None, weight=None, epsilon=0.001, degree=3, gamma=None, coef=0.0, nu=0.5, cache_size=100.0, shrinking=1, probability=0, nr_weight=1, c=1.0, p=0.1)
 
-    |ALPHA|
     Train a Lib Svm model
 
 

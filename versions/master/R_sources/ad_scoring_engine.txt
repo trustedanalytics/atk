@@ -1,18 +1,19 @@
 .. _ad_scoring_engine:
 Scoring Engine
 ==============
+The Scoring Engine is a simple REST server capable of loading trained models published by ATK using ModelPublishFormat.
+This section covers deployment and running the scoring engine in TAP environment.
 
-This section covers deployment and running the scoring engine.
 
-
-create a Scoring Engine Instance
+Create a Scoring Engine Instance
 --------------------------------
 
-In the TAP web site:
+In the TAP console:
 
 1) Navigate to **Services -> Marketplace**.
 2) Select **scoring_engine** => **Create new isntance**.
 3) Fill in an instance name of your choice *(given below as **my-svm-model**)*.
+    The model has already been trained in ATK and published using ModelPublishFormat, so it is available in HDFS.
 4) Select **+ Add variable**.
 5) Fill in two values: key **TAR_ARCHIVE**; value is the URI of the model you wish to use.
 
@@ -22,7 +23,7 @@ You will be able to see your scoring engine under the Applications page.
 Scoring Client
 --------------
 
-Below is a sample python script to send requests to the scoring engine:
+Below is a sample Python script to send requests to the scoring engine:
 
 .. code::
 
@@ -30,6 +31,11 @@ Below is a sample python script to send requests to the scoring engine:
     >>> import requests
     >>> headers = {'Content-type': 'application/json',
     ...            'Accept': 'application/json,text/plain'}
+
+    # posting a request to get the metadata about the model
+    >>> r =requests.get('http://my-svm-model.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
 
 
     # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
@@ -52,7 +58,21 @@ Below is a sample python script to send requests to the scoring engine:
     >>> r.text
     u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
 
-    # posting a request to get the metadata about the model
-    >>> r =requests.get('http://my-svm-model.demotrustedanalytics.com/v2/metadata')
-    >>> r.text
-    u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
+Header 
+------
+
+-   `Autoregressive Exogenous Model (ARX)  <python_api/models/model-arx/publish.html>`_
+-   `Autoregressive Integrated Moving Average Model (ARIMA) <python_api/models/model-arima/publish.html>`_
+-   `K Means <python_api/models/model-k_means/publish.html>`_
+-   `Label Propagation <python_api/graphs/graph-/label_propagation.html>`_
+-   `Latent Dirichlet Allocation (LDA) <python_api/models/model-lda/publish.html>`_
+-   `Lib SVM <python_api/models/model-libsvm/publish.html>`_
+-   `Linear Regression <python_api/models/model-linear_regression/publish.html>`_
+-   `Loopy Belief Propagation <python_api/graphs/graph-/loopy_belief_propagation.html>`_
+-   `Naive Bayes <python_api/models/model-naive_bayes/publish.html>`_
+-   `Principal Component Analysis <python_api/models/model-principal_components/publish.html>`_
+-   `Random Forest Classifier <python_api/models/model-random_forest_classifier/publish.html>`_
+-   `Random Forest Regressor <python_api/models/model-random_forest_regressor/publish.html>`_
+-   `SVM with SGD <python_api/models/model-svm/publish.html>`_
+

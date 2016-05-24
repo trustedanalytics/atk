@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:naive_bayes/train
 -----------------------------------------------
 
-|ALPHA|
 Build a naive bayes model.
 
 POST /v1/commands/

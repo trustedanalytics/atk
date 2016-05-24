@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
-    <link rel="next" title="Algorithms" href="ds_algorithms.html" >
+    <link rel="next" title="Process Flow Examples" href="ds_pflw.html" >
     <link rel="prev" title="User Manual" href="ds_over.html" > 
   </head>
   <body>
@@ -76,7 +76,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ds_algorithms.html" title="Algorithms"
+        <a href="ds_pflw.html" title="Process Flow Examples"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -101,21 +101,15 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_pflw.html">Process Flow Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -136,28 +130,24 @@
             
   <div class="section" id="getting-started">
 <span id="ds-strt"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<div class="contents local topic" id="table-of-contents">
-<p class="topic-title first">Table of Contents</p>
-<ul class="simple">
-<li><a class="reference internal" href="#open-source" id="id1">Open-Source</a></li>
-<li><a class="reference internal" href="#features" id="id2">Features</a></li>
-</ul>
+<p>To start using ATK on TAP, create a new Jupyter notebook instance and create a set of credentials to connect to ATK Server. The following steps will guide you through this process.</p>
+<p>For a more detailed set of instructions please visit the <a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/Getting-Started-with-AT">Trusted Analytics Platform wiki pages</a>.
+Note: The wiki page will be updated to stay in sync with the latest version of AT and TAP and might not always be consistent with AT version 0.7.0</p>
+<div class="section" id="creating-a-jupyter-notebook-instance">
+<h2>Creating a Jupyter Notebook Instance<a class="headerlink" href="#creating-a-jupyter-notebook-instance" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>From the <em>&gt;Home</em> page, select <em>&gt;Data Science</em> from the main menu, then select <em>&gt;Jupyter</em>.</li>
+<li>Click inside form field labeled Instance Name and assign a name to your instance.</li>
+<li>Select the button <em>&gt;Create new Jupyter instance</em> to create a new instance.  The button is not available until a name has been provided in the available form field.</li>
+</ol>
+<p>Your new Jupyter instance has been created.  The new instance can be found by selecting <em>&gt;Data Science</em> from the main menu, then by selecting the sub menu item <em>&gt;Jupyter</em> and searching for the Instance Name you assigned in step 2.</p>
 </div>
-<div class="section" id="open-source">
-<h2>Open-Source<a class="headerlink" href="#open-source" title="Permalink to this headline">¶</a></h2>
-<p>Trusted Analytics Platform uses standards and open-source routines from
-<a class="reference external" href="http://hadoop.apache.org/">Apache Hadoop</a> such as <abbr title="Hadoop Distributed File System">HDFS</abbr>,
-<a class="reference internal" href="glossary.html#term-mapreduce"><span class="xref std std-term">MapReduce</span></a>, YARN</p>
-</div>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Import routines read and convert data from several different formats</li>
-<li>Data cleaning tools prepare the data by removing erroneous values,
-transforming values to a normalized state and constructing
-new features through manipulating existing values</li>
-<li>Analysis and machine learning algorithms give deeper insight into the data</li>
-</ul>
+<div class="section" id="working-with-the-analytics-toolkit-from-a-jupyter-notebook">
+<h2>Working with the Analytics Toolkit from a Jupyter Notebook<a class="headerlink" href="#working-with-the-analytics-toolkit-from-a-jupyter-notebook" title="Permalink to this headline">¶</a></h2>
+<p>Create your credentials file: <a class="reference external" href="https://github.com/trustedanalytics/jupyter-default-notebooks/blob/master/notebooks/examples/atk/create-credentials.ipynb">Creating a Credentials File Example Notebook</a></p>
+<p>This step only needs to be taken the first time you attempt to use the Analytics Toolkit or when switching to a new instance of Analytics Toolkit.
+Creating credentials generates a file named myuser-cred.creds
+This file is necessary when writing scripts to connect to the Analytics Toolkit from Jupyter Notebooks.</p>
 </div>
 </div>
 
@@ -182,7 +172,7 @@ new features through manipulating existing values</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

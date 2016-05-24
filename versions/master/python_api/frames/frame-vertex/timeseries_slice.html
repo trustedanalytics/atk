@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-timeseries-slice">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  timeseries_slice<a class="headerlink" href="#vertexframe-timeseries-slice" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  timeseries_slice<a class="headerlink" href="#vertexframe-timeseries-slice" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="timeseries_slice">
@@ -164,7 +161,7 @@ This means that the frame has a string column for key and a vector column that c
 a series of the observed values.  We must also know the date/time index that corresponds
 to the time series.</p>
 <p>The time series is in a Frame object called <em>ts_frame</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  key  series</span>
 <span class="go">==============================================</span>
 <span class="go">[0]  A    [62.0, 55.0, 60.0, 61.0, 60.0, 59.0]</span>
@@ -174,12 +171,12 @@ to the time series.</p>
 </div>
 <p>Next, we define the date/time index.  In this example, it is one day intervals from
 2016-01-01 to 2016-01-06:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2016-01-01T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-02T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-03T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-04T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-05T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-06T12:00:00.000Z&quot;</span><span class="p">]</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2016-01-01T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-02T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-03T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-04T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-05T12:00:00.000Z&quot;</span><span class="p">,</span><span class="s2">&quot;2016-01-06T12:00:00.000Z&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Get a slice of our time series from 2016-01-02 to 2016-01-04:</p>
 <p>Take a look at our sliced time series:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sliced_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sliced_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  key  series</span>
 <span class="go">============================</span>
 <span class="go">[0]  A    [55.0, 60.0, 61.0]</span>
@@ -212,7 +209,7 @@ to the time series.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

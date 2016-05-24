@@ -4,6 +4,7 @@
 :doc:`Commands <index>` frame/daal_covariance_matrix
 ----------------------------------------------------
 
+|BETA|
 Calculate covariance matrix for two or more columns.
 
 POST /v1/commands/

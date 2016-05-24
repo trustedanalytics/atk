@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="kmeansmodel-init">
-<h1><a class="reference internal" href="index.html"><em>KMeansModel</em></a>  __init__<a class="headerlink" href="#kmeansmodel-init" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">KMeansModel</span></a>  __init__<a class="headerlink" href="#kmeansmodel-init" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="__init__">
@@ -152,13 +149,13 @@
 </tr>
 </tbody>
 </table>
-<p>k-means <a class="reference internal" href="../model-random_forest_regressor/new.html#r7" id="id1">[R7]</a> is an unsupervised algorithm used to partition
+<p>k-means <a class="reference internal" href="../model-svm/index.html#r7" id="id1">[R7]</a> is an unsupervised algorithm used to partition
 the data into &#8216;k&#8217; clusters.
 Each observation can belong to only one cluster, the cluster with the nearest
 mean.
 The k-means model is initialized, trained on columns of a frame, and used to
 predict cluster assignments for a frame.
-This model runs the MLLib implementation of k-means <a class="reference internal" href="../model-random_forest_regressor/new.html#r8" id="id2">[R8]</a> with enhanced
+This model runs the MLLib implementation of k-means <a class="reference internal" href="../model-svm/index.html#r8" id="id2">[R8]</a> with enhanced
 features, computing the number of elements in each cluster during training.
 During predict, it computes the distance of each observation from its cluster
 center and also from every other cluster center.</p>
@@ -178,7 +175,7 @@ center and also from every other cluster center.</p>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing two columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  data  name</span>
 <span class="go">===============</span>
 <span class="go">[0]   2.0  ab</span>
@@ -206,6 +203,29 @@ center and also from every other cluster center.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;KMeans Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.KMeansScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;data&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;data&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;score&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;}]}&#8217;</p>
+<p># Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=2.0">http://mymodel.demotrustedanalytics.com/v1/score?data=2.0</a>&#8216;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;1&#8217;</p>
+<p># Posting a request to version 1 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&amp;data=7.0&amp;data=5.0">http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&amp;data=7.0&amp;data=5.0</a>&#8216;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#8216;1,2,2&#8217;</p>
+<p># Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#8216;data&#8217; is the name of the observation column that the model was trained on:
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;data&#8221;: 2.0}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;data&#8221;:2.0,&#8221;score&#8221;:1}]}&#8217;</p>
+<p># posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;data&#8221;: 2.0}, {&#8220;data&#8221;: 7.0}, {&#8220;data&#8221;: 5.0}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;data&#8221;:2.0,&#8221;score&#8221;:1},{&#8220;data&#8221;:7.0,&#8221;score&#8221;:2},{&#8220;data&#8221;:5.0,&#8221;score&#8221;:2}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -231,7 +251,7 @@ center and also from every other cluster center.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

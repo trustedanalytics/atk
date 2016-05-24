@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-group-by">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  group_by<a class="headerlink" href="#vertexframe-group-by" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  group_by<a class="headerlink" href="#vertexframe-group-by" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="group_by">
 <code class="descname">group_by</code><span class="sig-paren">(</span><em>self</em>, <em>group_by_columns</em>, <em>*aggregation_arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#group_by" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Create summarized frame.</p>
+<dd><p>Create summarized frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -190,7 +186,7 @@ aggregation function supported at this time.</li>
 <p class="rubric">Examples</p>
 <p>For setup, we will use a Frame <em>my_frame</em> accessing a frame with a
 column <em>a</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a  b        c     d       e  f    g</span>
 <span class="go">========================================</span>
 <span class="go">[0]  1  alpha     3.0  small   1  3.0  9</span>
@@ -246,7 +242,7 @@ column <em>a</em>:</p>
 <span class="go">[3]  1  bravo      5.0     5.0</span>
 </pre></div>
 </div>
-<p>For further examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-group-by"><span>Group by (and aggregate):</span></a>.</p>
+<p>For further examples, see <span class="xref std std-ref">example_frame.group_by</span>.</p>
 </dd></dl>
 
 </div>
@@ -272,7 +268,7 @@ column <em>a</em>:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

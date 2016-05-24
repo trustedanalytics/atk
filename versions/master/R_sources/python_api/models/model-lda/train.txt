@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, document_column_name, word_column_name, word_count_column_name, max_iterations=20, alpha=None, beta=1.10000002384, num_topics=10, random_seed=None)
 
-    |ALPHA|
     Creates Latent Dirichlet Allocation model
 
 

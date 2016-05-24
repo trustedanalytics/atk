@@ -7,7 +7,7 @@
 
 .. function:: __init__(self, name=None)
 
-    |ALPHA|
+    |BETA|
     Create a 'new' instance of a DAAL Linear Regression model.
 
 

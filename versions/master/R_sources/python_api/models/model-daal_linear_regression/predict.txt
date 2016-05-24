@@ -7,7 +7,7 @@
 
 .. function:: predict(self, frame, value_column=None, observation_columns=None)
 
-    |ALPHA|
+    |BETA|
     Predict labels for a test frame using trained Intel DAAL linear regression model.
 
 

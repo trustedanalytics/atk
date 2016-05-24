@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-assign-sample">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  assign_sample<a class="headerlink" href="#edgeframe-assign-sample" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  assign_sample<a class="headerlink" href="#edgeframe-assign-sample" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="assign_sample">
@@ -185,7 +182,7 @@ valid label with probability one.</li>
 </ol>
 <p class="rubric">Examples</p>
 <p>Consider this simple frame.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  blip  id</span>
 <span class="go">=============</span>
 <span class="go">[0]  abc    0</span>
@@ -202,11 +199,11 @@ valid label with probability one.</li>
 </div>
 <p>We&#8217;ll assign labels to each row according to a rough 40-30-30 split, for
 &#8220;train&#8221;, &#8220;test&#8221;, and &#8220;validate&#8221;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  blip  id  sample_bin</span>
 <span class="go">=========================</span>
 <span class="go">[0]  abc    0  VA</span>
@@ -224,14 +221,14 @@ valid label with probability one.</li>
 <p>Now the frame  has a new column named &#8220;sample_bin&#8221; with a string label.
 Values in the other columns are unaffected.</p>
 <p>Here it is again, this time specifying labels, output column and random seed</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
 <span class="gp">... </span>                    <span class="p">[</span><span class="s2">&quot;cat1&quot;</span><span class="p">,</span> <span class="s2">&quot;cat2&quot;</span><span class="p">,</span> <span class="s2">&quot;cat3&quot;</span><span class="p">,</span> <span class="s2">&quot;cat4&quot;</span><span class="p">],</span>
 <span class="gp">... </span>                    <span class="n">output_column</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span>
 <span class="gp">... </span>                    <span class="n">random_seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  blip  id  sample_bin  cat</span>
 <span class="go">===============================</span>
 <span class="go">[0]  abc    0  VA          cat4</span>
@@ -271,7 +268,7 @@ Values in the other columns are unaffected.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

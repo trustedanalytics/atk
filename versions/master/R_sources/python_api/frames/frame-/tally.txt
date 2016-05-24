@@ -7,7 +7,6 @@
 
 .. function:: tally(self, sample_col, count_val)
 
-    |BETA|
     Count number of times a value is seen.
 
 

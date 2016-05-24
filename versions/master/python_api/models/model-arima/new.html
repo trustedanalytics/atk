@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="arimamodel-init">
-<h1><a class="reference internal" href="index.html"><em>ArimaModel</em></a>  __init__<a class="headerlink" href="#arimamodel-init" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">ArimaModel</span></a>  __init__<a class="headerlink" href="#arimamodel-init" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="__init__">
@@ -152,7 +149,7 @@
 </tr>
 </tbody>
 </table>
-<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-random_forest_classifier/new.html#r4" id="id1">[R4]</a> model is a
+<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-random_forest_classifier/new.html#r2" id="id1">[R2]</a> model is a
 generalization of an autoregressive moving average (ARMA) model.
 These models are fitted to time series data either to better understand
 the data or to predict future points in the series (forecasting).
@@ -161,16 +158,16 @@ parameters p, d, and q are non-negative integers, p is the order of the
 Autoregressive model, d is the degree of differencing, and q is the order
 of the Moving-average model.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r4" rules="none">
+<table class="docutils citation" frame="void" id="r2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R4]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R2]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following frame of observations collected over seven days.</p>
 <p>The frame has three columns: timestamp, name, and value.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  timestamp                 name   value</span>
 <span class="go">=================================================</span>
 <span class="go">[0]  2015-01-01T00:00:00.000Z  Sarah  12.88969427</span>
@@ -183,7 +180,7 @@ of the Moving-average model.</p>
 </pre></div>
 </div>
 <p>Define the date time index:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2015-01-01T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-02T00:00:00.000Z&#39;</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2015-01-01T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-02T00:00:00.000Z&#39;</span><span class="p">,</span>
 <span class="gp">... </span><span class="s1">&#39;2015-01-03T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-04T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-05T00:00:00.000Z&#39;</span><span class="p">,</span>
 <span class="gp">... </span><span class="s1">&#39;2015-01-06T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-07T00:00:00.000Z&#39;</span><span class="p">]</span>
 </pre></div>
@@ -191,11 +188,11 @@ of the Moving-average model.</p>
 <p>Then, create a time series frame from the frame of observations, since the ARIMA model
 expects data to be in a time series format (where the time series values are in a
 vector column).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">timeseries_from_observations</span><span class="p">(</span><span class="n">datetimeindex</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">timeseries_from_observations</span><span class="p">(</span><span class="n">datetimeindex</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  name</span>
 <span class="go">==========</span>
 <span class="go">[0]  Sarah</span>
@@ -206,14 +203,14 @@ vector column).</p>
 </pre></div>
 </div>
 <p>Use the frame take function to get one row of data with just the &#8220;value&#8221; column</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_frame_data</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_frame_data</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>From the ts_frame_data, get the first row and first column to extract out just the time series values.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span> <span class="o">=</span> <span class="n">ts_frame_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span> <span class="o">=</span> <span class="n">ts_frame_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span>
 <span class="go">[12.88969427,</span>
 <span class="go"> 13.54964408,</span>
 <span class="go"> 13.8432745,</span>
@@ -224,18 +221,18 @@ vector column).</p>
 </pre></div>
 </div>
 <p>Create an ARIMA model:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArimaModel</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArimaModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>Train the model using the timeseries frame:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="go">{u&#39;coefficients&#39;: [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}</span>
 </pre></div>
 </div>
 <p>Call predict to future periods:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="go">{u&#39;forecasted&#39;: [12.674342627141744,</span>
 <span class="go">  13.638048984791693,</span>
@@ -246,6 +243,24 @@ vector column).</p>
 <span class="go">  14.201275185574925]}</span>
 </pre></div>
 </div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># Post a request to get the metadata about the model
+&gt;&gt;&gt; r = requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;ARIMA Model&#8221;,&#8221;model_class&#8221;:&#8221;com.cloudera.sparkts.models.ARIMAModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;timeseries&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;future&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;timeseries&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;future&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;},{&#8220;name&#8221;:&#8221;predicted_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}]}&#8217;</p>
+<p># The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
+# time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
+# since 7 historical time series values were provided, 7 future periods will be forecasted.
+r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8216;,json={&#8220;records&#8221;:[{&#8220;timeseries&#8221;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&#8221;future&#8221;:0}]})</p>
+<p># The &#8216;predicted_values&#8217; array contains the future values, which have been forecasted based on the historical data.
+r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;timeseries&#8221;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&#8221;future&#8221;:0.0,&#8221;predicted_values&#8221;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -271,7 +286,7 @@ vector column).</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

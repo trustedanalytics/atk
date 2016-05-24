@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-sorted-k">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  sorted_k<a class="headerlink" href="#edgeframe-sorted-k" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  sorted_k<a class="headerlink" href="#edgeframe-sorted-k" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="sorted_k">
 <code class="descname">sorted_k</code><span class="sig-paren">(</span><em>self</em>, <em>k</em>, <em>column_names_and_ascending</em>, <em>reduce_tree_depth=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sorted_k" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Get a sorted subset of the data.</p>
+<dd><p>Get a sorted subset of the data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -184,7 +180,7 @@ other words, it cannot fit in Spark driver memory).</li>
 <p class="rubric">Examples</p>
 <p>These examples deal with the most recently-released movies in a private collection.
 Consider the movie collection already stored in the frame below:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  genre      year  title</span>
 <span class="go">========================================================</span>
 <span class="go">[0]  Drama      1957  12 Angry Men</span>
@@ -200,11 +196,11 @@ Consider the movie collection already stored in the frame below:</p>
 </pre></div>
 </div>
 <p>This example returns the top 3 rows sorted by a single column: &#8216;year&#8217; descending:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  genre      year  title</span>
 <span class="go">=====================================</span>
 <span class="go">[0]  Animation  2013  Frozen</span>
@@ -213,11 +209,11 @@ Consider the movie collection already stored in the frame below:</p>
 </pre></div>
 </div>
 <p>This example returns the top 5 rows sorted by multiple columns: &#8216;genre&#8217; ascending, then &#8216;year&#8217; descending:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;genre&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">])</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;genre&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  genre      year  title</span>
 <span class="go">=====================================</span>
 <span class="go">[0]  Animation  2013  Frozen</span>
@@ -231,11 +227,11 @@ Consider the movie collection already stored in the frame below:</p>
 ascending, then &#8216;year&#8217; ascending.
 It also illustrates the optional tuning parameter for reduce-tree depth
 (which does not affect the final result).</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;genre&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="p">],</span> <span class="n">reduce_tree_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;genre&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="p">],</span> <span class="n">reduce_tree_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  genre      year  title</span>
 <span class="go">===================================</span>
 <span class="go">[0]  Animation  1994  The Lion King</span>
@@ -270,7 +266,7 @@ It also illustrates the optional tuning parameter for reduce-tree depth
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

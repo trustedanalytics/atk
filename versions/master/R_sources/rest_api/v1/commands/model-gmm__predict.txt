@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:gmm/predict
 -----------------------------------------
 
-|BETA|
 Predict the cluster assignments for the data points.
 
 POST /v1/commands/

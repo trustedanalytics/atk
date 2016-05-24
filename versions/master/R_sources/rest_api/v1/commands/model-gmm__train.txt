@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:gmm/train
 ---------------------------------------
 
-|BETA|
 Creates a GMM Model from the train frame.
 
 POST /v1/commands/
@@ -88,7 +87,7 @@ Request
 
 
 
-    **seed** : int64 (default=-4974093262556369132)
+    **seed** : int64 (default=3452667845848018014)
 
     ..
 

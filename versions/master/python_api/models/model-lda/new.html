@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="ldamodel-init">
-<h1><a class="reference internal" href="index.html"><em>LdaModel</em></a>  __init__<a class="headerlink" href="#ldamodel-init" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">LdaModel</span></a>  __init__<a class="headerlink" href="#ldamodel-init" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="__init__">
@@ -158,7 +155,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  doc_id     word_id     word_count</span>
 <span class="go">======================================</span>
 <span class="go">[0]  nytimes    harry                3</span>
@@ -246,6 +243,22 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p># Take the path to the published model and run it in the Scoring Engine
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
+<p># posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;Lda Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LdaScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;doc_id&#8221;,&#8221;value&#8221;:&#8221;Array[String]&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;doc_id&#8221;,&#8221;value&#8221;:&#8221;Array[String]&#8221;},{&#8220;name&#8221;:&#8221;topics_given_doc&#8221;,&#8221;value&#8221;:&#8221;Vector[Double]&#8221;},{&#8220;name&#8221;:&#8221;new_words_count&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;},{&#8220;name&#8221;:&#8221;new_words_percentage&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
+<p># The LDA model only supports version 2 of the scoring engine.
+# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0}]}&#8217;</p>
+<p># posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}, {&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}]})
+&gt;&gt;&gt; r.text
+u&#8217;{&#8220;data&#8221;:[{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0},{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0}]}&#8217;</p>
 </dd></dl>
 
 </div>
@@ -271,7 +284,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

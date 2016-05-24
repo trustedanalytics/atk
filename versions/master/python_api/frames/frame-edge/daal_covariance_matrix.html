@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
-    <link rel="next" title="EdgeFrame daal_pca" href="daal_pca.html" >
+    <link rel="next" title="EdgeFrame dot_product" href="dot_product.html" >
     <link rel="prev" title="EdgeFrame cumulative_sum" href="cumulative_sum.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="daal_pca.html" title="EdgeFrame daal_pca"
+        <a href="dot_product.html" title="EdgeFrame dot_product"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -103,9 +103,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -128,12 +125,13 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-daal-covariance-matrix">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  daal_covariance_matrix<a class="headerlink" href="#edgeframe-daal-covariance-matrix" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  daal_covariance_matrix<a class="headerlink" href="#edgeframe-daal-covariance-matrix" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="daal_covariance_matrix">
 <code class="descname">daal_covariance_matrix</code><span class="sig-paren">(</span><em>self</em>, <em>data_column_names</em>, <em>matrix_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#daal_covariance_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate covariance matrix for two or more columns.</p>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+Calculate covariance matrix for two or more columns.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -164,7 +162,7 @@ matrix.</p>
 <p>This function applies only to columns containing numerical data.</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em>, which contains the data</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go"> [#]  idnum  x1   x2   x3   x4</span>
 <span class="go">===============================</span>
 <span class="go">[0]      0  1.0  4.0  0.0  -1.0</span>
@@ -176,12 +174,12 @@ matrix.</p>
 </div>
 <p>my_frame.daal_covariance_matrix computes the covariance on each pair of columns in the user-provided list.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">daal_covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">daal_covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>The resulting table (specifying all columns) is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  idnum  x1    x2    x3    x4</span>
 <span class="go">=================================</span>
 <span class="go">[0]    2.5   2.5  -2.5   1.5  0.0</span>
@@ -217,7 +215,7 @@ matrix.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

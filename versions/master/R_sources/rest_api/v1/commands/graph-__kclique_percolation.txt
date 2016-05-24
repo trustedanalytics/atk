@@ -4,7 +4,7 @@
 :doc:`Commands <index>` graph:/kclique_percolation
 --------------------------------------------------
 
-|ALPHA|
+|BETA|
 Find groups of vertices with similar attributes.
 
 POST /v1/commands/

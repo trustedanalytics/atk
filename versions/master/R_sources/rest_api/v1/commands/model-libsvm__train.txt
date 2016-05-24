@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:libsvm/train
 ------------------------------------------
 
-|ALPHA|
 Train a Lib Svm model
 
 POST /v1/commands/

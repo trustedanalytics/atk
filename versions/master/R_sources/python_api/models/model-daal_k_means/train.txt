@@ -5,9 +5,9 @@
 ------
 
 
-.. function:: train(self, frame, observation_columns, k=2, max_iterations=50, column_scalings=None, label_column='cluster', initialization_mode='random')
+.. function:: train(self, frame, observation_columns, column_scalings=None, k=2, max_iterations=100, label_column='predicted_cluster')
 
-    |ALPHA|
+    |BETA|
     Creates DAAL KMeans Model from train frame.
 
 
@@ -30,24 +30,6 @@
 
 
 
-        **k** : int32 (default=2)
-
-        ..
-
-            Desired number of clusters.
-            Default is 2.
-
-
-
-        **max_iterations** : int32 (default=50)
-
-        ..
-
-            Number of iterations for which the algorithm should run.
-            Default is 20.
-
-
-
         **column_scalings** : list (default=None)
 
         ..
@@ -58,22 +40,30 @@
 
 
 
-        **label_column** : unicode (default=cluster)
+        **k** : int32 (default=2)
+
+        ..
+
+            Desired number of clusters.
+            Default is 2.
+
+
+
+        **max_iterations** : int32 (default=100)
+
+        ..
+
+            Number of iterations for which the algorithm should run.
+            Default is 20.
+
+
+
+        **label_column** : unicode (default=predicted_cluster)
 
         ..
 
             Optional name of output column with
             index of cluster each observation belongs to.
-
-
-
-        **initialization_mode** : unicode (default=random)
-
-        ..
-
-            Optional initialization mode for cluster centroids.
-            random - Random choice of k feature vectors from the data set.
-            deterministic - Choice of first k feature vectors from the data set.
 
 
 
@@ -85,10 +75,11 @@
         ..
 
             dictionary
-                A dictionary with trained KMeans model with the following keys\:
+                A dictionary with trained KMeans model with the following keys:
             'centroids' : dictionary with 'Cluster:id' as the key and the corresponding centroid as the value
             'assignments' : Frame with cluster assignments.
     Creating a DAAL KMeans Model using the observation columns.
+    The algorithm chooses random observations as the initial cluster centers.
 
     Examples
     --------

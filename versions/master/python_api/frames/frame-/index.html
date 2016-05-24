@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames" href="../index.html" >
-    <link rel="next" title="Frame __init__" href="__init__.html" >
+    <link rel="next" title="Frame __init__" href="R__init__.html" >
     <link rel="prev" title="VertexFrame unflatten_columns" href="../frame-vertex/unflatten_columns.html" > 
   </head>
   <body>
@@ -77,7 +77,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="__init__.html" title="Frame __init__"
+        <a href="R__init__.html" title="Frame __init__"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -102,9 +102,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -135,7 +132,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frames-frame">
-<h1><a class="reference internal" href="../index.html"><em>Frames</em></a> Frame<a class="headerlink" href="#frames-frame" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><span class="doc">Frames</span></a> Frame<a class="headerlink" href="#frames-frame" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -153,22 +150,22 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="column_names.html"><em>column_names</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="column_names.html"><span class="doc">column_names</span></a></td>
 <td>Column identifications in the current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
 <td>Last time this frame&#8217;s data was accessed.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
 <td>Set or get the name of the frame object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="row_count.html"><em>row_count</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="row_count.html"><span class="doc">row_count</span></a></td>
 <td>Number of rows in the current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="schema.html"><em>schema</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="schema.html"><span class="doc">schema</span></a></td>
 <td>Current frame column names and types.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
 <td>Current frame life cycle status.</td>
 </tr>
 </tbody>
@@ -180,170 +177,158 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#frame-init"><span>__init__</span></a>(self[, source, name, _info])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#frame-init"><span class="std std-ref">__init__</span></a>(self[, source, name, _info])</td>
 <td>Create a Frame/frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="add_columns.html"><em>add_columns</em></a>(self, func, schema[, columns_accessed])</td>
+<tr class="row-even"><td><a class="reference internal" href="add_columns.html"><span class="doc">add_columns</span></a>(self, func, schema[, columns_accessed])</td>
 <td>Add columns to current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="append.html"><em>append</em></a>(self, data)</td>
+<tr class="row-odd"><td><a class="reference internal" href="append.html"><span class="doc">append</span></a>(self, data)</td>
 <td>Adds more data to the current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="assign_sample.html"><em>assign_sample</em></a>(self, sample_percentages[, sample_labels, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="assign_sample.html"><span class="doc">assign_sample</span></a>(self, sample_percentages[, sample_labels, ...])</td>
 <td>Randomly group rows into user-defined classes.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="bin_column.html"><em>bin_column</em></a>(self, column_name, cutoffs[, include_lowest, strict_binning, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="bin_column.html"><span class="doc">bin_column</span></a>(self, column_name, cutoffs[, include_lowest, strict_binning, ...])</td>
 <td>Classify data into user-defined groups.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="bin_column_equal_depth.html"><em>bin_column_equal_depth</em></a>(self, column_name[, num_bins, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="bin_column_equal_depth.html"><span class="doc">bin_column_equal_depth</span></a>(self, column_name[, num_bins, ...])</td>
 <td>Classify column into groups with the same frequency.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="bin_column_equal_width.html"><em>bin_column_equal_width</em></a>(self, column_name[, num_bins, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="bin_column_equal_width.html"><span class="doc">bin_column_equal_width</span></a>(self, column_name[, num_bins, ...])</td>
 <td>Classify column into same-width groups.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="categorical_summary.html"><em>categorical_summary</em></a>(self, *column_inputs)</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Compute a summary of the data in a column(s) for categorical or numerical data types.</td>
+<tr class="row-even"><td><a class="reference internal" href="categorical_summary.html"><span class="doc">categorical_summary</span></a>(self, *column_inputs)</td>
+<td>Compute a summary of the data in a column(s) for categorical or numerical data types.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="classification_metrics.html"><em>classification_metrics</em></a>(self, label_column, pred_column[, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="classification_metrics.html"><span class="doc">classification_metrics</span></a>(self, label_column, pred_column[, ...])</td>
 <td>Model statistics of accuracy, precision, and others.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="column_median.html"><em>column_median</em></a>(self, data_column[, weights_column])</td>
+<tr class="row-even"><td><a class="reference internal" href="column_median.html"><span class="doc">column_median</span></a>(self, data_column[, weights_column])</td>
 <td>Calculate the (weighted) median of a column.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="column_mode.html"><em>column_mode</em></a>(self, data_column[, weights_column, max_modes_returned])</td>
+<tr class="row-odd"><td><a class="reference internal" href="column_mode.html"><span class="doc">column_mode</span></a>(self, data_column[, weights_column, max_modes_returned])</td>
 <td>Evaluate the weights assigned to rows.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="column_summary_statistics.html"><em>column_summary_statistics</em></a>(self, data_column[, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="column_summary_statistics.html"><span class="doc">column_summary_statistics</span></a>(self, data_column[, ...])</td>
 <td>Calculate multiple statistics for a column.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="copy.html"><em>copy</em></a>(self[, columns, where, name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="copy.html"><span class="doc">copy</span></a>(self[, columns, where, name])</td>
 <td>Create new frame from current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="correlation.html"><em>correlation</em></a>(self, data_column_names)</td>
+<tr class="row-even"><td><a class="reference internal" href="correlation.html"><span class="doc">correlation</span></a>(self, data_column_names)</td>
 <td>Calculate correlation for two columns of current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="correlation_matrix.html"><em>correlation_matrix</em></a>(self, data_column_names[, matrix_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="correlation_matrix.html"><span class="doc">correlation_matrix</span></a>(self, data_column_names[, matrix_name])</td>
 <td>Calculate correlation matrix for two or more columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="count.html"><em>count</em></a>(self, where)</td>
+<tr class="row-even"><td><a class="reference internal" href="count.html"><span class="doc">count</span></a>(self, where)</td>
 <td>Counts the number of rows which meet given criteria.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="covariance.html"><em>covariance</em></a>(self, data_column_names)</td>
+<tr class="row-odd"><td><a class="reference internal" href="covariance.html"><span class="doc">covariance</span></a>(self, data_column_names)</td>
 <td>Calculate covariance for exactly two columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="covariance_matrix.html"><em>covariance_matrix</em></a>(self, data_column_names[, matrix_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="covariance_matrix.html"><span class="doc">covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
 <td>Calculate covariance matrix for two or more columns.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="cumulative_percent.html"><em>cumulative_percent</em></a>(self, sample_col)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Add column to frame with cumulative percent sum.</td>
+<tr class="row-odd"><td><a class="reference internal" href="cumulative_percent.html"><span class="doc">cumulative_percent</span></a>(self, sample_col)</td>
+<td>Add column to frame with cumulative percent sum.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="cumulative_sum.html"><em>cumulative_sum</em></a>(self, sample_col)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Add column to frame with cumulative percent sum.</td>
+<tr class="row-even"><td><a class="reference internal" href="cumulative_sum.html"><span class="doc">cumulative_sum</span></a>(self, sample_col)</td>
+<td>Add column to frame with cumulative percent sum.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="daal_covariance_matrix.html"><em>daal_covariance_matrix</em></a>(self, data_column_names[, matrix_name])</td>
-<td>Calculate covariance matrix for two or more columns.</td>
+<tr class="row-odd"><td><a class="reference internal" href="daal_covariance_matrix.html"><span class="doc">daal_covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Calculate covariance matrix for two or more columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="daal_pca.html"><em>daal_pca</em></a>(self, column_names[, method])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate principal components using Intel&#8217;s Data Analytics Acceleration Library (DAAL).</td>
+<tr class="row-even"><td><a class="reference internal" href="dot_product.html"><span class="doc">dot_product</span></a>(self, left_column_names, right_column_names, ...[, ...])</td>
+<td>Calculate dot product for each row in current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="dot_product.html"><em>dot_product</em></a>(self, left_column_names, right_column_names, ...[, ...])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate dot product for each row in current frame.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="download.html"><em>download</em></a>(self[, n, offset, columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="download.html"><span class="doc">download</span></a>(self[, n, offset, columns])</td>
 <td>Download frame data from the server into client workspace as a pandas dataframe</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="drop_columns.html"><em>drop_columns</em></a>(self, columns)</td>
+<tr class="row-even"><td><a class="reference internal" href="drop_columns.html"><span class="doc">drop_columns</span></a>(self, columns)</td>
 <td>Remove columns from the frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="drop_duplicates.html"><em>drop_duplicates</em></a>(self[, unique_columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="drop_duplicates.html"><span class="doc">drop_duplicates</span></a>(self[, unique_columns])</td>
 <td>Modify the current frame, removing duplicate rows.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="drop_rows.html"><em>drop_rows</em></a>(self, predicate)</td>
+<tr class="row-even"><td><a class="reference internal" href="drop_rows.html"><span class="doc">drop_rows</span></a>(self, predicate)</td>
 <td>Erase any row in the current frame which qualifies.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="ecdf.html"><em>ecdf</em></a>(self, column[, result_frame_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="ecdf.html"><span class="doc">ecdf</span></a>(self, column[, result_frame_name])</td>
 <td>Builds new frame with columns for data and distribution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="entropy.html"><em>entropy</em></a>(self, data_column[, weights_column])</td>
+<tr class="row-even"><td><a class="reference internal" href="entropy.html"><span class="doc">entropy</span></a>(self, data_column[, weights_column])</td>
 <td>Calculate the Shannon entropy of a column.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_csv.html"><em>export_to_csv</em></a>(self, folder_name[, separator, count, offset])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_csv.html"><span class="doc">export_to_csv</span></a>(self, folder_name[, separator, count, offset])</td>
 <td>Write current frame to HDFS in csv format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_hbase.html"><em>export_to_hbase</em></a>(self, table_name[, key_column_name, family_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_hbase.html"><span class="doc">export_to_hbase</span></a>(self, table_name[, key_column_name, family_name])</td>
 <td>Write current frame to HBase table.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_hive.html"><em>export_to_hive</em></a>(self, table_name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_hive.html"><span class="doc">export_to_hive</span></a>(self, table_name)</td>
 <td>Write  current frame to Hive table.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_jdbc.html"><em>export_to_jdbc</em></a>(self, table_name[, connector_type, driver_name, query])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_jdbc.html"><span class="doc">export_to_jdbc</span></a>(self, table_name[, connector_type, driver_name, query])</td>
 <td>Write current frame to JDBC table.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_json.html"><em>export_to_json</em></a>(self, folder_name[, count, offset])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_json.html"><span class="doc">export_to_json</span></a>(self, folder_name[, count, offset])</td>
 <td>Write current frame to HDFS in JSON format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="filter.html"><em>filter</em></a>(self, predicate)</td>
+<tr class="row-even"><td><a class="reference internal" href="filter.html"><span class="doc">filter</span></a>(self, predicate)</td>
 <td>Select all rows which satisfy a predicate.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="flatten_columns.html"><em>flatten_columns</em></a>(self, columns[, delimiters])</td>
+<tr class="row-odd"><td><a class="reference internal" href="flatten_columns.html"><span class="doc">flatten_columns</span></a>(self, columns[, delimiters])</td>
 <td>Spread data to multiple rows based on cell data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="get_error_frame.html"><em>get_error_frame</em></a>(self)</td>
+<tr class="row-even"><td><a class="reference internal" href="get_error_frame.html"><span class="doc">get_error_frame</span></a>(self)</td>
 <td>Get a frame with error recordings.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="group_by.html"><em>group_by</em></a>(self, group_by_columns, *aggregation_arguments)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Create summarized frame.</td>
+<tr class="row-odd"><td><a class="reference internal" href="group_by.html"><span class="doc">group_by</span></a>(self, group_by_columns, *aggregation_arguments)</td>
+<td>Create summarized frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="helloworld.html"><em>helloworld</em></a>(self[, msg])</td>
-<td>This is a Hello World Plugin for Frame.</td>
+<tr class="row-even"><td><a class="reference internal" href="histogram.html"><span class="doc">histogram</span></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
+<td>Compute the histogram for a column in a frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="histogram.html"><em>histogram</em></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute the histogram for a column in a frame.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><span class="doc">inspect</span></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
 <td>Pretty-print of the frame data</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="invert_matrix.html"><em>invert_matrix</em></a>(self, column_names)</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Inverts a matrix.</td>
+<tr class="row-even"><td><a class="reference internal" href="join.html"><span class="doc">join</span></a>(self, right, left_on[, right_on, how, name])</td>
+<td>Join operation on one or two frames, creating a new frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="join.html"><em>join</em></a>(self, right, left_on[, right_on, how, name])</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Join operation on one or two frames, creating a new frame.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="quantiles.html"><em>quantiles</em></a>(self, column_name, quantiles)</td>
+<tr class="row-odd"><td><a class="reference internal" href="quantiles.html"><span class="doc">quantiles</span></a>(self, column_name, quantiles)</td>
 <td>New frame with Quantiles and their values.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="rename_columns.html"><em>rename_columns</em></a>(self, names)</td>
+<tr class="row-even"><td><a class="reference internal" href="rename_columns.html"><span class="doc">rename_columns</span></a>(self, names)</td>
 <td>Rename columns</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="sort.html"><em>sort</em></a>(self, columns[, ascending])</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Sort the data in a frame.</td>
+<tr class="row-odd"><td><a class="reference internal" href="sort.html"><span class="doc">sort</span></a>(self, columns[, ascending])</td>
+<td>Sort the data in a frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="sorted_k.html"><em>sorted_k</em></a>(self, k, column_names_and_ascending[, reduce_tree_depth])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Get a sorted subset of the data.</td>
+<tr class="row-even"><td><a class="reference internal" href="sorted_k.html"><span class="doc">sorted_k</span></a>(self, k, column_names_and_ascending[, reduce_tree_depth])</td>
+<td>Get a sorted subset of the data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="take.html"><em>take</em></a>(self, n[, offset, columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="take.html"><span class="doc">take</span></a>(self, n[, offset, columns])</td>
 <td>Get data subset.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tally.html"><em>tally</em></a>(self, sample_col, count_val)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Count number of times a value is seen.</td>
+<tr class="row-even"><td><a class="reference internal" href="tally.html"><span class="doc">tally</span></a>(self, sample_col, count_val)</td>
+<td>Count number of times a value is seen.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tally_percent.html"><em>tally_percent</em></a>(self, sample_col, count_val)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute a cumulative percent count.</td>
+<tr class="row-odd"><td><a class="reference internal" href="tally_percent.html"><span class="doc">tally_percent</span></a>(self, sample_col, count_val)</td>
+<td>Compute a cumulative percent count.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="timeseries_from_observations.html"><em>timeseries_from_observations</em></a>(self, date_time_index, ...)</td>
+<tr class="row-even"><td><a class="reference internal" href="timeseries_from_observations.html"><span class="doc">timeseries_from_observations</span></a>(self, date_time_index, ...)</td>
 <td>Returns a frame that has the observations formatted as a time series.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="timeseries_slice.html"><em>timeseries_slice</em></a>(self, date_time_index, start, end)</td>
+<tr class="row-odd"><td><a class="reference internal" href="timeseries_slice.html"><span class="doc">timeseries_slice</span></a>(self, date_time_index, start, end)</td>
 <td>Returns a frame that is a sub-slice of the given series.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="top_k.html"><em>top_k</em></a>(self, column_name, k[, weights_column])</td>
+<tr class="row-even"><td><a class="reference internal" href="top_k.html"><span class="doc">top_k</span></a>(self, column_name, k[, weights_column])</td>
 <td>Most or least frequent column values.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="unflatten_columns.html"><em>unflatten_columns</em></a>(self, columns[, delimiter])</td>
+<tr class="row-odd"><td><a class="reference internal" href="unflatten_columns.html"><span class="doc">unflatten_columns</span></a>(self, columns[, delimiter])</td>
 <td>Compacts data from multiple rows based on cell data.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="wordcount.html"><em>wordcount</em></a>(self)</td>
-<td>Counts and reports the top 10 words across all columns with string data in a frame.</td>
 </tr>
 </tbody>
 </table>
@@ -389,14 +374,14 @@ considered part of the str.</p>
 <em>my_csv_schema</em>.
 Name the frame &#8220;myframe&#8221;.
 Create a Frame <em>my_frame</em> to access the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv_schema</span><span class="p">,</span> <span class="s2">&quot;myframe&quot;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv_schema</span><span class="p">,</span> <span class="s2">&quot;myframe&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A Frame object has been created and <em>my_frame</em> is its proxy.
 It brought in the data described by <em>my_csv_schema</em>.
 It is named <em>myframe</em>.</p>
 <p>Create an empty frame; name it &#8220;yourframe&#8221;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;yourframe&#39;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;yourframe&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A frame has been created and Frame <em>your_frame</em> is its proxy.
@@ -426,7 +411,7 @@ It has no data yet, but it does have the name <em>yourframe</em>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 28, 2016.
+      Last updated on May 24, 2016.
       </li>
     </ul>
     </div>

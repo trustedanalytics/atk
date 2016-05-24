@@ -34,10 +34,10 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <RandomForestClassifierModel__init__>`\ (self[, name, _info])                          Create a 'new' instance of a Random Forest Classifier model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict the labels for the data points.
-    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
-    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, num_classes, ...])            |ALPHA| Build Random Forests Classifier model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        Predict the labels for the data points.
+    :doc:`publish <publish>`\ (self)                                                                      Creates a tar file that will be used as input to the scoring engine
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, num_classes, ...])            Build Random Forests Classifier model.
     ====================================================================================================  ====================================================================================================
 
 .. _RandomForestClassifierModel__init__:
@@ -133,3 +133,33 @@
     Actual_Neg              0              3
     >>> model.publish()
     [===Job Progress===]
+
+    # Take the path to the published model and run it in the Scoring Engine
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    # posting a request to get the metadata about the model
+    >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"Random Forest Classifier Model","model_class":"org.trustedanalytics.atk.scoring.models.RandomForestClassifierScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.RandomForestClassifierModelReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
+    # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856', headers=headers)
+    >>> r.text
+    u'1.0'
+
+    # Posting a request to version 1 with multiple records to score:
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856&data=46.1810010826, 3.1611961917', headers=headers)
+    >>> r.text
+    u'1.0,0.0'
+
+    # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.2985856}]})
+    >>> r.text
+    u'{"data":[{"Dim_1":19.8446,"Dim_2":2.2985856,"Prediction":1.0}]}'
+
+    # posting a request to version 2 with multiple records to score:
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.2985856}, {"Dim_1": 46.1810010826, "Dim_2": 3.1611961917}]})
+    >>> r.text
+    u'{"data":[{"Dim_1":19.8446,"Dim_2":2.2985856,"Prediction":1.0},{"Dim_1":46.1810010826,"Dim_2":3.1611961917,"Prediction":0.0}]}'
+

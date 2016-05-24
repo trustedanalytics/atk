@@ -26,3 +26,7 @@
                   file.  The tar file is then published on HDFS and this method returns the path to
                   to the tar file.  The tar file serves as input to the scoring engine.
                   This model can then be used to predict future values.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
