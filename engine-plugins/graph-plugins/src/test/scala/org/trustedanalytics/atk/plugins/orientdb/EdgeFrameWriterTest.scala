@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- *  scala test for EdgeFrameWriter, checking the number of exported edges
- */
 class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 
   override def beforeEach() {
@@ -38,7 +35,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbConfig = new DbConfigurations(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 

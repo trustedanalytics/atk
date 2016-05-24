@@ -16,17 +16,20 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.VertexFrameRdd
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
  * Exports VertexFrameRdd to OrientDB
+ *
  * @param vertexFrameRdd vertices frame to be exported to OrientDB
  * @param dbConfigurations OrientDB configurations
  */
 
-class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfiguration) extends Serializable with EventLogging {
 
   /**
    * Method to export vertex frame to OrientDb
+   *
    * @param batchSize the number of vertices to be committed
    * @return the number of exported vertices
    */
@@ -50,6 +53,7 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
       catch {
         case e: Exception => {
           orientGraph.rollback()
+          error(s"Unable to add vertices to OrientDB graph", exception = e)
           throw new RuntimeException(s"Unable to add vertices to OrientDB graph: ${e.getMessage}")
         }
       }

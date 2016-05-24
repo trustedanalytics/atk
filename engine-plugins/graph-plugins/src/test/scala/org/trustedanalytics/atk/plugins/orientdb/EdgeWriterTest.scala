@@ -21,9 +21,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- * scala test for EdgeWriter, checking the exported exported edge source vertex ID, destination vertex ID and the edge properties.
- */
 class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
     setupOrientDbInMemory()

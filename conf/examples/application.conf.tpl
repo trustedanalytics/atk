@@ -55,6 +55,7 @@ trustedanalytics.atk {
     //connection-orientdb.username = "invalid-orientdb-user"
     //connection-orientdb.password = "invalid-orientdb-password"
     //connection-orientdb.url = "remote:"${trustedanalytics.atk.datastore.connection-orientdb.host}":"${trustedanalytics.atk.datastore.connection-orientdb.port}
+    // connection-orientdb.rootpassword = "invalid-orientdb-rootpassword"
   }
 
   engine {

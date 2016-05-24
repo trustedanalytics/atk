@@ -860,3 +860,47 @@ class JdbcTable(object):
 
 
 
+class OrientDBGraph(object):
+    """
+    Define the object to retrieve the data from OrientDB database.
+    """
+
+    def __init__(self, graph_name):
+        """
+        Define the object to retrieve the data from OrientDB database.
+
+        Parameters
+        ----------
+       graph_name : str
+            the OrientDB database name
+
+        Returns
+        -------
+        class : GraphEntity
+            ATK graph which holds the OrientDB graph data.
+
+        Examples
+        --------
+        .. code::
+
+            >>> import trustedanalytics as ta
+            >>> ta.connect()
+            >>> graph = ta.Graph(OrientDBGraph("OrientDBDatabaseName"))
+            >>> graph.vertices
+            >>> graph.edges
+
+
+        """
+        if (not isinstance(graph_name, str)):
+            raise ValueError("Incorrect graph name, Please provide a graph_name of type str")
+
+        self.graph_name = graph_name
+
+    def to_json(self):
+        return {"graph_name": self.graph_name}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
+
+

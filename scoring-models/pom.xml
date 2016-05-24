@@ -109,6 +109,10 @@
             <groupId>com.intel.daal</groupId>
             <artifactId>daal-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>daal-utils</artifactId>
+        </dependency>
         <!-- END Intel DAAL dependencies -->
 
         <dependency>

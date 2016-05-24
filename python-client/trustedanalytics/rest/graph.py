@@ -95,6 +95,11 @@ class GraphBackendRest(object):
     def _get_graph_full_uri(self,graph):
         return self.server.create_full_uri(graph.uri)
 
+    def _import_orientdb(self, graph, source):
+        arguments = source.to_json()
+        arguments['graph'] = graph.uri
+        return executor.execute("graph:/_import_orientdb", graph, arguments)
+
     def get_vertex_frames(self, graph_uri):
         r = self.server.get('%s/vertices' % graph_uri)
         return [VertexFrame(_info=x) for x in r.json()]
