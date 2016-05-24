@@ -49,7 +49,21 @@ export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/appli
 export KRB5_CONFIG=$DIR/../krb5jwt/etc/krb5.conf
 export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
 export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+
 # Make a curl request to UAA and get the PRINCIPAL name for the cloud foundry technical user
+get_technical_user_id() {
+
+    access_token=`curl -X POST  http://${UAA_URI}/oauth/token -H "Accept:application/json" -H \
+    "Content-Type:application/x-www-form-urlencoded" -d \
+    "grant_type=password&password=${FS_TECHNICAL_USER_PASSWORD}&scope=&username=${FS_TECHNICAL_USER_NAME}" -u \
+    ${UAA_CLIENT_NAME}:${UAA_CLIENT_PASSWORD} | $jq -c -r '.access_token' | cut -d'.' -f2`
+
+    technical_user_id=`base64 -d <<< $access_token | $jq -c -r '.user_id'`
+    echo $technical_user_id
+}
+
+kerberos_realm=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.kerberos.krealm')
+export KRB5CCNAME="/tmp/"$( get_technical_user_id )"@${kerberos_realm}"
 
 # uncomment the following lines if a binding to the zookeeper is needed
 #export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
