@@ -33,6 +33,10 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
+if [ -f licenses-scoring-engine.xml ]; then
+        mv licenses-scoring-engine.xml tarballs/$package/licenses.xml
+fi
+
 echo "create package directories"
 mkdir -pv  tarballs/$package/bin
 mkdir -pv  tarballs/$package/conf

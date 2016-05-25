@@ -35,6 +35,10 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
+if [ -f licenses-rest-server.xml ]; then
+	mv licenses-rest-server.xml tarballs/$package/licenses.xml
+fi
+
 echo "create package directories"
 mkdir -pv  tarballs/$package/bin
 mkdir -pv  tarballs/$package/conf
