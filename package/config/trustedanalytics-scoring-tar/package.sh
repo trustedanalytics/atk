@@ -33,6 +33,8 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
+pwd
+ls -la 
 if [ -f licenses-scoring-engine.xml ]; then
         mv licenses-scoring-engine.xml tarballs/$package/licenses.xml
 else

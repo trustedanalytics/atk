@@ -35,6 +35,8 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
+pwd
+ls -la 
 if [ -f licenses-rest-server.xml ]; then
 	mv licenses-rest-server.xml tarballs/$package/licenses.xml
 else
