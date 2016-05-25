@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.repository
 
 import org.apache.commons.dbcp.BasicDataSource
+import java.net._
 import com.github.tototoshi.slick.GenericJodaSupport
 
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntryTemplate, GarbageCollectionEntry, GarbageCollection, GarbageCollectionTemplate }
@@ -1249,8 +1250,11 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def updateProgress(id: Long, progress: String)(implicit session: Session): Unit = {
       val columns = for (c <- jobContextTable if c.id === id) yield (c.progress, c.modifiedOn)
-      columns.update(Some(progress), new DateTime)
-
+      val now = new DateTime
+      val localHost = InetAddress.getLocalHost
+      info(s"JobContextTable.updateProgress (for YarnJobsMonitor) from host $localHost at $now")
+      columns.update(Some(progress), now)
+      //columns.update(Some(progress), new DateTime)
     }
 
     override def updateYarnAppName(id: Long, yarnAppName: String)(implicit session: Session): Unit = {

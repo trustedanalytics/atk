@@ -16,6 +16,7 @@
 package org.trustedanalytics.atk.engine.command.mgmt
 
 import java.util.concurrent.TimeUnit
+import java.net._
 
 import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine.{ EngineConfig, Engine }
@@ -28,9 +29,12 @@ import org.trustedanalytics.atk.event.EventLogging
 class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends Runnable with EventLogging {
 
   lazy val timeoutMinutes: Long = EngineConfig.yarnMonitorTaskTimeout
+  lazy val timeoutMillis: Long = timeoutMinutes * 60 * 1000
 
   def run(): Unit = {
-    info(s"YarnJobsMonitor started.  Task timeout is $timeoutMinutes minutes.")
+    val localHost = InetAddress.getLocalHost
+    val nowMillis = System.currentTimeMillis()
+    info(s"YarnJobsMonitor started on $localHost at $nowMillis total ms.  Task timeout is $timeoutMinutes minutes (or $timeoutMillis ms).")
     while (true) {
       engine.getCommandsNotComplete().foreach { command =>
         engine.getCommandJobContext(command) match {
@@ -44,6 +48,12 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
     }
   }
 
-  def hasStaleContext(context: JobContext): Boolean =
-    System.currentTimeMillis() - context.modifiedOn.getMillis > timeoutMinutes * 60 * 1000
+  def hasStaleContext(context: JobContext): Boolean = {
+    val localHost = InetAddress.getLocalHost
+    val nowMillis = System.currentTimeMillis()
+    val lastModMillis = context.modifiedOn.getMillis
+    info(s"YarnJobsMonitor hasStaleContext check called $localHost at $nowMillis total ms against context.modified.getMillis=$lastModMillis")
+    //System.currentTimeMillis() - context.modifiedOn.getMillis > timeoutMinutes * 60 * 1000
+    nowMillis - lastModMillis > timeoutMillis
+  }
 }
