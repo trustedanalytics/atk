@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, observation_columns, column_scalings, k=2, max_iterations=100, convergence_tol=0.01, seed=1476060284844522954)
+.. function:: train(self, frame, observation_columns, column_scalings, k=2, max_iterations=100, convergence_tol=0.01, seed=-3896772081252575199)
 
     Creates a GMM Model from the train frame.
 
@@ -61,7 +61,7 @@
 
 
 
-        **seed** : int64 (default=1476060284844522954)
+        **seed** : int64 (default=-3896772081252575199)
 
         ..
 
