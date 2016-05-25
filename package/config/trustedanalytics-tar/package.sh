@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-
+pwd
 package=$1
 BUILD_NUMBER=$2
 VERSION=$3
@@ -37,6 +37,8 @@ rm $package-source.tar.gz
 
 if [ -f licenses-rest-server.xml ]; then
 	mv licenses-rest-server.xml tarballs/$package/licenses.xml
+else
+	echo no license file	
 fi
 
 echo "create package directories"

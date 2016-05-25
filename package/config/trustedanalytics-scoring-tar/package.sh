@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-
+pwd
 package="trustedanalytics-scoring-tar"
 workDir=$(pwd)
 baseDir=${workDir##*/}
@@ -35,6 +35,8 @@ rm $package-source.tar.gz
 
 if [ -f licenses-scoring-engine.xml ]; then
         mv licenses-scoring-engine.xml tarballs/$package/licenses.xml
+else
+	echo no license file
 fi
 
 echo "create package directories"
