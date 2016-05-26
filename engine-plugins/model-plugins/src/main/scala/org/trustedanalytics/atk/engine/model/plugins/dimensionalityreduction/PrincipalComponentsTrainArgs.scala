@@ -36,4 +36,6 @@ Default is the number of observation columns""") k: Option[Int] = None) {
   require(frame != null, "frame is required")
   require(!observationColumns.contains(null), "data columns names cannot be null")
   require(observationColumns.forall(!_.equals("")), "data columns names cannot be empty")
+  require(k.isEmpty || k.get <= observationColumns.length,
+    "k must be less than or equal to number of observation columns")
 }

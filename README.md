@@ -1,7 +1,12 @@
-ATK
-===
+TAP Analytics Toolkit (AT)
+==========================
 
-#Setting up your build environment
+## End User Documentation
+
+* [ATK Documentation](http://trustedanalytics.github.io/atk/)
+* [TAP Wiki](https://github.com/trustedanalytics/platform-wiki-0.7/wiki)
+
+## Setting up your build environment
 You will need to increase your maven memory settings and set the https protocol.
 
 ```
@@ -18,7 +23,7 @@ sudo keytool -importcert -trustcacerts -storepass changeit -file `pwd`/public.cr
 If you don't want to trust our public certificate you can change the all repository urls in parent [pom](pom.xml) from https://maven.trustedanalytics.org to http://maven.trustedanalytics.org 
 
 
-#Building
+## Building
 After cloning the repository (to a directory we'll refer to as 'atk'),
 
 Start the zinc server for incremental compilation
@@ -32,7 +37,7 @@ mvn compile
 ```
 
 
-## To build all the jars necessary to run the rest server
+### To build all the jars necessary to run the rest server
 
 ```
 mvn package -DskipTests
@@ -55,7 +60,7 @@ mvn -T 4 compile
 mvn -T 4 package
 ```
 
-# Running
+## Running
 
 This is an overview. Additional details and instructions are in the user documentation.
 
@@ -79,12 +84,7 @@ This is an overview. Additional details and instructions are in the user documen
     * import trustedanalytics as ta
     * ta.connect()
 
-# Getting Help
-* [Bug Tracking](https://trustedanalytics.atlassian.net)
-* [Look at our end user docs](http://trustedanalytics.github.io/atk/)
-* [Look at our wiki docs](../../wiki)
-
-# Folders Overview
+## Folders Overview
 * bin/ - scripts for starting REST server and scoring engine, etc.
 * conf/ - configuration templates for setting up a system, put your application.conf here for running out of source code
 * [doc](doc)/ - end user docs for the system (except doc for specific plugins goes in the plugins themselves)
@@ -112,7 +112,7 @@ This is an overview. Additional details and instructions are in the user documen
 * testutils/ - some test utility code that gets reused between tests in different modules
 
 
-# Developer Todo
+## Developer Todo
 * Enable lazy execution and delayed execution. We have a plan where SparkContexts can be re-used and only shutdown when needed.
 * Properly support directed and undirected graphs (get rid of "bi-directional")
 * Data types in graphs/frames needs to be extended greatly

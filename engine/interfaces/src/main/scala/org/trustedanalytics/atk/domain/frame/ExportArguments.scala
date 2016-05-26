@@ -70,15 +70,3 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
 }
-
-/**
- * Input arguments class for export to JDBC
- */
-case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
-                              @ArgDoc("""JDBC table name""") tableName: String,
-                              @ArgDoc("""(optional) JDBC connector type""") connectorType: Option[String],
-                              @ArgDoc("""(optional) driver name""") driverName: Option[String],
-                              @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {
-  require(frame != null, "frame is required")
-  require(StringUtils.isNotEmpty(tableName), "table name is required")
-}

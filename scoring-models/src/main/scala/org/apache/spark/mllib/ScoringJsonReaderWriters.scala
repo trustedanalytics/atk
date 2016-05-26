@@ -24,7 +24,6 @@ import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.ml.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
@@ -469,6 +468,52 @@ object ScoringJsonReaderWriters {
       val intercept = getOrInvalid(fields, "intercept").convertTo[Double]
 
       new DaalLinearRegressionModelData(serializedModel, obsCols, valueColumn, weights, intercept)
+    }
+  }
+
+  implicit object DaalNaiveBayesDataFormat extends JsonFormat[DaalNaiveBayesModelData] {
+    /**
+     * The write methods converts from DaalNaiveBayesModelData to JsValue
+     * @param obj DaalNaiveBayesModelData. Where DaalNaiveBayesModelData format is:
+     *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
+     *               labelColumn: String, numClasses: Int, lambdaParameter: Double, classPrior: Option[Array[Double]])
+     * @return JsValue
+     */
+    override def write(obj: DaalNaiveBayesModelData): JsValue = {
+      JsObject(
+        "serialized_model" -> obj.serializedModel.toJson,
+        "observation_columns" -> obj.observationColumns.toJson,
+        "label_column" -> obj.labelColumn.toJson,
+        "num_classes" -> obj.numClasses.toJson,
+        "lamda_parameter" -> obj.lambdaParameter.toJson,
+        "class_log_prior" -> obj.classLogPrior.toJson,
+        "feature_log_prob" -> obj.featureLogProb.toJson,
+        "class_prior" -> obj.classPrior.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to DaalNaiveBayesModelData
+     * @param json JsValue
+     * @return DaalNaiveBayesModelData with format:
+     *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
+     *                 labelColumn: String, numClasses: Int, lambdaParameter: Double, classPrior: Option[Array[Double]])
+     */
+    override def read(json: JsValue): DaalNaiveBayesModelData = {
+      val fields = json.asJsObject.fields
+      val serializedModel = getOrInvalid(fields, "serialized_model").convertTo[List[Byte]]
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val labelColumn = getOrInvalid(fields, "label_column").convertTo[String]
+      val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
+      val lambdaParameter = getOrInvalid(fields, "lambda_parameter").convertTo[Double]
+      val classLogPrior = getOrInvalid(fields, "class_log_prior").convertTo[Array[Double]]
+      val featureLogProb = getOrInvalid(fields, "feature_log_prob").convertTo[Array[Array[Double]]]
+      val classPrior = fields.get("class_prior") match {
+        case Some(prior) => Some(prior.convertTo[Array[Double]])
+        case _ => None
+      }
+      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses,
+        lambdaParameter, classLogPrior, featureLogProb, classPrior)
     }
   }
 
