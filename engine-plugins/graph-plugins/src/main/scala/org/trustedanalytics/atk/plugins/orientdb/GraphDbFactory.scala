@@ -88,11 +88,12 @@ object GraphDbFactory extends EventLogging {
    */
   private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     Try {
-      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbUserName)
+      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
       db
     } match {
       case Success(db) => new OrientGraphNoTx(db)
       case Failure(ex) =>
+        println("stack" + ex.printStackTrace())
         error(s"Unable to open database", exception = ex)
         throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }

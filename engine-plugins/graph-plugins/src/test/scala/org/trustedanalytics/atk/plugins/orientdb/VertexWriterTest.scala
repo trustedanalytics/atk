@@ -34,7 +34,13 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
 
   "Vertex Writer" should {
     val vertex = {
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
+      val columns = List(
+        Column(GraphSchema.vidProperty, DataTypes.int64),
+        Column(GraphSchema.labelProperty, DataTypes.string),
+        Column("name", DataTypes.string),
+        Column("from", DataTypes.string),
+        Column("to", DataTypes.string),
+        Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
       Vertex(schema, row)

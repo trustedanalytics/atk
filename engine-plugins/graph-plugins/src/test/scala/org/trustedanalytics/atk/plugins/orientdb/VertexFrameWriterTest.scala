@@ -34,7 +34,13 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
       val dbConfig = new DbConfiguration(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
+      val columns = List(
+        Column(GraphSchema.vidProperty, DataTypes.int64),
+        Column(GraphSchema.labelProperty, DataTypes.string),
+        Column("name", DataTypes.string),
+        Column("from", DataTypes.string),
+        Column("to", DataTypes.string),
+        Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val vertices: List[Row] = List(
         new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350)),
