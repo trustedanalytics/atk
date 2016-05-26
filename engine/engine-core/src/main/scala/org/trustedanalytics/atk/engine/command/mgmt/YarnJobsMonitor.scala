@@ -38,9 +38,11 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
     while (true) {
       engine.getCommandsNotComplete().foreach { command =>
         engine.getCommandJobContext(command) match {
-          case Some(context) => if (hasStaleContext(context)) {
-            engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes.  This may indicate that a task is running for a very long time.  Try increasing the 'trustedanalytics.atk.engine.yarn-monitor-task-timeout' config setting."))
-          }
+          case Some(context) =>
+            val (answer, msg) = hasStaleContext(context)
+            if (answer) {
+              engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes.  This may indicate that a task is running for a very long time.  Try increasing the 'trustedanalytics.atk.engine.yarn-monitor-task-timeout' config setting.  Details: $msg"))
+            }
           case None => ; // there is no know YARN job to shutdown (command remains not complete, but this is not the responsibility of a YARN jobs monitor
         }
       }
@@ -48,12 +50,14 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
     }
   }
 
-  def hasStaleContext(context: JobContext): Boolean = {
+  def hasStaleContext(context: JobContext): (Boolean, String) = {
     val localHost = InetAddress.getLocalHost
     val nowMillis = System.currentTimeMillis()
     val lastModMillis = context.modifiedOn.getMillis
-    info(s"YarnJobsMonitor hasStaleContext check called $localHost at $nowMillis total ms against context.modified.getMillis=$lastModMillis")
+    val msg = s"YarnJobsMonitor hasStaleContext check called by $localHost: $nowMillis - $lastModMillis > $timeoutMillis"
+    info(msg)
     //System.currentTimeMillis() - context.modifiedOn.getMillis > timeoutMinutes * 60 * 1000
-    nowMillis - lastModMillis > timeoutMillis
+    val answer = nowMillis - lastModMillis > timeoutMillis
+    (answer, msg)
   }
 }
