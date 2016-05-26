@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.command.mgmt
 import java.util.concurrent.TimeUnit
 import java.net._
 
+import org.joda.time.{ DateTimeZone, LocalDateTime }
 import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine.{ EngineConfig, Engine }
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -52,7 +53,9 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
 
   def hasStaleContext(context: JobContext): (Boolean, String) = {
     val localHost = InetAddress.getLocalHost
-    val nowMillis = System.currentTimeMillis()
+    //val nowMillis = System.currentTimeMillis()
+    val now = new LocalDateTime().toDateTime(DateTimeZone.UTC)
+    val nowMillis = now.getMillis
     val lastModMillis = context.modifiedOn.getMillis
     val msg = s"YarnJobsMonitor hasStaleContext check called by $localHost: $nowMillis - $lastModMillis > $timeoutMillis"
     info(msg)
