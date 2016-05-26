@@ -15,10 +15,12 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
+import com.orientechnologies.orient.client.remote.OServerAdmin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.engine.graph.{ SparkEdgeFrame, SparkVertexFrame, SparkGraph }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.event.EventLogging
 import scala.collection.immutable.Map
 import spray.json._
 
@@ -49,7 +51,6 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
   override def name: String = "graph:/export_to_orientdb"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
   /**
    * Method to export graph to OrientDB
    *
@@ -63,6 +64,11 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     // Get OrientDB configurations
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
 
+    // Check if the given graph name/database name already exists
+    val rootUserName = "root"
+    if (new OServerAdmin(dbConfig.dbUri).connect(rootUserName, dbConfig.rootPassword).existsDatabase()) {
+      require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required")
+    }
     //Get the graph meta data
     val graph: SparkGraph = arguments.graph
 
