@@ -14,6 +14,7 @@ applications:
   - zookeeper-xxx
   - pg93-xxx
   - kerberos-xxx
+  - hive-xxx
   env:
     CC_URI: api.52.88.248.77.xip.io
     UAA_URI: uaa.52.88.248.77.xip.io

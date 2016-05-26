@@ -121,13 +121,16 @@ tab="    "
 hbase_file="hbase-site.xml"
 hdfs_file="hdfs-site.xml"
 yarn_file="yarn-site.xml"
+hive_file="hive-site.xml"
 yarn_json="yarn.json"
 hdfs_json="hdfs.json"
 hbase_json="hbase.json"
+hive_json="hive.json"
 
 echo $VCAP_SERVICES |  $jq -c '.hbase[0].credentials.HADOOP_CONFIG_KEY' > $hbase_json
 echo $VCAP_SERVICES |  $jq -c '.hdfs[0].credentials.HADOOP_CONFIG_KEY' > $hdfs_json
 echo $VCAP_SERVICES |  $jq -c '.yarn[0].credentials.HADOOP_CONFIG_KEY' > $yarn_json
+echo $VCAP_SERVICES |  $jq -c '.hive[0].credentials.HADOOP_CONFIG_KEY' > $hive_json
 
 function buildSvcBrokerConfig {
 (echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -150,6 +153,7 @@ rm $2
 buildSvcBrokerConfig $hbase_file $hbase_json
 buildSvcBrokerConfig $hdfs_file $hdfs_json
 buildSvcBrokerConfig $yarn_file $yarn_json
+buildSvcBrokerConfig $hive_file $hive_json
 
 ## This next 2 blocks are temporary fixes for incorrect VCAP parameters passed through brokers and ublock new module-loader
 yarn_application_classpath="<property><name>yarn.application.classpath</name><value>,,/*,/lib/*,/*,/lib/*,/*,/lib/*</value></property>"
