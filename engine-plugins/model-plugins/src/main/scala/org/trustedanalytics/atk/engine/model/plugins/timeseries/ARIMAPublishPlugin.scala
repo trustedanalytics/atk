@@ -32,9 +32,9 @@ import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARIMAJsonProtoco
 
 @PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
   extended = """The publish method exports the ARIMA Model and its implementation into a tar
-              file.  The tar file is then published on HDFS and this method returns the path to
-              to the tar file.  The tar file serves as input to the scoring engine.
-              This model can then be used to predict future values.""",
+file.  The tar file is then published on HDFS and this method returns the path to
+to the tar file.  The tar file serves as input to the scoring engine.
+This model can then be used to predict future values.""",
   returns = """Returns the HDFS path to the trained model's tar file.""")
 class ARIMAPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
