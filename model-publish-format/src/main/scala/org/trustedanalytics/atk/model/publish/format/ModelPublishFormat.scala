@@ -17,7 +17,7 @@ package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
 import java.net.{ URL, URLClassLoader }
-import java.nio.file.Path
+import java.nio.file.{ Files, Path }
 
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream, TarArchiveOutputStream }
@@ -200,17 +200,24 @@ object ModelPublishFormat extends EventLogging {
   private def getTemporaryDirectory: Path = {
     try {
       val config = ConfigFactory.load(this.getClass.getClassLoader)
+      val configKey = "atk.scoring-engine.tmpdir"
 
-      /** Get path to temporary directory from config */
-      val tmpDirStr: String = config.getString("atk.scoring-engine.tmpdir")
-      val tmpDir = new File(tmpDirStr)
-      if (!tmpDir.exists()) {
-        tmpDir.mkdir()
+      val tmpModelDir = if (config.hasPath(configKey)) {
+        val tmpDirStr: String = config.getString("atk.scoring-engine.tmpdir")
+        val tmpDir = new File(tmpDirStr)
+        if (!tmpDir.exists()) {
+          tmpDir.mkdir()
+        }
+        tmpDir
+      }
+      else {
+        val tmpDir = Files.createTempDirectory("tap-scoring-model")
+        tmpDir.toFile
       }
 
       // Delete temporary directory on exit
-      sys.addShutdownHook(FileUtils.deleteQuietly(tmpDir))
-      tmpDir.toPath
+      sys.addShutdownHook(FileUtils.deleteQuietly(tmpModelDir))
+      tmpModelDir.toPath
     }
     catch {
       case e: Exception => {
