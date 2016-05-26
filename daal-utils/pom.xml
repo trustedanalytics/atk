@@ -27,7 +27,7 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <executions>
                         <execution>
-                            <id>daal-all</id>
+                            <id>daal-compile</id>
                             <phase>compile</phase>
                             <goals>
                                 <goal>exec</goal>
@@ -41,6 +41,39 @@
                             </configuration>
                         </execution>
                     </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>daal-install</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                   <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>daal-compile</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>tar</executable>
+                                    <workingDirectory>${basedir}/src/main/c++/</workingDirectory>
+                                    <arguments>
+                                        <argument>-xvjf</argument>
+                                        <argument>${basedir}/lib/daal-libs.tar.bz2</argument>
+                                        <argument>-C</argument>
+                                        <argument>${basedir}/lib</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>

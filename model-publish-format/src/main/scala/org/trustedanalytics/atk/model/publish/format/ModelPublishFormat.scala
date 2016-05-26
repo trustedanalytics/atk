@@ -16,10 +16,10 @@
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
-import java.lang.reflect.Field
 import java.net.{ URL, URLClassLoader }
-import java.nio.file.{ Path, Files }
+import java.nio.file.Path
 
+import com.typesafe.config.ConfigFactory
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream, TarArchiveOutputStream }
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.trustedanalytics.atk.event.EventLogging
@@ -84,7 +84,7 @@ object ModelPublishFormat extends EventLogging {
 
     try {
       // Extract files to temporary directory so that dynamic library names are not changed
-      val tempDirectory = Files.createTempDirectory("tap-scoring-model")
+      val tempDirectory = getTemporaryDirectory
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
@@ -152,7 +152,7 @@ object ModelPublishFormat extends EventLogging {
     try {
       file = new File(tempDir.toString, fileName)
       file.createNewFile()
-      //TODO: file.deleteOnExit()???
+
       outputFile = new FileOutputStream(file)
       IOUtils.write(content, outputFile)
 
@@ -197,6 +197,29 @@ object ModelPublishFormat extends EventLogging {
     tarBall.closeArchiveEntry()
   }
 
+  private def getTemporaryDirectory: Path = {
+    try {
+      val config = ConfigFactory.load(this.getClass.getClassLoader)
+
+      /** Get path to temporary directory from config */
+      val tmpDirStr: String = config.getString("atk.scoring-engine.tmpdir")
+      val tmpDir = new File(tmpDirStr)
+      if (!tmpDir.exists()) {
+        tmpDir.mkdir()
+      }
+
+      // Delete temporary directory on exit
+      sys.addShutdownHook(FileUtils.deleteQuietly(tmpDir))
+      tmpDir.toPath
+    }
+    catch {
+      case e: Exception => {
+        error("Failed to create temporary director for extracting model", exception = e)
+        throw e
+      }
+    }
+  }
+
   /**
    * Get directory path for input file
    *
@@ -233,4 +256,3 @@ object ModelPublishFormat extends EventLogging {
   }
 
 }
-
