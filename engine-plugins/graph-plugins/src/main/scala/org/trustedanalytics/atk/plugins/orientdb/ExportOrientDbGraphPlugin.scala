@@ -19,8 +19,7 @@ import com.orientechnologies.orient.client.remote.OServerAdmin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.engine.graph.{ SparkEdgeFrame, SparkVertexFrame, SparkGraph }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
-import org.trustedanalytics.atk.event.EventLogging
+import org.trustedanalytics.atk.engine.plugin.{Invocation, PluginDoc, SparkCommandPlugin }
 import scala.collection.immutable.Map
 import spray.json._
 
