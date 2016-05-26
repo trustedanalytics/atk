@@ -15,6 +15,7 @@
 #  limitations under the License.
 #
 
+pwd
 package=$1
 BUILD_NUMBER=$2
 VERSION=$3
@@ -35,11 +36,21 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
+
 echo "create package directories"
 mkdir -pv  tarballs/$package/bin
 mkdir -pv  tarballs/$package/conf
 mkdir -pv  tarballs/$package/lib
 mkdir -pv  tarballs/$package/lib/daal
+
+pwd
+ls -la
+if [ -f licenses-rest-server.xml ]; then
+        mv licenses-rest-server.xml tarballs/$package/licenses.xml
+else
+        echo no license file
+fi
+
 
 echo "copy config into package"
 cp -v  config/$package/application.conf tarballs/$package/conf
