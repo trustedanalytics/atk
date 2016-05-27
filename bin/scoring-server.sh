@@ -33,7 +33,6 @@ export HOSTNAME=`hostname`
 # LD_LIBRARY_PATH allows the OS to find the dynamic libraries and any dependencies
 export MODEL_TMP_DIR=`mktemp -d -t tap-scoring-modelXXXXXXXXXXXXXXXXXX`
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MODEL_TMP_DIR
-echo "model temporary directory: $MODEL_TMP_DIR"
 
 # NOTE: Add this parameter to Java for connecting to a debugger
 # -agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005

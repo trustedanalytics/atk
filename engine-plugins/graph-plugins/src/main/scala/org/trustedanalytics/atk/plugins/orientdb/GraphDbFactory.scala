@@ -93,7 +93,6 @@ object GraphDbFactory extends EventLogging {
     } match {
       case Success(db) => new OrientGraphNoTx(db)
       case Failure(ex) =>
-        println("stack" + ex.printStackTrace())
         error(s"Unable to open database", exception = ex)
         throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }

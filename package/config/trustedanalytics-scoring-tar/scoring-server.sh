@@ -97,8 +97,14 @@ if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 fi
 
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
+# Create temporary directory for extracting the model, and add it to the library path
+# It is difficult to modify the library path for dynamic libraries after the Java process has started
+# LD_LIBRARY_PATH allows the OS to find the dynamic libraries and any dependencies
+export MODEL_TMP_DIR=`mktemp -d -t tap-scoring-modelXXXXXXXXXXXXXXXXXX`
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MODEL_TMP_DIR
+
+echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -Datk.scoring-engine.tmpdir="$MODEL_TMP_DIR" $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
+java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -Datk.scoring-engine.tmpdir="$MODEL_TMP_DIR" $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
 
 popd
 

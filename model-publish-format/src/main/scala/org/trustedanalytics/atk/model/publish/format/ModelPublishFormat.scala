@@ -215,8 +215,8 @@ object ModelPublishFormat extends EventLogging {
         tmpDir.toFile
       }
 
-      // Delete temporary directory on exit
-      sys.addShutdownHook(FileUtils.deleteQuietly(tmpModelDir))
+      info(s"installing model to temporary directory:${tmpModelDir.getAbsolutePath}")
+      sys.addShutdownHook(FileUtils.deleteQuietly(tmpModelDir)) // Delete temporary directory on exit
       tmpModelDir.toPath
     }
     catch {
