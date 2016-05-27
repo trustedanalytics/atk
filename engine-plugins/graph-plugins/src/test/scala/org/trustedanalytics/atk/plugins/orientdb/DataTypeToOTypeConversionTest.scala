@@ -21,7 +21,13 @@ import scala.collection.mutable.ArrayBuffer
 
 class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
 
-  val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
+  val columns = List(
+    Column(GraphSchema.vidProperty, DataTypes.int64),
+    Column(GraphSchema.labelProperty, DataTypes.string),
+    Column("name", DataTypes.string),
+    Column("from", DataTypes.string),
+    Column("to", DataTypes.string),
+    Column("fair", DataTypes.int32))
   val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
   val orientTypeBuffer = new ArrayBuffer[String]()
   val dataTypeBuffer = new ArrayBuffer[String]()
@@ -30,7 +36,6 @@ class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
     "Convert DataTypes to OrientDb OTypes" in {
 
       columns.foreach(col => {
-        val colName = col.name
         val colDataType = col.dataType
         // call method under test
         val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(colDataType)
