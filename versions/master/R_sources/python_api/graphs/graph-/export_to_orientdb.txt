@@ -7,7 +7,6 @@
 
 .. function:: export_to_orientdb(self, graph_name, batch_size=1000)
 
-    |ALPHA|
     Exports graph to OrientDB
 
 

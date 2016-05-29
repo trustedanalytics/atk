@@ -4,7 +4,6 @@
 :doc:`Commands <index>` graph:/export_to_orientdb
 -------------------------------------------------
 
-|ALPHA|
 Exports graph to OrientDB
 
 POST /v1/commands/
