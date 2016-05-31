@@ -28,9 +28,9 @@ import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARIMAJsonProtoco
 
 @PluginDoc(oneLine = "Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.",
   extended = """Given a time series, fits an non-seasonal Autoregressive Integrated Moving Average (ARIMA) model of
-     order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
-     and q represents the moving average error terms.  If includeIntercept is true, the model is fitted
-     with an intercept.""",
+order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
+and q represents the moving average error terms.  If includeIntercept is true, the model is fitted
+with an intercept.""",
   returns = "Array of coefficients (intercept, AR, MA, with increasing degrees).")
 class ARIMATrainPlugin extends SparkCommandPlugin[ARIMATrainArgs, ARIMATrainReturn] {
   /**

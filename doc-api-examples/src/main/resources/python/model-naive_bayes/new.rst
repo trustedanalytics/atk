@@ -53,32 +53,49 @@ Actual_Neg              0              3
 >>> model.publish()
 <progress>
 
+Take the path to the published model and run it in the Scoring Engine
+
 <skip>
-# Take the path to the published model and run it in the Scoring Engine
 >>> import requests
 >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+</skip>
 
-# posting a request to get the metadata about the model
+Posting a request to get the metadata about the model
+
+<skip>
+>>> # asdfasdf
 >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
 >>> r.text
 u'{"model_details":{"model_type":"Naive Bayes Model","model_class":"org.apache.spark.mllib.classification.NaiveBayesScoringModel","model_reader":"org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"score","value":"Double"}]}'
+</skip>
 
-# Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+<skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.298585', headers=headers)
 >>> r.text
 u'0.0'
+</skip>
 
-# Posting a request to version 1 with multiple records to score:
+Posting a request to version 1 with multiple records to score:
+
+<skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446&data=5.5548729596, 2.7777687995', headers=headers)
 >>> r.text
 u'0.0,1.0'
+</skip>
 
-# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+
+<skip>
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.298585}]})
 >>> r.text
 u'{"data":[{"Dim_1":19.8446,"Dim_2":2.298585,"score":[0.0]}]}'
+</skip>
 
-# posting a request to version 2 with multiple records to score:
+Posting a request to version 2 with multiple records to score:
+
+<skip>
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.298585}, {"Dim_1": 5.5548729596 , "Dim_2": 2.7777687995}]})
 >>> r.text
 u'{"data":[{"Dim_1":19.8446,"Dim_2":2.298585,"score":[0.0]},{"Dim_1":5.5548729596,"Dim_2":2.7777687995,"score":[1.0]}]}'

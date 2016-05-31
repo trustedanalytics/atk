@@ -74,32 +74,48 @@ Consider the following frame containing two columns.
 >>> model.publish()
 <progress>
 
+Take the path to the published model and run it in the Scoring Engine
+
 <skip>
-# Take the path to the published model and run it in the Scoring Engine
 >>> import requests
 >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+</skip>
 
-# posting a request to get the metadata about the model
+Posting a request to get the metadata about the model
+
+<skip>
 >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
 >>> r.text
 u'{"model_details":{"model_type":"Linear Regression Model","model_class":"org.apache.spark.ml.regression.LinearRegressionModel","model_reader":"org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin","custom_values":{}},"input":[{"name":"x1","value":"Double"}],"output":[{"name":"x1","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+</skip>
 
-# Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+<skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0', headers=headers)
 >>> r.text
 u'9.743030303030302'
+</skip>
 
-# Posting a request to version 1 with multiple records to score:
+Posting a request to version 1 with multiple records to score:
+
+<skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0&data=0.0', headers=headers)
 >>> r.text
 u'9.743030303030302, -0.032727272727271384' #not working
+</skip>
 
-# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+
+<skip>
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"x1": 0.0}]})
 >>> r.text
 u'{"data":[{"x1":0.0,"Prediction":[-0.032727272727271384]}]}'
+</skip>
 
-# posting a request to version 2 with multiple records to score:
+Posting a request to version 2 with multiple records to score:
+
+<skip>
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"x1": 0.0}, {"x1": 4.0}]})
 >>> r.text
 u'{"data":[{"x1":0.0,"Prediction":[-0.032727272727271384]},{"x1":4.0,"Prediction":[9.743030303030302]}]}'
