@@ -1,0 +1,50 @@
+
+:doc:`GmmModel <index>`  predict
+********************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    Predict the cluster assignments for the data points.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose clusters are to be predicted.
+            By default, we predict the clusters over columns the GMMModel was trained on.
+            The columns are scaled using the same values used when training the model.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            Frame
+                A new frame consisting of the existing columns of the frame and a new column:
+            predicted_cluster : int
+                Integer containing the cluster assignment.
+    Predicts the clusters for each data point of the frame using the trained model
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

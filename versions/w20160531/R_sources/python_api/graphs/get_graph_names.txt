@@ -1,0 +1,20 @@
+
+:doc:`trustedanalytics <index>`  get_graph_names
+************************************************
+
+------
+
+
+.. function:: get_graph_names()
+
+    Retrieve names for all the graph objects on the server.
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            List of names
