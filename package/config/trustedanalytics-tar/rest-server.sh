@@ -25,20 +25,6 @@ jq=$DIR/../jq
 echo "make jq executable"
 chmod +x $jq
 
-
-
-if [ "$KRB5_BASE64" ]; then
-    (base64 -d <<< $KRB5_BASE64) > $DIR/../krb5.conf
-    export KERBEROS_ENABLED=true
-    export KRB5_CONFIG=$DIR/../krb5.conf
-    export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kuser')
-    export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kpassword')
-    export HADOOP_USER_NAME=$YARN_AUTHENTICATED_USERNAME
-    export KRB5CCNAME=/tmp/cf@CLOUDERA
-else
-    export KERBEROS_ENABLED=false
-fi
-
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
 export HADOOP_CONF_DIR=$YARN_CONF_DIR
@@ -55,8 +41,30 @@ export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
 export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
 export USE_HTTP=true
 
-export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
+export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.uri')
+export FS_TECHNICAL_USER_NAME=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.user')
+export FS_TECHNICAL_USER_PASSWORD=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.password')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
+
+export KRB5_CONFIG=$DIR/../krb5jwt/etc/krb5.conf
+export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
+export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+
+# Make a curl request to UAA and get the PRINCIPAL name for the cloud foundry technical user
+get_technical_user_id() {
+
+    access_token=`curl -X POST  http://${UAA_URI}/oauth/token -H "Accept:application/json" -H \
+    "Content-Type:application/x-www-form-urlencoded" -d \
+    "grant_type=password&password=${FS_TECHNICAL_USER_PASSWORD}&scope=&username=${FS_TECHNICAL_USER_NAME}" -u \
+    ${UAA_CLIENT_NAME}:${UAA_CLIENT_PASSWORD} | $jq -c -r '.access_token' | cut -d'.' -f2`
+
+    technical_user_id=`base64 -d <<< $access_token | $jq -c -r '.user_id'`
+    echo $technical_user_id
+}
+
+kerberos_realm=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.kerberos.krealm')
+export KRB5CCNAME="/tmp/"$( get_technical_user_id )"@${kerberos_realm}"
+export HADOOP_USER_NAME=$( get_technical_user_id )
 
 # uncomment the following lines if a binding to the zookeeper is needed
 #export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
@@ -112,13 +120,16 @@ tab="    "
 hbase_file="hbase-site.xml"
 hdfs_file="hdfs-site.xml"
 yarn_file="yarn-site.xml"
+hive_file="hive-site.xml"
 yarn_json="yarn.json"
 hdfs_json="hdfs.json"
 hbase_json="hbase.json"
+hive_json="hive.json"
 
 echo $VCAP_SERVICES |  $jq -c '.hbase[0].credentials.HADOOP_CONFIG_KEY' > $hbase_json
 echo $VCAP_SERVICES |  $jq -c '.hdfs[0].credentials.HADOOP_CONFIG_KEY' > $hdfs_json
 echo $VCAP_SERVICES |  $jq -c '.yarn[0].credentials.HADOOP_CONFIG_KEY' > $yarn_json
+echo $VCAP_SERVICES |  $jq -c '.hive[0].credentials.HADOOP_CONFIG_KEY' > $hive_json
 
 function buildSvcBrokerConfig {
 (echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -141,6 +152,7 @@ rm $2
 buildSvcBrokerConfig $hbase_file $hbase_json
 buildSvcBrokerConfig $hdfs_file $hdfs_json
 buildSvcBrokerConfig $yarn_file $yarn_json
+buildSvcBrokerConfig $hive_file $hive_json
 
 ## This next 2 blocks are temporary fixes for incorrect VCAP parameters passed through brokers and ublock new module-loader
 yarn_application_classpath="<property><name>yarn.application.classpath</name><value>,,/*,/lib/*,/*,/lib/*,/*,/lib/*</value></property>"
@@ -171,13 +183,8 @@ if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
  export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
 fi
 
-if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
- export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
-fi
-
-echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
-java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 

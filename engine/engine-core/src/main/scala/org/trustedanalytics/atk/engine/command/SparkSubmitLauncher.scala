@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
+import org.trustedanalytics.hadoop.config.client.oauth.TapOauthToken
 
 import org.trustedanalytics.hadoop.config.client.{ Configurations, ServiceType }
 import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
@@ -51,11 +52,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // make sure hdfs libs have been uploaded
         BackgroundInit.waitTillCompleted
 
-        val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
-          case true => (s"",
-            s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
-          case false => ("", "")
-        }
+        val kerbOptions = s"-Djavax.security.auth.useSubjectCredsOnly=false"
 
         val sparkMaster = Array(s"--master", s"${EngineConfig.sparkMaster}")
         val jobName = Array(s"--name", s"${jobContext.getYarnAppName}")
@@ -68,7 +65,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
         // the pound symbol '#' is used to rename a file during upload e.g. "/some/path/oldname#newname"
         val confFile = EngineConfig.effectiveApplicationConf
-        val pluginDependencyFiles = Array("--files", s"$confFile$kerbFile$pythonDependencyPath,${EngineConfig.daalDynamicLibraries}")
+        val pluginDependencyFiles = Array("--files", s"$confFile$pythonDependencyPath,${EngineConfig.daalDynamicLibraries}")
         val executionParams = Array(
           "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions -Dconfig.resource=${EngineConfig.effectiveApplicationConfFileName}")
 
@@ -124,7 +121,11 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         }
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
-        val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
+        val jwtToken = invocation.user.token.isDefined match {
+          case true => Some(new TapOauthToken(invocation.user.token.get))
+          case false => None
+        }
+        val userAuthenticatedConfiguration = KerberosAuthenticator.submitYarnJobAsAuthenticatedUser(jwtToken)
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
@@ -135,6 +136,11 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         val result = Subject.doAs[Int](userAuthenticatedConfiguration.subject, new PrivilegedAction[Int] {
           def run: Int = {
             val pb = new java.lang.ProcessBuilder(javaArgs: _*)
+            if (jwtToken.isDefined) {
+              pb.environment().put("KRB5CCNAME", s"/tmp/${jwtToken.get.getUserId}@CLOUDERA")
+              pb.environment().put("KRB5_CONFIG", s"krb5jwt/etc/krb5.conf")
+              pb.environment().put("HADOOP_USER_NAME", s"${jwtToken.get.getUserId}")
+            }
             val job = pb.inheritIO().start()
             job.waitFor()
           }
