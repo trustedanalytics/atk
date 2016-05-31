@@ -14,7 +14,7 @@ In the TAP web site:
 2) Select **scoring_engine** => **Create new isntance**.
 3) Fill in an instance name of your choice *(given below as **my-svm-model**)*.
 4) Select **+ Add variable**.
-5) Fill in two values: key **TAR_ARCHIVE**; value is the URI of the model you wish to use.
+5) Fill in two values: key **uri**; value is the URI of the model you wish to use.
 
 You will be able to see your scoring engine under the Applications page.
 
