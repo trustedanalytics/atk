@@ -887,6 +887,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>hive-common</artifactId>
                 <version>${dep.hive.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-jdbc</artifactId>
+                <version>${dep.hive.version}</version>
+            </dependency>
             <!--org.apache.hadoop-->
             <dependency>
                 <groupId>org.apache.hadoop</groupId>

@@ -119,5 +119,9 @@
             <groupId>com.cloudera.sparkts</groupId>
             <artifactId>sparkts</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+        </dependency>
     </dependencies>
 </project>
