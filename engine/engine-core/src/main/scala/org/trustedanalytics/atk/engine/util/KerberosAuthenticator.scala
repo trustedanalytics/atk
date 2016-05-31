@@ -101,28 +101,32 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
     }
   }
 
-  def submitYarnJobAsAuthenticatedUser(jwtToken: JwtToken): UserAuthenticatedConfiguration = {
-    try {
-      val helper = Configurations.newInstanceFromEnv()
-      val hdfsConf = helper.getServiceConfig(ServiceType.YARN_TYPE)
-      if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
-        val kerberosProperties = new KerberosProperties
-        val loginManager = KrbLoginManagerFactory.getInstance()
-          .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
-        val res = hdfsConf.asHadoopConfiguration()
-        val subject = loginManager.loginWithJWTtoken(jwtToken)
-        loginManager.loginInHadoop(subject, res)
-        UserAuthenticatedConfiguration(subject, res)
-      }
-      else UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
-    }
-    catch {
-      case t: Throwable =>
-        info("Printing stack trace as to why kinit failed")
-        t.printStackTrace()
-        info(s"Failed to loginUsingHadooputils. Either kerberos is not enabled or invalid setup or " +
-          "using System credentials for authentication. Returning default configuration")
-        UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
+  def submitYarnJobAsAuthenticatedUser(jwtToken: Option[JwtToken]): UserAuthenticatedConfiguration = {
+    jwtToken.isDefined match {
+      case false => UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
+      case true =>
+        try {
+          val helper = Configurations.newInstanceFromEnv()
+          val hdfsConf = helper.getServiceConfig(ServiceType.YARN_TYPE)
+          if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
+            val kerberosProperties = new KerberosProperties
+            val loginManager = KrbLoginManagerFactory.getInstance()
+              .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
+            val res = hdfsConf.asHadoopConfiguration()
+            val subject = loginManager.loginWithJWTtoken(jwtToken.get)
+            loginManager.loginInHadoop(subject, res)
+            UserAuthenticatedConfiguration(subject, res)
+          }
+          else UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
+        }
+        catch {
+          case t: Throwable =>
+            info("Printing stack trace as to why kinit failed")
+            t.printStackTrace()
+            info(s"Failed to loginUsingHadooputils. Either kerberos is not enabled or invalid setup or " +
+              "using System credentials for authentication. Returning default configuration")
+            UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
+        }
     }
   }
 
