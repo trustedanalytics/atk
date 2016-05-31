@@ -135,6 +135,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
             val pb = new java.lang.ProcessBuilder(javaArgs: _*)
             pb.environment().put("KRB5CCNAME", s"/tmp/${jwtToken.getUserId}@CLOUDERA")
             pb.environment().put("KRB5_CONFIG", s"krb5jwt/etc/krb5.conf")
+            pb.environment().put("HADOOP_USER_NAME", s"${jwtToken.getUserId}")
             val job = pb.inheritIO().start()
             job.waitFor()
           }

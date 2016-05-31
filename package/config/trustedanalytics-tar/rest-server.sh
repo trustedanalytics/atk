@@ -64,6 +64,7 @@ get_technical_user_id() {
 
 kerberos_realm=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.kerberos.krealm')
 export KRB5CCNAME="/tmp/"$( get_technical_user_id )"@${kerberos_realm}"
+export HADOOP_USER_NAME=$( get_technical_user_id )
 
 # uncomment the following lines if a binding to the zookeeper is needed
 #export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
