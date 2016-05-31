@@ -125,22 +125,26 @@
     >>> model.publish()
     [===Job Progress===]
 
-    # Take the path to the published model and run it in the Scoring Engine
+    Take the path to the published model and run it in the Scoring Engine
+
     >>> import requests
     >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
 
-    # posting a request to get the metadata about the model
+    Posting a request to get the metadata about the model
+
     >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
     >>> r.text
     u'{"model_details":{"model_type":"Lda Model","model_class":"org.trustedanalytics.atk.scoring.models.LdaScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin","custom_values":{}},"input":[{"name":"doc_id","value":"Array[String]"}],"output":[{"name":"doc_id","value":"Array[String]"},{"name":"topics_given_doc","value":"Vector[Double]"},{"name":"new_words_count","value":"Int"},{"name":"new_words_percentage","value":"Double"}]}'
 
-    # The LDA model only supports version 2 of the scoring engine.
-    # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+    The LDA model only supports version 2 of the scoring engine.
+    Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+
     >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"doc_id": ['harry', 'secrets', 'magic']}]})
     >>> r.text
     u'{"data":[{"doc_id":["harry","secrets","magic"],"topics_given_doc":[0.4841745428992676,0.5158254571007324],"new_words_count":0,"new_words_percentage":0.0}]}'
 
-    # posting a request to version 2 with multiple records to score:
+    Posting a request to version 2 with multiple records to score:
+
     >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"doc_id": ['harry', 'secrets', 'magic']}, {"doc_id": ['harry', 'secrets', 'magic']}]})
     >>> r.text
     u'{"data":[{"doc_id":["harry","secrets","magic"],"topics_given_doc":[0.4841745428992676,0.5158254571007324],"new_words_count":0,"new_words_percentage":0.0},{"doc_id":["harry","secrets","magic"],"topics_given_doc":[0.4841745428992676,0.5158254571007324],"new_words_count":0,"new_words_percentage":0.0}]}'

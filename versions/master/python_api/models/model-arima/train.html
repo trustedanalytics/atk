@@ -158,23 +158,15 @@ Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specifie
 </div></blockquote>
 <p><strong>method</strong> : unicode (default=css-cgd)</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>Objective function and optimization method.  Current options are: &#8216;css-bobyqa&#8217;</dt>
-<dd><p class="first last">and &#8216;css-cgd&#8217;.  Both optimize the log likelihood in terms of the conditional sum of
-squares.  The first uses BOBYQA for optimization, while the second uses conjugate
-gradient descent.  Default is &#8216;css-cgd&#8217;.</p>
-</dd>
-</dl>
+<div><p>Objective function and optimization method.  Current options are: &#8216;css-bobyqa&#8217; and &#8216;css-cgd&#8217;.
+Both optimize the log likelihood in terms of the conditional sum of squares.  The first uses BOBYQA for optimization, while
+the second uses conjugate gradient descent.  Default is &#8216;css-cgd&#8217;.</p>
 </div></blockquote>
 <p><strong>user_init_params</strong> : list (default=None)</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>A set of user provided initial parameters for optimization. If the list</dt>
-<dd><p class="first last">is empty (default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter
-should be: intercept term, AR parameters (in increasing order of lag), MA parameters (in
-increasing order of lag)</p>
-</dd>
-</dl>
+<div><p>A set of user provided initial parameters for optimization. If the list is empty
+(default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter should be: intercept term, AR
+parameters (in increasing order of lag), MA parameters (in increasing order of lag)</p>
 </div></blockquote>
 </td>
 </tr>
@@ -186,12 +178,10 @@ increasing order of lag)</p>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>Given a time series, fits an non-seasonal Autoregressive Integrated Moving Average (ARIMA) model of</dt>
-<dd>order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
+<p>Given a time series, fits an non-seasonal Autoregressive Integrated Moving Average (ARIMA) model of
+order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
 and q represents the moving average error terms.  If includeIntercept is true, the model is fitted
-with an intercept.</dd>
-</dl>
+with an intercept.</p>
 <p class="rubric">Examples</p>
 <p>See :doc: &#8216;here &lt;new&gt;&#8217; for examples.</p>
 </dd></dl>

@@ -297,22 +297,30 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p># Take the path to the published model and run it in the Scoring Engine
-&gt;&gt;&gt; import requests
-&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
-<p># posting a request to get the metadata about the model
-&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;Lda Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LdaScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;doc_id&#8221;,&#8221;value&#8221;:&#8221;Array[String]&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;doc_id&#8221;,&#8221;value&#8221;:&#8221;Array[String]&#8221;},{&#8220;name&#8221;:&#8221;topics_given_doc&#8221;,&#8221;value&#8221;:&#8221;Vector[Double]&#8221;},{&#8220;name&#8221;:&#8221;new_words_count&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;},{&#8220;name&#8221;:&#8221;new_words_percentage&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
-<p># The LDA model only supports version 2 of the scoring engine.
-# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
-&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}]})
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0}]}&#8217;</p>
-<p># posting a request to version 2 with multiple records to score:
-&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}, {&#8220;doc_id&#8221;: [&#8216;harry&#8217;, &#8216;secrets&#8217;, &#8216;magic&#8217;]}]})
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0},{&#8220;doc_id&#8221;:[&#8220;harry&#8221;,&#8221;secrets&#8221;,&#8221;magic&#8221;],&#8221;topics_given_doc&#8221;:[0.4841745428992676,0.5158254571007324],&#8221;new_words_count&#8221;:0,&#8221;new_words_percentage&#8221;:0.0}]}&#8217;</p>
+<p>Take the path to the published model and run it in the Scoring Engine</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Posting a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;Lda Model&quot;,&quot;model_class&quot;:&quot;org.trustedanalytics.atk.scoring.models.LdaScoreModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;doc_id&quot;,&quot;value&quot;:&quot;Array[String]&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;doc_id&quot;,&quot;value&quot;:&quot;Array[String]&quot;},{&quot;name&quot;:&quot;topics_given_doc&quot;,&quot;value&quot;:&quot;Vector[Double]&quot;},{&quot;name&quot;:&quot;new_words_count&quot;,&quot;value&quot;:&quot;Int&quot;},{&quot;name&quot;:&quot;new_words_percentage&quot;,&quot;value&quot;:&quot;Double&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>The LDA model only supports version 2 of the scoring engine.
+Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;doc_id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;harry&#39;</span><span class="p">,</span> <span class="s1">&#39;secrets&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">]}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;doc_id&quot;:[&quot;harry&quot;,&quot;secrets&quot;,&quot;magic&quot;],&quot;topics_given_doc&quot;:[0.4841745428992676,0.5158254571007324],&quot;new_words_count&quot;:0,&quot;new_words_percentage&quot;:0.0}]}&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 2 with multiple records to score:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;doc_id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;harry&#39;</span><span class="p">,</span> <span class="s1">&#39;secrets&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">]},</span> <span class="p">{</span><span class="s2">&quot;doc_id&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;harry&#39;</span><span class="p">,</span> <span class="s1">&#39;secrets&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">]}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;doc_id&quot;:[&quot;harry&quot;,&quot;secrets&quot;,&quot;magic&quot;],&quot;topics_given_doc&quot;:[0.4841745428992676,0.5158254571007324],&quot;new_words_count&quot;:0,&quot;new_words_percentage&quot;:0.0},{&quot;doc_id&quot;:[&quot;harry&quot;,&quot;secrets&quot;,&quot;magic&quot;],&quot;topics_given_doc&quot;:[0.4841745428992676,0.5158254571007324],&quot;new_words_count&quot;:0,&quot;new_words_percentage&quot;:0.0}]}&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

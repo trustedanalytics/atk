@@ -149,12 +149,12 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r1" id="id1">[R1]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="../model-linear_regression/new.html#r1" id="id1">[R1]</a> is a supervised ensemble learning algorithm
 which can be used to perform binary and multi-class classification.
 The Random Forest Classifier model is initialized, trained on columns of a
 frame, used to predict the labels of observations in a frame, and tests the
 predicted labels against the true labels.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r2" id="id2">[R2]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="../model-linear_regression/new.html#r2" id="id2">[R2]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, each tree&#8217;s prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes.
@@ -221,29 +221,41 @@ using built-in binary and multi-class Classification Metrics.</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p># Take the path to the published model and run it in the Scoring Engine
-&gt;&gt;&gt; import requests
-&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
-<p># posting a request to get the metadata about the model
-&gt;&gt;&gt; r =requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;Random Forest Classifier Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.RandomForestClassifierScoreModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.RandomForestClassifierModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;Dim_1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Dim_2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;Dim_1&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Dim_2&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
-<p># Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
-&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446">http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446</a>, 2.2985856&#8217;, headers=headers)
-&gt;&gt;&gt; r.text
-u&#8216;1.0&#8217;</p>
-<p># Posting a request to version 1 with multiple records to score:
-&gt;&gt;&gt; r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446">http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446</a>, 2.2985856&amp;data=46.1810010826, 3.1611961917&#8217;, headers=headers)
-&gt;&gt;&gt; r.text
-u&#8216;1.0,0.0&#8217;</p>
-<p># Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
-&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;Dim_1&#8221;: 19.8446, &#8220;Dim_2&#8221;: 2.2985856}]})
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;Dim_1&#8221;:19.8446,&#8221;Dim_2&#8221;:2.2985856,&#8221;Prediction&#8221;:1.0}]}&#8217;</p>
-<p># posting a request to version 2 with multiple records to score:
-&gt;&gt;&gt; r = requests.post(&#8220;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;Dim_1&#8221;: 19.8446, &#8220;Dim_2&#8221;: 2.2985856}, {&#8220;Dim_1&#8221;: 46.1810010826, &#8220;Dim_2&#8221;: 3.1611961917}]})
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;Dim_1&#8221;:19.8446,&#8221;Dim_2&#8221;:2.2985856,&#8221;Prediction&#8221;:1.0},{&#8220;Dim_1&#8221;:46.1810010826,&#8221;Dim_2&#8221;:3.1611961917,&#8221;Prediction&#8221;:0.0}]}&#8217;</p>
+<p>Take the path to the published model and run it in the Scoring Engine</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Posting a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;Random Forest Classifier Model&quot;,&quot;model_class&quot;:&quot;org.trustedanalytics.atk.scoring.models.RandomForestClassifierScoreModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.RandomForestClassifierModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;Dim_1&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;Dim_2&quot;,&quot;value&quot;:&quot;Double&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;Dim_1&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;Dim_2&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;Prediction&quot;,&quot;value&quot;:&quot;Double&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 1 of Scoring Engine supporting strings for requests and response:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;1.0&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 1 with multiple records to score:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856&amp;data=46.1810010826, 3.1611961917&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;1.0,0.0&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;Dim_1&quot;</span><span class="p">:</span> <span class="mf">19.8446</span><span class="p">,</span> <span class="s2">&quot;Dim_2&quot;</span><span class="p">:</span> <span class="mf">2.2985856</span><span class="p">}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;Dim_1&quot;:19.8446,&quot;Dim_2&quot;:2.2985856,&quot;Prediction&quot;:1.0}]}&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 2 with multiple records to score:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;Dim_1&quot;</span><span class="p">:</span> <span class="mf">19.8446</span><span class="p">,</span> <span class="s2">&quot;Dim_2&quot;</span><span class="p">:</span> <span class="mf">2.2985856</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;Dim_1&quot;</span><span class="p">:</span> <span class="mf">46.1810010826</span><span class="p">,</span> <span class="s2">&quot;Dim_2&quot;</span><span class="p">:</span> <span class="mf">3.1611961917</span><span class="p">}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;Dim_1&quot;:19.8446,&quot;Dim_2&quot;:2.2985856,&quot;Prediction&quot;:1.0},{&quot;Dim_1&quot;:46.1810010826,&quot;Dim_2&quot;:3.1611961917,&quot;Prediction&quot;:0.0}]}&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

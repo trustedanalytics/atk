@@ -50,9 +50,9 @@ Request
 **Description**
 
 The publish method exports the ARIMA Model and its implementation into a tar
-              file.  The tar file is then published on HDFS and this method returns the path to
-              to the tar file.  The tar file serves as input to the scoring engine.
-              This model can then be used to predict future values.
+file.  The tar file is then published on HDFS and this method returns the path to
+to the tar file.  The tar file serves as input to the scoring engine.
+This model can then be used to predict future values.
 
 |
 

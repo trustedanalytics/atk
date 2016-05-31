@@ -203,7 +203,7 @@
 </tr>
 </tbody>
 </table>
-<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-random_forest_classifier/new.html#r1" id="id1">[R1]</a> model is a
+<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-linear_regression/new.html#r1" id="id1">[R1]</a> model is a
 generalization of an autoregressive moving average (ARMA) model.
 These models are fitted to time series data either to better understand
 the data or to predict future points in the series (forecasting).
@@ -301,20 +301,28 @@ vector column).</p>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p># Take the path to the published model and run it in the Scoring Engine
-&gt;&gt;&gt; import requests
-&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
-<p># Post a request to get the metadata about the model
-&gt;&gt;&gt; r = requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;ARIMA Model&#8221;,&#8221;model_class&#8221;:&#8221;com.cloudera.sparkts.models.ARIMAModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;timeseries&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;future&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;timeseries&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;future&#8221;,&#8221;value&#8221;:&#8221;Int&#8221;},{&#8220;name&#8221;:&#8221;predicted_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}]}&#8217;</p>
-<p># The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
-# time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
-# since 7 historical time series values were provided, 7 future periods will be forecasted.
-r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8216;,json={&#8220;records&#8221;:[{&#8220;timeseries&#8221;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&#8221;future&#8221;:0}]})</p>
-<p># The &#8216;predicted_values&#8217; array contains the future values, which have been forecasted based on the historical data.
-r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;timeseries&#8221;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&#8221;future&#8221;:0.0,&#8221;predicted_values&#8221;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#8217;</p>
+<p>Take the path to the published model and run it in the Scoring Engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Post a request to get the metadata about the model.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARIMA Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARIMAModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;},{&quot;name&quot;:&quot;predicted_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
+time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
+since 7 historical time series values were provided, 7 future periods will be forecasted.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;timeseries&quot;</span><span class="p">:[</span><span class="mf">12.88969427</span><span class="p">,</span><span class="mf">13.54964408</span><span class="p">,</span><span class="mf">13.8432745</span><span class="p">,</span><span class="mf">12.13843611</span><span class="p">,</span><span class="mf">12.81156092</span><span class="p">,</span><span class="mf">14.2499628</span><span class="p">,</span><span class="mf">15.12102595</span><span class="p">],</span><span class="s2">&quot;future&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}]})</span>
+</pre></div>
+</div>
+<p>The &#8216;predicted_values&#8217; array contains the future values, which have been forecasted based on the historical data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;timeseries&quot;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&quot;future&quot;:0.0,&quot;predicted_values&quot;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

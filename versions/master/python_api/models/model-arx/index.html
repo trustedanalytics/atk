@@ -266,20 +266,28 @@ The frame has five columns where &#8220;y&#8221; is the time series value and &#
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p># Take the path to the published model and run it in the Scoring Engine
-&gt;&gt;&gt; import requests
-&gt;&gt;&gt; headers = {&#8216;Content-type&#8217;: &#8216;application/json&#8217;, &#8216;Accept&#8217;: &#8216;application/json,text/plain&#8217;}</p>
-<p># Post a request to get the metadata about the model
-&gt;&gt;&gt; r = requests.get(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/metadata">http://mymodel.demotrustedanalytics.com/v2/metadata</a>&#8216;)
-&gt;&gt;&gt; r.text
-u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;ARX Model&#8221;,&#8221;model_class&#8221;:&#8221;com.cloudera.sparkts.models.ARXModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;y&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;x_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;y&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;x_values&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;},{&#8220;name&#8221;:&#8221;score&#8221;,&#8221;value&#8221;:&#8221;Array[Double]&#8221;}]}&#8217;</p>
-<p># The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
-# that was trained and published in the example above.  To keep things simple, we just send the first three rows of
-# &#8216;y&#8217; values and the corresponding &#8216;x_values&#8217; (visitors, wkends, incidentRate, and seasonality).
-r = requests.post(&#8216;<a class="reference external" href="http://mymodel.demotrustedanalytics.com/v2/score">http://mymodel.demotrustedanalytics.com/v2/score</a>&#8216;,json={&#8220;records&#8221;:[{&#8220;y&#8221;:[68.0,89.0,96.0],&#8221;x_values&#8221;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})</p>
-<p># The &#8216;score&#8217; value contains an array of predicted y values.
-r.text
-u&#8217;{&#8220;data&#8221;:[{&#8220;y&#8221;:[68.0,89.0,96.0],&#8221;x_values&#8221;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],&#8221;score&#8221;:[74.24592767720993,87.31024788358613,84.8763748215895]}]}&#8217;</p>
+<p>Take the path to the published model and run it in the Scoring Engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Post a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARX Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARXModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;score&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
+that was trained and published in the example above.  To keep things simple, we just send the first three rows of
+&#8216;y&#8217; values and the corresponding &#8216;x_values&#8217; (visitors, wkends, incidentRate, and seasonality).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;y&quot;</span><span class="p">:[</span><span class="mf">68.0</span><span class="p">,</span><span class="mf">89.0</span><span class="p">,</span><span class="mf">96.0</span><span class="p">],</span><span class="s2">&quot;x_values&quot;</span><span class="p">:[</span><span class="mf">278.0</span><span class="p">,</span><span class="mf">324.0</span><span class="p">,</span><span class="mf">318.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">0.0151327580791</span><span class="p">,</span><span class="mf">0.0115112433251</span><span class="p">,</span><span class="mf">0.0190129524584</span><span class="p">]}]})</span>
+</pre></div>
+</div>
+<p>The &#8216;score&#8217; value contains an array of predicted y values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;y&quot;:[68.0,89.0,96.0],&quot;x_values&quot;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],&quot;score&quot;:[74.24592767720993,87.31024788358613,84.8763748215895]}]}&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
