@@ -25,6 +25,10 @@
    "type": "Weekly", 
    "version": "v0.7.0rc1"
   }, 
+  "v0.7.0rc2": {
+   "type": "Production", 
+   "version": "v0.7.0rc2"
+  }, 
   "w20150921": {
    "type": "Weekly", 
    "version": "w20150921"

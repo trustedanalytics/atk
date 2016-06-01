@@ -1,0 +1,126 @@
+
+
+-------------------------------------------------
+:doc:`Commands <index>` graph:/export_to_orientdb
+-------------------------------------------------
+
+Exports graph to OrientDB
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:/export_to_orientdb
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **graph_name** : unicode
+
+    ..
+
+        OrientDB database name.
+
+
+
+    **batch_size** : int32 (default=1000)
+
+    ..
+
+        batch size for commiting transactions.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creates OrientDB database using the parameters provided in the configurations file.
+
+      OrientDB database will be created in the given host name and port number,
+      and with the given user credentials after checking the user authorization to create or access OrientDB database.
+
+      Exports the graph edges and vertices to the OrientDB database. Each vertex or edge type in the graph corresponds to a vertex or edge class in OrientDB.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        The location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
+              for vertices dictionary:
+                     it returns the vertex class name, the number of the exported vertices and the number of vertices failed to be exported.
+              for the edges dictionary:
+                     it returns the edge class name, the number of the exported edges and the number of edges that failed to be exported.
+
+
