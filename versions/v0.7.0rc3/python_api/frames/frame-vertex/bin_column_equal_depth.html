@@ -1,0 +1,263 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame bin_column_equal_depth &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame bin_column_equal_width" href="bin_column_equal_width.html" >
+    <link rel="prev" title="VertexFrame bin_column" href="bin_column.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="bin_column.html" title="VertexFrame bin_column"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="bin_column_equal_width.html" title="VertexFrame bin_column_equal_width"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-bin-column-equal-depth">
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  bin_column_equal_depth<a class="headerlink" href="#vertexframe-bin-column-equal-depth" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="bin_column_equal_depth">
+<code class="descname">bin_column_equal_depth</code><span class="sig-paren">(</span><em>self</em>, <em>column_name</em>, <em>num_bins=None</em>, <em>bin_column_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bin_column_equal_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify column into groups with the same frequency.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_name</strong> : unicode</p>
+<blockquote>
+<div><p>The column whose values are to be binned.</p>
+</div></blockquote>
+<p><strong>num_bins</strong> : int32 (default=None)</p>
+<blockquote>
+<div><p>The maximum number of bins.
+Default is the Square-root choice
+<img class="math" src="../../../R_images/math/ba432cd68613e43bf4d687471b871c16a94289d3.png" alt="\lfloor \sqrt{m} \rfloor"/>, where <img class="math" src="../../../R_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> is the number of rows.</p>
+</div></blockquote>
+<p><strong>bin_column_name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>The name for the new column holding the grouping labels.
+Default is <code class="docutils literal"><span class="pre">&lt;column_name&gt;_binned</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><p>A list containing the edges of each bin.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Group rows of data based on the value in a single column and add a label
+to identify grouping.</p>
+<p>Equal depth binning attempts to label rows such that each bin contains the
+same number of elements.
+For <img class="math" src="../../../R_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> bins of a column <img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> of length <img class="math" src="../../../R_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/>, the bin
+number is determined by:</p>
+<div class="math">
+<p><img src="../../../R_images/math/d0e9241a389149393563f3419534feced4b7f125.png" alt="\lceil n * \frac { f(C) }{ m } \rceil"/></p>
+</div><p>where <img class="math" src="../../../R_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> is a tie-adjusted ranking function over values of
+<img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>.
+If there are multiples of the same value in <img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>, then their
+tie-adjusted rank is the average of their ordered rank values.</p>
+<p><strong>Notes</strong></p>
+<ol class="arabic simple">
+<li>Unicode in column names is not supported and will likely cause the
+drop_frames() method (and others) to fail!</li>
+<li>The num_bins parameter is considered to be the maximum permissible number
+of bins because the data may dictate fewer bins.
+For example, if the column to be binned has a quantity of :math&#8221;<cite>X</cite>
+elements with only 2 distinct values and the <em>num_bins</em> parameter is
+greater than 2, then the actual number of bins will only be 2.
+This is due to a restriction that elements with an identical value must
+belong to the same bin.</li>
+</ol>
+<p class="rubric">Examples</p>
+<p>Given a frame with column <em>a</em> accessed by a Frame object <em>my_frame</em>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<span class="go">[##]  a</span>
+<span class="go">========</span>
+<span class="go">[0]    1</span>
+<span class="go">[1]    1</span>
+<span class="go">[2]    2</span>
+<span class="go">[3]    3</span>
+<span class="go">[4]    5</span>
+<span class="go">[5]    8</span>
+<span class="go">[6]   13</span>
+<span class="go">[7]   21</span>
+<span class="go">[8]   34</span>
+<span class="go">[9]   55</span>
+<span class="go">[10]  89</span>
+</pre></div>
+</div>
+<p>Modify the frame, adding a column showing what bin the data is in.
+The data should be grouped into a maximum of five bins.
+Note that each bin will have the same quantity of members (as much as
+possible):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;aEDBinned&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<span class="go">[##]  a   aEDBinned</span>
+<span class="go">===================</span>
+<span class="go">[0]    1          0</span>
+<span class="go">[1]    1          0</span>
+<span class="go">[2]    2          1</span>
+<span class="go">[3]    3          1</span>
+<span class="go">[4]    5          2</span>
+<span class="go">[5]    8          2</span>
+<span class="go">[6]   13          3</span>
+<span class="go">[7]   21          3</span>
+<span class="go">[8]   34          4</span>
+<span class="go">[9]   55          4</span>
+<span class="go">[10]  89          4</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">cutoffs</span>
+<span class="go">[1.0, 2.0, 5.0, 13.0, 34.0, 89.0]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jun 01, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

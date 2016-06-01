@@ -1,0 +1,50 @@
+
+:doc:`ArimaModel <index>`  predict
+**********************************
+
+------
+
+
+.. function:: predict(self, timeseries_values, future_periods)
+
+    |ALPHA|
+    Forecasts future periods using ARIMA.
+
+
+    :Parameters:
+
+        **timeseries_values** : list
+
+        ..
+
+            Time series values to use as the gold standard.
+
+
+
+        **future_periods** : int32
+
+        ..
+
+            Number of periods in the future to forecast (beyond the length the time series)
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A series of 1-step ahead forecasts for historicals and then future periods
+            of forecasts.
+    Provided fitted values of the time series as 1-step ahead forecasts, based
+    on current model parameters, then provide future periods of forecast.  We assume
+    AR terms prior to the start of the series are equal to the model's intercept term
+    (or 0.0, if fit without an intercept term).  Meanwhile, MA terms prior to the start
+    are assumed to be 0.0.  If there is differencing, the first d terms come from the
+    original series.
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.

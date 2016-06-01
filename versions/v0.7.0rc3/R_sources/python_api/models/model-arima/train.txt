@@ -1,0 +1,91 @@
+
+:doc:`ArimaModel <index>`  train
+********************************
+
+------
+
+
+.. function:: train(self, timeseries_values, p, d, q, include_intercept=True, method='css-cgd', user_init_params=None)
+
+    |ALPHA|
+    Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.
+
+
+    :Parameters:
+
+        **timeseries_values** : list
+
+        ..
+
+            List of time series values.
+
+
+
+        **p** : int32
+
+        ..
+
+            Autoregressive order
+
+
+
+        **d** : int32
+
+        ..
+
+            Differencing order
+
+
+
+        **q** : int32
+
+        ..
+
+            Moving average order
+
+
+
+        **include_intercept** : bool (default=True)
+
+        ..
+
+            If true, the model is fit with an intercept.  Default is True
+
+
+
+        **method** : unicode (default=css-cgd)
+
+        ..
+
+            Objective function and optimization method.  Current options are: 'css-bobyqa' and 'css-cgd'.
+            Both optimize the log likelihood in terms of the conditional sum of squares.  The first uses BOBYQA for optimization, while
+            the second uses conjugate gradient descent.  Default is 'css-cgd'.
+
+
+
+        **user_init_params** : list (default=None)
+
+        ..
+
+            A set of user provided initial parameters for optimization. If the list is empty
+            (default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter should be: intercept term, AR
+            parameters (in increasing order of lag), MA parameters (in increasing order of lag)
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Array of coefficients (intercept, AR, MA, with increasing degrees).
+    Given a time series, fits an non-seasonal Autoregressive Integrated Moving Average (ARIMA) model of
+    order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
+    and q represents the moving average error terms.  If includeIntercept is true, the model is fitted
+    with an intercept.
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.
