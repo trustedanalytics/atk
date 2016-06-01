@@ -17,6 +17,12 @@ export T_JVM_OPT="-XX:MaxPermSize=384m"
 export TUSER="atkuser"
 export HOSTNAME=`hostname`
 
+# Create temporary directory for extracting the model, and add it to the library path
+# It is difficult to modify the library path for dynamic libraries after the Java process has started
+# LD_LIBRARY_PATH allows the OS to find the dynamic libraries and any dependencies
+export MODEL_TMP_DIR=`mktemp -d -t tap-scoring-modelXXXXXXXXXXXXXXXXXX`
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MODEL_TMP_DIR
+chown -R $TUSER $MODEL_TMP_DIR
 
 IFS=$'\n\r'
 #get class paths from separate file to make the upstart skip neat and making editing easier
