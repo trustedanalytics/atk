@@ -35,7 +35,7 @@
     :ref:`__init__ <DaalKMeansModel__init__>`\ (self[, name, _info])                                      |BETA| Create a 'new' instance of a DAAL k-means model.
     :doc:`predict <predict>`\ (self, frame[, observation_columns, label_column])                          |BETA| Predict the cluster assignments for the data points.
     :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`train <train>`\ (self, frame, observation_columns[, column_scalings, k, max_iterations, ...])   |BETA| Creates DAAL KMeans Model from train frame.
+    :doc:`train <train>`\ (self, frame, observation_columns[, column_scalings, k, max_iterations, ...])   |ALPHA| Creates DAAL KMeans Model from train frame.
     ====================================================================================================  ====================================================================================================
 
 .. _DaalKMeansModel__init__:

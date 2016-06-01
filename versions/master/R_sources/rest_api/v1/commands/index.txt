@@ -280,7 +280,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:daal_k_means/new <model-daal_k_means__new>`                                         |BETA| Create a 'new' instance of a DAAL k-means model.
 :doc:`model:daal_k_means/predict <model-daal_k_means__predict>`                                 |BETA| Predict the cluster assignments for the data points.
 :doc:`model:daal_k_means/publish <model-daal_k_means__publish>`                                 |BETA| Creates a tar file that will be used as input to the scoring engine
-:doc:`model:daal_k_means/train <model-daal_k_means__train>`                                     |BETA| Creates DAAL KMeans Model from train frame.
+:doc:`model:daal_k_means/train <model-daal_k_means__train>`                                     |ALPHA| Creates DAAL KMeans Model from train frame.
 :doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |BETA| Create a 'new' instance of a DAAL Linear Regression model.
 :doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |BETA| Predict labels for a test frame using trained Intel DAAL linear regression model.
 :doc:`model:daal_linear_regression/publish <model-daal_linear_regression__publish>`             |BETA| Creates a tar file that will be used as input to the scoring engine

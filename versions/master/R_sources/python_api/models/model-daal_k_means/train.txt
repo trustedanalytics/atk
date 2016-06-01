@@ -7,7 +7,7 @@
 
 .. function:: train(self, frame, observation_columns, column_scalings=None, k=2, max_iterations=100, label_column='predicted_cluster')
 
-    |BETA|
+    |ALPHA|
     Creates DAAL KMeans Model from train frame.
 
 
