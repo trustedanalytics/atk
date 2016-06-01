@@ -16,13 +16,16 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.SparkContext
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.ExportHdfsHiveArgs
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.apache.hive.jdbc.Utils
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -57,7 +60,15 @@ class ExportHdfsHivePlugin extends SparkCommandPlugin[ExportHdfsHiveArgs, UnitRe
    */
   override def execute(arguments: ExportHdfsHiveArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    exportToHdfsHive(sc, frame.rdd, arguments.tableName)
+    val SEPARATOR = "."
+    val tableName = StringUtils.isEmpty(EngineConfig.hiveConnectionUrl) || arguments.tableName.contains(SEPARATOR) match {
+      case true => arguments.tableName
+      case false =>
+        val database = Utils.parseURL(EngineConfig.hiveConnectionUrl).getDbName
+        s"$database$SEPARATOR${arguments.tableName}"
+    }
+
+    exportToHdfsHive(sc, frame.rdd, tableName)
   }
 
   /**
