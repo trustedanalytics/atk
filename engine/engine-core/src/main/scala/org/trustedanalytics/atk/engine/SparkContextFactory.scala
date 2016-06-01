@@ -63,9 +63,6 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
       sparkConf.set("spark.kryo.registrator", kryoRegistrator.get)
     }
 
-    KerberosAuthenticator.loginUsingHadoopUtils()
-    KerberosAuthenticator.loginAsAuthenticatedUser()
-
     info("SparkConf settings: " + sparkConf.toDebugString)
 
     val context = new SparkContext(sparkConf)

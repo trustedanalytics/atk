@@ -26,6 +26,7 @@ import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.{ ExportHdfsHBaseArgs }
 import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.{ RowWrapper, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 import org.apache.hadoop.hbase.client.{ HBaseAdmin, Put }
@@ -66,7 +67,14 @@ class ExportHdfsHBasePlugin extends SparkCommandPlugin[ExportHdfsHBaseArgs, Unit
   override def execute(arguments: ExportHdfsHBaseArgs)(implicit invocation: Invocation): UnitReturn = {
 
     val frame: SparkFrame = arguments.frame
-    val conf = createConfig(arguments.tableName)
+
+    val SEPARATOR = ":"
+    val tableName = StringUtils.isEmpty(EngineConfig.hbaseNamespace) || arguments.tableName.contains(SEPARATOR) match {
+      case true => arguments.tableName
+      case false => s"${EngineConfig.hbaseNamespace}$SEPARATOR${arguments.tableName}"
+    }
+
+    val conf = createConfig(tableName)
     val familyName = arguments.familyName
 
     val pairRdd = ExportHBaseImpl.convertToPairRDD(frame.rdd,
@@ -74,8 +82,8 @@ class ExportHdfsHBasePlugin extends SparkCommandPlugin[ExportHdfsHBaseArgs, Unit
       arguments.keyColumnName.getOrElse(StringUtils.EMPTY))
 
     val hBaseAdmin = new HBaseAdmin(HBaseConfiguration.create())
-    if (!hBaseAdmin.tableExists(arguments.tableName)) {
-      val desc = new HTableDescriptor(arguments.tableName)
+    if (!hBaseAdmin.tableExists(tableName)) {
+      val desc = new HTableDescriptor(tableName)
       desc.addFamily(new HColumnDescriptor(familyName))
 
       hBaseAdmin.createTable(desc)

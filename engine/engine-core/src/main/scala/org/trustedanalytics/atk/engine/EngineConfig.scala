@@ -68,11 +68,13 @@ trait EngineConfig extends EventLogging {
   val sparkHome: String = config.getString("trustedanalytics.atk.engine.spark.home")
   val hiveLib: String = config.getString("trustedanalytics.atk.engine.hive.lib")
   val hiveConf: String = config.getString("trustedanalytics.atk.engine.hive.conf")
+  val hiveConnectionUrl: String = config.getString("trustedanalytics.atk.engine.hive.connection.url")
   val jdbcLib: String = config.getString("trustedanalytics.atk.engine.jdbc.lib")
   val sparkBroadcastFactoryLib: String = config.getString("trustedanalytics.atk.engine.spark.broadcast-factory-lib")
 
   /** Path to hbase conf, e.g. /etc/hbase/conf */
   val hbaseConf: String = config.getString("trustedanalytics.atk.engine.hbase.configuration.path")
+  val hbaseNamespace: String = config.getString("trustedanalytics.atk.engine.hbase.namespace")
 
   /**
    * New in-progress feature for keeping Yarn Application Master alive between requests.
@@ -294,8 +296,6 @@ trait EngineConfig extends EventLogging {
   //gc variables
   lazy val gcInterval = config.getDuration("trustedanalytics.atk.engine.gc.interval", TimeUnit.MILLISECONDS)
   lazy val gcStaleAge = config.getDuration("trustedanalytics.atk.engine.gc.stale-age", TimeUnit.MILLISECONDS)
-
-  val enableKerberos: Boolean = config.getBoolean("trustedanalytics.atk.engine.hadoop.kerberos.enabled")
 
   /**
    * Path to effective application.conf (includes overrides passed in at runtime
