@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.apache.hadoop.fs.permission.{ FsAction, FsPermission }
 import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.domain._
@@ -140,6 +141,8 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     withContext("SFS.saveFrame") {
       val saveInfo = prepareForSave(frame)
       frameRdd.save(saveInfo.targetPath, saveInfo.storageFormat)
+      frameFileStorage.hdfs.hdfs.setPermission(new Path(saveInfo.targetPath),
+        new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
       postSave(frame, saveInfo, frameRdd.frameSchema)
     }
 

@@ -38,6 +38,10 @@ class HdfsLibSync(fs: FileStorage) extends EventLogging {
     if (fs.exists(trustedAnalyticsSubDirectory) == false) {
       FileSystem.mkdirs(fs.hdfs, trustedAnalyticsSubDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
     }
+    val checkpointDirectory = fs.absolutePath(EngineConfig.checkPointDirectory)
+    if (fs.exists(checkpointDirectory) == false) {
+      FileSystem.mkdirs(fs.hdfs, checkpointDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+    }
   }
 
   /**

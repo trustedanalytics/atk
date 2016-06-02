@@ -19,7 +19,8 @@ package org.trustedanalytics.atk.engine.model
 import java.io.{ OutputStream, InputStream }
 
 import org.apache.commons.io.IOUtils
-import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.permission.{ FsAction, FsPermission }
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.model.ModelEntity
 import org.trustedanalytics.atk.engine.{ EntityRev, SaveInfo, FileStorage }
@@ -42,6 +43,9 @@ class ModelFileStorage(fsRoot: String,
   withContext("ModelFileStorage") {
     info("fsRoot: " + fsRoot)
     info("model base directory: " + modelsBaseDirectory)
+    if (hdfs.hdfs.exists(modelsBaseDirectory) == false) {
+      FileSystem.mkdirs(hdfs.hdfs, modelsBaseDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+    }
   }
 
   /**
