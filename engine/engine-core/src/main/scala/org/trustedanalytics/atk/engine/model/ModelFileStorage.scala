@@ -43,7 +43,7 @@ class ModelFileStorage(fsRoot: String,
   withContext("ModelFileStorage") {
     info("fsRoot: " + fsRoot)
     info("model base directory: " + modelsBaseDirectory)
-    if (hdfs.hdfs.exists(modelsBaseDirectory) == false) {
+    if (hdfs != null && hdfs.hdfs.exists(modelsBaseDirectory) == false) {
       FileSystem.mkdirs(hdfs.hdfs, modelsBaseDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
     }
   }

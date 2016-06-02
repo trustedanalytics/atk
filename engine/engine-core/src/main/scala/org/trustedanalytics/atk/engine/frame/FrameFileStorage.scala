@@ -39,7 +39,7 @@ class FrameFileStorage(fsRoot: String,
   withContext("FrameFileStorage") {
     info("fsRoot: " + fsRoot)
     info("data frames base directory: " + framesBaseDirectory)
-    if (hdfs.hdfs.exists(framesBaseDirectory) == false) {
+    if (hdfs != null && hdfs.hdfs.exists(framesBaseDirectory) == false) {
       FileSystem.mkdirs(hdfs.hdfs, framesBaseDirectory,
         new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
     }
