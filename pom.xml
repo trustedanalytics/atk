@@ -1503,6 +1503,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <artifactId>breeze_${scala.short.version}</artifactId>
                         <groupId>org.scalanlp</groupId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>jfree</groupId>
+                        <artifactId>jfreechart</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>jfree</groupId>
+                        <artifactId>jcommon</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <!--test scope-->
