@@ -152,7 +152,7 @@ class FileStorage extends EventLogging {
   def createDirectory(directory: Path): Unit = withContext("file.createDirectory") {
     val adjusted = absolutePath(directory.toString)
     hdfs.mkdirs(adjusted)
-    hdfs.setPermission(adjusted, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+    hdfs.setPermission(adjusted, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
   }
 
   /**
