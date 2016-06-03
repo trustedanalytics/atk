@@ -1,0 +1,187 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>REST API Entities &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API" href="../index.html" >
+    <link rel="next" title="Entities Create Entity" href="create_entity.html" >
+    <link rel="prev" title="Commands model/rename" href="../commands/model__rename.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">REST API</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../commands/model__rename.html" title="Commands model/rename"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="create_entity.html" title="Entities Create Entity"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">REST API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands/index.html">Commands</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../info.html">Info</a></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="rest-api-entities">
+<span id="index-0"></span><h1><a class="reference internal" href="../index.html"><span class="doc">REST API</span></a> Entities<a class="headerlink" href="#rest-api-entities" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="create_entity.html">Create entity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_entity.html#post-v1-entities">POST /v1/:entities/</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="drop_entity.html">Drop entity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="drop_entity.html#delete-v1-entities-id">DELETE /v1/:entities/:id</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="get_entity.html">Get entity</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_entity.html#get-v1-entities-id">GET /v1/:entities/:id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_entity.html#get-v1-entities-name">GET /v1/:entities?name=</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="get_named_entities.html">Get list of named entities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_named_entities.html#get-v1-entities">GET /v1/:entities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="get_frame_data.html">Get frame data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_frame_data.html#get-v1-frames-id-data-offset-offset-count-count">GET /v1/frames/:id/data?offset=:offset&amp;count=:count</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jun 02, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

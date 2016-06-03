@@ -1,0 +1,337 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Commands Get Command &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API Commands" href="index.html" >
+    <link rel="next" title="Commands About Command Names" href="about_command_names.html" >
+    <link rel="prev" title="Commands Issue Command" href="issue_command.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Commands</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="issue_command.html" title="Commands Issue Command"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="about_command_names.html" title="Commands About Command Names"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">REST API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../entities/index.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../info.html">Info</a></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="commands-get-command">
+<h1><a class="reference internal" href="index.html"><span class="doc">Commands</span></a>  Get Command<a class="headerlink" href="#commands-get-command" title="Permalink to this headline">¶</a></h1>
+<p>Gets information about a specific command.</p>
+<div class="section" id="get-v1-commands-id">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">25</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns information about the command</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>command instance id (engine-assigned)</td>
+</tr>
+<tr class="row-odd"><td>name</td>
+<td>command name</td>
+</tr>
+<tr class="row-even"><td>correlation_id</td>
+<td>correlation id</td>
+</tr>
+<tr class="row-odd"><td>links</td>
+<td>links to the command</td>
+</tr>
+<tr class="row-even"><td>arguments</td>
+<td>the arguments that were passed to the command</td>
+</tr>
+<tr class="row-odd"><td>progress</td>
+<td>command execution progress
+<code class="docutils literal"><span class="pre">progress</span></code>: percentage complete
+<code class="docutils literal"><span class="pre">tasks_info</span></code>: info about each task in the
+command including number of retries</td>
+</tr>
+<tr class="row-even"><td>complete</td>
+<td>boolean indicating if the command has finished</td>
+</tr>
+<tr class="row-odd"><td>result</td>
+<td>the return data from command completion.
+(field will not appear until &#8216;complete&#8217; is true)</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Example response body for command 18, &#8216;assign_sample&#8217; on frame 16 which is in the middle of execution:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span>
+   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+   <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;frame/assign_sample&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;correlation_id&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;sample_labels&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;validate&quot;</span><span class="p">],</span>
+     <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+     <span class="s2">&quot;random_seed&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+     <span class="s2">&quot;sample_percentages&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+     <span class="s2">&quot;output_column&quot;</span><span class="p">:</span> <span class="n">null</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[{</span>
+      <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">33.33000183105469</span><span class="p">,</span>
+      <span class="s2">&quot;tasks_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="p">}</span>
+   <span class="p">}],</span>
+   <span class="s2">&quot;complete&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+   <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/commands/18&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span>
+   <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Example response body for command 17, a &#8216;load&#8217; on frame 16 which has completed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span> <span class="p">{</span>
+   <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span>
+   <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:/load&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;correlation_id&quot;</span><span class="p">:</span> <span class="s2">&quot;3d074058-54bd-4170-a8a7-2219e6e3a894&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;source_type&quot;</span><span class="p">:</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+       <span class="s2">&quot;parser&quot;</span><span class="p">:</span> <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;builtin/line/separator&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;arguments&quot;</span><span class="p">:</span> <span class="p">{</span>
+           <span class="s2">&quot;separator&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;skip_rows&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+             <span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;int32&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot;unicode&quot;</span><span class="p">]]</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">},</span>
+       <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+       <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;/join_left.csv&quot;</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="mi">16</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+     <span class="s2">&quot;tasks_info&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;retries&quot;</span><span class="p">:</span> <span class="mi">0</span>
+     <span class="p">}</span>
+   <span class="p">}],</span>
+   <span class="s2">&quot;complete&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+   <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;super_frame&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="p">{</span>
+       <span class="s2">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;int32&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">0</span>
+       <span class="p">},</span> <span class="p">{</span>
+         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;data_type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">1</span>
+       <span class="p">}]</span>
+     <span class="p">},</span>
+     <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+     <span class="s2">&quot;created_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:23.369-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;modified_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:35.272-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;storage_format&quot;</span><span class="p">:</span> <span class="s2">&quot;file/parquet&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;storage_location&quot;</span><span class="p">:</span> <span class="s2">&quot;hdfs://paulsimon.hf.trustedanalytics.com/user/atkuser/trustedanalytics/frames/16&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;row_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+     <span class="s2">&quot;modified_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+     <span class="s2">&quot;materialized_on&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:32.611-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;materialization_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:35.258-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;last_read_date&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-15T14:58:23.369-07:00&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;frames/16&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:&quot;</span>
+   <span class="p">},</span>
+   <span class="s2">&quot;links&quot;</span><span class="p">:</span> <span class="p">[{</span>
+     <span class="s2">&quot;rel&quot;</span><span class="p">:</span> <span class="s2">&quot;self&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/commands/17&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span>
+   <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">405</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="p">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">14</span> <span class="n">May</span> <span class="mi">2015</span> <span class="mi">23</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mi">27</span> <span class="n">GMT</span>
+</pre></div>
+</div>
+<p><strong>Note</strong></p>
+<p>[Some notes could go here recommending polling strategies, and more info about the progress field]</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jun 02, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
