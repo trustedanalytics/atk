@@ -16,8 +16,11 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin
 
+import org.apache.commons.lang3.StringUtils
+import org.apache.hive.jdbc.Utils
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.frame.load.{ HiveArgs }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
@@ -58,6 +61,12 @@ class LoadFromHivePlugin extends SparkCommandPlugin[HiveArgs, FrameEntity] {
   override def execute(arguments: HiveArgs)(implicit invocation: Invocation): FrameEntity = {
     val destinationFrame: SparkFrame = arguments.destination
     val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
+
+    StringUtils.isNotEmpty(EngineConfig.hiveConnectionUrl) match {
+      case true => sqlContext.sql(s"use ${Utils.parseURL(EngineConfig.hiveConnectionUrl).getDbName}")
+      case false =>
+    }
+
     val rdd = sqlContext.sql(arguments.query)
     val additionalData = LoadHiveImpl.hiveFrameToFrameRdd(rdd)
 
