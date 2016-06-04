@@ -198,4 +198,19 @@ class FileStorage extends EventLogging {
     }
   }
 
+  def create_base_dirs(): Unit = withContext("create_base_dirs") {
+    val fsRootPath = absolutePath(EngineConfig.fsRoot)
+    if (exists(fsRootPath) == false) {
+      FileSystem.mkdirs(hdfs, fsRootPath, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+    }
+    val trustedAnalyticsSubDirectory = absolutePath(s"${EngineConfig.fsRoot}/trustedanalytics")
+    if (exists(trustedAnalyticsSubDirectory) == false) {
+      FileSystem.mkdirs(hdfs, trustedAnalyticsSubDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+    }
+    val checkpointDirectory = absolutePath(EngineConfig.checkPointDirectory)
+    if (exists(checkpointDirectory) == false) {
+      FileSystem.mkdirs(hdfs, checkpointDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+    }
+  }
+
 }
