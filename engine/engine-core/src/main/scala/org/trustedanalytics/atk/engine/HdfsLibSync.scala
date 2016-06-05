@@ -28,27 +28,10 @@ class HdfsLibSync(fs: FileStorage) extends EventLogging {
 
   implicit val eventContext = EventContext.enter("HdfsLibSync")
 
-  def create_base_dirs(): Unit = withContext("create_base_dirs") {
-
-    val fsRootPath = fs.absolutePath(EngineConfig.fsRoot)
-    if (fs.exists(fsRootPath) == false) {
-      FileSystem.mkdirs(fs.hdfs, fsRootPath, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
-    }
-    val trustedAnalyticsSubDirectory = fs.absolutePath(s"${EngineConfig.fsRoot}/trustedanalytics")
-    if (fs.exists(trustedAnalyticsSubDirectory) == false) {
-      FileSystem.mkdirs(fs.hdfs, trustedAnalyticsSubDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
-    }
-    val checkpointDirectory = fs.absolutePath(EngineConfig.checkPointDirectory)
-    if (fs.exists(checkpointDirectory) == false) {
-      FileSystem.mkdirs(fs.hdfs, checkpointDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
-    }
-  }
-
   /**
    * Synchronize local-lib folders to hdfs-lib by copying jars to HDFS.
    */
   def syncLibs(): Unit = {
-    create_base_dirs()
     val destDir = fs.absolutePath(EngineConfig.hdfsLib)
     val localLibs = Module.libs.map(url => new Path(url.toURI))
     info(s"hdfs-lib: $destDir")

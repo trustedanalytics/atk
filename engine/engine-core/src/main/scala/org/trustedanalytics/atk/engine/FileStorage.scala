@@ -22,12 +22,13 @@ import java.util.concurrent.TimeUnit
 import org.apache.hadoop.fs.permission.{ FsPermission, FsAction }
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
-import org.apache.commons.lang3.ArrayUtils
+import org.apache.commons.lang3.{ StringUtils, ArrayUtils }
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs._
 import org.apache.hadoop.hdfs.DistributedFileSystem
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.hadoop.config.client.oauth.TapOauthToken
+import org.trustedanalytics.hadoop.config.client.helper.Hdfs
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, Future }
@@ -61,10 +62,14 @@ class FileStorage extends EventLogging {
   val localFileSystem = FileSystem.getLocal(configuration)
   private val fileSystem = {
     try {
-      import org.trustedanalytics.hadoop.config.client.helper.Hdfs
-      val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
-      val jwtToken = KerberosAuthenticator.getJwtToken()
-      Hdfs.newInstance().createFileSystem(new TapOauthToken(jwtToken))
+      if (KerberosAuthenticator.isAuthenticationEnabled()) {
+        val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
+        val jwtToken = KerberosAuthenticator.getJwtToken()
+        Hdfs.newInstance().createFileSystem(new TapOauthToken(jwtToken))
+      }
+      else {
+        FileSystem.get(configuration)
+      }
     }
     catch {
       case t: Throwable =>
@@ -195,6 +200,27 @@ class FileStorage extends EventLogging {
     }
     else {
       first + "/" + second
+    }
+  }
+
+  def create_base_dirs(): Unit = withContext("create_base_dirs") {
+    // TODO: There might be other ways to set the umask even though the CDH HDFS umask defaults to 022 (global). We need
+    // TODO: to set the directory permissions mostly group writable so have to make these calls explicitly for authenticated
+    // TODO: environments which mandate org level permissions
+
+    if (KerberosAuthenticator.isAuthenticationEnabled()) {
+      val fsRootPath = absolutePath(EngineConfig.fsRoot)
+      if (exists(fsRootPath) == false) {
+        FileSystem.mkdirs(hdfs, fsRootPath, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+      }
+      val trustedAnalyticsSubDirectory = absolutePath(s"${EngineConfig.fsRoot}/trustedanalytics")
+      if (exists(trustedAnalyticsSubDirectory) == false) {
+        FileSystem.mkdirs(hdfs, trustedAnalyticsSubDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
+      }
+      val checkpointDirectory = absolutePath(EngineConfig.checkPointDirectory)
+      if (exists(checkpointDirectory) == false) {
+        FileSystem.mkdirs(hdfs, checkpointDirectory, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+      }
     }
   }
 

@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.engine.util
 import java.security.AccessController
 import javax.security.auth.Subject
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -188,6 +189,10 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
       httpClient.close()
     }
   }(null)
+
+  def isAuthenticationEnabled(): Boolean = {
+    StringUtils.isNotBlank(System.getenv("FS_TECHNICAL_USER_NAME"))
+  }
 
 }
 
