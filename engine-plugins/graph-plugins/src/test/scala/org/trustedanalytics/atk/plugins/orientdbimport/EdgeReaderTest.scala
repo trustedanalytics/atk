@@ -38,8 +38,8 @@ class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with Be
       Edge(edgeSchema, edgeRow)
     }
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
-    val srcVertex = addOrientVertex.findOrCreate(1L)
-    val destVertex = addOrientVertex.findOrCreate(2L)
+    val srcVertex = addOrientVertex.findOrCreate(1L, edge.schema.srcVertexLabel)
+    val destVertex = addOrientVertex.findOrCreate(2L, edge.schema.destVertexLabel)
     val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
     edgeWriter.create(srcVertex, destVertex)
   }

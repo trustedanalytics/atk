@@ -15,7 +15,8 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx }
+import com.orientechnologies.orient.core.sql.OCommandSQL
+import com.tinkerpop.blueprints.impls.orient.{ OrientDynaElementIterable, OrientGraphNoTx }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 import org.apache.spark.atk.graph.Vertex
 import org.trustedanalytics.atk.domain.schema.GraphSchema
@@ -55,10 +56,10 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
    * @param vertexId the vertex ID
    * @return OrientDB vertex
    */
-  def findOrCreate(vertexId: Long): BlueprintsVertex = {
-    val vertex = find(vertexId)
+  def findOrCreate(vertexId: Long, className: String): BlueprintsVertex = {
+    val vertex = find(vertexId, className)
     if (vertex.isEmpty) {
-      val newVertex = orientGraph.addVertex(GraphSchema.labelProperty, null)
+      val newVertex = orientGraph.addVertex(className, null)
       newVertex.setProperty(GraphSchema.vidProperty, vertexId)
       newVertex
     }
@@ -73,8 +74,12 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
    * @param vertexId vertex ID
    * @return  OrientDB vertex if exists or null if not found
    */
-  def find(vertexId: Long): Option[BlueprintsVertex] = {
-    val vertexIterator = orientGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
+  def find(vertexId: Long, className: String): Option[BlueprintsVertex] = {
+    //val vertexIterator = orientGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
+    val vertices: OrientDynaElementIterable = orientGraph.command(
+      new OCommandSQL(s"select from ${className} where ${GraphSchema.vidProperty}= ${vertexId}")
+    ).execute()
+    val vertexIterator = vertices.iterator().asInstanceOf[java.util.Iterator[BlueprintsVertex]]
     if (vertexIterator.hasNext) {
       val existingVertex = vertexIterator.next()
       return Some(existingVertex)
@@ -106,7 +111,7 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
    * @return OrientDB vertex
    */
   def updateOrCreate(vertex: Vertex): BlueprintsVertex = {
-    val orientVertex = find(vertex.vid)
+    val orientVertex = find(vertex.vid, vertex.label)
     val newVertex = if (orientVertex.isEmpty) {
       create(vertex)
     }

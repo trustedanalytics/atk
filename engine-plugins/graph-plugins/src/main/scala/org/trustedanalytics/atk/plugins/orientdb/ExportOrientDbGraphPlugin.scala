@@ -16,6 +16,7 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import com.orientechnologies.orient.client.remote.OServerAdmin
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.engine.graph.{ SparkEdgeFrame, SparkVertexFrame, SparkGraph }
@@ -63,9 +64,19 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     // Get OrientDB configurations
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
 
-    // Check if the given graph name/database name already exists
-    if (new OServerAdmin(dbConfig.dbUri).connect(GraphDbFactory.rootUserName, dbConfig.rootPassword).existsDatabase() && !dbConfig.append) {
-      require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required")
+    // Check the existence of the given graph name/database name
+    if (!dbConfig.append) {
+      if (dbConfig.dbUri.startsWith("remote:")) {
+        if (new OServerAdmin(dbConfig.dbUri).connect(GraphDbFactory.rootUserName, dbConfig.rootPassword).existsDatabase()) {
+          require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required or set 'append' to 'true'")
+        }
+      }
+      else {
+        val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfig.dbUri)
+        if (orientDb.exists()) {
+          require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required or set 'append' to 'true'")
+        }
+      }
     }
 
     //Get the graph meta data
@@ -86,7 +97,8 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs,
+                                 dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
@@ -116,7 +128,9 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs,
+                               dbConfigurations: DbConfiguration,
+                               graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val edgeFrames = graphMeta.edgeFrames.map(_.toReference)

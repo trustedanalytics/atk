@@ -50,7 +50,7 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
     val schemaWriter = new SchemaWriter(orientMemoryGraph)
     schemaWriter.createVertexSchema(vertex.schema)
     val srcVertex = addOrientVertex.create(vertex)
-    val destVertex = addOrientVertex.findOrCreate(2L)
+    val destVertex = addOrientVertex.findOrCreate(2L, edge.schema.destVertexLabel)
     schemaWriter.createEdgeSchema(edge.schema)
     val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
     edgeWriter.create(srcVertex, destVertex)

@@ -63,7 +63,7 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val orientVertex = addOrientVertex.create(vertex)
       val vertexId = 1L
       //Tested method
-      val newVertex = addOrientVertex.findOrCreate(vertexId)
+      val newVertex = addOrientVertex.findOrCreate(vertexId, vertex.schema.label)
       //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       val propName: Any = newVertex.getProperty("from")
@@ -76,7 +76,7 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val orientVertex = addOrientVertex.create(vertex)
       val vertexId = 2L
       //Tested Method
-      val newVertex = addOrientVertex.findOrCreate(vertexId)
+      val newVertex = addOrientVertex.findOrCreate(vertexId, vertex.schema.label)
       //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       assert(vidProp == 2)
