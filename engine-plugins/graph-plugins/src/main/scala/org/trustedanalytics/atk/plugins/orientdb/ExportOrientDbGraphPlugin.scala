@@ -64,7 +64,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
 
     // Check if the given graph name/database name already exists
-    if (new OServerAdmin(dbConfig.dbUri).connect(GraphDbFactory.rootUserName, dbConfig.rootPassword).existsDatabase()) {
+    if (new OServerAdmin(dbConfig.dbUri).connect(GraphDbFactory.rootUserName, dbConfig.rootPassword).existsDatabase() && !dbConfig.append) {
       require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required")
     }
 

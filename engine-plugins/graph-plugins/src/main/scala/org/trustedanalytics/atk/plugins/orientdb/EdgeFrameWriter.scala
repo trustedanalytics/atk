@@ -43,10 +43,15 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
           val edge = edgeWrapper.toEdge
           // lookup the source and destination vertices
           val findOrientVertex = new VertexWriter(orientGraph)
-          val srcVertex = findOrientVertex.findOrCreateVertex(edge.srcVertexId())
-          val destVertex = findOrientVertex.findOrCreateVertex(edge.destVertexId())
+          val srcVertex = findOrientVertex.findOrCreate(edge.srcVertexId())
+          val destVertex = findOrientVertex.findOrCreate(edge.destVertexId())
           val edgeWriter = new EdgeWriter(orientGraph, edge)
-          val orientEdge = edgeWriter.addEdge(srcVertex, destVertex)
+          val orientEdge = if (dbConfigurations.append) {
+            edgeWriter.updateOrCreate(edge, srcVertex, destVertex)
+          }
+          else {
+            edgeWriter.create(srcVertex, destVertex)
+          }
           batchCounter += 1
           if (batchCounter % batchSize == 0 && batchCounter != 0) {
             orientGraph.commit()

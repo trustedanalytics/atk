@@ -37,7 +37,7 @@ class VertexReaderTest extends WordSpec with TestingOrientDb with Matchers with 
       Vertex(schema, row)
     }
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
-    val orientVertex = addOrientVertex.addVertex(vertex)
+    val orientVertex = addOrientVertex.create(vertex)
   }
 
   override def afterEach() {

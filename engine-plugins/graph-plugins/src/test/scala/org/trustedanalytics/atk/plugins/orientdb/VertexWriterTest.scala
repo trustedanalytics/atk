@@ -43,7 +43,7 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
     "export vertex to OrientDb vertex " in {
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
       //Tested method
-      val orientVertex = addOrientVertex.addVertex(vertex)
+      val orientVertex = addOrientVertex.create(vertex)
       //Results validation
       val vidProp: Any = orientVertex.getProperty(GraphSchema.vidProperty)
       val propName: Any = orientVertex.getProperty("name")
@@ -54,10 +54,10 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
 
     "findOrCreate gets a vertex" in {
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
-      val orientVertex = addOrientVertex.addVertex(vertex)
+      val orientVertex = addOrientVertex.create(vertex)
       val vertexId = 1L
       //Tested method
-      val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
+      val newVertex = addOrientVertex.findOrCreate(vertexId)
       //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       val propName: Any = newVertex.getProperty("from")
@@ -67,10 +67,10 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
 
     "findOrCreate creates a vertex if not found" in {
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
-      val orientVertex = addOrientVertex.addVertex(vertex)
+      val orientVertex = addOrientVertex.create(vertex)
       val vertexId = 2L
       //Tested Method
-      val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
+      val newVertex = addOrientVertex.findOrCreate(vertexId)
       //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       assert(vidProp == 2)

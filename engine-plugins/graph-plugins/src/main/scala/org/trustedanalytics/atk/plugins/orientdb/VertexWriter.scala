@@ -28,16 +28,15 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
  */
 class VertexWriter(orientGraph: OrientGraphNoTx) {
 
-  require(orientGraph != null, "The Orient graph database instance must not equal null")
+  require(orientGraph != null, "The OrientDB graph database instance must not equal null")
 
   /**
-   * Method for exporting a vertex
+   * Method for creates a vertex
    *
-   * @param vertex atk vertex to be converted to Orient BlueprintsVertex
-   * @return Orient BlueprintsVertex
+   * @param vertex atk vertex to be converted to OrientDB BlueprintsVertex
+   * @return OrientDB BlueprintsVertex
    */
-
-  def addVertex(vertex: Vertex): BlueprintsVertex = {
+  def create(vertex: Vertex): BlueprintsVertex = {
 
     val className: String = vertex.schema.label
     val orientVertexType: BlueprintsVertex = orientGraph.addVertex(className, null)
@@ -47,29 +46,73 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
         orientVertexType.setProperty(col.name, rowWrapper(vertex.row).value(col.name))
       }
     })
-
     orientVertexType
-
   }
 
   /**
-   * a method for checking an existing vertex and creates a new vertex if not found
+   * a method for looking up a vertex in OrientDB graph and creates a new vertex if not found
    *
    * @param vertexId the vertex ID
-   * @return vertex
+   * @return OrientDB vertex
    */
-  def findOrCreateVertex(vertexId: Long): BlueprintsVertex = {
-
-    val vertexIterator = orientGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
-    if (vertexIterator.hasNext) {
-      val existingVertex = vertexIterator.next()
-      existingVertex
-    }
-    else {
+  def findOrCreate(vertexId: Long): BlueprintsVertex = {
+    val vertex = find(vertexId)
+    if (vertex.isEmpty) {
       val newVertex = orientGraph.addVertex(GraphSchema.labelProperty, null)
       newVertex.setProperty(GraphSchema.vidProperty, vertexId)
       newVertex
     }
+    else {
+      vertex.get
+    }
+  }
 
+  /**
+   * a method that finds a vertex
+   *
+   * @param vertexId vertex ID
+   * @return  OrientDB vertex if exists or null if not found
+   */
+  def find(vertexId: Long): Option[BlueprintsVertex] = {
+    val vertexIterator = orientGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
+    if (vertexIterator.hasNext) {
+      val existingVertex = vertexIterator.next()
+      return Some(existingVertex)
+    }
+    None
+  }
+
+  /**
+   * updates an existing OrientDB vertex
+   *
+   * @param vertex ATK vertex
+   * @param orientDbVertex OrientDB vertex
+   * @return updated OrientDB vertex
+   */
+  def update(vertex: Vertex, orientDbVertex: BlueprintsVertex): BlueprintsVertex = {
+    val rowWrapper = new RowWrapper(vertex.schema)
+    vertex.schema.columns.foreach(col => {
+      if (col.name != GraphSchema.labelProperty) {
+        orientDbVertex.setProperty(col.name, rowWrapper(vertex.row).value(col.name))
+      }
+    })
+    orientDbVertex
+  }
+
+  /**
+   * a method that updates OrientDB vertex if exists or creates a new vertex if not found
+   *
+   * @param vertex ATK vertex
+   * @return OrientDB vertex
+   */
+  def updateOrCreate(vertex: Vertex): BlueprintsVertex = {
+    val orientVertex = find(vertex.vid)
+    val newVertex = if (orientVertex.isEmpty) {
+      create(vertex)
+    }
+    else {
+      update(vertex, orientVertex.get)
+    }
+    newVertex
   }
 }

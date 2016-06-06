@@ -49,11 +49,11 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
     val schemaWriter = new SchemaWriter(orientMemoryGraph)
     schemaWriter.createVertexSchema(vertex.schema)
-    val srcVertex = addOrientVertex.addVertex(vertex)
-    val destVertex = addOrientVertex.findOrCreateVertex(2L)
+    val srcVertex = addOrientVertex.create(vertex)
+    val destVertex = addOrientVertex.findOrCreate(2L)
     schemaWriter.createEdgeSchema(edge.schema)
     val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
-    edgeWriter.addEdge(srcVertex, destVertex)
+    edgeWriter.create(srcVertex, destVertex)
   }
 
   override def afterEach() {

@@ -26,7 +26,8 @@ case class DbConfiguration(@ArgDoc("""OrientDB database URI.""") dbUri: String,
                            @ArgDoc("""The database password.""") dbPassword: String,
                            @ArgDoc("""Port number.""") portNumber: String,
                            @ArgDoc("""The database host.""") dbHost: String,
-                           @ArgDoc("""The root password.""") rootPassword: String) extends Serializable {
+                           @ArgDoc("""The root password.""") rootPassword: String,
+                           @ArgDoc("""Enables/Disables updating an existing OrientDB graph""") append: Boolean) extends Serializable {
 
   require(dbUri != null, "database URI is required")
   require(dbUserName != null, "the user name is required")

@@ -42,8 +42,13 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
         while (iter.hasNext) {
           val vertexWrapper = iter.next()
           val vertex = vertexWrapper.toVertex
-          val addOrientVertex = new VertexWriter(orientGraph)
-          val orientVertex = addOrientVertex.addVertex(vertex)
+          val vertexWriter = new VertexWriter(orientGraph)
+          if (dbConfigurations.append) {
+            vertexWriter.updateOrCreate(vertex)
+          }
+          else {
+            vertexWriter.create(vertex)
+          }
           batchCounter += 1
           if (batchCounter % batchSize == 0 && batchCounter != 0) {
             orientGraph.commit()
