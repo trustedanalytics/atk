@@ -31,14 +31,12 @@ case class ARIMATrainArgs(model: ModelReference,
                           @ArgDoc("""Differencing order""") d: Int,
                           @ArgDoc("""Moving average order""") q: Int,
                           @ArgDoc("If true, the model is fit with an intercept.  Default is True") includeIntercept: Boolean = true,
-                          @ArgDoc("""Objective function and optimization method.  Current options are: 'css-bobyqa'
-           and 'css-cgd'.  Both optimize the log likelihood in terms of the conditional sum of
-           squares.  The first uses BOBYQA for optimization, while the second uses conjugate
-           gradient descent.  Default is 'css-cgd'.""") method: String = "css-cgd",
-                          @ArgDoc("""A set of user provided initial parameters for optimization. If the list
-            is empty (default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter
-            should be: intercept term, AR parameters (in increasing order of lag), MA parameters (in
-            increasing order of lag)""") userInitParams: Option[List[Double]] = None) {
+                          @ArgDoc("""Objective function and optimization method.  Current options are: 'css-bobyqa' and 'css-cgd'.
+Both optimize the log likelihood in terms of the conditional sum of squares.  The first uses BOBYQA for optimization, while
+the second uses conjugate gradient descent.  Default is 'css-cgd'.""") method: String = "css-cgd",
+                          @ArgDoc("""A set of user provided initial parameters for optimization. If the list is empty
+(default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter should be: intercept term, AR
+parameters (in increasing order of lag), MA parameters (in increasing order of lag)""") userInitParams: Option[List[Double]] = None) {
   require(model != null, "model must not be null")
   require(timeseriesValues != null && timeseriesValues.nonEmpty, "List of time series values must not be null or empty.")
 }

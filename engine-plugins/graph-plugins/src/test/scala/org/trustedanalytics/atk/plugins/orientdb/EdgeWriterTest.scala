@@ -32,7 +32,13 @@ class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWord
   "Edge writer" should {
     "export edge to Orient edge" in {
       //create the source and destination vertices
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
+      val columns = List(
+        Column(GraphSchema.vidProperty, DataTypes.int64),
+        Column(GraphSchema.labelProperty, DataTypes.string),
+        Column("name", DataTypes.string),
+        Column("from", DataTypes.string),
+        Column("to", DataTypes.string),
+        Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val rowSrc = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
       val rowDest = new GenericRow(Array(2L, "l1", "Alice", "SFO", "SEA", 465))
@@ -42,7 +48,12 @@ class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWord
       val orientVertexSrc = vertexWriter.create(vertexSrc)
       val orientVertexDest = vertexWriter.create(vertexDest)
       // create the edge
-      val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
+      val edgeColumns = List(
+        Column(GraphSchema.edgeProperty, DataTypes.int64),
+        Column(GraphSchema.srcVidProperty, DataTypes.int64),
+        Column(GraphSchema.destVidProperty, DataTypes.int64),
+        Column(GraphSchema.labelProperty, DataTypes.string),
+        Column("distance", DataTypes.int32))
       val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
       val edgeRow = new GenericRow(Array(1L, 2L, 3L, "distance", 500))
       val edge = Edge(edgeSchema, edgeRow)

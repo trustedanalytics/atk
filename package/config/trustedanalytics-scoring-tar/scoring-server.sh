@@ -19,8 +19,7 @@ echo "Starting ATK startup script"
 
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-export KEYTAB=$DIR/../atk.keytab
-export KRB5_CONFIG=$DIR/../krb5.conf
+
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
 
@@ -43,7 +42,9 @@ export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
 export USE_HTTP=true
 
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
-export PRINCIPAL=$(echo $VCAP_SERVICES | $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["dfs.datanode.kerberos.principal"]')
+
+export FS_TECHNICAL_USER_NAME=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.user')
+export FS_TECHNICAL_USER_PASSWORD=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.password')
 
 env
 
@@ -93,12 +94,15 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
-fi
 
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
+# Create temporary directory for extracting the model, and add it to the library path
+# It is difficult to modify the library path for dynamic libraries after the Java process has started
+# LD_LIBRARY_PATH allows the OS to find the dynamic libraries and any dependencies
+export MODEL_TMP_DIR=`mktemp -d -t tap-scoring-modelXXXXXXXXXXXXXXXXXX`
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MODEL_TMP_DIR
+
+echo java $@ -XX:MaxPermSize=384m $SEARCH_PATH -cp "$CP" -Datk.scoring-engine.tmpdir="$MODEL_TMP_DIR" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
+java $@ -XX:MaxPermSize=384m $SEARCH_PATH -cp "$CP" -Datk.scoring-engine.tmpdir="$MODEL_TMP_DIR" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
 
 popd
 
