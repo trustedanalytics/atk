@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin
 
 import org.apache.commons.lang3.StringUtils
-import org.apache.hive.jdbc.Utils
+import org.apache.hive.jdbc.HiveDriver
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.frame.load.{ HiveArgs }
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -63,7 +63,12 @@ class LoadFromHivePlugin extends SparkCommandPlugin[HiveArgs, FrameEntity] {
     val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
 
     StringUtils.isNotEmpty(EngineConfig.hiveConnectionUrl) match {
-      case true => sqlContext.sql(s"use ${Utils.parseURL(EngineConfig.hiveConnectionUrl).getDbName}")
+      case true => {
+        val hiveDriver = new HiveDriver()
+        val propInfo = hiveDriver.getPropertyInfo(EngineConfig.hiveConnectionUrl, null)
+        val database = propInfo(2).value
+        sqlContext.sql(s"use ${database}")
+      }
       case false =>
     }
 

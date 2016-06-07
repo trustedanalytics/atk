@@ -29,9 +29,9 @@ CONFDIR=$DIR/conf
 
 # needed for Python UDFs to work locally
 # was needed for Python UDF tests to pass locally
-if [ -d "/usr/lib/spark/spark-cdh5.5.0-release/" ]
+if [ -d "/usr/lib/spark/spark-cdh5.7.1-release/" ]
 then
-    export SPARK_HOME=/usr/lib/spark/spark-cdh5.5.0-release/
+    export SPARK_HOME=/usr/lib/spark/spark-cdh5.7.1-release/
 elif [ -z "$SPARK_HOME" ]
 then
     export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark/

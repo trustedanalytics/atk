@@ -165,7 +165,7 @@ object PythonRddStorage {
     val sparkPython: Path = (EngineConfig.sparkHome: Path) / "python"
     environment.put("PYTHONPATH",
       Seq(sparkPython,
-        sparkPython / "lib" / "py4j-0.8.2.1-src.zip",
+        sparkPython / "lib" / "py4j-0.9-src.zip",
         //Support dev machines without installing python packages
         //TODO: Maybe hide behind a flag?
         Directory.Current.get / "python").map(_.toString()).mkString(":"))
