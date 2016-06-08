@@ -87,7 +87,7 @@ Request
 
 
 
-    **seed** : int64 (default=1319894911342942831)
+    **seed** : int64 (default=-4953565474642752541)
 
     ..
 
