@@ -843,46 +843,55 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>module-loader</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>meta-store</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>rest-server</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>doc-api-examples</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>engine-core</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>scoring-engine</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>scoring-interfaces</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>model-publish-format</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>scoring-models</artifactId>
                 <version>${project.version}</version>
+
             </dependency>
             <!-- Needed to support large broadcast variables in Spark - do not delete-->
             <dependency>
@@ -895,6 +904,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.scala-lang</groupId>
                 <artifactId>scala-library</artifactId>
                 <version>${scala.long.version}</version>
+
             </dependency>
             <dependency>
                 <groupId>org.scala-lang</groupId>
@@ -930,12 +940,28 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-jdbc</artifactId>
                 <version>${dep.hive.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--org.apache.hadoop-->
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
                 <version>${dep.hadoop2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet.jsp</groupId>
+                        <artifactId>jsp-api</artifactId>
+                    </exclusion>
+                    <!--<exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>-->
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
@@ -949,6 +975,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>javax.servlet.jsp</groupId>
                         <artifactId>jsp-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -981,6 +1011,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-mapreduce-client-shuffle</artifactId>
                 <version>${dep.hadoop2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
@@ -1011,12 +1051,22 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-aws</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-yarn-common</artifactId>
                 <version>${dep.hadoop2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
@@ -1049,6 +1099,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-yarn_${scala.short.version}</artifactId>
                 <version>${dep.spark.yarn.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.spark</groupId>
@@ -1089,6 +1145,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>org.apache.commons</groupId>
                         <artifactId>commons-math3</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1162,6 +1222,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>com.google.protobuf</groupId>
                         <artifactId>protobuf-java</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.xml.bind</groupId>
+                        <artifactId>jaxb-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
