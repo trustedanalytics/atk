@@ -21,6 +21,10 @@
    "type": "Production", 
    "version": "v0.4.1"
   }, 
+  "v0.7.0": {
+   "type": "Production", 
+   "version": "v0.7.0"
+  }, 
   "v0.7.0rc1": {
    "type": "Production", 
    "version": "v0.7.0rc1"
