@@ -64,6 +64,10 @@
   "w20160205": {
    "type": "Weekly", 
    "version": "w20160205"
+  }, 
+  "w20160604": {
+   "type": "Weekly", 
+   "version": "w20160604"
   }
  }
 }

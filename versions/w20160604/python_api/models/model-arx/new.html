@@ -1,0 +1,269 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>ArxModel __init__ &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models ArxModel" href="index.html" >
+    <link rel="next" title="ArxModel last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="Models ArxModel" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Models</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Models</span></code> ArxModel</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Models ArxModel"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="last_read_date.html" title="ArxModel last_read_date"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="arxmodel-init">
+<h1><a class="reference internal" href="index.html"><span class="doc">ArxModel</span></a>  __init__<a class="headerlink" href="#arxmodel-init" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+Create a &#8216;new&#8217; instance of a AutoRegressive Exogenous model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of ARXModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.
+The frame has five columns where &#8220;y&#8221; is the time series value and &#8220;vistors&#8221;, &#8220;wkends&#8221;,
+&#8220;incidentRate&#8221;, and &#8220;seasonality&#8221; are exogenous inputs.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  y      visitors  wkends  incidentRate  seasonality</span>
+<span class="go">===========================================================</span>
+<span class="go">[0]   68.0     278.0     0.0          28.0  0.0151327580791</span>
+<span class="go">[1]   89.0     324.0     0.0          28.0  0.0115112433251</span>
+<span class="go">[2]   96.0     318.0     0.0          28.0  0.0190129524584</span>
+<span class="go">[3]   98.0     347.0     0.0          28.0  0.0292307976571</span>
+<span class="go">[4]   70.0     345.0     1.0          28.0  0.0232811662756</span>
+<span class="go">[5]   88.0     335.0     1.0          29.0  0.0306535355962</span>
+<span class="go">[6]   76.0     309.0     0.0          29.0   0.027808059718</span>
+<span class="go">[7]  104.0     318.0     0.0          29.0  0.0305241957835</span>
+<span class="go">[8]   64.0     308.0     0.0          29.0  0.0247039042146</span>
+<span class="go">[9]   89.0     320.0     0.0          29.0  0.0269026810295</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArxModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{u&#39;c&#39;: 0.0,</span>
+<span class="go"> u&#39;coefficients&#39;: [0.27583285049358186,</span>
+<span class="go">  -13.096710518563603,</span>
+<span class="go">  -0.030872283789462572,</span>
+<span class="go">  -103.8264674349643]}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;visitors&quot;</span><span class="p">,</span> <span class="s2">&quot;wkends&quot;</span><span class="p">,</span> <span class="s2">&quot;incidentRate&quot;</span><span class="p">,</span> <span class="s2">&quot;seasonality&quot;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">column_names</span>
+<span class="go">[u&#39;y&#39;, u&#39;visitors&#39;, u&#39;wkends&#39;, u&#39;incidentRate&#39;, u&#39;seasonality&#39;, u&#39;predicted_y&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;predicted_y&quot;</span><span class="p">))</span>
+<span class="go">[#]  y      predicted_y</span>
+<span class="go">=========================</span>
+<span class="go">[0]   68.0  74.2459276772</span>
+<span class="go">[1]   89.0  87.3102478836</span>
+<span class="go">[2]   96.0  84.8763748216</span>
+<span class="go">[3]   98.0  91.8146447141</span>
+<span class="go">[4]   70.0  78.7839977035</span>
+<span class="go">[5]   88.0  75.2293498516</span>
+<span class="go">[6]   76.0  81.4498419659</span>
+<span class="go">[7]  104.0  83.6503308076</span>
+<span class="go">[8]   64.0  81.4963026157</span>
+<span class="go">[9]   89.0  84.5780055922</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Take the path to the published model and run it in the Scoring Engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Post a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARX Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARXModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;score&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
+that was trained and published in the example above.  To keep things simple, we just send the first three rows of
+&#8216;y&#8217; values and the corresponding &#8216;x_values&#8217; (visitors, wkends, incidentRate, and seasonality).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;y&quot;</span><span class="p">:[</span><span class="mf">68.0</span><span class="p">,</span><span class="mf">89.0</span><span class="p">,</span><span class="mf">96.0</span><span class="p">],</span><span class="s2">&quot;x_values&quot;</span><span class="p">:[</span><span class="mf">278.0</span><span class="p">,</span><span class="mf">324.0</span><span class="p">,</span><span class="mf">318.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">28.0</span><span class="p">,</span><span class="mf">0.0151327580791</span><span class="p">,</span><span class="mf">0.0115112433251</span><span class="p">,</span><span class="mf">0.0190129524584</span><span class="p">]}]})</span>
+</pre></div>
+</div>
+<p>The &#8216;score&#8217; value contains an array of predicted y values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;y&quot;:[68.0,89.0,96.0],&quot;x_values&quot;:[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],&quot;score&quot;:[74.24592767720993,87.31024788358613,84.8763748215895]}]}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jun 09, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

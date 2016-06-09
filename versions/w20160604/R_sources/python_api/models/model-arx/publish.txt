@@ -1,0 +1,31 @@
+
+:doc:`ArxModel <index>`  publish
+********************************
+
+------
+
+
+.. function:: publish(self)
+
+    |ALPHA|
+    Creates a tar file that will be used as input to the scoring engine
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the ARX Model and its implementation into a tar file. The tar file is then published
+    on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+    This model can then be used to predict the cluster assignment of an observation.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

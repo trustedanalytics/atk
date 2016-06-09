@@ -1,0 +1,47 @@
+
+:doc:`CoxPhModel <index>`  predict
+**********************************
+
+------
+
+
+.. function:: predict(self, predict_frame, comparison_frame=None, feature_columns=None)
+
+    |ALPHA|
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **predict_frame** : Frame
+
+        ..
+
+            A frame whose hazard values
+
+
+
+        **comparison_frame** : Frame (default=None)
+
+        ..
+
+            A frame storing observations to compare hazards of the predict frame against. By default it is the frame used to train the model 
+
+
+
+        **feature_columns** : list (default=None)
+
+        ..
+
+            Columns containing the observations. By default it is the columns used to train the model
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+

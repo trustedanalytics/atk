@@ -1,0 +1,30 @@
+
+:doc:`trustedanalytics <index>`  get_model
+******************************************
+
+------
+
+
+.. function:: get_model(identifier)
+
+    Get handle to a model object.
+
+
+    :Parameters:
+
+        **identifier** : str | int
+
+        ..
+
+            Name of the model to get
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            model object
