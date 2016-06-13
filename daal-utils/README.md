@@ -12,6 +12,12 @@ The extensions to Intel DAAL include:
 This module depends on:
 * Intel DAAL 2016 Update 2
 
+## Install libraries
+To install the compiled Intel DAAL libraries, run:
+
+```
+ %linux-prompt> mvn install -DskipTests
+```
 
 ## Build libraries
 To re-build the dynamic libraries for the Intel DAAL extensions:

@@ -16,10 +16,12 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load.HBasePlugin
 
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.load.HBaseArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameReference }
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
@@ -61,8 +63,14 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] 
   override def execute(arguments: HBaseArgs)(implicit invocation: Invocation): FrameReference = {
     val destinationFrame: SparkFrame = arguments.destination
 
+    val SEPARATOR = ":"
+    val tableName = StringUtils.isEmpty(EngineConfig.hbaseNamespace) || arguments.tableName.contains(SEPARATOR) match {
+      case true => arguments.tableName
+      case false => s"${EngineConfig.hbaseNamespace}$SEPARATOR${arguments.tableName}"
+    }
+
     // run the operation
-    val hBaseRdd = LoadHBaseImpl.createRdd(sc, arguments.tableName, arguments.schema, arguments.startTag, arguments.endTag)
+    val hBaseRdd = LoadHBaseImpl.createRdd(sc, tableName, arguments.schema, arguments.startTag, arguments.endTag)
     val hBaseSchema = new FrameSchema(arguments.schema.map {
       case x => Column(x.columnFamily + "_" + x.columnName, x.dataType)
     })

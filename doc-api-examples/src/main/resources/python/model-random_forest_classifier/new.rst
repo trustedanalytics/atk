@@ -59,3 +59,51 @@ Actual_Pos              3              0
 Actual_Neg              0              3
 >>> model.publish()
 <progress>
+
+
+Take the path to the published model and run it in the Scoring Engine
+
+<skip>
+>>> import requests
+>>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+</skip>
+
+Posting a request to get the metadata about the model
+
+<skip>
+>>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+>>> r.text
+u'{"model_details":{"model_type":"Random Forest Classifier Model","model_class":"org.trustedanalytics.atk.scoring.models.RandomForestClassifierScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.RandomForestClassifierModelReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+</skip>
+
+Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+<skip>
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856', headers=headers)
+>>> r.text
+u'1.0'
+</skip>
+
+Posting a request to version 1 with multiple records to score:
+
+<skip>
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.2985856&data=46.1810010826, 3.1611961917', headers=headers)
+>>> r.text
+u'1.0,0.0'
+</skip>
+
+Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+
+<skip>
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.2985856}]})
+>>> r.text
+u'{"data":[{"Dim_1":19.8446,"Dim_2":2.2985856,"Prediction":1.0}]}'
+</skip>
+
+Posting a request to version 2 with multiple records to score:
+
+<skip>
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.2985856}, {"Dim_1": 46.1810010826, "Dim_2": 3.1611961917}]})
+>>> r.text
+u'{"data":[{"Dim_1":19.8446,"Dim_2":2.2985856,"Prediction":1.0},{"Dim_1":46.1810010826,"Dim_2":3.1611961917,"Prediction":0.0}]}'
+</skip>

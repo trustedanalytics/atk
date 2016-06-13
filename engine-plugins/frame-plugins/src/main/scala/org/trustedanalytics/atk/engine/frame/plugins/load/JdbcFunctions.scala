@@ -16,7 +16,25 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import java.util.Properties
 import com.typesafe.config.ConfigFactory
+
+/**
+ * Helper class to pass relevant information from the config to the jdbc connection
+ */
+case class JdbcConnectionInfo(connector: String) {
+
+  def userPassProperties() = {
+    val properties = new Properties()
+    properties.setProperty("user", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".username"))
+    properties.setProperty("password", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".password"))
+    properties
+  }
+
+  def urlString() = {
+    ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url")
+  }
+}
 
 /**
  * Helper class for creating an RDD from jdbc
@@ -24,51 +42,16 @@ import com.typesafe.config.ConfigFactory
 object JdbcFunctions extends Serializable {
 
   /**
-   * Builds connection argmuments for jdbc
-   * @param tableName table name
-   * @param connectorType optional connector type
-   * @param driverName optional driver name
-   * @return connection args as map
-   */
-  def buildConnectionArgs(tableName: String,
-                          connectorType: Option[String],
-                          driverName: Option[String]): Map[String, String] = {
-    val connectionUrl = buildUrl(connectorType)
-
-    if (driverName.isEmpty) {
-      Map(
-        urlKey -> connectionUrl,
-        dbTableKey -> tableName)
-    }
-    else {
-      Map(
-        urlKey -> connectionUrl,
-        dbTableKey -> tableName,
-        "driver" -> driverName.get)
-    }
-  }
-
-  /**
-   * url key used for connection map
-   * @return "url"
-   */
-  def urlKey = "url"
-
-  /**
-   * table key used for connection map
-   * @return "dbtable"
-   */
-  def dbTableKey = "dbtable"
-
-  /**
    * Builds connection url for cluster/cloud deployment.
-   * @return a connection url
+   * @return a connection url, the username, and the password
    */
-  private def buildUrl(connectorType: Option[String]): String = {
-    val connector = connectorType.getOrElse(
-      throw new RuntimeException("Connector type is required if the url is not provided")
-    )
+  def buildUrl(connectorType: String) = {
+    val connector = connectorType match {
+      case "postgres" => "connection-postgresql"
+      case "mysql" => "connection-mysql"
+      case _ => throw new IllegalArgumentException("value must be postgres or mysql")
+    }
+    JdbcConnectionInfo(connector)
 
-    ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url")
   }
 }

@@ -18,14 +18,33 @@ package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
 import java.sql.SQLException
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.frame.{ ExportHdfsJdbcArgs }
 import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.apache.commons.lang3.StringUtils
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.domain.frame.FrameReference
 
 // Implicits needed for JSON conversion 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
+object ExportHdfsJdbcArgsFormat {
+  implicit val exportHdfsJdbcPlugin = jsonFormat3(ExportHdfsJdbcArgs)
+}
+
+import ExportHdfsJdbcArgsFormat._
+
+/**
+ * Input arguments class for export to JDBC
+ */
+case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
+                              @ArgDoc("""JDBC table name""") tableName: String,
+                              @ArgDoc("""(optional) JDBC connector, either mysql or postgres. Default is postgres""") connectorType: String = "postgres") {
+  require(frame != null, "frame is required")
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
+  require(connectorType == "postgres" || connectorType == "mysql", "connector type must be either mysql or postgres")
+}
 
 /**
  * Export a frame to Jdbc table
@@ -41,13 +60,7 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
   override def name: String = "frame/export_to_jdbc"
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: ExportHdfsJdbcArgs)(implicit invocation: Invocation) = 5
-
-  /**
-   * Calculate covariance for the specified columns
+   * Export the frame to a jdbc table
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
    *                   that can be called to produce a SparkContext that can be used during this invocation
@@ -56,8 +69,7 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
    */
   override def execute(arguments: ExportHdfsJdbcArgs)(implicit invocation: Invocation): UnitReturn = {
 
-    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.driverName)
-    exportToHdfsJdbc(arguments, connectionArgs)
+    exportToHdfsJdbc(arguments)
 
   }
 
@@ -65,18 +77,14 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
    * Exports to jdbc
    * @param arguments jdbc arguments
    */
-  private def exportToHdfsJdbc(arguments: ExportHdfsJdbcArgs,
-                               connectionArgs: Map[String, String])(implicit invocation: Invocation): UnitReturn = {
+  private def exportToHdfsJdbc(arguments: ExportHdfsJdbcArgs)(implicit invocation: Invocation): UnitReturn = {
+
     val frame: SparkFrame = arguments.frame
     val dataFrame = frame.rdd.toDataFrame
-    try {
-      dataFrame.createJDBCTable(connectionArgs(JdbcFunctions.urlKey), connectionArgs(JdbcFunctions.dbTableKey), false)
-    }
-    catch {
-      case e: SQLException =>
-        dataFrame.insertIntoJDBC(connectionArgs(JdbcFunctions.urlKey), connectionArgs(JdbcFunctions.dbTableKey), false)
-    }
 
+    // Set up the connection string
+    val dbConnection = JdbcFunctions.buildUrl(arguments.connectorType)
+
+    dataFrame.write.jdbc(dbConnection.urlString, arguments.tableName, dbConnection.userPassProperties)
   }
-
 }

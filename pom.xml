@@ -31,6 +31,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     <name>TrustedAnalytics Parent</name>
     <description>TrustedAnalytics : Large Scale Graph Analytics</description>
     <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
 
     <repositories>
@@ -39,6 +45,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -53,6 +60,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
@@ -68,6 +76,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://repository.apache.org/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -78,6 +87,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://oss.sonatype.org/content/groups/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
@@ -130,7 +140,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
         <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.2.181</dep.daal.version>
-        <dep.orientdb.version>2.1.12</dep.orientdb.version>
+        <dep.orientdb.version>2.1.16</dep.orientdb.version>
 
         <!--START GAO MAVEN -->
 
@@ -495,6 +505,24 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </configuration>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.8</version>
+                    <configuration>
+
+                        <includeTransitiveDependencies>false</includeTransitiveDependencies>
+                        <includedLicenses>true</includedLicenses>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>download-licenses</id>
+                            <goals>
+                                <goal>download-licenses</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <!-- Update and correct open source license block comments -->
                 <plugin>
                     <groupId>com.mycila</groupId>
@@ -746,6 +774,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>all</artifactId>
                 <version>1.1.2</version>
                 <type>pom</type>
+                <exclusions>
+                  <exclusion>
+                    <groupId>com.github.fommil</groupId>
+                    <artifactId>jniloader</artifactId>
+                  </exclusion>
+                </exclusions>
             </dependency>
             <!-- END Netlib dependencies -->
             <dependency>
@@ -890,6 +924,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-common</artifactId>
+                <version>${dep.hive.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hive</groupId>
+                <artifactId>hive-jdbc</artifactId>
                 <version>${dep.hive.version}</version>
             </dependency>
             <!--org.apache.hadoop-->
@@ -1398,16 +1437,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>h2</artifactId>
                 <version>1.3.175</version>
             </dependency>
+
             <dependency>
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>8.4-702.jdbc4</version>
             </dependency>
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.6</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.github.tototoshi</groupId>
                 <artifactId>slick-joda-mapper_2.10</artifactId>
@@ -1472,6 +1508,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <artifactId>breeze_${scala.short.version}</artifactId>
                         <groupId>org.scalanlp</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>jfree</groupId>
+                        <artifactId>jfreechart</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>jfree</groupId>
+                        <artifactId>jcommon</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

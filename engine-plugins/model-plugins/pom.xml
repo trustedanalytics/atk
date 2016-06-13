@@ -47,6 +47,25 @@
                 <groupId>org.trustedanalytics</groupId>
                 <artifactId>atk-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+
+                <configuration>
+
+                    <excludes>
+                        <exclude>**/*.conf</exclude>
+                        <exclude>pom.xml</exclude>
+                        <exclude>src/main/scala/org/apache/spark/README.txt</exclude>
+                        <exclude>src/main/scala/org/apache/spark/ml/feature/Instance.scala</exclude>
+                        <exclude>src/main/scala/org/apache/spark/ml/param/params.scala</exclude>
+                        <exclude>src/main/scala/org/apache/spark/ml/util/ReadWrite.scala</exclude>
+                        <exclude>src/main/scala/org/apache/spark/mllib/linalg/Vectors.scala</exclude>
+                        <exclude>src/main/scala/org/apache/spark/sql/catalyst/util/GenericArrayData.scala</exclude>
+
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -83,10 +102,6 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-graphx_${scala.short.version}</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-mllib_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>

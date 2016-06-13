@@ -88,7 +88,7 @@ object GraphDbFactory extends EventLogging {
    */
   private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     Try {
-      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbUserName)
+      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
       db
     } match {
       case Success(db) => new OrientGraphNoTx(db)
