@@ -30,11 +30,13 @@ ta.connect()
 class ModelLinearRegressionTest(unittest.TestCase):
     def testLinearRegression(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/linear_regression_8_columns.csv", schema = [("y", ta.float64),("1",ta.float64),("2",ta.float64),
-                                                              ("3",ta.float64),("4",ta.float64),("5",ta.float64),
-                                                              ("6",ta.float64),("7",ta.float64),("8",ta.float64),
-                                                              ("9",ta.float64),("10",ta.float64)])
-
+        csv = ta.CsvFile("linear_regression_7_columns.csv", schema = [("x1", ta.float64),
+                                                                      ("x2",ta.float64),
+                                                                      ("x3",ta.float64),
+                                                                      ("x4",ta.float64),
+                                                                      ("x5",ta.float64),
+                                                                      ("x6",ta.float64),
+                                                                      ("x7",ta.float64)], skip_header_lines=1)
         print "create frame"
         frame = ta.Frame(csv,'LinearRegressionSampleFrame')
 
@@ -42,10 +44,10 @@ class ModelLinearRegressionTest(unittest.TestCase):
         model = ta.LinearRegressionModel(name='myLinearRegressionModel')
 
         print "Training the model on the Frame"
-        model.train(frame,'y', ['1','2','3','4','5','6','7','8','9','10'])
+        model.train(frame,'x1', ['x3','x4','x5','x6','x7'])
 
         output = model.predict(frame)
-        self.assertEqual(output.column_names, ['y','1','2','3','4','5','6','7','8','9','10','predicted_value'])
+        self.assertEqual(output.column_names, ['x1','x2','x3','x4','x5','x6','x7','predicted_value'])
 
 
 if __name__ == "__main__":
