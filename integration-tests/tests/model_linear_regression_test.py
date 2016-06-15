@@ -30,7 +30,7 @@ ta.connect()
 class ModelLinearRegressionTest(unittest.TestCase):
     def testLinearRegression(self):
         print "define csv file"
-        csv = ta.CsvFile("linear_regression_7_columns.csv", schema = [("x1", ta.float64),
+        csv = ta.CsvFile("/datasets/linear_regression_7_columns.csv", schema = [("x1", ta.float64),
                                                                       ("x2",ta.float64),
                                                                       ("x3",ta.float64),
                                                                       ("x4",ta.float64),
