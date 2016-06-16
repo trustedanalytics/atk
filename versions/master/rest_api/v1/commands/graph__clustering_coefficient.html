@@ -97,8 +97,8 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -202,7 +202,7 @@ coefficient of the graph is the probability that two people are friends given
 that they share a common friend.</p>
 <p>More formally:</p>
 <div class="math">
-<p><img src="../../../R_images/math/8ad82996dc05eb39a9d2048302b97466f86a10ff.png" alt="cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+<p><img src="../../../R_images/math/7f7352552313462313d72e29e8e079b6de0fc540.png" alt="cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
 E \} \| }{\| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\} \in E \} \|}"/></p>
 </div><p>Analogously, the clustering coefficient of a vertex provides a measure of how
 tightly clustered that vertex&#8217;s neighborhood is.
@@ -211,7 +211,7 @@ coefficient at a vertex <img class="math" src="../../../R_images/math/0e22076955
 <img class="math" src="../../../R_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> are themselves friends.</p>
 <p>More formally:</p>
 <div class="math">
-<p><img src="../../../R_images/math/ed185de62c15525dd60813233e170cb3d2379cca.png" alt="cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+<p><img src="../../../R_images/math/bbb5788ad2095c626678dba388e74634219613d1.png" alt="cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
 E \} \| }{\| \{ (u,v,w) \in V^3: \ \{v, u \}, \{v, w\} \in E \} \|}"/></p>
 </div><p>The toolkit provides the function clustering_coefficient which computes both
 local and global clustering coefficients for a given undirected graph.</p>
@@ -287,7 +287,7 @@ clustering coefficients stored at properties at each vertex.</div></blockquote>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jun 15, 2016.
+      Last updated on Jun 16, 2016.
       </li>
     </ul>
     </div>
