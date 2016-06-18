@@ -23,10 +23,11 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  */
 
 case class ExportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String,
+                                   @ArgDoc("""if true, append data to an existing OrientDB graph""") append: Boolean,
                                    @ArgDoc("""batch size for commiting transactions.""") batchSize: Int = 1000) {
 
   require(graph != null, "graph is required")
   require(graphName != null, "database name is required")
   require(batchSize > 0, "batch size should be a positive value")
-
+  require(append || !append, "set append to a value of type boolean")
 }

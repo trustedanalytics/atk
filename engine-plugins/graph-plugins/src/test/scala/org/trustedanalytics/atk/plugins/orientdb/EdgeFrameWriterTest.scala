@@ -35,7 +35,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword, false)
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
@@ -52,7 +52,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
         val oVertexType = schemaWriter.createVertexSchema(vSchema)
       }
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
-      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(vBatchSize)
+      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(vBatchSize, false)
 
       //exporting the edge frame:
       val eColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
@@ -70,7 +70,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       }
       val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
       // call method under test
-      val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize)
+      val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize, false)
       //validate results
       val exportedEdges = orientFileGraph.countEdges()
       edgesCount shouldEqual exportedEdges

@@ -38,7 +38,6 @@ object DbConfigReader extends Serializable {
     val portNumber = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.port")
     val dbDir = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.url")
     val dbUri = dbDir + "/" + dbName
-    val append = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.append").toBoolean
-    DbConfiguration(dbUri, userName, password, portNumber, dbHost, rootPassword, append)
+    DbConfiguration(dbUri, userName, password, portNumber, dbHost, rootPassword)
   }
 }

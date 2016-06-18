@@ -58,13 +58,12 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
    */
   def findOrCreate(vertexId: Long, className: String): BlueprintsVertex = {
     val vertex = find(vertexId, className)
-    if (vertex.isEmpty) {
-      val newVertex = orientGraph.addVertex(className, null)
-      newVertex.setProperty(GraphSchema.vidProperty, vertexId)
-      newVertex
-    }
-    else {
-      vertex.get
+    vertex match {
+      case Some(vertex) => vertex
+      case _ =>
+        val newVertex = orientGraph.addVertex(className, null)
+        newVertex.setProperty(GraphSchema.vidProperty, vertexId)
+        newVertex
     }
   }
 

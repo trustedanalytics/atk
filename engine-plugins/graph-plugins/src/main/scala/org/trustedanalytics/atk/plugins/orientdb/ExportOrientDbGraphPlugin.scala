@@ -27,7 +27,7 @@ import spray.json._
 /** Json conversion for arguments and return value case classes */
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 object ExportOrientDbGraphJsonFormat {
-  implicit val exportOrientDbGraphArgsFormat = jsonFormat3(ExportOrientDbGraphArgs)
+  implicit val exportOrientDbGraphArgsFormat = jsonFormat4(ExportOrientDbGraphArgs)
   implicit val statisticsFormat = jsonFormat2(Statistics)
   implicit val exportOrientDbGraphReturnFormat = jsonFormat3(ExportOrientDbGraphReturn)
 }
@@ -65,7 +65,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
 
     // Check the existence of the given graph name/database name
-    if (!dbConfig.append) {
+    if (!arguments.append) {
       if (dbConfig.dbUri.startsWith("remote:")) {
         if (new OServerAdmin(dbConfig.dbUri).connect(GraphDbFactory.rootUserName, dbConfig.rootPassword).existsDatabase()) {
           require(arguments.graphName != s"${arguments.graphName}", s"the database name ${arguments.graphName} already exists, a new database name is required or set 'append' to 'true'")
@@ -111,7 +111,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
         val oVertexType = schemaWriter.createVertexSchema(vertexSchema)
       }
       val exportVertexFrame = new VertexFrameWriter(vertexFrameRdd, dbConfigurations)
-      val verticesCount = exportVertexFrame.exportVertexFrame(arguments.batchSize)
+      val verticesCount = exportVertexFrame.exportVertexFrame(arguments.batchSize, arguments.append)
       val exportedVerticesCount = orientDatabase.countVertices(vertexSchema.label)
       val failedVerticesCount = verticesCount - exportedVerticesCount
       (vertexSchema.label, Statistics(exportedVerticesCount, failedVerticesCount))
@@ -143,7 +143,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
         val edgeType = schemaWriter.createEdgeSchema(edgeSchema)
       }
       val exportEdgeFrame = new EdgeFrameWriter(edgeFrameRdd, dbConfigurations)
-      val edgesCount = exportEdgeFrame.exportEdgeFrame(arguments.batchSize)
+      val edgesCount = exportEdgeFrame.exportEdgeFrame(arguments.batchSize, arguments.append)
       val exportedEdgesCount = orientDatabase.countEdges(edgeSchema.label)
       val failedEdgesCount = edgesCount - exportedEdgesCount
       (edgeSchema.label, Statistics(exportedEdgesCount, failedEdgesCount))

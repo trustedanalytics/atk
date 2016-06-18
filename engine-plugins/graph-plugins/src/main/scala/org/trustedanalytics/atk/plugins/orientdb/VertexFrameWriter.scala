@@ -33,7 +33,7 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
    * @param batchSize the number of vertices to be committed
    * @return the number of exported vertices
    */
-  def exportVertexFrame(batchSize: Int): Long = {
+  def exportVertexFrame(batchSize: Int, append: Boolean): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
 
@@ -43,7 +43,7 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
           val vertexWrapper = iter.next()
           val vertex = vertexWrapper.toVertex
           val vertexWriter = new VertexWriter(orientGraph)
-          if (dbConfigurations.append) {
+          if (append) {
             vertexWriter.updateOrCreate(vertex)
           }
           else {

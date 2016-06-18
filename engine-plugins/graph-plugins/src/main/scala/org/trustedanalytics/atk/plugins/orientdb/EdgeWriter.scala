@@ -57,7 +57,7 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
    * @return OrientDB edge
    */
   def find(edge: Edge): Option[BlueprintsEdge] = {
-    val edgeIterator = orientGraph.getEdges(GraphSchema.srcVidProperty, edge.srcVertexId()).iterator()
+    val edgeIterator = orientGraph.getEdges(GraphSchema.srcVidProperty == edge.srcVertexId() && GraphSchema.destVidProperty == edge.destVertexId()).iterator()
     if (edgeIterator.hasNext) {
       val existingEdge = edgeIterator.next()
       return Some(existingEdge)

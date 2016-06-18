@@ -32,7 +32,7 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
    * @param batchSize the number of edges to be committed
    * @return the number of exported edges
    */
-  def exportEdgeFrame(batchSize: Int): Long = {
+  def exportEdgeFrame(batchSize: Int, append: Boolean): Long = {
 
     val edgesCountRdd = edgeFrameRdd.mapPartitionEdges(iter => {
       val orientGraph = GraphDbFactory.graphDbConnector(dbConfigurations)
@@ -46,7 +46,7 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
           val srcVertex = findOrientVertex.findOrCreate(edge.srcVertexId(), edge.schema.srcVertexLabel)
           val destVertex = findOrientVertex.findOrCreate(edge.destVertexId(), edge.schema.destVertexLabel)
           val edgeWriter = new EdgeWriter(orientGraph, edge)
-          val orientEdge = if (dbConfigurations.append) {
+          val orientEdge = if (append) {
             edgeWriter.updateOrCreate(edge, srcVertex, destVertex)
           }
           else {
