@@ -63,7 +63,6 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
       new OCommandSQL(s"select from ${edge.schema.label} where ${GraphSchema.srcVidProperty}== ${edge.srcVertexId()} and ${GraphSchema.destVidProperty}== ${edge.destVertexId()}")
     ).execute()
     val edgeIterator = edges.iterator().asInstanceOf[java.util.Iterator[BlueprintsEdge]]
-    // val edgeIterator = orientGraph.getEdges(GraphSchema.srcVidProperty,edge.srcVertexId()).iterator()
     if (edgeIterator.hasNext) {
       val existingEdge = edgeIterator.next()
       return Some(existingEdge)

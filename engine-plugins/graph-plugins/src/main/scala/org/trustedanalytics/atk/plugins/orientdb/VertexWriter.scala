@@ -75,7 +75,7 @@ class VertexWriter(orientGraph: OrientGraphNoTx) {
    */
   def find(vertexId: Long, className: String): Option[BlueprintsVertex] = {
     val vertices: OrientDynaElementIterable = orientGraph.command(
-      new OCommandSQL(s"select from ${className} where ${GraphSchema.vidProperty}== ${vertexId}")
+      new OCommandSQL(s"select from ${className} where ${GraphSchema.vidProperty} = ${vertexId}")
     ).execute()
     val vertexIterator = vertices.iterator().asInstanceOf[java.util.Iterator[BlueprintsVertex]]
     if (vertexIterator.hasNext) {

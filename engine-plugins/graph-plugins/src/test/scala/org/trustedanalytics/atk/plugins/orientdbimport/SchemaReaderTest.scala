@@ -42,7 +42,7 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
         Column(GraphSchema.destVidProperty, DataTypes.int64),
         Column(GraphSchema.labelProperty, DataTypes.string),
         Column("distance", DataTypes.int32))
-      val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
+      val edgeSchema = new EdgeSchema(edgeColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
       val edgeRow = new GenericRow(Array(1L, 1L, 2L, "distance", 500))
       Edge(edgeSchema, edgeRow)
     }
