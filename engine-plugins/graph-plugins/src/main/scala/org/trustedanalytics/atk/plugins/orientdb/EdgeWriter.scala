@@ -15,8 +15,9 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
+import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex, Edge => BlueprintsEdge }
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdge }
+import com.tinkerpop.blueprints.impls.orient.{ OrientDynaElementIterable, OrientGraphNoTx, OrientEdge }
 import org.apache.spark.atk.graph.Edge
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
@@ -53,11 +54,16 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
   /**
    * a method that finds OrientDB edge
+   *
    * @param edge ATK edge
    * @return OrientDB edge
    */
   def find(edge: Edge): Option[BlueprintsEdge] = {
-    val edgeIterator = orientGraph.getEdges(GraphSchema.srcVidProperty == edge.srcVertexId() && GraphSchema.destVidProperty == edge.destVertexId()).iterator()
+    val edges: OrientDynaElementIterable = orientGraph.command(
+      new OCommandSQL(s"select from ${edge.schema.label} where ${GraphSchema.srcVidProperty}== ${edge.srcVertexId()} and ${GraphSchema.destVidProperty}== ${edge.destVertexId()}")
+    ).execute()
+    val edgeIterator = edges.iterator().asInstanceOf[java.util.Iterator[BlueprintsEdge]]
+    // val edgeIterator = orientGraph.getEdges(GraphSchema.srcVidProperty,edge.srcVertexId()).iterator()
     if (edgeIterator.hasNext) {
       val existingEdge = edgeIterator.next()
       return Some(existingEdge)
@@ -67,6 +73,7 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
   /**
    * a method that updates OrientDB edge
+   *
    * @param edge ATK edge
    * @param orientDbEdge OrientDB edge
    * @return updated OrientDB edge
@@ -83,6 +90,7 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
   /**
    * a method that updates OrientDB edge if exists or creates a new edge if not found
+   *
    * @param edge ATK edge
    * @param srcVertex OrientDB vertex as a source
    * @param destVertex OrientDB vertex as a destination
