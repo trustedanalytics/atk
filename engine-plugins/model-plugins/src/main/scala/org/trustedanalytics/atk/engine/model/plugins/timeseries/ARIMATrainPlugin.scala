@@ -48,7 +48,7 @@ class ARIMATrainPlugin extends SparkCommandPlugin[ARIMATrainArgs, ARIMATrainRetu
     val arimaModel = ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
       arguments.includeIntercept, arguments.method, userInitParams)
 
-    val jsonModel = new ARIMAData(arimaModel)
+    val jsonModel = new ARIMAData(arimaModel, arguments.timeseriesValues)
     model.data = jsonModel.toJson.asJsObject
 
     new ARIMATrainReturn(arimaModel.coefficients)

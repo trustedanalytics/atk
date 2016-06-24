@@ -72,9 +72,10 @@ class ARIMAPredictPlugin extends SparkCommandPlugin[ARIMAPredictArgs, ARIMAPredi
     // Extract the ARIMAModel from the stored JsObject
     val arimaData = model.data.convertTo[ARIMAData]
     val arimaModel = arimaData.arimaModel
+    val tsValues = arimaData.tsValues.toArray
 
     // Call ARIMA model to forecast values using the specified golden values
-    val forecasted = arimaModel.forecast(new DenseVector(arguments.timeseriesValues.toArray), arguments.futurePeriods).toArray
+    val forecasted = arimaModel.forecast(new DenseVector(tsValues), arguments.futurePeriods).toArray
 
     new ARIMAPredictReturn(forecasted)
   }

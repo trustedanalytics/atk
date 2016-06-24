@@ -27,7 +27,8 @@ class ARIMAScoreModelTest extends WordSpec {
   val coefficients = Array[Double](9.864444620964322, 0.2848511106449633, 0.47346114378593795)
   val hasIntercept = true
   val arimaModel = new ARIMAModel(p, d, q, coefficients, hasIntercept)
-  val arimaData = new ARIMAData(arimaModel)
+  val tsValues = List[Double](12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 15.12102595)
+  val arimaData = new ARIMAData(arimaModel, tsValues)
   val arimaScoreModel = new ARIMAScoreModel(arimaModel, arimaData)
 
   "ARIMAScoreModel" should {
@@ -41,18 +42,16 @@ class ARIMAScoreModelTest extends WordSpec {
         arimaScoreModel.score(Array[Any](12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 5))
       }
       intercept[IllegalArgumentException] {
-        arimaScoreModel.score(Array[Any](List[Double](12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628), 5.5))
+        arimaScoreModel.score(Array[Any](5.5))
       }
     }
 
-    "score a model when valid data is passed as an array and integer (v2 format)" in {
-      val goldenValues = List[Any](12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 15.12102595)
+    "score a model when valid data is passed as an integer (v2 format)" in {
       val future = 1 // number of future periods to predict, beyond the length of the golden time series
 
-      // Input array contains the golden values and number of future periods
-      var input = new Array[Any](2)
-      input(0) = goldenValues
-      input(1) = future
+      // Input array contains the number of future periods
+      var input = new Array[Any](1)
+      input(0) = future
 
       // Call score model to predict
       val output = arimaScoreModel.score(input)
@@ -61,7 +60,7 @@ class ARIMAScoreModelTest extends WordSpec {
       // grab the array of predictions from the last element in the output
       assert(output(output.length - 1).isInstanceOf[Array[Double]])
       val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
-      assert(predictions.length == (goldenValues.length + future))
+      assert(predictions.length == (tsValues.length + future))
       assert(predictions.sameElements(List(12.674342627141744, 13.536088349647843, 13.724075785996275,
         13.807716737252422, 13.322091628390751, 13.51383197812193, 13.923562351193734, 13.830586820836254)))
     }

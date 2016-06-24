@@ -31,26 +31,25 @@ class ARIMAScoreModel(arimaModel: ARIMAModel, arimaData: ARIMAData) extends ARIM
    * @return Predicted values
    */
   override def score(data: Array[Any]): Array[Any] = {
-    if (data.length < 2)
-      throw new RuntimeException(s"Unexpected data length (${data.length.toString}). At least 2 values are required.")
+    if (data.length != 1)
+      throw new IllegalArgumentException(s"Unexpected data length (${data.length.toString}). Only 1 value was expected.")
 
     // This socring model only supports the scoring engine v2, and expects that the data array passed in contains:
-    //  (0) a List[Double] of time series values
     //  (1) an integer for the number of future values to forecast
-    if (data.length != 2)
-      throw new IllegalArgumentException(s"Unexpected number of elements in the data array.  The ARIMA score model expects 2 elements, but received ${data.length}")
+    if (data.length != 1)
+      throw new IllegalArgumentException(s"Unexpected number of elements in the data array.  The ARIMA score model expects 1 element, but received ${data.length}")
 
-    if (data(0).isInstanceOf[List[Double]] == false)
-      throw new IllegalArgumentException(s"The ARIMA score model expects the first item in the data array to be a List[Double].  Instead received ${data(0).getClass.getSimpleName}.")
+    if (data(0).isInstanceOf[Int] == false)
+      throw new IllegalArgumentException(s"The ARIMA score model expects the item in the data array to be an integer.  Instead received ${data(0).getClass.getSimpleName}.")
 
-    val timeseries = new DenseVector(data(0).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
-    val futurePeriods = ScoringModelUtils.asInt(data(1))
+    val timeseries = new DenseVector(arimaData.tsValues.toArray)
+    val futurePeriods = ScoringModelUtils.asInt(data(0))
 
     data :+ forecast(timeseries, futurePeriods).toArray
   }
 
   override def input(): Array[Field] = {
-    Array[Field](Field("timeseries", "Array[Double]"), Field("future", "Int"))
+    Array[Field](Field("future", "Int"))
   }
 
   override def modelMetadata(): ModelMetaDataArgs = {
