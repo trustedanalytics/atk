@@ -30,7 +30,7 @@ export YARN_CONF_DIR=$ATK_CONF_DIR
 export HADOOP_CONF_DIR=$YARN_CONF_DIR
 
 
-CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
+CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.5.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.5.jar
 CP=$DIR/../conf/logback.xml:$CP
 CP=$DIR/../conf:$CP
 
