@@ -42,18 +42,18 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
         Column(GraphSchema.destVidProperty, DataTypes.int64),
         Column(GraphSchema.labelProperty, DataTypes.string),
         Column("distance", DataTypes.int32))
-      val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
+      val edgeSchema = new EdgeSchema(edgeColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
       val edgeRow = new GenericRow(Array(1L, 1L, 2L, "distance", 500))
       Edge(edgeSchema, edgeRow)
     }
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
     val schemaWriter = new SchemaWriter(orientMemoryGraph)
     schemaWriter.createVertexSchema(vertex.schema)
-    val srcVertex = addOrientVertex.addVertex(vertex)
-    val destVertex = addOrientVertex.findOrCreateVertex(2L)
+    val srcVertex = addOrientVertex.create(vertex)
+    val destVertex = addOrientVertex.findOrCreate(2L, edge.schema.destVertexLabel)
     schemaWriter.createEdgeSchema(edge.schema)
     val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
-    edgeWriter.addEdge(srcVertex, destVertex)
+    edgeWriter.create(srcVertex, destVertex)
   }
 
   override def afterEach() {

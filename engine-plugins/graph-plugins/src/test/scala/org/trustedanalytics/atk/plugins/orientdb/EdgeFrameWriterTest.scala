@@ -35,14 +35,8 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
-      val vColumns = List(
-        Column(GraphSchema.vidProperty, DataTypes.int64),
-        Column(GraphSchema.labelProperty, DataTypes.string),
-        Column("name", DataTypes.string),
-        Column("from", DataTypes.string),
-        Column("to", DataTypes.string),
-        Column("fair", DataTypes.int32))
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
+      val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
       val vertices: List[Row] = List(
@@ -58,16 +52,11 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
         val oVertexType = schemaWriter.createVertexSchema(vSchema)
       }
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
-      val verticesCount = vertexFrameWriter.exportVertexFrame(vBatchSize)
+      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(vBatchSize, false)
 
       //exporting the edge frame:
-      val eColumns = List(
-        Column(GraphSchema.edgeProperty, DataTypes.int64),
-        Column(GraphSchema.srcVidProperty, DataTypes.int64),
-        Column(GraphSchema.destVidProperty, DataTypes.int64),
-        Column(GraphSchema.labelProperty, DataTypes.string),
-        Column("distance", DataTypes.int32))
-      val eSchema = new EdgeSchema(eColumns, "label", "srclabel", "destlabel")
+      val eColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
+      val eSchema = new EdgeSchema(eColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
       val edges: List[Row] = List(
         new GenericRow(Array(1L, 1L, 2L, "distance1", 100)),
         new GenericRow(Array(2L, 2L, 3L, "distance2", 200)),
@@ -81,7 +70,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       }
       val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
       // call method under test
-      val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize)
+      val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize, false)
       //validate results
       val exportedEdges = orientFileGraph.countEdges()
       edgesCount shouldEqual exportedEdges
