@@ -179,7 +179,6 @@ export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
 if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
- echo "Adding Intel DAAL libraries"
  export DAAL_LIB_DIR="$DIR/../lib/daal/intel64_lin"
  export DAAL_GCC_VERSION="gcc4.4"
  export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
