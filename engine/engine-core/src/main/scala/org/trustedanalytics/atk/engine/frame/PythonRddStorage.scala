@@ -35,6 +35,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.bson.types.BasicBSONList
 import org.bson.{ BSON, BasicBSONObject }
+import scala.collection.mutable
 import scala.collection.mutable.{ ListBuffer, ArrayBuffer }
 import com.google.common.io.Files
 
@@ -43,6 +44,7 @@ import scala.collection.JavaConversions._
 import scala.reflect.io.{ Directory, Path }
 
 object PythonRddStorage {
+  private val addedFiles = new mutable.HashSet[String]()
 
   private def decodePythonBase64EncodedStrToBytes(byteStr: String): Array[Byte] = {
     decodeBase64(byteStr)
@@ -176,8 +178,11 @@ object PythonRddStorage {
 
     val pyIncludes = new JArrayList[String]()
 
-    sc.addFile(s"file://$pythonDepZip")
-    pyIncludes.add("trustedanalytics.zip")
+    if (!addedFiles.contains(pythonDepZip)) { //Prevent illegal argument exception if file is added multiple times
+      sc.addFile(s"file://$pythonDepZip")
+      pyIncludes.add("trustedanalytics.zip")
+      addedFiles.add(pythonDepZip)
+    }
 
     if (udf.dependencies != null) {
       val includes = uploadUdfDependencies(udf)
