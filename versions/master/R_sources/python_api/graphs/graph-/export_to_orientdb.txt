@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: export_to_orientdb(self, graph_name, batch_size=1000)
+.. function:: export_to_orientdb(self, graph_name, append, batch_size=1000)
 
     Exports graph to OrientDB
 
@@ -17,6 +17,14 @@
         ..
 
             OrientDB database name.
+
+
+
+        **append** : bool
+
+        ..
+
+            if true, append data to an existing OrientDB graph
 
 
 

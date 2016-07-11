@@ -46,6 +46,14 @@ Request
 
 
 
+    **append** : bool
+
+    ..
+
+        if true, append data to an existing OrientDB graph
+
+
+
     **batch_size** : int32 (default=1000)
 
     ..

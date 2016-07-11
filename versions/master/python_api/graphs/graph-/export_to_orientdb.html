@@ -129,7 +129,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="export_to_orientdb">
-<code class="descname">export_to_orientdb</code><span class="sig-paren">(</span><em>self</em>, <em>graph_name</em>, <em>batch_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_orientdb" title="Permalink to this definition">¶</a></dt>
+<code class="descname">export_to_orientdb</code><span class="sig-paren">(</span><em>self</em>, <em>graph_name</em>, <em>append</em>, <em>batch_size=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_orientdb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exports graph to OrientDB</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -138,6 +138,10 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph_name</strong> : unicode</p>
 <blockquote>
 <div><p>OrientDB database name.</p>
+</div></blockquote>
+<p><strong>append</strong> : bool</p>
+<blockquote>
+<div><p>if true, append data to an existing OrientDB graph</p>
 </div></blockquote>
 <p><strong>batch_size</strong> : int32 (default=1000)</p>
 <blockquote>
@@ -195,7 +199,7 @@ and with the given user credentials after checking the user authorization to cre
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 08, 2016.
+      Last updated on Jul 11, 2016.
       </li>
     </ul>
     </div>
