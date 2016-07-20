@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine._
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.exception.ExceptionUtils
 import scala.reflect.io.Directory
-
+import com.github.fommil.netlib
 /**
  * The Yarn Job that runs a SparkCommandPlugin.
  *
@@ -118,6 +118,9 @@ object SparkCommandJob {
    * @param args command line arguments.
    */
   def main(args: Array[String]) = {
+    println(netlib.BLAS.getInstance().getClass().getName())
+    println(netlib.LAPACK.getInstance().getClass().getName())
+
     if (args.length < 1) {
       usage()
     }
