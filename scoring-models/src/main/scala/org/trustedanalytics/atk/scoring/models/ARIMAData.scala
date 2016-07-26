@@ -21,6 +21,7 @@ import com.cloudera.sparkts.models.ARIMAModel
 /**
  * ARIMAData class
  */
-case class ARIMAData(arimaModel: ARIMAModel) {
+case class ARIMAData(arimaModel: ARIMAModel, tsValues: List[Double]) {
   require(arimaModel != null, "arimaModel must not be null.")
+  require(tsValues != null && tsValues.nonEmpty, "tsValues must not be null or empty.")
 }
