@@ -216,9 +216,10 @@ object TimeSeriesFunctions extends Serializable {
   def getVectorFromFrame(frame: FrameRdd, columnName: String): SparkVector = {
     frame.frameSchema.requireColumnIsNumerical(columnName)
     val dataType = frame.frameSchema.columnDataType(columnName)
-    val column = frame.toDataFrame.select(columnName).collect().map(row => {
-      DataTypes.toDouble(row.get(0))
-    })
+    val column = frame.selectColumn(columnName).map(row => DataTypes.toDouble(row.get(0))).collect()
+    //val column = frame.toDataFrame.select(columnName).collect().map(row => {
+    //  DataTypes.toDouble(row.get(0))
+    //})
     new SparkDenseVector(column)
   }
 
