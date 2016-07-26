@@ -20,7 +20,6 @@ import java.io.Serializable
 import java.sql.Timestamp
 import java.time.ZonedDateTime
 
-import org.apache.spark.mllib.linalg.{ Vector, DenseVector }
 import org.apache.spark.sql.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes, Schema }
@@ -29,6 +28,7 @@ import org.apache.spark.frame.FrameRdd
 import com.cloudera.sparkts._
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import org.apache.spark.mllib.linalg.{ Vector => SparkVector, DenseVector => SparkDenseVector, Matrix => SparkMatrix, DenseMatrix => SparkDenseMatrix }
 
 /**
  * Object contains utility functions for working with time series
@@ -53,7 +53,7 @@ object TimeSeriesFunctions extends Serializable {
     // Map the column of values so that it uses a Scala Vector rather than a Spark DenseVector.
     val withVector = timeseriesRdd.map(row => {
       val originalColumns = row.productIterator.toList
-      val newVectorCol = originalColumns(1).asInstanceOf[DenseVector].toArray.iterator.toVector
+      val newVectorCol = originalColumns(1).asInstanceOf[SparkDenseVector].toArray.iterator.toVector
       Array[Any](originalColumns(0), newVectorCol)
     })
 
@@ -145,11 +145,81 @@ object TimeSeriesFunctions extends Serializable {
     val rdd = frame.rdd.mapRows(row => {
       val key = row.stringValue(keyColumn)
       val series = row.vectorValue(valueColumn)
-      val vector = new DenseVector(series.toArray)
-      (key.asInstanceOf[String], vector.asInstanceOf[Vector])
+      val vector = new SparkDenseVector(series.toArray)
+      (key.asInstanceOf[String], vector.asInstanceOf[SparkVector])
     })
 
     new TimeSeriesRDD[String](dateTimeIndex, rdd)
+  }
+
+  /**
+   * Gets values from the specified y and x columns.
+   * @param frame Frame to get values from
+   * @param yColumnName Name of the y column
+   * @param xColumnNames Name of the x columns
+   * @return Array of y values, and 2-dimensional array of x values
+   */
+  private def getYAndXFromRows(frame: FrameRdd, yColumnName: String, xColumnNames: Seq[String]): (Array[Double], Array[Array[Double]]) = {
+    val schema = frame.frameSchema
+
+    schema.requireColumnIsNumerical(yColumnName)
+    xColumnNames.foreach((xColumn: String) => schema.requireColumnIsNumerical(xColumn))
+
+    val totalRowCount = frame.count.toInt
+    val yValues = new Array[Double](totalRowCount)
+    val xValues = Array.ofDim[Double](totalRowCount, xColumnNames.size)
+    var rowCounter = 0
+    val yColumnIndex = schema.columnIndex(yColumnName)
+
+    for (row <- frame.collect()) {
+      yValues(rowCounter) = DataTypes.toDouble(row.get(yColumnIndex))
+
+      var xColumnCounter = 0
+      for (xColumn <- xColumnNames) {
+        xValues(rowCounter)(xColumnCounter) = DataTypes.toDouble(row.get(schema.columnIndex(xColumn)))
+        xColumnCounter += 1
+      }
+
+      rowCounter += 1
+    }
+
+    (yValues, xValues)
+
+  }
+
+  /**
+   * Gets x (spark matrix) and y (spark matrix) values from the specified frame
+   * @param frame  Frame to get values from
+   * @param yColumnName Name of the column that has y values
+   * @param xColumnNames Name of the columns that have x values
+   * @return Spark Vector of y values and Spark Matrix of x values
+   */
+  def getSparkVectorYAndXFromFrame(frame: FrameRdd, yColumnName: String, xColumnNames: Seq[String]): (SparkVector, SparkMatrix) = {
+
+    // Get values in arrays
+    val (yValues, xValues) = getYAndXFromRows(frame, yColumnName, xColumnNames)
+
+    // Put values into a vector and matrix to return
+    val yVector = new SparkDenseVector(yValues)
+    val xMatrix = new SparkDenseMatrix(numRows = yValues.length, numCols = xColumnNames.size, values = xValues.transpose.flatten)
+
+    (yVector, xMatrix)
+  }
+
+  /**
+   * Returns a spark vector that contains the data from the specified column in the frame provided.
+   *
+   * @param frame Frame of data
+   * @param columnName Name of the column to get data.  Data must be numerical
+   * @return DenseVector of data from the column
+   */
+  def getVectorFromFrame(frame: FrameRdd, columnName: String): SparkVector = {
+    frame.frameSchema.requireColumnIsNumerical(columnName)
+    val dataType = frame.frameSchema.columnDataType(columnName)
+    val column = frame.toDataFrame.select(columnName).collect().map(row => {
+      DataTypes.toDouble(row.get(0))
+    })
+    return new SparkDenseVector(column)
   }
 
 }
