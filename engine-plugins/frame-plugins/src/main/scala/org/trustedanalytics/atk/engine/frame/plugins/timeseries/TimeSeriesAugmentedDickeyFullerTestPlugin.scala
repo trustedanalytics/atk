@@ -49,9 +49,6 @@ class TimeSeriesAugmentedDickeyFullerTestPlugin extends SparkCommandPlugin[TimeS
    */
   override def name: String = "frame/timeseries_augmented_dickey_fuller_test"
 
-  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
-  override def executesPythonUdf = false
-
   /**
    * Returns the Augmented Dickey-Fuller test statistic
    *
@@ -66,7 +63,7 @@ class TimeSeriesAugmentedDickeyFullerTestPlugin extends SparkCommandPlugin[TimeS
     val tsVector = TimeSeriesFunctions.getVectorFromFrame(frame.rdd, arguments.tsColumn)
     val regression = arguments.regression.getOrElse("c")
     val dftResult = TimeSeriesStatisticalTests.adftest(tsVector, arguments.maxLag, regression)
-    return TimeSeriesAugmentedDickeyFullerTestReturn(dftResult._1, dftResult._2)
+    TimeSeriesAugmentedDickeyFullerTestReturn(dftResult._1, dftResult._2)
   }
 }
 

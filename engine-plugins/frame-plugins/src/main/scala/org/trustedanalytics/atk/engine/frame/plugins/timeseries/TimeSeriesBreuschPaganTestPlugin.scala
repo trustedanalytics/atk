@@ -47,9 +47,6 @@ class TimeSeriesBreuschPaganTestPlugin extends SparkCommandPlugin[TimeSeriesBreu
    */
   override def name: String = "frame/timeseries_breusch_pagan_test"
 
-  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
-  override def executesPythonUdf = false
-
   /**
    * Calculates the Breusch-Pagan test statistic
    *
@@ -64,7 +61,7 @@ class TimeSeriesBreuschPaganTestPlugin extends SparkCommandPlugin[TimeSeriesBreu
     val (vector, matrix) = TimeSeriesFunctions.getSparkVectorYAndXFromFrame(frame.rdd, arguments.residuals, arguments.factors)
 
     val result = TimeSeriesStatisticalTests.bptest(vector, matrix)
-    return TimeSeriesBreuschPaganTestReturn(result._1, result._2)
+    TimeSeriesBreuschPaganTestReturn(result._1, result._2)
   }
 }
 

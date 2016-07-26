@@ -51,9 +51,6 @@ class TimeSeriesDurbinWatsonTestPlugin extends SparkCommandPlugin[TimeSeriesDurb
    */
   override def name: String = "frame/timeseries_durbin_watson_test"
 
-  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
-  override def executesPythonUdf = false
-
   /**
    * Returns the Durbin-Watson test statistic
    *
@@ -65,6 +62,6 @@ class TimeSeriesDurbinWatsonTestPlugin extends SparkCommandPlugin[TimeSeriesDurb
    */
   override def execute(arguments: TimeSeriesDurbinWatsonTestArgs)(implicit invocation: Invocation): DoubleValue = {
     val frame: SparkFrame = arguments.frame
-    return DoubleValue(TimeSeriesStatisticalTests.dwtest(TimeSeriesFunctions.getVectorFromFrame(frame.rdd, arguments.residuals)))
+    DoubleValue(TimeSeriesStatisticalTests.dwtest(TimeSeriesFunctions.getVectorFromFrame(frame.rdd, arguments.residuals)))
   }
 }

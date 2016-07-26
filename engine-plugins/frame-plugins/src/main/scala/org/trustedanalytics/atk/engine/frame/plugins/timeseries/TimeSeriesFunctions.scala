@@ -219,7 +219,7 @@ object TimeSeriesFunctions extends Serializable {
     val column = frame.toDataFrame.select(columnName).collect().map(row => {
       DataTypes.toDouble(row.get(0))
     })
-    return new SparkDenseVector(column)
+    new SparkDenseVector(column)
   }
 
 }

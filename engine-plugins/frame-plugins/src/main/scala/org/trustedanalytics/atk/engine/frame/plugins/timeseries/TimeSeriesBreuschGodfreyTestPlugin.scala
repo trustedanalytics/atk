@@ -47,9 +47,6 @@ class TimeSeriesBreuschGodfreyTestPlugin extends SparkCommandPlugin[TimeSeriesBr
    */
   override def name: String = "frame/timeseries_breusch_godfrey_test"
 
-  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
-  override def executesPythonUdf = false
-
   /**
    * Returns the Breusch-Godfrey test statistic
    *
@@ -64,7 +61,7 @@ class TimeSeriesBreuschGodfreyTestPlugin extends SparkCommandPlugin[TimeSeriesBr
     val (vector, matrix) = TimeSeriesFunctions.getSparkVectorYAndXFromFrame(frame.rdd, arguments.residuals, arguments.factors)
 
     val result = TimeSeriesStatisticalTests.bgtest(vector, matrix, arguments.maxLag)
-    return TimeSeriesBreuschGodfreyTestReturn(result._1, result._2)
+    TimeSeriesBreuschGodfreyTestReturn(result._1, result._2)
   }
 }
 
