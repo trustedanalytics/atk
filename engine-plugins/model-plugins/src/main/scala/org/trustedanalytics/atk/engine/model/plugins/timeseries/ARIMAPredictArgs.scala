@@ -24,10 +24,8 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  */
 case class ARIMAPredictArgs(model: ModelReference,
                             @ArgDoc("""Number of periods in the future to forecast (beyond the length the time series)""") futurePeriods: Int,
-                            @ArgDoc(
-                              """Optional list of time series values to use as the gold standard. If no values are
-                                |provided, the same values that were used during training will be used for forecasting.
-                              """.stripMargin) timeseriesValues: Option[List[Double]]) {
+                            @ArgDoc("""Optional list of time series values to use as the gold standard. If no values
+are provided, the same values that were used during training will be used for forecasting.""") timeseriesValues: Option[List[Double]]) {
   require(model != null, "model is required")
   require(futurePeriods >= 0, "Number of future periods should be greater than or equal to 0.")
 }
