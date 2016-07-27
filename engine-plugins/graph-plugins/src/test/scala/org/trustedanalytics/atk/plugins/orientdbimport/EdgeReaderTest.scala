@@ -18,9 +18,9 @@ package org.trustedanalytics.atk.plugins.orientdbimport
 import org.apache.spark.atk.graph.Edge
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.{ Matchers, BeforeAndAfterEach, WordSpec }
-import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, DataTypes, GraphSchema, Column }
+import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.RowWrapper
-import org.trustedanalytics.atk.plugins.orientdb.{ VertexWriter, EdgeWriter }
+import org.trustedanalytics.atk.plugins.orientdb.{ SchemaWriter, VertexWriter, EdgeWriter }
 import org.trustedanalytics.atk.testutils.TestingOrientDb
 
 class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
@@ -33,15 +33,19 @@ class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with Be
         Column(GraphSchema.destVidProperty, DataTypes.int64),
         Column(GraphSchema.labelProperty, DataTypes.string),
         Column("distance", DataTypes.int32))
-      val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
+      val edgeSchema = new EdgeSchema(edgeColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
       val edgeRow = new GenericRow(Array(1L, 1L, 2L, "distance", 500))
       Edge(edgeSchema, edgeRow)
     }
+    val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string))
+    val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
+    val schemaWriter = new SchemaWriter(orientMemoryGraph)
+    schemaWriter.createVertexSchema(schema)
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
-    val srcVertex = addOrientVertex.findOrCreateVertex(1L)
-    val destVertex = addOrientVertex.findOrCreateVertex(2L)
+    val srcVertex = addOrientVertex.findOrCreate(1L, edge.schema.srcVertexLabel)
+    val destVertex = addOrientVertex.findOrCreate(2L, edge.schema.destVertexLabel)
     val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
-    edgeWriter.addEdge(srcVertex, destVertex)
+    edgeWriter.create(srcVertex, destVertex)
   }
   override def afterEach() {
     cleanupOrientDbInMemory()
@@ -53,7 +57,7 @@ class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with Be
       Column(GraphSchema.destVidProperty, DataTypes.int64),
       Column(GraphSchema.labelProperty, DataTypes.string),
       Column("distance", DataTypes.int32))
-    val schema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
+    val schema = new EdgeSchema(edgeColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
 
     "import edge" in {
       val srcVertexId = 1L

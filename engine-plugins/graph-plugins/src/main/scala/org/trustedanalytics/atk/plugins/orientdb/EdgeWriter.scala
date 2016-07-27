@@ -15,8 +15,9 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdge, OrientGraph }
+import com.orientechnologies.orient.core.sql.OCommandSQL
+import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex, Edge => BlueprintsEdge }
+import com.tinkerpop.blueprints.impls.orient.{ OrientDynaElementIterable, OrientGraphNoTx, OrientEdge }
 import org.apache.spark.atk.graph.Edge
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
@@ -29,7 +30,7 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
  */
 class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
-  require(orientGraph != null, "The Orient graph database instance must not equal null")
+  require(orientGraph != null, "The OrientDB graph database instance must not equal null")
 
   /**
    * Method for exporting an edge
@@ -38,7 +39,7 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
    * @param destVertex is a blueprintsVertex as a destination
    * @return OrientDB edge
    */
-  def addEdge(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
+  def create(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
 
     val className = edge.schema.label
     val orientEdge = orientGraph.addEdge("class:" + className, srcVertex, destVertex, className)
@@ -49,6 +50,60 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
       }
     })
     orientEdge
+  }
+
+  /**
+   * a method that finds OrientDB edge
+   *
+   * @param edge ATK edge
+   * @return OrientDB edge
+   */
+  def find(edge: Edge): Option[BlueprintsEdge] = {
+    val edges: OrientDynaElementIterable = orientGraph.command(
+      new OCommandSQL(s"select from ${edge.schema.label} where ${GraphSchema.srcVidProperty}== ${edge.srcVertexId()} and ${GraphSchema.destVidProperty}== ${edge.destVertexId()}")
+    ).execute()
+    val edgeIterator = edges.iterator().asInstanceOf[java.util.Iterator[BlueprintsEdge]]
+    if (edgeIterator.hasNext) {
+      val existingEdge = edgeIterator.next()
+      return Some(existingEdge)
+    }
+    None
+  }
+
+  /**
+   * a method that updates OrientDB edge
+   *
+   * @param edge ATK edge
+   * @param orientDbEdge OrientDB edge
+   * @return updated OrientDB edge
+   */
+  def update(edge: Edge, orientDbEdge: BlueprintsEdge): BlueprintsEdge = {
+    val rowWrapper = new RowWrapper(edge.schema)
+    edge.schema.columns.foreach(col => {
+      if (col.name != GraphSchema.labelProperty) {
+        orientDbEdge.setProperty(col.name, rowWrapper(edge.row).value(col.name))
+      }
+    })
+    orientDbEdge
+  }
+
+  /**
+   * a method that updates OrientDB edge if exists or creates a new edge if not found
+   *
+   * @param edge ATK edge
+   * @param srcVertex OrientDB vertex as a source
+   * @param destVertex OrientDB vertex as a destination
+   * @return OrientDB edge
+   */
+  def updateOrCreate(edge: Edge, srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): BlueprintsEdge = {
+    val orientEdge = find(edge)
+    val newEdge = if (orientEdge.isEmpty) {
+      create(srcVertex, destVertex)
+    }
+    else {
+      update(edge, orientEdge.get)
+    }
+    newEdge
   }
 
 }
