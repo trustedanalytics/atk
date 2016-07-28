@@ -26,7 +26,7 @@ case class TimeSeriesAugmentedDickeyFullerTestArgs(@ArgDoc("Frame of time series
                                                    @ArgDoc("The method of regression that was used. Following MacKinnon's " +
                                                      "notation, this can be \"c\" for constant, \"nc\" for no constant, " +
                                                      "\"ct\" for constant and trend, and \"ctt\" for constant, trend, and " +
-                                                     "trend-squared. ") regression: Option[String]) {
+                                                     "trend-squared. ") regression: String = "c") {
   require(frame != null, "frame is required")
   require(StringUtils.isNotEmpty(tsColumn), "ts_column must not be null or empty.")
 }

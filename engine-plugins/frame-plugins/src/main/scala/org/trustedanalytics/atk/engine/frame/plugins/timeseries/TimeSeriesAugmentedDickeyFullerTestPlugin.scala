@@ -61,8 +61,7 @@ class TimeSeriesAugmentedDickeyFullerTestPlugin extends SparkCommandPlugin[TimeS
   override def execute(arguments: TimeSeriesAugmentedDickeyFullerTestArgs)(implicit invocation: Invocation): TimeSeriesAugmentedDickeyFullerTestReturn = {
     val frame: SparkFrame = arguments.frame
     val tsVector = TimeSeriesFunctions.getVectorFromFrame(frame.rdd, arguments.tsColumn)
-    val regression = arguments.regression.getOrElse("c")
-    val dftResult = TimeSeriesStatisticalTests.adftest(tsVector, arguments.maxLag, regression)
+    val dftResult = TimeSeriesStatisticalTests.adftest(tsVector, arguments.maxLag, arguments.regression)
     TimeSeriesAugmentedDickeyFullerTestReturn(dftResult._1, dftResult._2)
   }
 }
