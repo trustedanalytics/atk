@@ -44,6 +44,7 @@ import scala.collection.JavaConversions._
 import scala.reflect.io.{ Directory, Path }
 
 object PythonRddStorage {
+  //Track added files to prevent illegal argument exception if file is added multiple times in Spark 1.6+
   private val addedFiles = new mutable.HashSet[String]()
 
   private def decodePythonBase64EncodedStrToBytes(byteStr: String): Array[Byte] = {
@@ -105,7 +106,7 @@ object PythonRddStorage {
     val pythonIncludes = new JArrayList[String]()
     if (uploads != null) {
       for (k <- uploads.indices) {
-        sc.addFile(s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
+        addFileToSparkContext(sc, s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
         pythonIncludes.add(uploads(k))
       }
     }
@@ -178,11 +179,8 @@ object PythonRddStorage {
 
     val pyIncludes = new JArrayList[String]()
 
-    if (!addedFiles.contains(pythonDepZip)) { //Prevent illegal argument exception if file is added multiple times
-      sc.addFile(s"file://$pythonDepZip")
-      pyIncludes.add("trustedanalytics.zip")
-      addedFiles.add(pythonDepZip)
-    }
+    addFileToSparkContext(sc, s"file://$pythonDepZip")
+    pyIncludes.add("trustedanalytics.zip")
 
     if (udf.dependencies != null) {
       val includes = uploadUdfDependencies(udf)
@@ -266,6 +264,17 @@ object PythonRddStorage {
     }).map(converter)
 
     resultRdd
+  }
+
+  //Add file to Spark context only once
+  //Prevents illegal argument exception if file is added multiple times in Spark 1.6+
+  private def addFileToSparkContext(sc: SparkContext, file: String): Unit = {
+    if (!addedFiles.contains(file)) {
+      this.synchronized {
+        sc.addFile(file)
+        addedFiles.add(file)
+      }
+    }
   }
 }
 

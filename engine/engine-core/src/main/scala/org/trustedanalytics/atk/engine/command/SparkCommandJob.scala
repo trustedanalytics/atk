@@ -119,7 +119,7 @@ object SparkCommandJob {
    * @param args command line arguments.
    */
   def main(args: Array[String]) = {
-    
+
     println(netlib.BLAS.getInstance().getClass().getName())
     println(netlib.LAPACK.getInstance().getClass().getName())
 
