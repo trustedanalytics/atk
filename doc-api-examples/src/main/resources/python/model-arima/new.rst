@@ -80,9 +80,11 @@ Train the model using the timeseries frame:
 <progress>
 {u'coefficients': [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}
 
-Call predict to future periods:
+Call predict to forecast values by passing the number of future periods to predict beyond the length of the time series.
+Since the parameter in this example is 0, predict will forecast 7 values (the same number of values that were in the
+original time series vector).
 
->>> model.predict(ts_values, 0)
+>>> model.predict(0)
 <progress>
 {u'forecasted': [12.674342627141744,
   13.638048984791693,
@@ -110,17 +112,17 @@ Post a request to get the metadata about the model.
 u'{"model_details":{"model_type":"ARIMA Model","model_class":"com.cloudera.sparkts.models.ARIMAModel","model_reader":"org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin","custom_values":{}},"input":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"}],"output":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"},{"name":"predicted_values","value":"Array[Double]"}]}'
 </skip>
 
-The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
-time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
-since 7 historical time series values were provided, 7 future periods will be forecasted.
+ARIMA model support started in version 2 of the scoring engine REST API. We send the number of values to forecast
+beyond the length of the time series (in this example we are passing 0). This means that since 7 historical time series
+values were provided, 7 future periods will be forecasted.
 
 <skip>
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"timeseries":[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],"future":0}]})
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"future":0}]})
 </skip>
 
 The 'predicted_values' array contains the future values, which have been forecasted based on the historical data.
 
 <skip>
 >>> r.text
-u'{"data":[{"timeseries":[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],"future":0.0,"predicted_values":[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}'
+u'{"data":[{"future":0.0,"predicted_values":[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}'
 </skip>
