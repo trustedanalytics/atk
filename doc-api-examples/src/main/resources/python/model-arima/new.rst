@@ -112,9 +112,9 @@ Post a request to get the metadata about the model.
 u'{"model_details":{"model_type":"ARIMA Model","model_class":"com.cloudera.sparkts.models.ARIMAModel","model_reader":"org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin","custom_values":{}},"input":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"}],"output":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"},{"name":"predicted_values","value":"Array[Double]"}]}'
 </skip>
 
-The ARIMA model only supports version 2 of the scoring engine.  We send the number of values
-to forecast beyond the length of the time series (in this example we are passing 0).  This means that
-since 7 historical time series values were provided, 7 future periods will be forecasted.
+ARIMA model support started in version 2 of the scoring engine REST API. We send the number of values to forecast
+beyond the length of the time series (in this example we are passing 0). This means that since 7 historical time series
+values were provided, 7 future periods will be forecasted.
 
 <skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"future":0}]})

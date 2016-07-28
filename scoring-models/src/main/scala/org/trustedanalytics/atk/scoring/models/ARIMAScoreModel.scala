@@ -31,10 +31,7 @@ class ARIMAScoreModel(arimaModel: ARIMAModel, arimaData: ARIMAData) extends ARIM
    * @return Predicted values
    */
   override def score(data: Array[Any]): Array[Any] = {
-    if (data.length != 1)
-      throw new IllegalArgumentException(s"Unexpected data length (${data.length.toString}). Only 1 value was expected.")
-
-    // This socring model only supports the scoring engine v2, and expects that the data array passed in contains:
+    // This scoring model only supports the scoring engine v2, and expects that the data array passed in contains:
     //  (1) an integer for the number of future values to forecast
     //  (2) optional list of time series values
     if (data.length != 1 && data.length != 2)
