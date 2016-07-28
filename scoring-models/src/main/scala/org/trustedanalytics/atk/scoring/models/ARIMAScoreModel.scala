@@ -40,15 +40,19 @@ class ARIMAScoreModel(arimaModel: ARIMAModel, arimaData: ARIMAData) extends ARIM
     if (data(0).isInstanceOf[Int] == false)
       throw new IllegalArgumentException(s"The ARIMA score model expects the first item in the data array to be an integer.  Instead received ${data(0).getClass.getSimpleName}.")
 
-    var timeseries = new DenseVector(arimaData.tsValues.toArray) // default to use ts values that we trained with
-
     if (data.length == 2) {
       if (data(1).isInstanceOf[List[Double]] == false)
         throw new IllegalArgumentException(s"The ARIMA score model expectes the second item in the data array to be a " +
           s"List[Double].  Instead received ${data(1).getClass.getSimpleName} ")
-      else
-        // If a vector of values was provided, then use this instead of the default
-        timeseries = new DenseVector(data(1).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
+    }
+
+    val timeseries = if (data.length == 2) {
+      // If a vector of values was provided, then use this instead of the default
+      new DenseVector(data(1).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
+    }
+    else {
+      // default to use ts values that we trained with
+      new DenseVector(arimaData.tsValues.toArray)
     }
 
     val futurePeriods = ScoringModelUtils.asInt(data(0))
