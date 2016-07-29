@@ -46,6 +46,11 @@ class FrameTimeSeriesTest(unittest.TestCase):
         self.assertNotEqual(frame.timeseries_augmented_dickey_fuller_test("data", 0), None)
         self.assertNotEqual(frame.timeseries_augmented_dickey_fuller_test("data", 0, "c"), None)
 
+        try:
+            frame.timeseries_augmented_dickey_fuller_test("data", 0, "bogus")
+        except Exception as e:
+            assert("bogus is not c, ct, or ctt" in e.message)
+
     def test_adf_column_types(self):
         """
         Tests the Augmented Dickey-Fuller test with different column types
