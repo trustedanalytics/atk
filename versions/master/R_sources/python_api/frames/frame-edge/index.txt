@@ -62,6 +62,10 @@
     take
     tally
     tally_percent
+    timeseries_augmented_dickey_fuller_test
+    timeseries_breusch_godfrey_test
+    timeseries_breusch_pagan_test
+    timeseries_durbin_watson_test
     timeseries_from_observations
     timeseries_slice
     top_k
@@ -149,6 +153,10 @@
     :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
     :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   Count number of times a value is seen.
     :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   Compute a cumulative percent count.
+    :doc:`timeseries_augmented_dickey_fuller_test <timeseries_augmented_dickey_fuller_test>`\ (...)       Augmented Dickey-Fuller statistics test
+    :doc:`timeseries_breusch_godfrey_test <timeseries_breusch_godfrey_test>`\ (self, residuals, ...)      Breusch-Godfrey statistics test
+    :doc:`timeseries_breusch_pagan_test <timeseries_breusch_pagan_test>`\ (self, residuals, factors)      Breusch-Pagan statistics test
+    :doc:`timeseries_durbin_watson_test <timeseries_durbin_watson_test>`\ (self, residuals)               Durbin-Watson statistics test
     :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
     :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.

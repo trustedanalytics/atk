@@ -97,8 +97,8 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -318,6 +318,18 @@
 <tr class="row-odd"><td><a class="reference internal" href="tally_percent.html"><span class="doc">tally_percent</span></a>(self, sample_col, count_val)</td>
 <td>Compute a cumulative percent count.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="timeseries_augmented_dickey_fuller_test.html"><span class="doc">timeseries_augmented_dickey_fuller_test</span></a>(...)</td>
+<td>Augmented Dickey-Fuller statistics test</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="timeseries_breusch_godfrey_test.html"><span class="doc">timeseries_breusch_godfrey_test</span></a>(self, residuals, ...)</td>
+<td>Breusch-Godfrey statistics test</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="timeseries_breusch_pagan_test.html"><span class="doc">timeseries_breusch_pagan_test</span></a>(self, residuals, factors)</td>
+<td>Breusch-Pagan statistics test</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="timeseries_durbin_watson_test.html"><span class="doc">timeseries_durbin_watson_test</span></a>(self, residuals)</td>
+<td>Durbin-Watson statistics test</td>
+</tr>
 <tr class="row-even"><td><a class="reference internal" href="timeseries_from_observations.html"><span class="doc">timeseries_from_observations</span></a>(self, date_time_index, ...)</td>
 <td>Returns a frame that has the observations formatted as a time series.</td>
 </tr>
@@ -411,7 +423,7 @@ It has no data yet, but it does have the name <em>yourframe</em>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 27, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

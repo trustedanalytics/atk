@@ -97,8 +97,8 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -206,34 +206,34 @@
 </tr>
 </tbody>
 </table>
-<p>Support Vector Machine <a class="reference internal" href="#r7" id="id1">[R7]</a> is a supervised algorithm used to
+<p>Support Vector Machine <a class="reference internal" href="#r17" id="id1">[R17]</a> is a supervised algorithm used to
 perform binary classification.
 A Support Vector Machine constructs a high dimensional hyperplane which is
 said to achieve a good separation when a hyperplane has the largest distance
 to the nearest training-data point of any class.
-This model runs the MLLib implementation of SVM <a class="reference internal" href="#r8" id="id2">[R8]</a> with SGD <a class="reference internal" href="#r9" id="id3">[R9]</a> optimizer.
+This model runs the MLLib implementation of SVM <a class="reference internal" href="#r18" id="id2">[R18]</a> with SGD <a class="reference internal" href="#r19" id="id3">[R19]</a> optimizer.
 The SVMWithSGD model is initialized, trained on columns of a frame, used to
 predict the labels of observations in a frame, and tests the predicted labels
 against the true labels.
 During testing, labels of the observations are predicted and tested against
 the true labels using built-in binary Classification Metrics.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r7" rules="none">
+<table class="docutils citation" frame="void" id="r17" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R7]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Support_vector_machine">https://en.wikipedia.org/wiki/Support_vector_machine</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R17]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Support_vector_machine">https://en.wikipedia.org/wiki/Support_vector_machine</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r8" rules="none">
+<table class="docutils citation" frame="void" id="r18" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R8]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-support-vector-machines-svms">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-support-vector-machines-svms</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R18]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-support-vector-machines-svms">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-support-vector-machines-svms</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r9" rules="none">
+<table class="docutils citation" frame="void" id="r19" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R9]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -356,7 +356,7 @@ the true labels using built-in binary Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 27, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

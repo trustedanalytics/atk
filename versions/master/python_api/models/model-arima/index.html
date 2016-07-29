@@ -97,8 +97,8 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -168,7 +168,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#arimamodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
 <td>Create a &#8216;new&#8217; instance of an Autoregressive Integrated Moving Average (ARIMA) model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, timeseries_values, future_periods)</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, future_periods[, timeseries_values])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Forecasts future periods using ARIMA.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
@@ -203,7 +203,7 @@
 </tr>
 </tbody>
 </table>
-<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-random_forest_classifier/new.html#r1" id="id1">[R1]</a> model is a
+<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-principal_components/index.html#r3" id="id1">[R3]</a> model is a
 generalization of an autoregressive moving average (ARMA) model.
 These models are fitted to time series data either to better understand
 the data or to predict future points in the series (forecasting).
@@ -212,10 +212,10 @@ parameters p, d, and q are non-negative integers, p is the order of the
 Autoregressive model, d is the degree of differencing, and q is the order
 of the Moving-average model.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r1" rules="none">
+<table class="docutils citation" frame="void" id="r3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -285,8 +285,10 @@ vector column).</p>
 <span class="go">{u&#39;coefficients&#39;: [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}</span>
 </pre></div>
 </div>
-<p>Call predict to future periods:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<p>Call predict to forecast values by passing the number of future periods to predict beyond the length of the time series.
+Since the parameter in this example is 0, predict will forecast 7 values (the same number of values that were in the
+original time series vector).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="go">{u&#39;forecasted&#39;: [12.674342627141744,</span>
 <span class="go">  13.638048984791693,</span>
@@ -312,15 +314,15 @@ vector column).</p>
 <span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARIMA Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARIMAModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;},{&quot;name&quot;:&quot;predicted_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
 </pre></div>
 </div>
-<p>The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
-time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
-since 7 historical time series values were provided, 7 future periods will be forecasted.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;timeseries&quot;</span><span class="p">:[</span><span class="mf">12.88969427</span><span class="p">,</span><span class="mf">13.54964408</span><span class="p">,</span><span class="mf">13.8432745</span><span class="p">,</span><span class="mf">12.13843611</span><span class="p">,</span><span class="mf">12.81156092</span><span class="p">,</span><span class="mf">14.2499628</span><span class="p">,</span><span class="mf">15.12102595</span><span class="p">],</span><span class="s2">&quot;future&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}]})</span>
+<p>ARIMA model support started in version 2 of the scoring engine REST API. We send the number of values to forecast
+beyond the length of the time series (in this example we are passing 0). This means that since 7 historical time series
+values were provided, 7 future periods will be forecasted.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;future&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}]})</span>
 </pre></div>
 </div>
 <p>The &#8216;predicted_values&#8217; array contains the future values, which have been forecasted based on the historical data.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
-<span class="go">u&#39;{&quot;data&quot;:[{&quot;timeseries&quot;:[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],&quot;future&quot;:0.0,&quot;predicted_values&quot;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#39;</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;future&quot;:0.0,&quot;predicted_values&quot;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -348,7 +350,7 @@ since 7 historical time series values were provided, 7 future periods will be fo
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 27, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

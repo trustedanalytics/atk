@@ -97,8 +97,8 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -206,28 +206,28 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r25" id="id1">[R25]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="#r9" id="id1">[R9]</a> is a supervised ensemble learning algorithm
 which can be used to perform binary and multi-class classification.
 The Random Forest Classifier model is initialized, trained on columns of a
 frame, used to predict the labels of observations in a frame, and tests the
 predicted labels against the true labels.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r26" id="id2">[R26]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r10" id="id2">[R10]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, each tree&#8217;s prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes.
 During testing, labels of the observations are predicted and tested against the true labels
 using built-in binary and multi-class Classification Metrics.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r25" rules="none">
+<table class="docutils citation" frame="void" id="r9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R25]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R9]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r26" rules="none">
+<table class="docutils citation" frame="void" id="r10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R26]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R10]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -338,7 +338,7 @@ using built-in binary and multi-class Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 27, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

@@ -39,19 +39,20 @@ Request
 
 
 
-    **timeseries_values** : list
-
-    ..
-
-        Time series values to use as the gold standard.
-
-
-
     **future_periods** : int32
 
     ..
 
         Number of periods in the future to forecast (beyond the length the time series)
+
+
+
+    **timeseries_values** : list (default=None)
+
+    ..
+
+        Optional list of time series values to use as the gold standard. If no values
+        are provided, the same values that were used during training will be used for forecasting.
 
 
 
