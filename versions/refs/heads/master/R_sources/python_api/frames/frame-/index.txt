@@ -30,7 +30,7 @@
     covariance_matrix
     cumulative_percent
     cumulative_sum
-    daal_pca
+    daal_covariance_matrix
     dot_product
     download
     drop_columns
@@ -44,16 +44,13 @@
     export_to_jdbc
     export_to_json
     filter
-    flatten_column
     flatten_columns
     get_error_frame
     group_by
-    helloworld
     histogram
     inspect
     join
     last_read_date
-    mapreducewordcount
     name
     quantiles
     rename_columns
@@ -65,10 +62,14 @@
     take
     tally
     tally_percent
+    timeseries_augmented_dickey_fuller_test
+    timeseries_breusch_godfrey_test
+    timeseries_breusch_pagan_test
+    timeseries_durbin_watson_test
+    timeseries_from_observations
+    timeseries_slice
     top_k
-    unflatten_column
     unflatten_columns
-    wordcount
 
 .. class:: Frame
 
@@ -99,7 +100,7 @@
     :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
     :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.
     :doc:`bin_column_equal_width <bin_column_equal_width>`\ (self, column_name[, num_bins, ...])          Classify column into same-width groups.
-    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             |ALPHA| Compute a summary of the data in a column(s) for categorical or numerical data types.
+    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             Compute a summary of the data in a column(s) for categorical or numerical data types.
     :doc:`classification_metrics <classification_metrics>`\ (self, label_column, pred_column[, ...])      Model statistics of accuracy, precision, and others.
     :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
     :doc:`column_mode <column_mode>`\ (self, data_column[, weights_column, max_modes_returned])           Evaluate the weights assigned to rows.
@@ -110,10 +111,10 @@
     :doc:`count <count>`\ (self, where)                                                                   Counts the number of rows which meet given criteria.
     :doc:`covariance <covariance>`\ (self, data_column_names)                                             Calculate covariance for exactly two columns.
     :doc:`covariance_matrix <covariance_matrix>`\ (self, data_column_names[, matrix_name])                Calculate covariance matrix for two or more columns.
-    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    |BETA| Add column to frame with cumulative percent sum.
-    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            |BETA| Add column to frame with cumulative percent sum.
-    :doc:`daal_pca <daal_pca>`\ (self, column_names[, method])                                            |ALPHA| <Missing Doc>
-    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           |ALPHA| Calculate dot product for each row in current frame.
+    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    Add column to frame with cumulative percent sum.
+    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            Add column to frame with cumulative percent sum.
+    :doc:`daal_covariance_matrix <daal_covariance_matrix>`\ (self, data_column_names[, matrix_name])      |BETA| Calculate covariance matrix for two or more columns.
+    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           Calculate dot product for each row in current frame.
     :doc:`download <download>`\ (self[, n, offset, columns])                                              Download frame data from the server into client workspace as a pandas dataframe
     :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
     :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Modify the current frame, removing duplicate rows.
@@ -122,30 +123,31 @@
     :doc:`entropy <entropy>`\ (self, data_column[, weights_column])                                       Calculate the Shannon entropy of a column.
     :doc:`export_to_csv <export_to_csv>`\ (self, folder_name[, separator, count, offset])                 Write current frame to HDFS in csv format.
     :doc:`export_to_hbase <export_to_hbase>`\ (self, table_name[, key_column_name, family_name])          Write current frame to HBase table.
-    :doc:`export_to_hive <export_to_hive>`\ (self, table_name)                                            Write current frame to Hive table.
-    :doc:`export_to_jdbc <export_to_jdbc>`\ (self, table_name[, connector_type, driver_name, query])      Write current frame to JDBC table.
+    :doc:`export_to_hive <export_to_hive>`\ (self, table_name)                                            Write  current frame to Hive table.
+    :doc:`export_to_jdbc <export_to_jdbc>`\ (self, table_name[, connector_type])                          Write current frame to JDBC table.
     :doc:`export_to_json <export_to_json>`\ (self, folder_name[, count, offset])                          Write current frame to HDFS in JSON format.
     :doc:`filter <filter>`\ (self, predicate)                                                             Select all rows which satisfy a predicate.
-    :doc:`flatten_column <flatten_column>`\ (self, column[, delimiter])                                   |DEPRECATED| Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
     :doc:`flatten_columns <flatten_columns>`\ (self, columns[, delimiters])                               Spread data to multiple rows based on cell data.
     :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
-    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
-    :doc:`helloworld <helloworld>`\ (self[, msg])                                                         This is a Hello World Plugin for Frame.
-    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
+    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         Create summarized frame.
+    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           Compute the histogram for a column in a frame.
     :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
-    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
-    :doc:`mapreducewordcount <mapreducewordcount>`\ (self, input_dir, output_dir)                         Counts and reports the top 10 words across all columns with string data in a frame.
+    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     Join operation on one or two frames, creating a new frame.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns
-    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      |BETA| Sort the data in a frame.
-    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                |ALPHA| Get a sorted subset of the data.
+    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      Sort the data in a frame.
+    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                Get a sorted subset of the data.
     :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
-    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   |BETA| Count number of times a value is seen.
-    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   |BETA| Compute a cumulative percent count.
+    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   Count number of times a value is seen.
+    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   Compute a cumulative percent count.
+    :doc:`timeseries_augmented_dickey_fuller_test <timeseries_augmented_dickey_fuller_test>`\ (...)       Augmented Dickey-Fuller statistics test
+    :doc:`timeseries_breusch_godfrey_test <timeseries_breusch_godfrey_test>`\ (self, residuals, ...)      Breusch-Godfrey statistics test
+    :doc:`timeseries_breusch_pagan_test <timeseries_breusch_pagan_test>`\ (self, residuals, factors)      Breusch-Pagan statistics test
+    :doc:`timeseries_durbin_watson_test <timeseries_durbin_watson_test>`\ (self, residuals)               Durbin-Watson statistics test
+    :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
+    :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
-    :doc:`unflatten_column <unflatten_column>`\ (self, columns[, delimiter])                              |DEPRECATED| Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
     :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.
-    :doc:`wordcount <wordcount>`\ (self)                                                                  Counts and reports the top 10 words across all columns with string data in a frame.
     ====================================================================================================  ====================================================================================================
 
 .. _Frame__init__:

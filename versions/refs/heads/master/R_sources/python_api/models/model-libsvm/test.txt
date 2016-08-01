@@ -7,7 +7,6 @@
 
 .. function:: test(self, frame, label_column, observation_columns=None)
 
-    |ALPHA|
     Predict test frame labels and return metrics.
 
 

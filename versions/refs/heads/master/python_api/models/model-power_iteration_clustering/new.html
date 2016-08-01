@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="poweriterationclusteringmodel-init">
-<h1><a class="reference internal" href="index.html"><em>PowerIterationClusteringModel</em></a>  __init__<a class="headerlink" href="#poweriterationclusteringmodel-init" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">PowerIterationClusteringModel</span></a>  __init__<a class="headerlink" href="#poweriterationclusteringmodel-init" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="__init__">
@@ -135,25 +149,25 @@
 </tr>
 </tbody>
 </table>
-<p>Power Iteration Clustering <a class="reference internal" href="#r41" id="id1">[R41]</a> is a scalable and efficient algorithm for clustering vertices of a graph given pairwise similarities as edge properties.
+<p>Power Iteration Clustering <a class="reference internal" href="#r1" id="id1">[R1]</a> is a scalable and efficient algorithm for clustering vertices of a graph given pairwise similarities as edge properties.
 A Power Iteration Clustering model is initialized and the cluster assignments of the vertices can be predicted on specifying the source column, destination column and similarity column of the given frame.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r41" rules="none">
+<table class="docutils citation" frame="void" id="r1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R41]</a></td><td><a class="reference external" href="http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf">http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf">http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r42" rules="none">
+<table class="docutils citation" frame="void" id="r2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R42]</td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic</a></td></tr>
+<tr><td class="label">[R2]</td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns denoting the source vertex, destination vertex and corresponding similarity.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Source  Destination  Similarity</span>
 <span class="go">====================================</span>
 <span class="go">[0]       1            2         1.0</span>
@@ -166,11 +180,11 @@ A Power Iteration Clustering model is initialized and the cluster assignments of
 <span class="go">[7]       4            6         0.3</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PowerIterationClusteringModel</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PowerIterationClusteringModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Source&#39;</span><span class="p">,</span> <span class="s">&#39;Destination&#39;</span><span class="p">,</span> <span class="s">&#39;Similarity&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;Destination&#39;</span><span class="p">,</span> <span class="s1">&#39;Similarity&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s">&#39;predicted_frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s1">&#39;predicted_frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  id  cluster</span>
 <span class="go">================</span>
 <span class="go">[0]   4        3</span>
@@ -182,9 +196,9 @@ A Power Iteration Clustering model is initialized and the cluster assignments of
 <span class="go">[6]   2        1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s">&#39;cluster_size&#39;</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s1">&#39;cluster_size&#39;</span><span class="p">]</span>
 <span class="go">{u&#39;Cluster:1&#39;: 4, u&#39;Cluster:2&#39;: 1, u&#39;Cluster:3&#39;: 2}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s">&#39;number_of_clusters&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span><span class="p">[</span><span class="s1">&#39;number_of_clusters&#39;</span><span class="p">]</span>
 <span class="go">3</span>
 </pre></div>
 </div>
@@ -213,7 +227,7 @@ A Power Iteration Clustering model is initialized and the cluster assignments of
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

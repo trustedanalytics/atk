@@ -16,7 +16,7 @@
 
         ..
 
-            The number of rows to download to the client
+            The number of rows to download to this client from the frame (warning: do not overwhelm this client by downloading too much)
 
 
 

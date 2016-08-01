@@ -7,7 +7,6 @@
 
 .. function:: histogram(self, column_name, num_bins=None, weight_column_name=None, bin_type='equalwidth')
 
-    |BETA|
     Compute the histogram for a column in a frame.
 
 

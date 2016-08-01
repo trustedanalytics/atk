@@ -47,16 +47,16 @@ Request
 
 
 
-    **count** : int32 (default=None)
+    **count** : int32 (default=0)
 
     ..
 
         The number of records you want.
-        Default, or a non-positive value, is the whole frame.
+        Default (0), or a non-positive value, is the whole frame.
 
 
 
-    **offset** : int32 (default=None)
+    **offset** : int32 (default=0)
 
     ..
 
@@ -123,6 +123,6 @@ Response
 
 ``dict``
 
-
+        The URI of the created file
 
 

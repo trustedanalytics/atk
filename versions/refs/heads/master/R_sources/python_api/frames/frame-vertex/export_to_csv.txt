@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: export_to_csv(self, folder_name, separator=None, count=None, offset=None)
+.. function:: export_to_csv(self, folder_name, separator=',', count=-1, offset=0)
 
     Write current frame to HDFS in csv format.
 
@@ -21,15 +21,16 @@
 
 
 
-        **separator** : None (default=None)
+        **separator** : unicode (default=,)
 
         ..
 
+            The separator for separating the values.
+            Default is comma (,).
 
 
 
-
-        **count** : int32 (default=None)
+        **count** : int32 (default=-1)
 
         ..
 
@@ -38,7 +39,7 @@
 
 
 
-        **offset** : int32 (default=None)
+        **offset** : int32 (default=0)
 
         ..
 
@@ -54,15 +55,16 @@
 
         ..
 
-
+            The URI of the created file
     Export the frame to a file in csv format as a Hadoop file.
 
     Examples
     --------
-    Consider Frame *my_frame*:
 
     .. code::
 
-        >>> my_frame.export_to_csv('covarianceresults')
+        >>> frame.export_to_csv('covarianceresults')
+        [===Job Progress===]
+        "hdfs://hostname/user/user1/covarianceresults"
 
 

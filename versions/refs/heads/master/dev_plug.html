@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -79,14 +96,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -94,7 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Plugin Authoring Guide</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plugin Authoring Guide</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
@@ -143,7 +157,7 @@
 <p>Plug-ins are written in Scala and have a few requirements that follow this pattern:</p>
 <ol class="arabic simple">
 <li>Declare an arguments case class.</li>
-<li>Declare an return value case class.</li>
+<li>Declare a return value case class.</li>
 <li>Define JSON serialization (most of which is provided through library calls).</li>
 <li>Write the execution logic.</li>
 </ol>
@@ -184,7 +198,7 @@ contains settings that are relevant.</p>
 <div class="section" id="naming">
 <h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
 <p>All command plugins have a unique name. This name is the command’s identification and is also used to determine how command will be “installed” within the client-facing APIs. All commands are associated with an entity, which is the type of object the command is a member of. For example, the command for sorting rows in a frame has the formal name of “frame/sort”. The “frame” is the entity for the command, and the “sort” is the name of the function. This allows the Python client to support calling the plugin like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>There is limited subtyping available with the entities. This is most common in plugins for models. For example, the “train” command for the KMeansModel looks like this: “model:k_means/train”, where “:k_means” denotes a model subtype.</p>
@@ -263,7 +277,7 @@ possible to add a plugin without restarting the server.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

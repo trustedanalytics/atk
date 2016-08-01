@@ -33,9 +33,9 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <LogisticRegressionModel__init__>`\ (self[, name, _info])                              Create a 'new' instance of logistic regression model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict labels for data points using trained logistic regression model.
-    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
-    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, frequency_column, ...])       |ALPHA| Build logistic regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        Predict labels for data points using trained logistic regression model.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, frequency_column, ...])       Build logistic regression model.
     ====================================================================================================  ====================================================================================================
 
 .. _LogisticRegressionModel__init__:

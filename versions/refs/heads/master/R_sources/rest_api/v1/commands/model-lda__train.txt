@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:lda/train
 ---------------------------------------
 
-|ALPHA|
 Creates Latent Dirichlet Allocation model
 
 POST /v1/commands/

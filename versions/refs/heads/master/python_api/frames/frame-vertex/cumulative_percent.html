@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-cumulative-percent">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  cumulative_percent<a class="headerlink" href="#vertexframe-cumulative-percent" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  cumulative_percent<a class="headerlink" href="#vertexframe-cumulative-percent" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="cumulative_percent">
 <code class="descname">cumulative_percent</code><span class="sig-paren">(</span><em>self</em>, <em>sample_col</em><span class="sig-paren">)</span><a class="headerlink" href="#cumulative_percent" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Add column to frame with cumulative percent sum.</p>
+<dd><p>Add column to frame with cumulative percent sum.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -142,7 +155,7 @@ negative percentages).</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em> accessing a frame that contains a single
 column named <em>obs</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs</span>
 <span class="go">========</span>
 <span class="go">[0]    0</span>
@@ -154,7 +167,7 @@ column named <em>obs</em>:</p>
 </pre></div>
 </div>
 <p>The cumulative percent sum for column <em>obs</em> is obtained by:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s1">&#39;obs&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
@@ -162,7 +175,7 @@ column named <em>obs</em>:</p>
 <em>obsCumulativePercentSum</em>.
 They contain the original data and the cumulative percent sum,
 respectively:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs  obs_cumulative_percent</span>
 <span class="go">================================</span>
 <span class="go">[0]    0                     0.0</span>
@@ -198,7 +211,7 @@ respectively:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

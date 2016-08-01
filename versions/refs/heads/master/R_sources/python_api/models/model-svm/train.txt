@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, label_column, observation_columns, intercept=True, num_iterations=100, step_size=1.0, reg_type=None, reg_param=0.01, mini_batch_fraction=1.0)
 
-    |ALPHA|
     Build SVM with SGD model
 
 

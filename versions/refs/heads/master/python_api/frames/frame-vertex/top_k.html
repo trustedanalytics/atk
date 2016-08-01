@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -27,8 +44,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
-    <link rel="next" title="VertexFrame unflatten_column" href="unflatten_column.html" >
-    <link rel="prev" title="VertexFrame tally_percent" href="tally_percent.html" > 
+    <link rel="next" title="VertexFrame unflatten_columns" href="unflatten_columns.html" >
+    <link rel="prev" title="VertexFrame timeseries_slice" href="timeseries_slice.html" > 
   </head>
   <body>
 
@@ -57,11 +74,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="tally_percent.html" title="VertexFrame tally_percent"
+        <a href="timeseries_slice.html" title="VertexFrame timeseries_slice"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="unflatten_column.html" title="VertexFrame unflatten_column"
+        <a href="unflatten_columns.html" title="VertexFrame unflatten_columns"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-top-k">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  top_k<a class="headerlink" href="#vertexframe-top-k" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  top_k<a class="headerlink" href="#vertexframe-top-k" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="top_k">
@@ -154,7 +168,7 @@ If there are no data elements of finite weight &gt; 0, then topK is empty.</p>
 <p class="rubric">Examples</p>
 <p>For this example, we calculate the top 5 movie genres in a data frame:
 Consider the following frame containing four columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  rank  city         population_2013  population_2010  change  county</span>
 <span class="go">    ============================================================================</span>
 <span class="go">    [0]     1  Portland              609456           583776  4.40%   Multnomah</span>
@@ -167,7 +181,7 @@ Consider the following frame containing four columns.</p>
 <span class="go">    [7]    16  Oregon City            34622            31859  8.67%   Clackamas</span>
 <span class="go">    [8]    17  McMinnville            33131            32187  2.93%   Yamhill</span>
 <span class="go">    [9]    18  Redmond                27427            26215  4.62%   Deschutes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s2">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  county      count</span>
@@ -201,7 +215,7 @@ Consider the following frame containing four columns.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

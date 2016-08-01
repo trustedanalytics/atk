@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -80,14 +97,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -118,7 +132,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-collaborativefilteringmodel">
-<h1><a class="reference internal" href="../index.html"><em>Models</em></a> CollaborativeFilteringModel<a class="headerlink" href="#models-collaborativefilteringmodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> CollaborativeFilteringModel<a class="headerlink" href="#models-collaborativefilteringmodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -133,13 +147,13 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
 <td>Read-only property - Last time this model&#8217;s data was accessed.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
 <td>Set or get the name of the model object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
 <td>Read-only property - Current model life cycle status.</td>
 </tr>
 </tbody>
@@ -151,19 +165,19 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#collaborativefilteringmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#collaborativefilteringmodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
 <td>Create a new Collaborative Filtering (ALS) model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame, input_source_column_name, input_dest_column_name[, ...])</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, frame, input_source_column_name, input_dest_column_name[, ...])</td>
+<td>Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="recommend.html"><em>recommend</em></a>(self, entity_id[, number_of_recommendations, recommend_products])</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+<tr class="row-odd"><td><a class="reference internal" href="recommend.html"><span class="doc">recommend</span></a>(self, entity_id[, number_of_recommendations, recommend_products])</td>
+<td>Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="score.html"><em>score</em></a>(self, user_id, item_id)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+<tr class="row-even"><td><a class="reference internal" href="score.html"><span class="doc">score</span></a>(self, user_id, item_id)</td>
+<td>Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, source_column_name, dest_column_name, weight_column_name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, frame, source_column_name, dest_column_name, weight_column_name)</td>
 <td>Collaborative filtering (ALS) model</td>
 </tr>
 </tbody>
@@ -192,17 +206,17 @@
 <p>For details about Collaborative Filter (ALS) modelling,
 see <span class="xref std std-ref">Collaborative Filter</span>.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;dest&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span>
 <span class="go">[{u&#39;rating&#39;: 0.04854799984010311, u&#39;product&#39;: 4, u&#39;user&#39;: 1}, {u&#39;rating&#39;: 0.04045666535703035, u&#39;product&#39;: 3, u&#39;user&#39;: 1}, {u&#39;rating&#39;: 0.030060528471388848, u&#39;product&#39;: 5, u&#39;user&#39;: 1}]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
@@ -231,7 +245,7 @@ see <span class="xref std std-ref">Collaborative Filter</span>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

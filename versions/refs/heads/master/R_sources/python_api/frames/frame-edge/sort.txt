@@ -7,7 +7,6 @@
 
 .. function:: sort(self, columns, ascending=True)
 
-    |BETA|
     Sort the data in a frame.
 
 

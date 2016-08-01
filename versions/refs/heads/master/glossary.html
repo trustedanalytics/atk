@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -77,14 +94,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -114,12 +128,12 @@
 Each line of the list consists of a unique vertex identification, and
 a list of all of that vertex&#8217;s neighboring vertices.</p>
 <p>Example:</p>
-<div class="last highlight-python"><div class="highlight"><pre>  Node   Connection List
-/------------------------/
-   A         B, D
-   B         A, C, D
-   C         B
-   D         A, B
+<div class="last highlight-default"><div class="highlight"><pre><span></span>  <span class="n">Node</span>   <span class="n">Connection</span> <span class="n">List</span>
+<span class="o">/------------------------/</span>
+   <span class="n">A</span>         <span class="n">B</span><span class="p">,</span> <span class="n">D</span>
+   <span class="n">B</span>         <span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span>
+   <span class="n">C</span>         <span class="n">B</span>
+   <span class="n">D</span>         <span class="n">A</span><span class="p">,</span> <span class="n">B</span>
 </pre></div>
 </div>
 </dd>
@@ -306,7 +320,7 @@ Missing values are ignored.</p>
 <img class="math" src="R_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is the fraction of observations less than or
 equal to <img class="math" src="R_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.</p>
 <div class="math">
-<p><img src="R_images/math/9eeeefbeaf71ffe3770521016159044715aa43fe.png" alt="\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
+<p><img src="R_images/math/801c29459ea5b38c154f2e62265517a626e1698e.png" alt="\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
 \sum_{i=1}^{n} Indicator\{x_{i} \le t\}."/></p>
 </div><p class="last">where <img class="math" src="R_images/math/abcb304578fb16af504b213cb90b156849d328cc.png" alt="Indicator\{A\}"/> is the indicator of event <img class="math" src="R_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/>.
 For a fixed <img class="math" src="R_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, the indicator <img class="math" src="R_images/math/205c84c7f2cc4a182862ebd5d7a5435077d45d3b.png" alt="Indicator\{x_{i} \le t\}"/>
@@ -369,7 +383,8 @@ Also known as F1 score.</dd>
 <dt id="term-gaussian-belief-propagation">Gaussian Belief Propagation</dt>
 <dd>A special case of belief propagation when the underlying distributions
 are <a class="reference internal" href="#term-gaussian-distribution"><span class="xref std std-term">Gaussian</span></a> (Weiss &amp; Freeman <a class="footnote-reference" href="#f11" id="id4">[9]</a>).</dd>
-<dt id="term-gaussian-distribution"><span id="term-normal-distribution"></span>Gaussian Distribution<br />Normal Distribution</dt>
+<dt id="term-gaussian-distribution">Gaussian Distribution</dt>
+<dt id="term-normal-distribution">Normal Distribution</dt>
 <dd><p class="first">A group of values, where the probability of any specific value:</p>
 <ul class="simple">
 <li>will fall between two real limits,</li>
@@ -378,7 +393,7 @@ are <a class="reference internal" href="#term-gaussian-distribution"><span class
 </ul>
 <p>A Gaussian distribution is defined as:</p>
 <div class="math">
-<p><img src="R_images/math/cc236ed043767edb1ba2315fb4f0fa9f9f542feb.png" alt="f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
+<p><img src="R_images/math/aab3ba63db0a1c783c7b626e6d497142b247dde6.png" alt="f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
 e^{-i \frac{(x-i \mu)^{2}}{2i \sigma^2}}"/></p>
 </div><ul class="last simple">
 <li><img class="math" src="R_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> is the mean of the distribution.</li>
@@ -553,7 +568,7 @@ as the magnitude of lambda.</div></blockquote>
 Lambda functions are used when a method requires a function as an input
 parameter and the function is coded directly in the method call.</p>
 <p>Further examples and explanations can be found at this page:
-<a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
+<a class="reference internal" href="ds_apir.html"><span class="doc">Python User Functions</span></a>.</p>
 <p>Related term: <a class="reference internal" href="#term-python-user-defined-function"><span class="xref std std-term">Python User-defined Function</span></a>.</p>
 <div class="last admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -678,8 +693,8 @@ Both edges and vertices have property maps.</p>
 <dd><p class="first">A Python User-defined Function (UDF) is a Python function written by
 the user on the client-side which can execute in a distributed fashion
 on the cluster.
-For further explanation, see <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a></p>
-<p>Further examples and explanations can be found at <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
+For further explanation, see <a class="reference internal" href="ds_apir.html"><span class="doc">Python User Functions</span></a></p>
+<p>Further examples and explanations can be found at <a class="reference internal" href="ds_apir.html"><span class="doc">Python User Functions</span></a>.</p>
 <p class="last">Related: <a class="reference internal" href="#term-lambda-function"><span class="xref std std-term">Lambda Function</span></a>.</p>
 </dd>
 <dt id="term-quantile">Quantile</dt>
@@ -796,7 +811,8 @@ It can produce a weighted mean that has less variability than the
 arithmetic mean of a simple random sample of the population.</p>
 <p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Stratified_sampling">Wikipedia: Stratified Sampling</a>.</p>
 </dd>
-<dt id="term-superstep"><span id="term-supersteps"></span>Superstep<br />Supersteps</dt>
+<dt id="term-superstep">Superstep</dt>
+<dt id="term-supersteps">Supersteps</dt>
 <dd>A single iteration of an algorithm.</dd>
 <dt id="term-supervised-learning">Supervised Learning</dt>
 <dd><p class="first">Supervised learning refers to algorithms where the input data are all
@@ -968,7 +984,7 @@ PMID 11570995.</td></tr>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

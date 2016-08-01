@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -27,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestClassifierModel" href="index.html" >
-    <link rel="next" title="Models PrincipalComponentsModel" href="../model-principal_components/index.html" >
+    <link rel="next" title="Models CoxPhModel" href="../model-cox_ph/index.html" >
     <link rel="prev" title="RandomForestClassifierModel test" href="test.html" > 
   </head>
   <body>
@@ -61,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="../model-principal_components/index.html" title="Models PrincipalComponentsModel"
+        <a href="../model-cox_ph/index.html" title="Models CoxPhModel"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="randomforestclassifiermodel-train">
-<h1><a class="reference internal" href="index.html"><em>RandomForestClassifierModel</em></a>  train<a class="headerlink" href="#randomforestclassifiermodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">RandomForestClassifierModel</span></a>  train<a class="headerlink" href="#randomforestclassifiermodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=1778426779</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Build Random Forests Classifier model.</p>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-553762747</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build Random Forests Classifier model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -154,7 +167,7 @@ Build Random Forests Classifier model.</p>
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=1778426779)</p>
+<p><strong>seed</strong> : int32 (default=-553762747)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -192,7 +205,7 @@ Build Random Forests Classifier model.</p>
 </table>
 <p>Creating a Random Forests Classifier Model using the observation columns and label column.</p>
 <p class="rubric">Examples</p>
-<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
+<p>See <a class="reference internal" href="new.html"><span class="doc">here</span></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -218,7 +231,7 @@ Build Random Forests Classifier model.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-inspect">
-<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  inspect<a class="headerlink" href="#frame-inspect" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  inspect<a class="headerlink" href="#frame-inspect" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="inspect">
@@ -123,7 +137,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : int (default=10)</p>
 <blockquote>
-<div><p>The number of rows to print.</p>
+<div><p>The number of rows to print (warning: do not overwhelm this client by downloading too much)</p>
 </div></blockquote>
 <p><strong>offset</strong> : int (default=0)</p>
 <blockquote>
@@ -173,7 +187,7 @@ by python REPL (i.e. using the object&#8217;s __repr__).  If running in a script
 to be printed, then it must be explicitly printed, then <cite>print frame.inspect()</cite></p>
 <p class="rubric">Examples</p>
 <p>To look at the first 4 rows of data in a frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="go">[#]  animal    name    age  weight</span>
 <span class="go">==================================</span>
 <span class="go">[0]  human     George    8   542.5</span>
@@ -182,17 +196,17 @@ to be printed, then it must be explicitly printed, then <cite>print frame.inspec
 <span class="go">[3]  elephant  Shep      5  8630.0</span>
 </pre></div>
 </div>
-<p># For other examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-inspect"><span>Inspect the Data</span></a>.</p>
+<p># For other examples, see <span class="xref std std-ref">example_frame.inspect</span>.</p>
 <p>Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
 running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
 this problem, explicitly print the unicode of the returned object:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
 </pre></div>
 </div>
 <p><strong>Global Settings</strong></p>
 <p>If not specified, the arguments that control formatting receive default values from
 &#8216;trustedanalytics.inspect_settings&#8217;.  Make changes there to affect all calls to inspect.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="k">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate       None</span>
@@ -200,8 +214,8 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width            80</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c"># changes inspect to use 120 width globally</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c"># changes inspect to always truncate strings to 16 chars</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1"># changes inspect to use 120 width globally</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1"># changes inspect to always truncate strings to 16 chars</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate         16</span>
@@ -209,7 +223,7 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width           120</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># return value back to default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># return value back to default</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate         16</span>
@@ -217,7 +231,7 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width            80</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c"># set everything back to default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># set everything back to default</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate       None</span>
@@ -252,7 +266,7 @@ this problem, explicitly print the unicode of the returned object:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

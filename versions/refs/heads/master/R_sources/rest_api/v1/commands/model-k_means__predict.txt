@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:k_means/predict
 ---------------------------------------------
 
-|BETA|
 Predict the cluster assignments for the data points.
 
 POST /v1/commands/
@@ -71,7 +70,7 @@ Request
 
 **Description**
 
-Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along 
+Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model
 
 |
 

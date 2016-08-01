@@ -5,12 +5,20 @@
 ------
 
 
-.. function:: __init__(self, name=None)
+.. function:: __init__(self, source=None, name=None)
 
     Initialize the graph.
 
 
     :Parameters:
+
+        **source** : OrientDBGraph | None (default=None)
+
+        ..
+
+            A source of initial data.
+
+
 
         **name** : str (default=None)
 
@@ -142,7 +150,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2016, 1, 25, 23, 29, 2, 108329)
+    datetime.datetime(2016, 7, 29, 15, 7, 53, 656501)
 
     >>> graph
     Graph <unnamed>

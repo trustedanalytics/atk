@@ -4,7 +4,6 @@
 :doc:`Commands <index>` frame/histogram
 ---------------------------------------
 
-|BETA|
 Compute the histogram for a column in a frame.
 
 POST /v1/commands/

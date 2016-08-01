@@ -34,9 +34,9 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <CollaborativeFilteringModel__init__>`\ (self[, name, _info])                          Create a new Collaborative Filtering (ALS) model.
-    :doc:`predict <predict>`\ (self, frame, input_source_column_name, input_dest_column_name[, ...])      |BETA| Collaborative Filtering Predict (ALS).
-    :doc:`recommend <recommend>`\ (self, entity_id[, number_of_recommendations, recommend_products])      |BETA| Collaborative Filtering Predict (ALS).
-    :doc:`score <score>`\ (self, user_id, item_id)                                                        |BETA| Collaborative Filtering Predict (ALS).
+    :doc:`predict <predict>`\ (self, frame, input_source_column_name, input_dest_column_name[, ...])      Collaborative Filtering Predict (ALS).
+    :doc:`recommend <recommend>`\ (self, entity_id[, number_of_recommendations, recommend_products])      Collaborative Filtering Predict (ALS).
+    :doc:`score <score>`\ (self, user_id, item_id)                                                        Collaborative Filtering Predict (ALS).
     :doc:`train <train>`\ (self, frame, source_column_name, dest_column_name, weight_column_name)         Collaborative filtering (ALS) model
     ====================================================================================================  ====================================================================================================
 

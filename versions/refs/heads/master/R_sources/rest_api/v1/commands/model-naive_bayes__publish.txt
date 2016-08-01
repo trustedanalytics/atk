@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:naive_bayes/publish
 -------------------------------------------------
 
-|ALPHA|
 Creates a scoring engine tar file.
 
 POST /v1/commands/

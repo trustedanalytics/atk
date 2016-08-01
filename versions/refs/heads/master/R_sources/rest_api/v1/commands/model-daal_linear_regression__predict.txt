@@ -4,8 +4,8 @@
 :doc:`Commands <index>` model:daal_linear_regression/predict
 ------------------------------------------------------------
 
-|ALPHA|
-Make new frame with column for label prediction.
+|BETA|
+Predict labels for a test frame using trained Intel DAAL linear regression model.
 
 POST /v1/commands/
 ==================
@@ -43,23 +43,23 @@ Request
 
     ..
 
-        <Missing Description>
+        The frame to predict on
 
 
 
-    **feature_columns** : list
-
-    ..
-
-        <Missing Description>
-
-
-
-    **label_columns** : list
+    **value_column** : unicode (default=None)
 
     ..
 
-        <Missing Description>
+        Column name containing the value of each observation
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        List of column(s) containing the observations
 
 
 

@@ -76,3 +76,39 @@
     [u'data', u'name', u'distance_from_cluster_1', u'distance_from_cluster_2', u'distance_from_cluster_3', u'predicted_cluster']
     >>> model.publish()
     [===Job Progress===]
+
+    Take the path to the published model and run it in the Scoring Engine
+
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    Posting a request to get the metadata about the model
+
+    >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"KMeans Model","model_class":"org.trustedanalytics.atk.scoring.models.KMeansScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin","custom_values":{}},"input":[{"name":"data","value":"Double"}],"output":[{"name":"data","value":"Double"},{"name":"score","value":"Int"}]}'
+
+    Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0', headers=headers)
+    >>> r.text
+    u'1'
+
+    Posting a request to version 1 with multiple records to score:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&data=7.0&data=5.0', headers=headers)
+    >>> r.text
+    u'1,2,2'
+
+    Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, 'data' is the name of the observation column that the model was trained on:
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"data": 2.0}]})
+    >>> r.text
+    u'{"data":[{"data":2.0,"score":1}]}'
+
+    Posting a request to version 2 with multiple records to score:
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"data": 2.0}, {"data": 7.0}, {"data": 5.0}]})
+    >>> r.text
+    u'{"data":[{"data":2.0,"score":1},{"data":7.0,"score":2},{"data":5.0,"score":2}]}'
+

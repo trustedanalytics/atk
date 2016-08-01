@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -80,14 +97,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -115,14 +129,14 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="entities-get-named-entities">
-<h1><a class="reference internal" href="index.html"><em>Entities</em></a>  Get Named Entities<a class="headerlink" href="#entities-get-named-entities" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Entities</span></a>  Get Named Entities<a class="headerlink" href="#entities-get-named-entities" title="Permalink to this headline">¶</a></h1>
 <p>Gets list of short entries for all named entities in the entity collection.</p>
 <div class="section" id="get-v1-entities">
 <h2>GET /v1/:entities<a class="headerlink" href="#get-v1-entities" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="request">
 <h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">frames</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">frames</span>
 <span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">graphs</span>
 <span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">models</span>
 </pre></div>
@@ -130,15 +144,15 @@
 <p><strong>Body</strong></p>
 <p>(None)</p>
 <p><strong>Headers</strong></p>
-<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
-Content-type: application/json
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Authorization</span><span class="p">:</span> <span class="n">test_api_key_1</span>
+<span class="n">Content</span><span class="o">-</span><span class="nb">type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="response">
 <h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
-<div class="highlight-python"><div class="highlight"><pre>200 OK
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">200</span> <span class="n">OK</span>
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
@@ -175,27 +189,27 @@ Content-type: application/json
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>Example for GET /v1/frames:
-[
-  {
-      &quot;id&quot;: 7,
-      &quot;name&quot;: &quot;super_frame&quot;,
-      &quot;url&quot;: &quot;http://localhost:9099/v1/frames/7&quot;,
-      &quot;entity_type&quot;: &quot;frame:&quot;
-  },
-  {
-      &quot;id&quot;: 8,
-      &quot;name&quot;: &quot;weather_frame1&quot;,
-      &quot;url&quot;: &quot;http://localhost:9099/v1/frames/8&quot;,
-      &quot;entity_type&quot;: &quot;frame:&quot;
-  }
-]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Example</span> <span class="k">for</span> <span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">frames</span><span class="p">:</span>
+<span class="p">[</span>
+  <span class="p">{</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;super_frame&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/frames/7&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:&quot;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+      <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;weather_frame1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:9099/v1/frames/8&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="s2">&quot;frame:&quot;</span>
+  <span class="p">}</span>
+<span class="p">]</span>
 </pre></div>
 </div>
 <p><strong>Headers</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre>Content-Length: 279
-Content-Type: application/json; charset=UTF-8
-Date: Thu, 14 May 2015 23:42:27 GMT
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">279</span>
+<span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="p">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span>
+<span class="n">Date</span><span class="p">:</span> <span class="n">Thu</span><span class="p">,</span> <span class="mi">14</span> <span class="n">May</span> <span class="mi">2015</span> <span class="mi">23</span><span class="p">:</span><span class="mi">42</span><span class="p">:</span><span class="mi">27</span> <span class="n">GMT</span>
 </pre></div>
 </div>
 </div>
@@ -223,7 +237,7 @@ Date: Thu, 14 May 2015 23:42:27 GMT
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

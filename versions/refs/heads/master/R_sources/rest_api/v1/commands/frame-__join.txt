@@ -4,7 +4,6 @@
 :doc:`Commands <index>` frame:/join
 -----------------------------------
 
-|BETA|
 Join two data frames (similar to SQL JOIN).
 
 POST /v1/commands/

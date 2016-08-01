@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -28,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame download" href="download.html" >
-    <link rel="prev" title="EdgeFrame daal_pca" href="daal_pca.html" > 
+    <link rel="prev" title="EdgeFrame daal_covariance_matrix" href="daal_covariance_matrix.html" > 
   </head>
   <body>
 
@@ -57,7 +74,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="daal_pca.html" title="EdgeFrame daal_pca"
+        <a href="daal_covariance_matrix.html" title="EdgeFrame daal_covariance_matrix"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,13 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-dot-product">
-<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  dot_product<a class="headerlink" href="#edgeframe-dot-product" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  dot_product<a class="headerlink" href="#edgeframe-dot-product" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="dot_product">
 <code class="descname">dot_product</code><span class="sig-paren">(</span><em>self</em>, <em>left_column_names</em>, <em>right_column_names</em>, <em>dot_product_column_name</em>, <em>default_left_values=None</em>, <em>default_right_values=None</em><span class="sig-paren">)</span><a class="headerlink" href="#dot_product" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Calculate dot product for each row in current frame.</p>
+<dd><p>Calculate dot product for each row in current frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -164,7 +177,7 @@ The dot product for each row is stored in a new column in the existing frame.</p
 values will be replaced by zeros.</p>
 <p class="rubric">Examples</p>
 <p>Calculate the dot product for a sequence of columns in Frame object <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col_0  col_1  col_2  col_3</span>
 <span class="go">===============================</span>
 <span class="go">[0]      1    0.2     -2      5</span>
@@ -174,16 +187,16 @@ values will be replaced by zeros.</p>
 </pre></div>
 </div>
 <p>Modify the frame by computing the dot product for a sequence of columns:</p>
-<div class="code highlight-python"><div class="highlight"><pre> &gt;&gt;&gt; my_frame.dot_product([&#39;col_0&#39;,&#39;col_1&#39;], [&#39;col_2&#39;, &#39;col_3&#39;], &#39;dot_product&#39;)
- [===Job Progress===]
+<div class="code highlight-default"><div class="highlight"><pre><span></span> <span class="o">&gt;&gt;&gt;</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">dot_product</span><span class="p">([</span><span class="s1">&#39;col_0&#39;</span><span class="p">,</span><span class="s1">&#39;col_1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;col_2&#39;</span><span class="p">,</span> <span class="s1">&#39;col_3&#39;</span><span class="p">],</span> <span class="s1">&#39;dot_product&#39;</span><span class="p">)</span>
+ <span class="p">[</span><span class="o">===</span><span class="n">Job</span> <span class="n">Progress</span><span class="o">===</span><span class="p">]</span>
 
-&gt;&gt;&gt; my_frame.inspect()
-[#]  col_0  col_1  col_2  col_3  dot_product
-============================================
-[0]      1    0.2     -2      5         -1.0
-[1]      2    0.4     -1      6          0.4
-[2]      3    0.6      0      7          4.2
-[3]      4    0.8      1      8         10.4
+<span class="o">&gt;&gt;&gt;</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="p">[</span><span class="c1">#]  col_0  col_1  col_2  col_3  dot_product</span>
+<span class="o">============================================</span>
+<span class="p">[</span><span class="mi">0</span><span class="p">]</span>      <span class="mi">1</span>    <span class="mf">0.2</span>     <span class="o">-</span><span class="mi">2</span>      <span class="mi">5</span>         <span class="o">-</span><span class="mf">1.0</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span>      <span class="mi">2</span>    <span class="mf">0.4</span>     <span class="o">-</span><span class="mi">1</span>      <span class="mi">6</span>          <span class="mf">0.4</span>
+<span class="p">[</span><span class="mi">2</span><span class="p">]</span>      <span class="mi">3</span>    <span class="mf">0.6</span>      <span class="mi">0</span>      <span class="mi">7</span>          <span class="mf">4.2</span>
+<span class="p">[</span><span class="mi">3</span><span class="p">]</span>      <span class="mi">4</span>    <span class="mf">0.8</span>      <span class="mi">1</span>      <span class="mi">8</span>         <span class="mf">10.4</span>
 </pre></div>
 </div>
 <p>Calculate the dot product for columns of vectors in Frame object <em>my_frame</em>:</p>
@@ -212,7 +225,7 @@ values will be replaced by zeros.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

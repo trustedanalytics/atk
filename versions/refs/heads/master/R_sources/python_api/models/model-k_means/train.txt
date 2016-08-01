@@ -7,7 +7,6 @@
 
 .. function:: train(self, frame, observation_columns, column_scalings, k=2, max_iterations=20, epsilon=0.0001, initialization_mode='k-means||')
 
-    |BETA|
     Creates KMeans Model from train frame.
 
 

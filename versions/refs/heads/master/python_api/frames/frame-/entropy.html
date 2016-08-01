@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-entropy">
-<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  entropy<a class="headerlink" href="#frame-entropy" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  entropy<a class="headerlink" href="#frame-entropy" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="entropy">
@@ -149,25 +163,25 @@ the entropy is zero.</p>
 <p class="rubric">Examples</p>
 <p>Consider the following sample data set in <em>frame</em> &#8216;frame&#8217; containing several numbers.</p>
 <p>Given a frame of coin flips, half heads and half tails, the entropy is simply ln(2):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  data  weight</span>
 <span class="go">=================</span>
 <span class="go">[0]     0       1</span>
 <span class="go">[1]     1       2</span>
 <span class="go">[2]     2       4</span>
 <span class="go">[3]     4       8</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;weight&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;</span><span class="si">%0.8f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;</span><span class="si">%0.8f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
 <span class="go">&#39;1.13691659&#39;</span>
 </pre></div>
 </div>
 <p>If we have more choices and weights, the computation is not as simple.
 An on-line search for &#8220;Shannon Entropy&#8221; will provide more detail.</p>
 <p>Given a frame of coin flips, half heads and half tails, the entropy is simply ln(2):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  data</span>
 <span class="go">=========</span>
 <span class="go">[0]  H</span>
@@ -180,9 +194,9 @@ An on-line search for &#8220;Shannon Entropy&#8221; will provide more detail.</p
 <span class="go">[7]  T</span>
 <span class="go">[8]  H</span>
 <span class="go">[9]  T</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;</span><span class="si">%0.8f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;</span><span class="si">%0.8f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
 <span class="go">&#39;0.69314718&#39;</span>
 </pre></div>
 </div>
@@ -211,7 +225,7 @@ An on-line search for &#8220;Shannon Entropy&#8221; will provide more detail.</p
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

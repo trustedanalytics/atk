@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, source_column_name, dest_column_name, weight_column_name, max_steps=10, regularization=0.5, alpha=0.5, num_factors=3, use_implicit=False, num_user_blocks=2, num_item_block=3, target_rmse=0.05)
+.. function:: train(self, frame, source_column_name, dest_column_name, weight_column_name, max_steps=10, regularization=0.5, alpha=0.5, num_factors=3, use_implicit=False, num_user_blocks=2, num_item_block=3, checkpoint_iterations=10, target_rmse=0.05)
 
     Collaborative filtering (ALS) model
 
@@ -97,6 +97,14 @@
         ..
 
             number of item blocks
+
+
+
+        **checkpoint_iterations** : int32 (default=10)
+
+        ..
+
+            Number of iterations between checkpoints
 
 
 

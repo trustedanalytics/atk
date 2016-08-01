@@ -76,7 +76,13 @@
 
         ..
 
-            A new frame with a column storing node id and a column with corresponding cluster assignment
+            Dictionary containing clustering results
+            |    predicted_frame : Frame
+            |        A new frame with a column 'id' with the node id, and a column 'cluster' with the node's cluster assignment
+            |    number_of_clusters : int
+            |        Quantity of clusters used
+            |    cluster_size : dict
+            |        Cluster populations, keyed by names 'Cluster:1' through 'Cluster:n'
     Predict the cluster assignments for the nodes of the graph and create a new frame with a column storing node id and a column with corresponding cluster assignment
 
     Examples

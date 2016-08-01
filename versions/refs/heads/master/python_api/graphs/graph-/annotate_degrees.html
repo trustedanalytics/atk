@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -28,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
     <link rel="next" title="Graph annotate_weighted_degrees" href="annotate_weighted_degrees.html" >
-    <link rel="prev" title="Graph __init__" href="__init__.html" > 
+    <link rel="prev" title="Graph __init__" href="R__init__.html" > 
   </head>
   <body>
 
@@ -57,7 +74,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="__init__.html" title="Graph __init__"
+        <a href="R__init__.html" title="Graph __init__"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="graph-annotate-degrees">
-<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  annotate_degrees<a class="headerlink" href="#graph-annotate-degrees" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Graph</span></a>  annotate_degrees<a class="headerlink" href="#graph-annotate-degrees" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="annotate_degrees">
@@ -154,8 +168,7 @@ in the degree calculation, regardless of label.</p>
 <div><p>Dictionary containing the vertex type as the key and the corresponding
 vertex&#8217;s frame with a column storing the annotated degree for the vertex
 in a user specified property.
-Call dictionary_name[&#8216;label&#8217;] to get the handle to frame whose vertex type
-is label.</p>
+Call dictionary_name[&#8216;vertex type&#8217;] to get the handle to frame of that &#8216;vertex type&#8217;</p>
 </div></blockquote>
 </td>
 </tr>
@@ -178,20 +191,20 @@ of the weights of the edges leaving the vertex.</p>
 <p>The toolkit provides <span class="xref std std-ref">annotate_weighted_degrees</span>
 for the distributed calculation of weighted vertex degrees.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;edges&#39;</span><span class="p">,</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s1">&#39;edges&#39;</span><span class="p">,</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;weight&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s">&quot;outEdgesCount&quot;</span><span class="p">,</span><span class="n">degree_option</span><span class="o">=</span><span class="s">&quot;out&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s2">&quot;outEdgesCount&quot;</span><span class="p">,</span><span class="n">degree_option</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  _vid  _label  source  label  outEdgesCount</span>
 <span class="go">===============================================</span>
 <span class="go">[0]     1  source       1    1.0              3</span>
@@ -199,9 +212,9 @@ for the distributed calculation of weighted vertex degrees.</p>
 <span class="go">[2]     3  source       3    5.0              2</span>
 <span class="go">[3]     4  source       4    5.0              2</span>
 <span class="go">[4]     5  source       5    5.0              1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s">&quot;inEdgesCount&quot;</span><span class="p">,</span><span class="n">degree_option</span><span class="o">=</span><span class="s">&quot;in&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s2">&quot;inEdgesCount&quot;</span><span class="p">,</span><span class="n">degree_option</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  _vid  _label  source  label  inEdgesCount</span>
 <span class="go">==============================================</span>
 <span class="go">[0]     1  source       1    1.0             3</span>
@@ -236,7 +249,7 @@ for the distributed calculation of weighted vertex degrees.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

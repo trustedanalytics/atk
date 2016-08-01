@@ -12,6 +12,8 @@
 
     :Parameters:
 
+    Acts like a dictionary where the vertex type is the key, returning the particular VertexFrame
+
     Examples
     --------
     See :doc:`here <__init__>` for example usage in graph construction.

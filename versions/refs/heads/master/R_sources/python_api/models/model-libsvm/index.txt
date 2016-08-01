@@ -34,12 +34,12 @@
     .. rubric:: Methods
 
     ====================================================================================================  ====================================================================================================
-    :ref:`__init__ <LibsvmModel__init__>`\ (self[, name, _info])                                          |ALPHA| Create a 'new' instance of a Support Vector Machine model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| New frame with new predicted label column.
-    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`score <score>`\ (self, vector)                                                                  |ALPHA| Calculate the prediction label for a single observation.
-    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
-    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, svm_type, ...])               |ALPHA| Train a Lib Svm model
+    :ref:`__init__ <LibsvmModel__init__>`\ (self[, name, _info])                                          Create a 'new' instance of a Support Vector Machine model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        New frame with new predicted label column.
+    :doc:`publish <publish>`\ (self)                                                                      Creates a tar file that will be used as input to the scoring engine
+    :doc:`score <score>`\ (self, vector)                                                                  Calculate the prediction label for a single observation.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, svm_type, ...])               Train a Lib Svm model
     ====================================================================================================  ====================================================================================================
 
 .. _LibsvmModel__init__:
@@ -47,7 +47,6 @@
 
 .. function:: __init__(self, name=None)
 
-    |ALPHA|
     Create a 'new' instance of a Support Vector Machine model.
 
 
@@ -139,6 +138,41 @@
     -1.0
     >>> model.publish()
     [===Job Progress===]
+
+    Take the path to the published model and run it in the Scoring Engine
+
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    Posting a request to get the metadata about the model
+
+    >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
+    Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6', headers=headers)
+    >>> r.text
+    u'-1.0'
+
+    Posting a request to version 1 with multiple records to score:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6&data=0,0,0', headers=headers)
+    >>> r.text
+    u'-1.0,1.0'
+
+    Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, 'tr_row' and 'tr_col' are the names of the observation columns that the model was trained on:
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6}]})
+    >>> r.text
+    u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0}]}'
+
+    Posting a request to version 2 with multiple records to score:
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6},{"tr_row": 3.0, "tr_col": 0.6} ]})
+    >>> r.text
+    u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
 
 
 

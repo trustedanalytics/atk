@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,12 +125,12 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="graph-kclique-percolation">
-<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  kclique_percolation<a class="headerlink" href="#graph-kclique-percolation" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Graph</span></a>  kclique_percolation<a class="headerlink" href="#graph-kclique-percolation" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="kclique_percolation">
 <code class="descname">kclique_percolation</code><span class="sig-paren">(</span><em>self</em>, <em>clique_size</em>, <em>community_property_label</em><span class="sig-paren">)</span><a class="headerlink" href="#kclique_percolation" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
 Find groups of vertices with similar attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,7 +168,7 @@ other.
 Examples could include a community of friends in a social network or a
 collection of highly interacting proteins in a cellular process.</p>
 <p>Trusted Analytics Platform provides community detection using the k-Clique
-percolation method first proposed by Palla et. al. <a class="reference internal" href="#r1" id="id1">[R1]</a> that has been widely
+percolation method first proposed by Palla et. al. <a class="reference internal" href="../../models/model-power_iteration_clustering/new.html#r1" id="id1">[R1]</a> that has been widely
 used in many contexts.</p>
 <p><strong>K-Clique Percolation</strong></p>
 <p>K-clique percolation is a method for detecting community structure in graphs.
@@ -181,7 +195,7 @@ Vertex 4 belongs to two distinct (but overlapping) communities.</p>
 <p><strong>Distributed Implementation of K-Clique Community Detection</strong></p>
 <p>The implementation of k-clique community detection in Trusted Analytics Platform is a fully
 distributed implementation that follows the map-reduce
-algorithm proposed in Varamesh et. al. <a class="reference internal" href="#r2" id="id2">[R2]</a> .</p>
+algorithm proposed in Varamesh et. al. <a class="reference internal" href="../../models/model-power_iteration_clustering/new.html#r2" id="id2">[R2]</a> .</p>
 <p>It has the following steps:</p>
 <ol class="arabic simple">
 <li>All k-cliques are <a class="reference internal" href="../../../glossary.html#term-enumerate"><span class="xref std std-term">enumerated</span></a>.</li>
@@ -247,7 +261,7 @@ no., pp.478,483, 28-30 May 2013</td></tr>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

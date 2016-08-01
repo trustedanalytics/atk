@@ -7,7 +7,6 @@
 
 .. function:: tally_percent(self, sample_col, count_val)
 
-    |BETA|
     Compute a cumulative percent count.
 
 

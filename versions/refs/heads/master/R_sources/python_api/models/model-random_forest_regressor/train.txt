@@ -5,9 +5,8 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=-64234219, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, value_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=2126164254, categorical_features_info=None, feature_subset_category=None)
 
-    |ALPHA|
     Build Random Forests Regressor model.
 
 
@@ -21,11 +20,11 @@
 
 
 
-        **label_column** : unicode
+        **value_column** : unicode
 
         ..
 
-            Column name containing the label for each observation
+            Column name containing the value for each observation
 
 
 
@@ -41,7 +40,7 @@
 
         ..
 
-            Number of tress in the random forest. Default is 1.
+            Number of trees in the random forest. Default is 1.
 
 
 
@@ -69,7 +68,7 @@
 
 
 
-        **seed** : int32 (default=-64234219)
+        **seed** : int32 (default=2126164254)
 
         ..
 

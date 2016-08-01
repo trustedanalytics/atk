@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-classification-metrics">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  classification_metrics<a class="headerlink" href="#vertexframe-classification-metrics" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  classification_metrics<a class="headerlink" href="#vertexframe-classification-metrics" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="classification_metrics">
@@ -176,7 +190,7 @@ If we let:</p>
 </ul>
 <p>then:</p>
 <div class="math">
-<p><img src="../../../R_images/math/e462dbf448b4a4ab78b92edf47b97dc5ea49d849.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
+<p><img src="../../../R_images/math/c42200bac84ae127d86af25ec596e554ef77476b.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
 \frac{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
 F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}"/></p>
 </div><p>The <img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
@@ -223,7 +237,7 @@ binary classifier model, formatted for human readability.</p>
 <p>The <strong>confusion_matrix</strong> is not yet implemented for multi-class classifiers.</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em>, which contains the data</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a      b  labels  predictions</span>
 <span class="go">==================================</span>
 <span class="go">[0]  red    1       0            0</span>
@@ -232,27 +246,27 @@ binary classifier model, formatted for human readability.</p>
 <span class="go">[3]  green  0       1            1</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">classification_metrics</span><span class="p">(</span><span class="s">&#39;labels&#39;</span><span class="p">,</span> <span class="s">&#39;predictions&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">classification_metrics</span><span class="p">(</span><span class="s1">&#39;labels&#39;</span><span class="p">,</span> <span class="s1">&#39;predictions&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">f_measure</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">f_measure</span>
 <span class="go">0.6666666666666666</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">recall</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">recall</span>
 <span class="go">0.5</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">accuracy</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">accuracy</span>
 <span class="go">0.75</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">precision</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">precision</span>
 <span class="go">1.0</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">confusion_matrix</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">confusion_matrix</span>
 <span class="go">            Predicted_Pos  Predicted_Neg</span>
 <span class="go">Actual_Pos              1              1</span>
 <span class="go">Actual_Neg              0              2</span>
@@ -283,7 +297,7 @@ binary classifier model, formatted for human readability.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

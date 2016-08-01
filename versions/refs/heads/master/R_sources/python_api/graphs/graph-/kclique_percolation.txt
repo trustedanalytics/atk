@@ -7,7 +7,7 @@
 
 .. function:: kclique_percolation(self, clique_size, community_property_label)
 
-    |ALPHA|
+    |BETA|
     Find groups of vertices with similar attributes.
 
 

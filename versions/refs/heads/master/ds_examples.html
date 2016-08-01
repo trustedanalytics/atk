@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -67,14 +84,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -148,7 +162,7 @@
 <p>They are also available locally once the ATK python client is installed.</p>
 <p>To access any of the examples import them like you would any other python module.</p>
 <p><strong>import trustedanalytics.examples.[frame|movie_graph_small|pr] as EXAMPLE_NAME</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python[2.7]
 &gt;&gt;&gt; import trustedanalytics.examples.frame as frame
 </pre></div>
 </div>
@@ -164,7 +178,7 @@
 <li>exercises frame operations</li>
 </ul>
 <p>frame example:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python[2.7]
 &gt;&gt;&gt; import trustedanalytics.examples.frame as frame
 #after importing the example execute it&#39;s run method with the HDFS path from the data catalog
 &gt;&gt;&gt; frame.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
@@ -178,7 +192,7 @@
 <li>creates a graph from filtered frame data</li>
 </ul>
 <p>movie graph example:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python[2.7]
 &gt;&gt;&gt; import trustedanalytics.examples.movie_data_small as movie
 #after importing the example execute it&#39;s run method with the HDFS path from the data catalog
 &gt;&gt;&gt; movie.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
@@ -192,7 +206,7 @@
 <li>creates a graph and runs the page rank algorithm</li>
 </ul>
 <p>page rank example:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python[2.7]
 &gt;&gt;&gt; import trustedanalytics.examples.pr as pr
 #after importing the example execute it&#39;s run method with the HDFS path from the data catalog
 &gt;&gt;&gt; pr.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
@@ -222,7 +236,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

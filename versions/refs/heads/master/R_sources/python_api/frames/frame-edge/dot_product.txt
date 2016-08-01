@@ -7,7 +7,6 @@
 
 .. function:: dot_product(self, left_column_names, right_column_names, dot_product_column_name, default_left_values=None, default_right_values=None)
 
-    |ALPHA|
     Calculate dot product for each row in current frame.
 
 

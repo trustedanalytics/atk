@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:logistic_regression/predict
 ---------------------------------------------------------
 
-|ALPHA|
 Predict labels for data points using trained logistic regression model.
 
 POST /v1/commands/

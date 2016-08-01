@@ -16,7 +16,7 @@
 
         ..
 
-            The number of rows to print.
+            The number of rows to print (warning: do not overwhelm this client by downloading too much)
 
 
 

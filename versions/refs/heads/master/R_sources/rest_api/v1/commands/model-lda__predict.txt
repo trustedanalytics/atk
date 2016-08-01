@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:lda/predict
 -----------------------------------------
 
-|ALPHA|
 Predict conditional probabilities of topics given document.
 
 POST /v1/commands/

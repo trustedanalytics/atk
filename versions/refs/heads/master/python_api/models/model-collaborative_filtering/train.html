@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,11 +125,11 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="collaborativefilteringmodel-train">
-<h1><a class="reference internal" href="index.html"><em>CollaborativeFilteringModel</em></a>  train<a class="headerlink" href="#collaborativefilteringmodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">CollaborativeFilteringModel</span></a>  train<a class="headerlink" href="#collaborativefilteringmodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>source_column_name</em>, <em>dest_column_name</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>source_column_name</em>, <em>dest_column_name</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>checkpoint_iterations=10</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collaborative filtering (ALS) model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -162,6 +176,10 @@
 <blockquote>
 <div><p>number of item blocks</p>
 </div></blockquote>
+<p><strong>checkpoint_iterations</strong> : int32 (default=10)</p>
+<blockquote>
+<div><p>Number of iterations between checkpoints</p>
+</div></blockquote>
 <p><strong>target_rmse</strong> : float64 (default=0.05)</p>
 <blockquote class="last">
 <div><p>target RMSE</p>
@@ -197,7 +215,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

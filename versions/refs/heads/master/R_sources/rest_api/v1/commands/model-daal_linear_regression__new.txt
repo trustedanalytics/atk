@@ -4,8 +4,8 @@
 :doc:`Commands <index>` model:daal_linear_regression/new
 --------------------------------------------------------
 
-|ALPHA|
-Create a 'new' instance of a Linear Regression model.
+|BETA|
+Create a 'new' instance of a DAAL Linear Regression model.
 
 POST /v1/commands/
 ==================
@@ -117,6 +117,6 @@ Response
 
 ``Model``
 
-        A new instance of LinearRegressionModel
+        A new instance of DaalLinearRegressionNewPlugin
 
 

@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="graph-graphx-pagerank">
-<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  graphx_pagerank<a class="headerlink" href="#graph-graphx-pagerank" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">Graph</span></a>  graphx_pagerank<a class="headerlink" href="#graph-graphx-pagerank" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="graphx_pagerank">
@@ -200,7 +214,7 @@ analyzing predator-prey food webs to predict extinctions.</p>
 <p>The Trusted Analytics Platform implementation of <em>PageRank</em> satisfies the following equation
 at each vertex <img class="math" src="../../../R_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> of the graph:</p>
 <div class="math">
-<p><img src="../../../R_images/math/fc9164648b5a91c1b09ae8af18e3b618286d39ad.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
+<p><img src="../../../R_images/math/ec57b22b95b91ed92b0b9f1b1542780003ede533.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
 \frac {PR(u)}{L(u)} \right)"/></p>
 </div><dl class="docutils">
 <dt>Where:</dt>
@@ -225,20 +239,20 @@ threshold.</li>
 algorithm will terminate.</li>
 </ul>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;edges&#39;</span><span class="p">,</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s1">&#39;edges&#39;</span><span class="p">,</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;weight&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">graphx_pagerank</span><span class="p">(</span><span class="n">output_property</span><span class="o">=</span><span class="s">&quot;PageRank&quot;</span><span class="p">,</span><span class="n">max_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">convergence_tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">graphx_pagerank</span><span class="p">(</span><span class="n">output_property</span><span class="o">=</span><span class="s2">&quot;PageRank&quot;</span><span class="p">,</span><span class="n">max_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">convergence_tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  _eid  _src_vid  _dest_vid  _label  weight</span>
 <span class="go">    ==============================================</span>
 <span class="go">    [0]     6         1          2  edges        1</span>
@@ -246,9 +260,9 @@ algorithm will terminate.</li>
 <span class="go">    [2]     9         1          4  edges        1</span>
 <span class="go">    [3]     8         2          3  edges        1</span>
 <span class="go">    [4]    10         4          5  edges        1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;edge_dictionary&#39;</span><span class="p">][</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;edge_dictionary&#39;</span><span class="p">][</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row_count</span>
 <span class="go">10</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;vertex_dictionary&#39;</span><span class="p">][</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;vertex_dictionary&#39;</span><span class="p">][</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row_count</span>
 <span class="go">5</span>
 </pre></div>
 </div>
@@ -277,7 +291,7 @@ algorithm will terminate.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

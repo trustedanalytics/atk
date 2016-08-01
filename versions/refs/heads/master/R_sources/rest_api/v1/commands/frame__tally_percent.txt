@@ -4,7 +4,6 @@
 :doc:`Commands <index>` frame/tally_percent
 -------------------------------------------
 
-|BETA|
 Compute a cumulative percent count.
 
 POST /v1/commands/

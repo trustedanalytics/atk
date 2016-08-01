@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -28,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="Administration" href="ad_over.html" >
     <link rel="next" title="Eclipse Setup Instructions" href="ad_eclipse.html" >
-    <link rel="prev" title="System Requirements" href="ad_reqs.html" > 
+    <link rel="prev" title="Administration" href="ad_over.html" > 
   </head>
   <body>
 
@@ -55,7 +72,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="ad_reqs.html" title="System Requirements"
+        <a href="ad_over.html" title="Administration"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -79,14 +96,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -95,12 +109,10 @@
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Scoring Engine</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Scoring Engine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ad_eclipse.html">Eclipse Setup Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ad_intellij.html">IntelliJ IDEA Setup Instructions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ad_pycharm.html">PyCharm Setup Instructions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
@@ -118,31 +130,81 @@
             
   <div class="section" id="scoring-engine">
 <h1>Scoring Engine<a class="headerlink" href="#scoring-engine" title="Permalink to this headline">¶</a></h1>
-<p>This section covers deployment and running the scoring engine.</p>
+<p>The Scoring Engine is a simple REST server capable of loading trained models published by ATK using ModelPublishFormat.
+This section covers deployment and running the scoring engine in TAP environment.</p>
 <div class="section" id="create-a-scoring-engine-instance">
-<h2>create a Scoring Engine Instance<a class="headerlink" href="#create-a-scoring-engine-instance" title="Permalink to this headline">¶</a></h2>
-<p>In the TAP web site:</p>
-<ol class="arabic simple">
-<li>Navigate to <strong>Services -&gt; Marketplace</strong>.</li>
-<li>Select <strong>scoring_engine</strong> =&gt; <strong>Create new isntance</strong>.</li>
-<li>Fill in an instance name of your choice <em>(given below as **my-svm-model*</em>)*.</li>
-<li>Select <strong>+ Add variable</strong>.</li>
-<li>Fill in two values: key <strong>TAR_ARCHIVE</strong>; value is the URI of the model you wish to use.</li>
+<h2>Create a Scoring Engine Instance<a class="headerlink" href="#create-a-scoring-engine-instance" title="Permalink to this headline">¶</a></h2>
+<p>In the TAP console:</p>
+<ol class="arabic">
+<li><p class="first">Navigate to <strong>Services -&gt; Marketplace</strong>.</p>
+</li>
+<li><p class="first">Select <strong>scoring_engine</strong> =&gt; <strong>Create new isntance</strong>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Fill in an instance name of your choice <em>(given below as **my-svm-model*</em>)*.</dt>
+<dd><p class="first last">The model has already been trained in ATK and published using ModelPublishFormat, so it is available in HDFS.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Select <strong>+ Add variable</strong>.</p>
+</li>
+<li><p class="first">Fill in two values: key <strong>uri</strong>; value is the URI of the model you wish to use.</p>
+</li>
 </ol>
 <p>You will be able to see your scoring engine under the Applications page.</p>
 </div>
 <div class="section" id="scoring-client">
 <h2>Scoring Client<a class="headerlink" href="#scoring-client" title="Permalink to this headline">¶</a></h2>
-<p>Below is a sample python script to connect to the scoring engine:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;http://my-svm-model:9099/v1/score?data=2,17,-6&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
-<span class="go">list(1)</span>
+<p>Below is a sample Python script to send requests to the scoring engine containing trained Libsvm Model:</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span>$ python[2.7]
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#39;Content-type&#39;: &#39;application/json&#39;,
+...            &#39;Accept&#39;: &#39;application/json,text/plain&#39;}
+
+# posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#39;http://my-svm-model.demotrustedanalytics.com/v2/metadata&#39;)
+&gt;&gt;&gt; r.text
+u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;LibSvm Model&quot;,&quot;model_class&quot;:&quot;org.trustedanalytics.atk.scoring.models.LibSvmModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;tr_row&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;tr_col&quot;,&quot;value&quot;:&quot;Double&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;tr_row&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;tr_col&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;Prediction&quot;,&quot;value&quot;:&quot;Double&quot;}]}&#39;
+
+
+# Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+&gt;&gt;&gt; r = requests.post(&#39;http://my-svm-model.demotrustedanalytics.com/v1/score?data=2,17,-6&#39;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#39;-1.0&#39;
+
+# Posting a request to version 1 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#39;http://my-svm-model.demotrustedanalytics.com/v1/score?data=2,17,-6&amp;data=0,0,0&#39;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#39;-1.0,1.0&#39;
+
+# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#39;tr_row&#39; and &#39;tr_col&#39; are the names of the observation columns that the model was trained on:
+&gt;&gt;&gt; r = requests.post(&quot;http://my-svm-model.demotrustedanalytics.com/v2/score&quot;, json={&quot;records&quot;: [{&quot;tr_row&quot;: 1.0, &quot;tr_col&quot;: 2.6}]})
+&gt;&gt;&gt; r.text
+u&#39;{&quot;data&quot;:[{&quot;tr_row&quot;:1.0,&quot;tr_col&quot;:2.6,&quot;Prediction&quot;:-1.0}]}&#39;
+
+# posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&quot;http://my-svm-model.demotrustedanalytics.com/v2/score&quot;, json={&quot;records&quot;: [{&quot;tr_row&quot;: 1.0, &quot;tr_col&quot;: 2.6},{&quot;tr_row&quot;: 3.0, &quot;tr_col&quot;: 0.6} ]})
+&gt;&gt;&gt; r.text
+u&#39;{&quot;data&quot;:[{&quot;tr_row&quot;:1.0,&quot;tr_col&quot;:2.6,&quot;Prediction&quot;:-1.0},{&quot;tr_row&quot;:3.0,&quot;tr_col&quot;:0.6,&quot;Prediction&quot;:-1.0}]}&#39;
 </pre></div>
 </div>
+</div>
+<div class="section" id="posting-requests-to-atk-models">
+<h2>Posting Requests to ATK Models<a class="headerlink" href="#posting-requests-to-atk-models" title="Permalink to this headline">¶</a></h2>
+<p>For more examples of invoking other ATK published models running in Scoring Engine, please see the links below:</p>
+<ul class="simple">
+<li><a class="reference external" href="python_api/models/model-arx/index.html">Autoregressive Exogenous Model (ARX)</a></li>
+<li><a class="reference external" href="python_api/models/model-arima/index.html">Autoregressive Integrated Moving Average Model (ARIMA)</a></li>
+<li><a class="reference external" href="python_api/models/model-k_means/index.html">K Means</a></li>
+<li><a class="reference external" href="python_api/models/model-lda/index.html">Latent Dirichlet Allocation (LDA)</a></li>
+<li><a class="reference external" href="python_api/models/model-libsvm/index.html">Lib SVM</a></li>
+<li><a class="reference external" href="python_api/models/model-linear_regression/index.html">Linear Regression</a></li>
+<li><a class="reference external" href="python_api/models/model-naive_bayes/index.html">Naive Bayes</a></li>
+<li><a class="reference external" href="python_api/models/model-principal_components/index.html">Principal Component Analysis</a></li>
+<li><a class="reference external" href="python_api/models/model-random_forest_classifier/index.html">Random Forest Classifier</a></li>
+<li><a class="reference external" href="python_api/models/model-random_forest_regressor/index.html">Random Forest Regressor</a></li>
+<li><a class="reference external" href="python_api/models/model-svm/index.html">SVM with SGD</a></li>
+</ul>
 </div>
 </div>
 
@@ -167,7 +229,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

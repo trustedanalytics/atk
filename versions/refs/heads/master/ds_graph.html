@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -26,8 +43,8 @@
     <script type="text/javascript" src="R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
-    <link rel="up" title="User Manual" href="ds_over.html" >
-    <link rel="next" title="Best Known Methods (User)" href="ds_bkm.html" >
+    <link rel="up" title="Process Flow Examples" href="ds_pflw.html" >
+    <link rel="next" title="Algorithms" href="ds_algorithms.html" >
     <link rel="prev" title="Latent Dirichlet Allocation" href="ds_lda.html" > 
   </head>
   <body>
@@ -49,7 +66,8 @@
 	
         <li class="active"><a href="index.html">Trusted Analytics</a></li>
 	
-          <li class="active"><a href="ds_over.html" accesskey="U">User Manual</a></li> 
+          <li class="active"><a href="ds_over.html" >User Manual</a></li>
+          <li class="active"><a href="ds_pflw.html" accesskey="U">Process Flow Examples</a></li> 
     </ul>
               
               
@@ -59,7 +77,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ds_bkm.html" title="Best Known Methods (User)"
+        <a href="ds_algorithms.html" title="Algorithms"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -79,14 +97,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
@@ -94,10 +109,8 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Graphs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ds_pflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -118,55 +131,54 @@
             
   <div class="section" id="graphs">
 <span id="ds-graph"></span><h1>Graphs<a class="headerlink" href="#graphs" title="Permalink to this headline">¶</a></h1>
-<blockquote>
-<div># Graphs are composed of 2 sets, one of vertices, and one of edges that
-# connect exactly two (possibly not distinct) vertices. The degree
-# of a vertex is the number of edges attached to it</div></blockquote>
+<p>Graphs are composed of two sets, one of vertices, and one of edges that
+connect exactly two (possibly not distinct) vertices. The degree
+of a vertex is the number of edges attached to it.</p>
 <div class="section" id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
-<p>Establish a connection to the ATK Rest Server.
+<p>Establish a connection to the ATK REST Server.
 This handle will be used for the remainder of the script.</p>
 <p>Get server URL and credentials file from the TAP administrator.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">atk_server_uri</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;ATK_SERVER_URI&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
-<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;ATK_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">atk_server_uri</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_SERVER_URI&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Set the server, and use the credentials to connect to the ATK.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">atk_server_uri</span>
+<p>Set the server, and use the credentials to connect to the ATK REST server.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">atk_server_uri</span>
 <span class="n">ia</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="build-a-graph">
 <h2>Build a Graph<a class="headerlink" href="#build-a-graph" title="Permalink to this headline">¶</a></h2>
-<p>Below we build a frame using a vertexlist and an edgelist.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">vertex_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span>
-    <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s">&quot;vertex1&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex2&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex3&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex4&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex5&quot;</span><span class="p">]],</span>
-                  <span class="p">[(</span><span class="s">&quot;vertex_name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+<p>The example below shows how to build a frame using a vertexlist and an edgelist.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">vertex_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span>
+    <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s2">&quot;vertex1&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex2&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex3&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex4&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex5&quot;</span><span class="p">]],</span>
+                  <span class="p">[(</span><span class="s2">&quot;vertex_name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
 <span class="n">edge_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span>
-    <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s">&quot;vertex3&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s">&quot;vertex1&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s">&quot;vertex4&quot;</span><span class="p">],</span>
-                   <span class="p">[</span><span class="s">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s">&quot;vertex5&quot;</span><span class="p">]],</span>
-                  <span class="p">[(</span><span class="s">&quot;from&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;to&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+    <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s2">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s2">&quot;vertex3&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s2">&quot;vertex1&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s2">&quot;vertex4&quot;</span><span class="p">],</span>
+                   <span class="p">[</span><span class="s2">&quot;vertex2&quot;</span><span class="p">,</span> <span class="s2">&quot;vertex5&quot;</span><span class="p">]],</span>
+                  <span class="p">[(</span><span class="s2">&quot;from&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
 </pre></div>
 </div>
-<p>The graph is a center vertex (vertex20, with four vertices each attached to the center vertex. This is known as a star graph. It can be visualized as a plus sign.</p>
-<p>To Create a graph define the vertices, then define the edges.</p>
+<p>The graph is a center vertex (vertex2), with four vertices each attached to the center vertex. This is known as a star graph. It can be visualized as a plus sign.</p>
+<p>To create a graph define the vertices, then define the edges.</p>
 <p>The degree of a vertex is how many edges are connected to the vertex.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">degrees</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s">&quot;degree&quot;</span><span class="p">)</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">degrees</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s2">&quot;degree&quot;</span><span class="p">)</span>
 
 
-<span class="n">degree_list</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">[</span><span class="s">&quot;vertex&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">known_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="s">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s">u&#39;vertex4&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-              <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s">u&#39;vertex1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-              <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s">u&#39;vertex5&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-              <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s">u&#39;vertex2&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-              <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s">u&#39;vertex3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">degree_list</span> <span class="o">=</span> <span class="n">degrees</span><span class="p">[</span><span class="s2">&quot;vertex&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">known_list</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="s1">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">u&#39;vertex4&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">u&#39;vertex1&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s1">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">u&#39;vertex5&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s1">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">u&#39;vertex2&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+              <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s1">u&#39;vertex&#39;</span><span class="p">,</span> <span class="s1">u&#39;vertex3&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">known_list</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">degree_list</span><span class="p">)</span>
@@ -196,7 +208,7 @@ This handle will be used for the remainder of the script.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

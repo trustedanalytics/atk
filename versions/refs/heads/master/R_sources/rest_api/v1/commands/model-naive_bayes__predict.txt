@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:naive_bayes/predict
 -------------------------------------------------
 
-|ALPHA|
 Predict labels for data points using trained Naive Bayes model.
 
 POST /v1/commands/

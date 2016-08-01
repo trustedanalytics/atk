@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:random_forest_regressor/predict
 -------------------------------------------------------------
 
-|ALPHA|
 Predict the values for the data points.
 
 POST /v1/commands/

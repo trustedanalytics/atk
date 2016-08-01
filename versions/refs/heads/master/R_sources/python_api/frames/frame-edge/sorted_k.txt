@@ -7,7 +7,6 @@
 
 .. function:: sorted_k(self, k, column_names_and_ascending, reduce_tree_depth=None)
 
-    |ALPHA|
     Get a sorted subset of the data.
 
 

@@ -13,7 +13,9 @@
     last_read_date
     name
     predict
+    publish
     status
+    test
     train
 
 .. class:: LinearRegressionModel
@@ -32,8 +34,10 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <LinearRegressionModel__init__>`\ (self[, name, _info])                                Create a 'new' instance of a Linear Regression model.
-    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Make new frame with column for label prediction.
-    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, intercept, ...])              |ALPHA| Build linear regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        <Missing Doc>
+    :doc:`publish <publish>`\ (self)                                                                      Creates a tar file that will be used as input to the scoring engine
+    :doc:`test <test>`\ (self, frame, value_column[, observation_columns])                                <Missing Doc>
+    :doc:`train <train>`\ (self, frame, value_column, observation_columns[, ...])                         Build linear regression model.
     ====================================================================================================  ====================================================================================================
 
 .. _LinearRegressionModel__init__:
@@ -67,14 +71,12 @@
     The Linear Regression model is initialized, trained on columns of a frame and
     used to predict the value of the dependent variable given the independent
     observations of a frame.
-    This model runs the MLLib implementation of Linear Regression [2]_ with the
-    SGD [3]_ optimizer.
-                    
+
     .. rubric:: footnotes
 
     .. [1] https://en.wikipedia.org/wiki/Linear_regression
-    .. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
-    .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+    .. [2] https://spark.apache.org/docs/1.5.0/ml-linear-methods.html
+
 
     Examples
     --------
@@ -84,35 +86,94 @@
 
     >>> frame.inspect()
     [#]  x1   y
-    ==============
-    [0]  0.0   0.0
-    [1]  1.0   2.5
-    [2]  2.0   5.0
-    [3]  3.0   7.5
-    [4]  4.0  10.0
-    [5]  5.0  12.5
-    [6]  6.0  15.0
-    [7]  7.0  17.5
-    [8]  8.0  20.0
-    [9]  9.0  22.5
+    ===============
+    [0]  0.0    0.0
+    [1]  1.0    2.5
+    [2]  2.0    5.0
+    [3]  3.0    7.5
+    [4]  4.0   10.0
+    [5]  5.0   12.5
+    [6]  6.0   13.0
+    [7]  7.0  17.15
+    [8]  8.0   18.5
+    [9]  9.0   23.5
 
     >>> model = ta.LinearRegressionModel()
     [===Job Progress===]
-    >>> model.train(frame, "y", ["x1"], intercept=True, num_iterations=100)
+    >>> train_output = model.train(frame,'y',['x1'])
     [===Job Progress===]
+    >>> train_output
+    {u'explained_variance': 49.27592803030301,
+     u'intercept': -0.032727272727271384,
+     u'iterations': 3,
+     u'label': u'y',
+     u'mean_absolute_error': 0.5299393939393939,
+     u'mean_squared_error': 0.6300969696969692,
+     u'objective_history': [0.5, 0.007324606455391047, 0.006312834669731454],
+     u'observation_columns': [u'x1'],
+     u'r_2': 0.9873743306605371,
+     u'root_mean_squared_error': 0.7937864761363531,
+     u'weights': [2.4439393939393934]}
+    >>> test_output = model.test(frame,'y')
+    [===Job Progress===]
+    >>> test_output
+    {u'explained_variance': 49.27592803030301,
+     u'mean_absolute_error': 0.5299393939393939,
+     u'mean_squared_error': 0.6300969696969692,
+     u'r_2': 0.9873743306605371,
+     u'root_mean_squared_error': 0.7937864761363531}
     >>> predicted_frame = model.predict(frame, ["x1"])
     [===Job Progress===]
     >>> predicted_frame.inspect()
-    [#]  x1   y     predicted_value
+    [#]  x1   y      predicted_value
     ==================================
-    [0]  0.0   0.0  -3.74940273364e+55
-    [1]  1.0   2.5  -2.72603544372e+56
-    [2]  2.0   5.0  -5.07713061407e+56
-    [3]  3.0   7.5  -7.42822578442e+56
-    [4]  4.0  10.0  -9.77932095478e+56
-    [5]  5.0  12.5  -1.21304161251e+57
-    [6]  6.0  15.0  -1.44815112955e+57
-    [7]  7.0  17.5  -1.68326064658e+57
-    [8]  8.0  20.0  -1.91837016362e+57
-    [9]  9.0  22.5  -2.15347968065e+57
+    [0]  4.0   10.0      9.74303030303
+    [1]  0.0    0.0   -0.0327272727273
+    [2]  1.0    2.5      2.41121212121
+    [3]  6.0   13.0      14.6309090909
+    [4]  3.0    7.5      7.29909090909
+    [5]  7.0  17.15      17.0748484848
+    [6]  9.0   23.5      21.9627272727
+    [7]  8.0   18.5      19.5187878788
+    [8]  5.0   12.5       12.186969697
+    [9]  2.0    5.0      4.85515151515
+
+
+    >>> model.publish()
+    [===Job Progress===]
+
+    Take the path to the published model and run it in the Scoring Engine
+
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    Posting a request to get the metadata about the model
+
+    >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"Linear Regression Model","model_class":"org.apache.spark.ml.regression.LinearRegressionModel","model_reader":"org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin","custom_values":{}},"input":[{"name":"x1","value":"Double"}],"output":[{"name":"x1","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
+    Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0', headers=headers)
+    >>> r.text
+    u'9.743030303030302'
+
+    Posting a request to version 1 with multiple records to score:
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0&data=0.0', headers=headers)
+    >>> r.text
+    u'9.743030303030302, -0.032727272727271384' #not working
+
+    Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"x1": 0.0}]})
+    >>> r.text
+    u'{"data":[{"x1":0.0,"Prediction":[-0.032727272727271384]}]}'
+
+    Posting a request to version 2 with multiple records to score:
+
+    >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"x1": 0.0}, {"x1": 4.0}]})
+    >>> r.text
+    u'{"data":[{"x1":0.0,"Prediction":[-0.032727272727271384]},{"x1":4.0,"Prediction":[9.743030303030302]}]}'
 

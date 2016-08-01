@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="kmeansmodel-init">
-<h1><a class="reference internal" href="index.html"><em>KMeansModel</em></a>  __init__<a class="headerlink" href="#kmeansmodel-init" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">KMeansModel</span></a>  __init__<a class="headerlink" href="#kmeansmodel-init" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="__init__">
@@ -135,33 +149,33 @@
 </tr>
 </tbody>
 </table>
-<p>k-means <a class="reference internal" href="#r13" id="id1">[R13]</a> is an unsupervised algorithm used to partition
+<p>k-means <a class="reference internal" href="../model-random_forest_regressor/new.html#r15" id="id1">[R15]</a> is an unsupervised algorithm used to partition
 the data into &#8216;k&#8217; clusters.
 Each observation can belong to only one cluster, the cluster with the nearest
 mean.
 The k-means model is initialized, trained on columns of a frame, and used to
 predict cluster assignments for a frame.
-This model runs the MLLib implementation of k-means <a class="reference internal" href="#r14" id="id2">[R14]</a> with enhanced
+This model runs the MLLib implementation of k-means <a class="reference internal" href="../model-random_forest_regressor/new.html#r16" id="id2">[R16]</a> with enhanced
 features, computing the number of elements in each cluster during training.
 During predict, it computes the distance of each observation from its cluster
 center and also from every other cluster center.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r13" rules="none">
+<table class="docutils citation" frame="void" id="r15" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R13]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/K-means_clustering">https://en.wikipedia.org/wiki/K-means_clustering</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R15]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/K-means_clustering">https://en.wikipedia.org/wiki/K-means_clustering</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r14" rules="none">
+<table class="docutils citation" frame="void" id="r16" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R14]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#k-means">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#k-means</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R16]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#k-means">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#k-means</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing two columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  data  name</span>
 <span class="go">===============</span>
 <span class="go">[0]   2.0  ab</span>
@@ -175,18 +189,53 @@ center and also from every other cluster center.</p>
 <span class="go">[8]   5.0  qr</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">KMeansModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{u&#39;within_set_sum_of_squared_error&#39;: 5.3, u&#39;cluster_size&#39;: {u&#39;Cluster:1&#39;: 5, u&#39;Cluster:3&#39;: 2, u&#39;Cluster:2&#39;: 2}}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;within_set_sum_of_squared_error&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;within_set_sum_of_squared_error&#39;</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;data&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">column_names</span>
 <span class="go">[u&#39;data&#39;, u&#39;name&#39;, u&#39;distance_from_cluster_1&#39;, u&#39;distance_from_cluster_2&#39;, u&#39;distance_from_cluster_3&#39;, u&#39;predicted_cluster&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Take the path to the published model and run it in the Scoring Engine</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Posting a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;KMeans Model&quot;,&quot;model_class&quot;:&quot;org.trustedanalytics.atk.scoring.models.KMeansScoreModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;data&quot;,&quot;value&quot;:&quot;Double&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;data&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;score&quot;,&quot;value&quot;:&quot;Int&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 1 of Scoring Engine supporting strings for requests and response:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;1&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 1 with multiple records to score:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&amp;data=7.0&amp;data=5.0&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;1,2,2&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#8216;data&#8217; is the name of the observation column that the model was trained on:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;data&quot;:2.0,&quot;score&quot;:1}]}&#39;</span>
+</pre></div>
+</div>
+<p>Posting a request to version 2 with multiple records to score:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;http://mymodel.demotrustedanalytics.com/v2/score&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="mf">7.0</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;data&quot;:2.0,&quot;score&quot;:1},{&quot;data&quot;:7.0,&quot;score&quot;:2},{&quot;data&quot;:5.0,&quot;score&quot;:2}]}&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -214,7 +263,7 @@ center and also from every other cluster center.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

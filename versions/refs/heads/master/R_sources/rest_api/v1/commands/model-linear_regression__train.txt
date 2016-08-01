@@ -4,7 +4,6 @@
 :doc:`Commands <index>` model:linear_regression/train
 -----------------------------------------------------
 
-|ALPHA|
 Build linear regression model.
 
 POST /v1/commands/
@@ -43,16 +42,15 @@ Request
 
     ..
 
-        A frame to train the model on.
+        A frame to train the model on
 
 
 
-    **label_column** : unicode
+    **value_column** : unicode
 
     ..
 
-        Column name containing the label
-        for each observation.
+        Column name containing the value for each observation.
 
 
 
@@ -65,54 +63,51 @@ Request
 
 
 
-    **intercept** : bool (default=True)
+    **elastic_net_parameter** : float64 (default=0.0)
 
     ..
 
-        Flag indicating if the algorithm adds an intercept.
-        Default is true.
+        Parameter for the ElasticNet mixing. Default is 0.0
 
 
 
-    **num_iterations** : int32 (default=100)
-
-    ..
-
-        Number of iterations for SGD. Default is 100.
-
-
-
-    **step_size** : float64 (default=1.0)
+    **fit_intercept** : bool (default=True)
 
     ..
 
-        Initial step size for SGD optimizer for the first step.
-        Default is 1.0.
+        Parameter for whether to fit an intercept term. Default is true
 
 
 
-    **reg_type** : unicode (default=None)
-
-    ..
-
-        Regularization "L1" or "L2".
-        Default is "L2".
-
-
-
-    **reg_param** : float64 (default=0.01)
+    **max_iterations** : int32 (default=100)
 
     ..
 
-        Regularization parameter. Default is 0.01.
+        Parameter for maximum number of iterations. Default is 100
 
 
 
-    **mini_batch_fraction** : float64 (default=1.0)
+    **reg_param** : float64 (default=0.0)
 
     ..
 
-        Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.
+        Parameter for regularization. Default is 0.0
+
+
+
+    **standardization** : bool (default=True)
+
+    ..
+
+        Parameter for whether to standardize the training features before fitting the model. Default is true
+
+
+
+    **tolerance** : float64 (default=1e-06)
+
+    ..
+
+        Parameter for the convergence tolerance for iterative algorithms. Default is 1E-6
 
 
 

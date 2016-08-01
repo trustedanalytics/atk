@@ -4,8 +4,8 @@
 :doc:`Commands <index>` model:daal_linear_regression/train
 ----------------------------------------------------------
 
-|ALPHA|
-Build linear regression model.
+|BETA|
+Build Intel DAAL linear regression model.
 
 POST /v1/commands/
 ==================
@@ -43,23 +43,31 @@ Request
 
     ..
 
-        <Missing Description>
+        A frame to train or test the model on.
 
 
 
-    **feature_columns** : list
-
-    ..
-
-        <Missing Description>
-
-
-
-    **label_columns** : list
+    **value_column** : unicode
 
     ..
 
-        <Missing Description>
+        Column name containing the value for each observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        List of column(s) containing the observations.
+
+
+
+    **fit_intercept** : bool (default=True)
+
+    ..
+
+        Parameter for whether to fit an intercept term. Default is true
 
 
 
@@ -73,7 +81,7 @@ Request
 
 **Description**
 
-Creating a LinearRegression Model using the observation column and target column of the train frame
+Create Intel DAAL LinearRegression Model using the observation column and target column of the train frame
 
 |
 
@@ -121,6 +129,6 @@ Response
 
 ``dict``
 
-        Trained linear regression model
+        Trained Intel DAAL linear regression model
 
 

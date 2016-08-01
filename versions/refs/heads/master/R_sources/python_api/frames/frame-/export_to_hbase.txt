@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: export_to_hbase(self, table_name, key_column_name=None, family_name=None)
+.. function:: export_to_hbase(self, table_name, key_column_name=None, family_name='familyColumn')
 
     Write current frame to HBase table.
 
@@ -28,7 +28,7 @@
 
 
 
-        **family_name** : unicode (default=None)
+        **family_name** : unicode (default=familyColumn)
 
         ..
 

@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-bin-column-equal-depth">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  bin_column_equal_depth<a class="headerlink" href="#vertexframe-bin-column-equal-depth" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  bin_column_equal_depth<a class="headerlink" href="#vertexframe-bin-column-equal-depth" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="bin_column_equal_depth">
@@ -153,7 +167,7 @@ same number of elements.
 For <img class="math" src="../../../R_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> bins of a column <img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> of length <img class="math" src="../../../R_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/>, the bin
 number is determined by:</p>
 <div class="math">
-<p><img src="../../../R_images/math/43300a84d4067757d828ab860333ef7b9e537836.png" alt="\lceil n * \frac { f(C) }{ m } \rceil"/></p>
+<p><img src="../../../R_images/math/4869d6b1ca7d85042010f93db6f3eda94fce35fe.png" alt="\lceil n * \frac { f(C) }{ m } \rceil"/></p>
 </div><p>where <img class="math" src="../../../R_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> is a tie-adjusted ranking function over values of
 <img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>.
 If there are multiples of the same value in <img class="math" src="../../../R_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>, then their
@@ -172,7 +186,7 @@ belong to the same bin.</li>
 </ol>
 <p class="rubric">Examples</p>
 <p>Given a frame with column <em>a</em> accessed by a Frame object <em>my_frame</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a</span>
 <span class="go">========</span>
 <span class="go">[0]    1</span>
@@ -192,7 +206,7 @@ belong to the same bin.</li>
 The data should be grouped into a maximum of five bins.
 Note that each bin will have the same quantity of members (as much as
 possible):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEDBinned&#39;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;aEDBinned&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a   aEDBinned</span>
@@ -210,7 +224,7 @@ possible):</p>
 <span class="go">[10]  89          4</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">cutoffs</span>
 <span class="go">[1.0, 2.0, 5.0, 13.0, 34.0, 89.0]</span>
 </pre></div>
 </div>
@@ -239,7 +253,7 @@ possible):</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

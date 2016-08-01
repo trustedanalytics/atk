@@ -7,7 +7,6 @@
 
 .. function:: score(self, user_id, item_id)
 
-    |BETA|
     Collaborative Filtering Predict (ALS).
 
 

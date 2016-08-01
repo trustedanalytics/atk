@@ -1,3 +1,20 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
 <!DOCTYPE html>
 
 <html>
@@ -81,14 +98,11 @@
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="../../../index.html">Table Of Contents</a></h3>
@@ -111,7 +125,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-schema">
-<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  schema<a class="headerlink" href="#vertexframe-schema" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  schema<a class="headerlink" href="#vertexframe-schema" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="attribute">
 <dt id="schema">
@@ -136,13 +150,13 @@ associated data types.
 It is retrieved as a list of tuples.
 Each tuple has the name and data type of one of the frame&#8217;s columns.</p>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">schema</span>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">schema</span>
 <span class="go">[(u&#39;name&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;age&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;tenure&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;phone&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
 </div>
 <p>Note how the types shown are the raw, underlying types used in python.  To see the schema in a friendlier
 format, used the __repr__ presentation, invoke by simply entering the frame:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
 <span class="go">Frame &quot;example_frame&quot;</span>
 <span class="go">row_count = 4</span>
 <span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode]</span>
@@ -174,7 +188,7 @@ format, used the __repr__ presentation, invoke by simply entering the frame:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 25, 2016.
+      Last updated on Jul 29, 2016.
       </li>
     </ul>
     </div>

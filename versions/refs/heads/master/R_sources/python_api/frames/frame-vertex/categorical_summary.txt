@@ -7,7 +7,6 @@
 
 .. function:: categorical_summary(self, *column_inputs)
 
-    |ALPHA|
     Compute a summary of the data in a column(s) for categorical or numerical data types.
 
 

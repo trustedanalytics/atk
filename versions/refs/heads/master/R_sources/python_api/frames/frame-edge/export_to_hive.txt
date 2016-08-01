@@ -7,7 +7,7 @@
 
 .. function:: export_to_hive(self, table_name)
 
-    Write current frame to Hive table.
+    Write  current frame to Hive table.
 
 
     :Parameters:
@@ -19,7 +19,7 @@
             The name of the Hive table that will contain the exported frame
 
 
-    Table must not exist in Hive.
+    Table must not exist in Hive. Hive does not support case sensitive table names and columns names. Hence column names with uppercase letters will be converted to lower case by Hive.
     Export of Vectors is not currently supported.
 
     Examples
