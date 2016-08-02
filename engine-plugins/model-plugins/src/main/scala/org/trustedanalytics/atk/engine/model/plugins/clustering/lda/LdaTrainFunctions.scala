@@ -64,6 +64,7 @@ object LdaTrainFunctions extends Serializable {
     if (args.randomSeed.isDefined) {
       ldaRunner.setSeed(args.randomSeed.get)
     }
+    ldaRunner.setCheckpointInterval(args.checkPointInterval)
     ldaRunner
   }
 
