@@ -136,6 +136,16 @@ Request
 
 
 
+    **check_point_interval** : int32 (default=10)
+
+    ..
+
+        Period (in iterations) between checkpoints (default = 10). Checkpointing helps with recovery
+        * (when nodes fail). It also helps with eliminating temporary shuffle files on disk, which can be
+        * important when LDA is run for many iterations. If the checkpoint directory is not set, this setting is ignored.
+
+
+
 |
 
 **Headers** ::

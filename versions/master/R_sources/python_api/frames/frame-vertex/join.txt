@@ -206,8 +206,8 @@
     >>> composite_join.inspect()
     [#]  col_0  col_1_L  col_2  col_1_R
     ====================================
-    [0]      1      354  a      Ice-land
-    [1]      1      354  a      Iceland
+    [0]      1      354  a      Iceland
+    [1]      1      354  a      Ice-land
     [2]      2      100  b      India
     [3]      3       47  a      Norway
     [4]      4      968  c      Oman

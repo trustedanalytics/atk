@@ -114,8 +114,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
-<ul class="simple">
-</ul>
 
         </div>
       </div>
@@ -129,7 +127,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>document_column_name</em>, <em>word_column_name</em>, <em>word_count_column_name</em>, <em>max_iterations=20</em>, <em>alpha=None</em>, <em>beta=1.10000002384</em>, <em>num_topics=10</em>, <em>random_seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>document_column_name</em>, <em>word_column_name</em>, <em>word_count_column_name</em>, <em>max_iterations=20</em>, <em>alpha=None</em>, <em>beta=1.10000002384</em>, <em>num_topics=10</em>, <em>random_seed=None</em>, <em>check_point_interval=10</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates Latent Dirichlet Allocation model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -197,6 +195,12 @@ used in the LDA model. Setting the random seed to the same value every
 time the model is trained, allows LDA to generate the same topic distribution
 if the corpus and LDA parameters are unchanged.</p>
 </div></blockquote>
+<p><strong>check_point_interval</strong> : int32 (default=10)</p>
+<blockquote>
+<div><p>Period (in iterations) between checkpoints (default = 10). Checkpointing helps with recovery
+* (when nodes fail). It also helps with eliminating temporary shuffle files on disk, which can be
+* important when LDA is run for many iterations. If the checkpoint directory is not set, this setting is ignored.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
@@ -256,7 +260,7 @@ if the corpus and LDA parameters are unchanged.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 29, 2016.
+      Last updated on Aug 03, 2016.
       </li>
     </ul>
     </div>

@@ -113,8 +113,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
-<ul class="simple">
-</ul>
 
         </div>
       </div>
@@ -204,12 +202,18 @@ Valid value range is all positive int.
 Default is 10.</p>
 </div></blockquote>
 <p><strong>random_seed</strong> : int64 (default=None)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>An optional random seed.
 The random seed is used to initialize the pseudorandom number generator
 used in the LDA model. Setting the random seed to the same value every
 time the model is trained, allows LDA to generate the same topic distribution
 if the corpus and LDA parameters are unchanged.</p>
+</div></blockquote>
+<p><strong>check_point_interval</strong> : int32 (default=10)</p>
+<blockquote class="last">
+<div><p>Period (in iterations) between checkpoints (default = 10). Checkpointing helps with recovery
+* (when nodes fail). It also helps with eliminating temporary shuffle files on disk, which can be
+* important when LDA is run for many iterations. If the checkpoint directory is not set, this setting is ignored.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -318,7 +322,7 @@ if the corpus and LDA parameters are unchanged.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jul 29, 2016.
+      Last updated on Aug 03, 2016.
       </li>
     </ul>
     </div>
