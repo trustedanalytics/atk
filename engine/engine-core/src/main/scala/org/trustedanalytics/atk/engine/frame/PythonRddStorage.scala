@@ -35,6 +35,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.bson.types.BasicBSONList
 import org.bson.{ BSON, BasicBSONObject }
+import scala.collection.mutable
 import scala.collection.mutable.{ ListBuffer, ArrayBuffer }
 import com.google.common.io.Files
 
@@ -43,6 +44,8 @@ import scala.collection.JavaConversions._
 import scala.reflect.io.{ Directory, Path }
 
 object PythonRddStorage {
+  //Track added files to prevent illegal argument exception if file is added multiple times in Spark 1.6+
+  private val addedFiles = new mutable.HashSet[String]()
 
   private def decodePythonBase64EncodedStrToBytes(byteStr: String): Array[Byte] = {
     decodeBase64(byteStr)
@@ -103,7 +106,7 @@ object PythonRddStorage {
     val pythonIncludes = new JArrayList[String]()
     if (uploads != null) {
       for (k <- uploads.indices) {
-        sc.addFile(s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
+        addFileToSparkContext(sc, s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
         pythonIncludes.add(uploads(k))
       }
     }
@@ -165,7 +168,7 @@ object PythonRddStorage {
     val sparkPython: Path = (EngineConfig.sparkHome: Path) / "python"
     environment.put("PYTHONPATH",
       Seq(sparkPython,
-        sparkPython / "lib" / "py4j-0.8.2.1-src.zip",
+        sparkPython / "lib" / "py4j-0.9-src.zip",
         //Support dev machines without installing python packages
         //TODO: Maybe hide behind a flag?
         Directory.Current.get / "python").map(_.toString()).mkString(":"))
@@ -176,7 +179,7 @@ object PythonRddStorage {
 
     val pyIncludes = new JArrayList[String]()
 
-    sc.addFile(s"file://$pythonDepZip")
+    addFileToSparkContext(sc, s"file://$pythonDepZip")
     pyIncludes.add("trustedanalytics.zip")
 
     if (udf.dependencies != null) {
@@ -261,6 +264,19 @@ object PythonRddStorage {
     }).map(converter)
 
     resultRdd
+  }
+
+  //Add file to Spark context only once
+  //Prevents illegal argument exception if file is added multiple times in Spark 1.6+
+  private def addFileToSparkContext(sc: SparkContext, file: String): Unit = {
+    if (!addedFiles.contains(file)) {
+      this.synchronized {
+        if (!addedFiles.contains(file)) {
+          sc.addFile(file)
+          addedFiles.add(file)
+        }
+      }
+    }
   }
 }
 

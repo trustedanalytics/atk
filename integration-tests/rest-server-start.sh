@@ -29,9 +29,9 @@ CONFDIR=$DIR/conf
 
 # needed for Python UDFs to work locally
 # was needed for Python UDF tests to pass locally
-if [ -d "/usr/lib/spark/spark-cdh5.5.0-release/" ]
+if [ -d "/usr/lib/spark/spark-cdh5.7.1-release/" ]
 then
-    export SPARK_HOME=/usr/lib/spark/spark-cdh5.5.0-release/
+    export SPARK_HOME=/usr/lib/spark/spark-cdh5.7.1-release/
 elif [ -z "$SPARK_HOME" ]
 then
     export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark/
@@ -40,7 +40,7 @@ fi
 echo "$NAME SPARK_HOME=$SPARK_HOME"
 
 export MAVEN_REPO=~/.m2/repository
-export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar:`ls $TARGET_DIR/dependencies/*.jar | tr '\n' ':' `
+export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.5/scala-library-2.10.5.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.5/scala-reflect-2.10.5.jar:`ls $TARGET_DIR/dependencies/*.jar | tr '\n' ':' `
 
 
 export SEARCH_PATH="-Datk.module-loader.search-path=${DIR}/..:${HOME}/.m2/"

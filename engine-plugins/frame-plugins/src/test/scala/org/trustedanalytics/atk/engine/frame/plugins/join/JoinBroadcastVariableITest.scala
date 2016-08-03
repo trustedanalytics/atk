@@ -46,11 +46,11 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
     broadcastVariable.broadcastMultiMap.value.size should equal(5)
-    broadcastVariable.get(List(1)).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
-    broadcastVariable.get(List(2)).get should contain theSameElementsAs Set(idCountryNames(2))
-    broadcastVariable.get(List(3)).get should contain theSameElementsAs Set(idCountryNames(3))
-    broadcastVariable.get(List(4)).get should contain theSameElementsAs Set(idCountryNames(4))
-    broadcastVariable.get(List(6)).get should contain theSameElementsAs Set(idCountryNames(5))
+    broadcastVariable.get(List(1)).get should contain theSameElementsAs List(idCountryNames(0), idCountryNames(1))
+    broadcastVariable.get(List(2)).get should contain theSameElementsAs List(idCountryNames(2))
+    broadcastVariable.get(List(3)).get should contain theSameElementsAs List(idCountryNames(3))
+    broadcastVariable.get(List(4)).get should contain theSameElementsAs List(idCountryNames(4))
+    broadcastVariable.get(List(6)).get should contain theSameElementsAs List(idCountryNames(5))
     broadcastVariable.get(List(8)).isDefined should equal(false)
 
   }
@@ -62,11 +62,11 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.get(List(1)).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
-    broadcastVariable.get(List(2)).get should contain theSameElementsAs Set(idCountryNames(2))
-    broadcastVariable.get(List(3)).get should contain theSameElementsAs Set(idCountryNames(3))
-    broadcastVariable.get(List(4)).get should contain theSameElementsAs Set(idCountryNames(4))
-    broadcastVariable.get(List(6)).get should contain theSameElementsAs Set(idCountryNames(5))
+    broadcastVariable.get(List(1)).get should contain theSameElementsAs List(idCountryNames(0), idCountryNames(1))
+    broadcastVariable.get(List(2)).get should contain theSameElementsAs List(idCountryNames(2))
+    broadcastVariable.get(List(3)).get should contain theSameElementsAs List(idCountryNames(3))
+    broadcastVariable.get(List(4)).get should contain theSameElementsAs List(idCountryNames(4))
+    broadcastVariable.get(List(6)).get should contain theSameElementsAs List(idCountryNames(5))
     broadcastVariable.get(List(8)).isDefined should equal(false)
 
   }

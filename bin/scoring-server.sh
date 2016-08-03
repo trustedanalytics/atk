@@ -20,7 +20,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 
 export MAVEN_REPO=~/.m2/repository
-CP=$DIR/../conf/:/etc/hadoop/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar
+CP=$DIR/../conf/:/etc/hadoop/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.5/scala-library-2.10.5.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.5/scala-reflect-2.10.5.jar
 
 export SEARCH_PATH="-Datk.module-loader.search-path=module-loader/target:scoring-engine/target:scoring-interfaces/target:${HOME}/.m2/"
 pushd $DIR/..

@@ -1,17 +1,17 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
-import org.apache.spark.sql.catalyst.expressions.{ GenericRow, GenericMutableRow }
+import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
 
@@ -85,9 +85,10 @@ object JoinRddFunctions extends Serializable {
     else {
       val leftFrame = left.frame.toDataFrame
       val rightFrame = right.frame.toDataFrame
-      val joinedFrame = leftFrame.join(
-        rightFrame,
-        left.joinColumns
+      val expression = expressionMaker(leftFrame, rightFrame, left.joinColumns, right.joinColumns)
+      val joinedFrame = leftFrame.join(rightFrame,
+        expression,
+        joinType = "inner"
       )
       joinedFrame.rdd
     }
@@ -244,7 +245,7 @@ object JoinRddFunctions extends Serializable {
 
     joinedRdd.map(row => {
       val rowArray = row.toSeq.toArray
-      leftJoinIndices.zip(rightJoinIndices).map {
+      leftJoinIndices.zip(rightJoinIndices).foreach {
         case (leftIndex, rightIndex) => {
           if (row.get(leftIndex) == null) {
             rowArray(leftIndex) = row.get(rightIndex)
@@ -270,7 +271,7 @@ object JoinRddFunctions extends Serializable {
                          right: RddJoinParam): FrameRdd = {
     val leftSchema = left.frame.frameSchema
     val rightSchema = right.frame.frameSchema
-    val newSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+    val newSchema: Schema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
     val frameRdd = new FrameRdd(newSchema, joinedRdd)
     val leftColIndices = leftSchema.columnIndices(left.joinColumns)
     val leftColNames = leftColIndices.map(colindex => newSchema.column(colindex).name)
@@ -295,18 +296,17 @@ object JoinRddFunctions extends Serializable {
     val leftSchema = left.frame.frameSchema
     val rightSchema = right.frame.frameSchema
 
-    // Create new schema
+    var newSchema: Schema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+
     if (how == "inner") {
-      val newRightSchema = rightSchema.dropColumns(right.joinColumns.toList)
-      val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
-      new FrameRdd(newSchema, joinedRdd)
+      leftSchema.columnIndices(left.joinColumns).foreach(leftIndex => {
+        newSchema = newSchema.renameColumn(newSchema.column(leftIndex).name, leftSchema.column(leftIndex).name)
+      })
     }
-    else {
-      val newSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
-      val frameRdd = new FrameRdd(newSchema, joinedRdd)
-      val rightColIndices = rightSchema.columnIndices(right.joinColumns).map(rightindex => leftSchema.columns.size + rightindex)
-      val rightColNames = rightColIndices.map(colindex => newSchema.column(colindex).name)
-      frameRdd.dropColumns(rightColNames.toList)
-    }
+    val frameRdd = new FrameRdd(newSchema, joinedRdd)
+    val rightColIndices = rightSchema.columnIndices(right.joinColumns).map(rightindex => leftSchema.columns.size + rightindex)
+    val rightColNames = rightColIndices.map(colindex => newSchema.column(colindex).name)
+    frameRdd.dropColumns(rightColNames.toList)
   }
+
 }
