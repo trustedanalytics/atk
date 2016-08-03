@@ -271,8 +271,10 @@ object PythonRddStorage {
   private def addFileToSparkContext(sc: SparkContext, file: String): Unit = {
     if (!addedFiles.contains(file)) {
       this.synchronized {
-        sc.addFile(file)
-        addedFiles.add(file)
+        if (!addedFiles.contains(file)) {
+          sc.addFile(file)
+          addedFiles.add(file)
+        }
       }
     }
   }
