@@ -1,0 +1,74 @@
+
+:doc:`VertexFrame <index>`  timeseries_breusch_pagan_test
+*********************************************************
+
+------
+
+
+.. function:: timeseries_breusch_pagan_test(self, residuals, factors)
+
+    Breusch-Pagan statistics test
+
+
+    :Parameters:
+
+        **residuals** : unicode
+
+        ..
+
+            Name of the column that contains residual values
+
+
+
+        **factors** : list
+
+        ..
+
+            Name of the column(s) that contain factors 
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Performs the Breusch-Pagan test for heteroskedasticity.
+
+    Examples
+    --------
+
+
+    Consider the following frame:
+
+    >>> frame.inspect()
+    [#]  AT             V              AP             RH             PE
+    ==============================================================================
+    [0]  8.34000015259  40.7700004578  1010.84002686  90.0100021362  480.480010986
+    [1]  23.6399993896  58.4900016785  1011.40002441  74.1999969482         445.75
+    [2]  29.7399997711  56.9000015259  1007.15002441  41.9099998474  438.760009766
+    [3]  19.0699996948  49.6899986267   1007.2199707  76.7900009155  453.089996338
+    [4]  11.8000001907  40.6599998474  1017.13000488  97.1999969482  464.429992676
+    [5]   13.970000267  39.1599998474  1016.04998779  84.5999984741  470.959991455
+    [6]  22.1000003815  71.2900009155  1008.20001221  75.3799972534  442.350006104
+    [7]   14.470000267  41.7599983215  1021.97998047  78.4100036621          464.0
+    [8]          31.25  69.5100021362        1010.25  36.8300018311  428.769989014
+    [9]  6.76999998093  38.1800003052  1017.79998779  81.1299972534  484.299987793
+
+    Calculate the Bruesh-Pagan test statistic where the "AT" column contains residual values and the other columns are
+    factors:
+
+    >>> result = frame.timeseries_breusch_pagan_test("AT",["V","AP","RH","PE"])
+    [===Job Progress===]
+
+    The result contains the test statistic and p-value:
+
+    >>> result["test_stat"]
+    22.674159327676357
+
+    >>> result["p_value"]
+    0.00014708935047758054
+

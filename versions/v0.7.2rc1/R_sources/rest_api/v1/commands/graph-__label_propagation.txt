@@ -1,0 +1,173 @@
+
+
+------------------------------------------------
+:doc:`Commands <index>` graph:/label_propagation
+------------------------------------------------
+
+Classification on sparse data using Belief Propagation.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:/label_propagation
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **prior_property** : unicode
+
+    ..
+
+        Name of the vertex property which contains the prior belief for the vertex.
+
+
+
+    **posterior_property** : unicode
+
+    ..
+
+        Name of the vertex property which will contain the posterior belief for each vertex.
+
+
+
+    **state_space_size** : int32
+
+    ..
+
+        Number of features
+
+
+
+    **edge_weight_property** : unicode (default=)
+
+    ..
+
+        Name of the edge property that contains the edge weight for each edge.
+
+
+
+    **convergence_threshold** : float64 (default=0.0)
+
+    ..
+
+        Belief propagation will terminate when the average change in posterior beliefs between supersteps is less than or equal to this threshold.
+
+
+
+    **max_iterations** : int32 (default=20)
+
+    ..
+
+        The maximum number of supersteps that the algorithm will execute.The valid range is all positive int.
+
+
+
+    **was_labeled_property_name** : unicode (default=None)
+
+    ..
+
+        (LP only) - Represents the column/property name for the was labeled field
+
+
+
+    **alpha** : float32 (default=None)
+
+    ..
+
+        (LP only) - Represents the tradeoff parameter that controls how much influence an external classifier's prediction contributes to the final prediction.
+        This is for the case where an external classifier is available that can produce initial probabilistic classification on unlabeled examples, and
+        the option allows incorporating external classifier's prediction into the LP training process.The valid value range is [0.0,1.0].Default is 0.1
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Belief propagation by the sum-product algorithm.
+ This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
+ The priors are read from a property in the graph, the posteriors are written to another property in the graph.
+ This is the GraphX-based implementation of belief propagation.
+
+ See :ref:`Loopy Belief Propagation <python_api/frames/frame-/loopy_belief_propagation>`
+ for a more in-depth discussion of |BP| and |LBP|.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Progress report for belief propagation in the format of a multiple-line string.
+
+

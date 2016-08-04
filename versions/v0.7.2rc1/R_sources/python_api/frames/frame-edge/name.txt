@@ -1,0 +1,31 @@
+
+:doc:`EdgeFrame <index>`  name
+******************************
+
+------
+
+
+.. attribute:: name
+
+    Set or get the name of the frame object.
+
+
+    :Parameters:
+
+    Change or retrieve frame object identification.
+    Identification names must start with a letter and are limited to
+    alphanumeric characters and the ``_`` character.
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> my_frame.name
+        "abc"
+
+        >>> my_frame.name = "xyz"
+        >>> my_frame.name
+        "xyz"
+
