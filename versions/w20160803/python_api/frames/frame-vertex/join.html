@@ -1,0 +1,345 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame join &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="VertexFrame inspect" href="inspect.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="inspect.html" title="VertexFrame inspect"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="last_read_date.html" title="VertexFrame last_read_date"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-join">
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  join<a class="headerlink" href="#vertexframe-join" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>self</em>, <em>right</em>, <em>left_on</em>, <em>right_on=None</em>, <em>how='inner'</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join operation on one or two frames, creating a new frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>right</strong> : Frame</p>
+<blockquote>
+<div><p>Another frame to join with</p>
+</div></blockquote>
+<p><strong>left_on</strong> : list</p>
+<blockquote>
+<div><p>Names of the columns in the left frame used to match up the two frames.</p>
+</div></blockquote>
+<p><strong>right_on</strong> : list (default=None)</p>
+<blockquote>
+<div><p>Names of the columns in the right frame used to match up the two frames. Default is the same as the left frame.</p>
+</div></blockquote>
+<p><strong>how</strong> : str (default=inner)</p>
+<blockquote>
+<div><p>How to qualify the data to be joined together.  Must be one of the following:  &#8216;left&#8217;, &#8216;right&#8217;, &#8216;inner&#8217;, &#8216;outer&#8217;.  Default is &#8216;inner&#8217;</p>
+</div></blockquote>
+<p><strong>name</strong> : str (default=None)</p>
+<blockquote>
+<div><p>Name of the result grouped frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>A new frame with the results of the join</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Create a new frame from a SQL JOIN operation with another frame.
+The frame on the &#8216;left&#8217; is the currently active frame.
+The frame on the &#8216;right&#8217; is another frame.
+This method take column(s) in the left frame and matches its values
+with column(s) in the right frame.
+Using the default &#8216;how&#8217; option [&#8216;inner&#8217;] will only allow data in the
+resultant frame if both the left and right frames have the same value
+in the matching column(s).
+Using the &#8216;left&#8217; &#8216;how&#8217; option will allow any data in the resultant
+frame if it exists in the left frame, but will allow any data from the
+right frame if it has a value in its column(s) which matches the value in
+the left frame column(s).
+Using the &#8216;right&#8217; option works similarly, except it keeps all the data
+from the right frame and only the data from the left frame when it
+matches.
+The &#8216;outer&#8217; option provides a frame with data from both frames where
+the left and right frames did not have the same value in the matching
+column(s).</p>
+<p class="rubric">Notes</p>
+<p>When a column is named the same in both frames, it will result in two
+columns in the new frame.
+The column from the <em>left</em> frame (originally the current frame) will be
+copied and the column name will have the string &#8220;_L&#8221; added to it.
+The same thing will happen with the column from the <em>right</em> frame,
+except its name has the string &#8220;_R&#8221; appended. The order of columns
+after this method is called is not guaranteed.</p>
+<p>It is recommended that you rename the columns to meaningful terms prior
+to using the <code class="docutils literal"><span class="pre">join</span></code> method.
+Keep in mind that unicode in column names will likely cause the
+drop_frames() method (and others) to fail!</p>
+<p class="rubric">Examples</p>
+<p>Consider two frames: codes and colors</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers</span>
+<span class="go">============</span>
+<span class="go">[0]        1</span>
+<span class="go">[1]        3</span>
+<span class="go">[2]        1</span>
+<span class="go">[3]        0</span>
+<span class="go">[4]        2</span>
+<span class="go">[5]        1</span>
+<span class="go">[6]        5</span>
+<span class="go">[7]        3</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  color</span>
+<span class="go">====================</span>
+<span class="go">[0]        1  red</span>
+<span class="go">[1]        2  yellow</span>
+<span class="go">[2]        3  green</span>
+<span class="go">[3]        4  blue</span>
+</pre></div>
+</div>
+<p>Join them on the &#8216;numbers&#8217; column (&#8216;inner&#8217; join by default)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  color</span>
+<span class="go">====================</span>
+<span class="go">[0]        1  red</span>
+<span class="go">[1]        3  green</span>
+<span class="go">[2]        1  red</span>
+<span class="go">[3]        2  yellow</span>
+<span class="go">[4]        1  red</span>
+<span class="go">[5]        3  green</span>
+</pre></div>
+</div>
+<p>(The join adds an extra column <a href="#id1"><span class="problematic" id="id2">*</span></a>_R which is the join column from the right frame; it may be disregarded)</p>
+<p>Try a &#8216;left&#8217; join, which includes all the rows of the codes frame.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers_L  color</span>
+<span class="go">======================</span>
+<span class="go">[0]          1  red</span>
+<span class="go">[1]          3  green</span>
+<span class="go">[2]          1  red</span>
+<span class="go">[3]          0  None</span>
+<span class="go">[4]          2  yellow</span>
+<span class="go">[5]          1  red</span>
+<span class="go">[6]          5  None</span>
+<span class="go">[7]          3  green</span>
+</pre></div>
+</div>
+<p>And an outer join:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s1">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers_L  color</span>
+<span class="go">======================</span>
+<span class="go">[0]          0  None</span>
+<span class="go">[1]          1  red</span>
+<span class="go">[2]          1  red</span>
+<span class="go">[3]          1  red</span>
+<span class="go">[4]          2  yellow</span>
+<span class="go">[5]          3  green</span>
+<span class="go">[6]          3  green</span>
+<span class="go">[7]          4  blue</span>
+<span class="go">[8]          5  None</span>
+</pre></div>
+</div>
+<p>Consider two frames: country_codes_frame and country_names_frame</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_codes_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col_0  col_1  col_2</span>
+<span class="go">========================</span>
+<span class="go">[0]      1    354  a</span>
+<span class="go">[1]      2     91  a</span>
+<span class="go">[2]      2    100  b</span>
+<span class="go">[3]      3     47  a</span>
+<span class="go">[4]      4    968  c</span>
+<span class="go">[5]      5     50  c</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">country_names_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col_0  col_1     col_2</span>
+<span class="go">===========================</span>
+<span class="go">[0]      1  Iceland   a</span>
+<span class="go">[1]      1  Ice-land  a</span>
+<span class="go">[2]      2  India     b</span>
+<span class="go">[3]      3  Norway    a</span>
+<span class="go">[4]      4  Oman      c</span>
+<span class="go">[5]      6  Germany   c</span>
+</pre></div>
+</div>
+<p>Join them on the &#8216;col_0&#8217; and &#8216;col_2&#8217; columns (&#8216;inner&#8217; join by default)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span> <span class="o">=</span> <span class="n">country_codes_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">country_names_frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;col_0&#39;</span><span class="p">,</span> <span class="s1">&#39;col_2&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">composite_join</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col_0  col_1_L  col_2  col_1_R</span>
+<span class="go">====================================</span>
+<span class="go">[0]      1      354  a      Iceland</span>
+<span class="go">[1]      1      354  a      Ice-land</span>
+<span class="go">[2]      2      100  b      India</span>
+<span class="go">[3]      3       47  a      Norway</span>
+<span class="go">[4]      4      968  c      Oman</span>
+</pre></div>
+</div>
+<p>More examples can be found in the <span class="xref std std-ref">user manual</span>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Aug 03, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -5,10 +5,6 @@
    "type": "Master", 
    "version": "master"
   }, 
-  "refs/heads/master": {
-   "type": "Weekly", 
-   "version": "refs/heads/master"
-  }, 
   "v.0.6.0": {
    "type": "Production", 
    "version": "v.0.6.0"
@@ -72,6 +68,10 @@
   "w20160205": {
    "type": "Weekly", 
    "version": "w20160205"
+  }, 
+  "w20160803": {
+   "type": "Weekly", 
+   "version": "w20160803"
   }
  }
 }
