@@ -1,0 +1,76 @@
+
+:doc:`CoxPhModel <index>`  train
+********************************
+
+------
+
+
+.. function:: train(self, frame, time_column, covariate_columns, censor_column, convergence_tolerance=1e-06, max_steps=100)
+
+    |ALPHA|
+    Build Cox proportional hazard model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **time_column** : unicode
+
+        ..
+
+            Column containing the time data.
+
+
+
+        **covariate_columns** : list
+
+        ..
+
+            List of column(s) containing the co-variate data.
+
+
+
+        **censor_column** : unicode
+
+        ..
+
+            Column containing the censored data. Can have 2 values: 0 - event did not happen (censored); 1 - event happened (not censored)
+
+
+
+        **convergence_tolerance** : float64 (default=1e-06)
+
+        ..
+
+            Convergence tolerance
+
+
+
+        **max_steps** : int32 (default=100)
+
+        ..
+
+            Max steps.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Trained Cox proportional hazard model
+    Fitting a CoxProportionalHazard Model using the covariate column(s)
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
