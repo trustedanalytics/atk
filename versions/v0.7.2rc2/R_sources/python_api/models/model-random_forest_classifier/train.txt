@@ -1,0 +1,127 @@
+
+:doc:`RandomForestClassifierModel <index>`  train
+*************************************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=1701442563, categorical_features_info=None, feature_subset_category=None)
+
+    Build Random Forests Classifier model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column name containing the label for each observation
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Column(s) containing the observations
+
+
+
+        **num_classes** : int32 (default=2)
+
+        ..
+
+            Number of classes for classification. Default is 2.
+
+
+
+        **num_trees** : int32 (default=1)
+
+        ..
+
+            Number of tress in the random forest. Default is 1.
+
+
+
+        **impurity** : unicode (default=gini)
+
+        ..
+
+            Criterion used for information gain calculation. Supported values "gini" or "entropy". Default is "gini".
+
+
+
+        **max_depth** : int32 (default=4)
+
+        ..
+
+            Maximum depth of the tree. Default is 4.
+
+
+
+        **max_bins** : int32 (default=100)
+
+        ..
+
+            Maximum number of bins used for splitting features. Default is 100.
+
+
+
+        **seed** : int32 (default=1701442563)
+
+        ..
+
+            Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.
+
+
+
+        **categorical_features_info** : dict (default=None)
+
+        ..
+
+            Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}.
+
+
+
+        **feature_subset_category** : unicode (default=None)
+
+        ..
+
+            Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird".  If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dictionary
+                  A dictionary with trained Random Forest Classifier model with the following keys\:
+                  |'observation_columns': the list of observation columns on which the model was trained,
+                  |'label_column': the column name containing the labels of the observations,
+                  |'num_classes': the number of classes,
+                  |'num_trees': the number of decision trees in the random forest,
+                  |'num_nodes': the number of nodes in the random forest,
+                  |'feature_subset_category': the map storing arity of categorical features,
+                  |'impurity': the criterion used for information gain calculation,
+                  |'max_depth': the maximum depth of the tree,
+                  |'max_bins': the maximum number of bins used for splitting features,
+                  |'seed': the random seed used for bootstrapping and choosing feature subset.
+                
+    Creating a Random Forests Classifier Model using the observation columns and label column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

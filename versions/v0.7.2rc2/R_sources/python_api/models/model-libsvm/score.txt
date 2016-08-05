@@ -1,0 +1,36 @@
+
+:doc:`LibsvmModel <index>`  score
+*********************************
+
+------
+
+
+.. function:: score(self, vector)
+
+    Calculate the prediction label for a single observation.
+
+
+    :Parameters:
+
+        **vector** : None
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : float64
+
+        ..
+
+            Predicted label.
+
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
+

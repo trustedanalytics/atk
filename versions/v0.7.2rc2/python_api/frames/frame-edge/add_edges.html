@@ -1,0 +1,203 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>EdgeFrame add_edges &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames EdgeFrame" href="index.html" >
+    <link rel="next" title="EdgeFrame assign_sample" href="assign_sample.html" >
+    <link rel="prev" title="EdgeFrame add_columns" href="add_columns.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> EdgeFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="add_columns.html" title="EdgeFrame add_columns"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="assign_sample.html" title="EdgeFrame assign_sample"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="edgeframe-add-edges">
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  add_edges<a class="headerlink" href="#edgeframe-add-edges" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="add_edges">
+<code class="descname">add_edges</code><span class="sig-paren">(</span><em>self</em>, <em>source_frame</em>, <em>column_name_for_source_vertex_id</em>, <em>column_name_for_dest_vertex_id</em>, <em>column_names=None</em>, <em>create_missing_vertices=False</em><span class="sig-paren">)</span><a class="headerlink" href="#add_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add edges to a graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source_frame</strong> : Frame</p>
+<blockquote>
+<div><p>Frame that will be the source of
+the edge data.</p>
+</div></blockquote>
+<p><strong>column_name_for_source_vertex_id</strong> : unicode</p>
+<blockquote>
+<div><p>column name for a unique id for
+each source vertex (this is not the system defined _vid).</p>
+</div></blockquote>
+<p><strong>column_name_for_dest_vertex_id</strong> : unicode</p>
+<blockquote>
+<div><p>column name for a unique id for
+each destination vertex (this is not the system defined _vid).</p>
+</div></blockquote>
+<p><strong>column_names</strong> : list (default=None)</p>
+<blockquote>
+<div><p>Column names to be used as properties for each vertex,
+None means use all columns,
+empty list means use none.</p>
+</div></blockquote>
+<p><strong>create_missing_vertices</strong> : bool (default=False)</p>
+<blockquote class="last">
+<div><p>True to create missing vertices for edge (slightly slower),
+False to drop edges pointing to missing vertices.
+Defaults to False.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Includes appending to a list of existing edges.</p>
+<p class="rubric">Examples</p>
+<p>See <a class="reference internal" href="../../graphs/graph-/R__init__.html"><span class="doc">here</span></a> for example usage in
+graph construction.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Aug 04, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

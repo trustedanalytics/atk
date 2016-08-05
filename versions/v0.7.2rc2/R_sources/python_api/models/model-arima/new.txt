@@ -1,0 +1,153 @@
+
+:doc:`ArimaModel <index>`  __init__
+***********************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of an Autoregressive Integrated Moving Average (ARIMA) model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            A new instance of ARIMAModel
+    An autoregressive integrated moving average (ARIMA) [1]_ model is a
+    generalization of an autoregressive moving average (ARMA) model.
+    These models are fitted to time series data either to better understand
+    the data or to predict future points in the series (forecasting).
+    Non-seasonal ARIMA models are generally denoted ARIMA (p,d,q) where
+    parameters p, d, and q are non-negative integers, p is the order of the
+    Autoregressive model, d is the degree of differencing, and q is the order
+    of the Moving-average model.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
+        
+
+    Examples
+    --------
+    Consider the following frame of observations collected over seven days.
+
+    The frame has three columns: timestamp, name, and value.
+
+    >>> frame.inspect()
+    [#]  timestamp                 name   value
+    =================================================
+    [0]  2015-01-01T00:00:00.000Z  Sarah  12.88969427
+    [1]  2015-01-02T00:00:00.000Z  Sarah  13.54964408
+    [2]  2015-01-03T00:00:00.000Z  Sarah   13.8432745
+    [3]  2015-01-04T00:00:00.000Z  Sarah  12.13843611
+    [4]  2015-01-05T00:00:00.000Z  Sarah  12.81156092
+    [5]  2015-01-06T00:00:00.000Z  Sarah   14.2499628
+    [6]  2015-01-07T00:00:00.000Z  Sarah  15.12102595
+
+
+
+    Define the date time index:
+
+    >>> datetimeindex = ['2015-01-01T00:00:00.000Z','2015-01-02T00:00:00.000Z',
+    ... '2015-01-03T00:00:00.000Z','2015-01-04T00:00:00.000Z','2015-01-05T00:00:00.000Z',
+    ... '2015-01-06T00:00:00.000Z','2015-01-07T00:00:00.000Z']
+
+    Then, create a time series frame from the frame of observations, since the ARIMA model
+    expects data to be in a time series format (where the time series values are in a
+    vector column).
+
+    >>> ts = frame.timeseries_from_observations(datetimeindex, "timestamp","name","value")
+    [===Job Progress===]
+
+    >>> ts.inspect()
+    [#]  name
+    ==========
+    [0]  Sarah
+    <BLANKLINE>
+    [#]  value
+    ================================================================================
+    [0]  [12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 15.12102595]
+
+
+    Use the frame take function to get one row of data with just the "value" column
+
+    >>> ts_frame_data = ts.take(n=1,offset=0,columns=["value"])
+
+    From the ts_frame_data, get the first row and first column to extract out just the time series values.
+
+    >>> ts_values = ts_frame_data[0][0]
+
+    >>> ts_values
+    [12.88969427,
+     13.54964408,
+     13.8432745,
+     12.13843611,
+     12.81156092,
+     14.2499628,
+     15.12102595]
+
+    Create an ARIMA model:
+
+    >>> model = ta.ArimaModel()
+    [===Job Progress===]
+
+    Train the model using the timeseries frame:
+
+    >>> model.train(ts_values, 1, 0, 1)
+    [===Job Progress===]
+    {u'coefficients': [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}
+
+    Call predict to forecast values by passing the number of future periods to predict beyond the length of the time series.
+    Since the parameter in this example is 0, predict will forecast 7 values (the same number of values that were in the
+    original time series vector).
+
+    >>> model.predict(0)
+    [===Job Progress===]
+    {u'forecasted': [12.674342627141744,
+      13.638048984791693,
+      13.682219498657313,
+      13.883970022400577,
+      12.49564914570843,
+      13.66340392811346,
+      14.201275185574925]}
+
+    >>> model.publish()
+    [===Job Progress===]
+
+    Take the path to the published model and run it in the Scoring Engine:
+
+    >>> import requests
+    >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+    Post a request to get the metadata about the model.
+
+    >>> r = requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"ARIMA Model","model_class":"com.cloudera.sparkts.models.ARIMAModel","model_reader":"org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin","custom_values":{}},"input":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"}],"output":[{"name":"timeseries","value":"Array[Double]"},{"name":"future","value":"Int"},{"name":"predicted_values","value":"Array[Double]"}]}'
+
+    ARIMA model support started in version 2 of the scoring engine REST API. We send the number of values to forecast
+    beyond the length of the time series (in this example we are passing 0). This means that since 7 historical time series
+    values were provided, 7 future periods will be forecasted.
+
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"future":0}]})
+
+    The 'predicted_values' array contains the future values, which have been forecasted based on the historical data.
+
+    >>> r.text
+    u'{"data":[{"future":0.0,"predicted_values":[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}'
+

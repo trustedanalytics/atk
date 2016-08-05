@@ -1,0 +1,125 @@
+
+
+-------------------------------------------------------------
+:doc:`Commands <index>` frame/timeseries_breusch_godfrey_test
+-------------------------------------------------------------
+
+Breusch-Godfrey statistics test
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/timeseries_breusch_godfrey_test
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame of time series data
+
+
+
+    **residuals** : unicode
+
+    ..
+
+        Name of the column that contains residual (y) values
+
+
+
+    **factors** : list
+
+    ..
+
+        Name of the column(s) that contain factors (x) values 
+
+
+
+    **max_lag** : int32
+
+    ..
+
+        The lag order to calculate the test statistic. 
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Calculates the Breusch-Godfrey test statistic for serial correlation.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+
