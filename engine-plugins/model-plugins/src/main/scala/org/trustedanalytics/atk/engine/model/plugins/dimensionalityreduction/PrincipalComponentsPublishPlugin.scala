@@ -52,6 +52,13 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, E
   override def name: String = "model:principal_components/publish"
 
   /**
+   * number of spark jobs that get spawned.
+   * Used to prevent multiple progress bars
+   */
+
+  override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
+
+  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
