@@ -133,7 +133,7 @@ class ScoringService(scoringModel: Model) extends Directives {
             onComplete(Future { model.modelMetadata() }) {
               case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
                 "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString())
+                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString)
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
 
