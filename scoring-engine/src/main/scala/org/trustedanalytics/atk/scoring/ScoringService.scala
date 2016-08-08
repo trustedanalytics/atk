@@ -17,18 +17,16 @@
 package org.trustedanalytics.atk.scoring
 
 import akka.actor.Actor
-import spray.json.JsValue
-import spray.routing._
-import spray.http._
-import MediaTypes._
 import akka.event.Logging
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent._
-import ExecutionContext.Implicits.global
-import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
-import scala.util.{ Failure, Success }
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import spray.json._
+import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
+import spray.http.MediaTypes._
+import spray.http._
+import spray.routing._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
+import scala.util.{ Failure, Success }
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -56,7 +54,8 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
 /**
  * Defines our service behavior independently from the service actor
  */
-class ScoringService(model: Model) extends Directives {
+class ScoringService(scoringModel: Model) extends Directives {
+  var model = scoringModel
   def homepage = {
     respondWithMediaType(`text/html`) {
       complete {
@@ -77,9 +76,8 @@ class ScoringService(model: Model) extends Directives {
 
   import AtkDefaultJsonProtocol._
   implicit val descFormat = jsonFormat3(ServiceDescription)
-  val jsonFormat = new ScoringServiceJsonProtocol(model)
-  import jsonFormat._
-
+  import ScoringServiceJsonProtocol._
+  var jsonFormat = new DataOutputFormatJsonProtocol(model)
   import spray.json._
 
   /**
@@ -99,9 +97,8 @@ class ScoringService(model: Model) extends Directives {
             entity(as[String]) {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
-                import jsonFormat.DataOutputFormat
-                onComplete(Future { scoreJsonRequest(DataInputFormat.read(json)) }) {
-                  case Success(output) => complete(DataOutputFormat.write(output).toString())
+                onComplete(Future { scoreJsonRequest(jsonFormat.DataInputFormat.read(json)) }) {
+                  case Success(output) => complete(jsonFormat.DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
                   }
@@ -136,11 +133,31 @@ class ScoringService(model: Model) extends Directives {
             onComplete(Future { model.modelMetadata() }) {
               case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
                 "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString)
+                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString())
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
 
               }
+            }
+          }
+        }
+      } ~
+      path("revise") {
+        requestUri { uri =>
+          post {
+            entity(as[String]) {
+              args =>
+                try {
+                  val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
+                  model = ScoringEngineHelper.getModel(path)
+                  jsonFormat = new DataOutputFormatJsonProtocol(model)
+                  complete { """{"status": "success"}""" }
+                }
+                catch {
+                  case e: Throwable =>
+                    e.printStackTrace()
+                    complete(StatusCodes.InternalServerError, e.getMessage)
+                }
             }
           }
         }
