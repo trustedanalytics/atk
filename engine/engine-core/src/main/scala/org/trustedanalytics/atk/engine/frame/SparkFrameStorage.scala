@@ -143,6 +143,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       frameRdd.save(saveInfo.targetPath, saveInfo.storageFormat)
       frameFileStorage.hdfs.hdfs.setPermission(new Path(saveInfo.targetPath),
         new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
+      frameFileStorage.hdfs.hdfs.setPermission(new Path(saveInfo.targetPath).getParent, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.NONE))
       postSave(frame, saveInfo, frameRdd.frameSchema)
     }
 

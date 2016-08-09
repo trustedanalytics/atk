@@ -14,14 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
-import com.cloudera.sparkts.models.ARIMAModel
+import org.apache.commons.lang.StringUtils
+import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-/**
- * ARIMAData class
- */
-case class ARIMAData(arimaModel: ARIMAModel, tsValues: List[Double]) {
-  require(arimaModel != null, "arimaModel must not be null.")
-  require(tsValues != null && tsValues.nonEmpty, "tsValues must not be null or empty.")
+case class TimeSeriesDurbinWatsonTestArgs(
+    @ArgDoc("Frame of time series data") frame: FrameReference,
+    @ArgDoc("Name of the column that contains residual values") residuals: String) {
+  require(frame != null, "frame is required")
+  require(StringUtils.isNotEmpty(residuals), "residuals must not be null or empty.")
 }
+

@@ -128,23 +128,23 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <buildtype>test</buildtype>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dep.cdh.version>cdh5.5.0</dep.cdh.version>
-        <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
-        <dep.spark.yarn.version>1.5.0-${dep.cdh.version}</dep.spark.yarn.version>
+        <dep.cdh.version>cdh5.7.1</dep.cdh.version>
+        <dep.spark.version>1.6.0-${dep.cdh.version}</dep.spark.version>
+        <dep.spark.yarn.version>1.6.0-${dep.cdh.version}</dep.spark.yarn.version>
         <dep.mahout.version>0.9-${dep.cdh.version}</dep.mahout.version>
         <dep.parquet.version>1.5.0-${dep.cdh.version}</dep.parquet.version>
-        <dep.hbase.version>1.0.0-${dep.cdh.version}</dep.hbase.version>
+        <dep.hbase.version>1.2.0-${dep.cdh.version}</dep.hbase.version>
         <dep.hadoop2.version>2.6.0-${dep.cdh.version}</dep.hadoop2.version>
         <dep.zookeeper.version>3.4.5-${dep.cdh.version}</dep.zookeeper.version>
         <dep.typesafe-config.version>1.2.1</dep.typesafe-config.version>
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
-        <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
+        <dev.spark.hive.version>1.6.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.2.181</dep.daal.version>
         <dep.orientdb.version>2.1.16</dep.orientdb.version>
 
         <!--START GAO MAVEN -->
 
-        <scala.long.version>2.10.4</scala.long.version>
+        <scala.long.version>2.10.5</scala.long.version>
         <scala.short.version>2.10</scala.short.version>
         <scalatest.version>2.1.6</scalatest.version>
 
@@ -925,6 +925,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-common</artifactId>
                 <version>${dep.hive.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet.jsp</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hive</groupId>
@@ -936,6 +946,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
                 <version>${dep.hadoop2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.servlet.jsp</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
@@ -1010,6 +1030,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-aws</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>jsp-api</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1150,6 +1178,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>javax.servlet.jsp</groupId>
                         <artifactId>jsp-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty-util</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.mortbay.jetty</groupId>

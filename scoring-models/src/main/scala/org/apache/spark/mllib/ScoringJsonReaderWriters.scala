@@ -1146,7 +1146,8 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: ARIMAData): JsValue = {
       val model = ARIMAModelFormat.write(obj.arimaModel)
-      JsObject("arima_model" -> model)
+      JsObject("arima_model" -> model,
+        "ts_values" -> obj.tsValues.toJson)
     }
 
     /**
@@ -1160,7 +1161,8 @@ object ScoringJsonReaderWriters {
         ARIMAModelFormat.read(v)
       }
       ).get
-      new ARIMAData(model)
+      val tsValues = getOrInvalid(fields, "ts_values").convertTo[List[Double]]
+      new ARIMAData(model, tsValues)
     }
   }
 }

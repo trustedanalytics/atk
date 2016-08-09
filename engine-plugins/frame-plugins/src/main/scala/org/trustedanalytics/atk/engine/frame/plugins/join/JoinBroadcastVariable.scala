@@ -37,7 +37,7 @@ case class JoinBroadcastVariable(joinParam: RddJoinParam) {
 
   // Represented as a sequence of multi-maps to support broadcast variables larger than 2GB
   // Using multi-maps instead of hash maps so that we can support duplicate keys.
-  val broadcastMultiMap: Broadcast[MultiMap[Any, Row]] = createBroadcastMultiMaps(joinParam)
+  val broadcastMultiMap: Broadcast[Map[Any, List[Row]]] = createBroadcastMultiMaps(joinParam)
 
   /**
    * Get matching set of rows by key from broadcast join variable
@@ -45,26 +45,15 @@ case class JoinBroadcastVariable(joinParam: RddJoinParam) {
    * @param key Join key
    * @return Matching set of rows if found. Multiple rows might match if there are duplicate keys.
    */
-  def get(key: Any): Option[Set[Row]] = {
+  def get(key: Any): Option[List[Row]] = {
     broadcastMultiMap.value.get(key)
   }
 
   // Create the broadcast variable for the join
-  private def createBroadcastMultiMaps(joinParam: RddJoinParam): Broadcast[MultiMap[Any, Row]] = {
+  private def createBroadcastMultiMaps(joinParam: RddJoinParam): Broadcast[Map[Any, List[Row]]] = {
     //Grouping by key to ensure that duplicate keys are not split across different broadcast variables
-    val broadcastList = joinParam.frame.groupByRows(row => row.values(joinParam.joinColumns.toList)).collect().toList
-    val broadcastMultiMap = listToMultiMap(broadcastList)
-    joinParam.frame.sparkContext.broadcast(broadcastMultiMap)
-  }
-
-  //Broadcast variables are stored as multi-maps to ensure results are not lost when RDD has duplicate keys
-  private def listToMultiMap(list: List[(Any, Iterable[Row])]): MultiMap[Any, Row] = {
-    val multiMap = new HashMap[Any, Set[Row]] with MultiMap[Any, Row]
-
-    list.foldLeft(multiMap) {
-      case (map, (key, rows)) =>
-        rows.foreach(row => map.addBinding(key, row))
-        map
-    }
+    val broadcastList = joinParam.frame.groupByRows(row => row.values(joinParam.joinColumns.toList)).collect()
+    val broadcastMap: Map[Any, List[Row]] = broadcastList.map { case (key, rows) => (key, rows.toList) }.toMap
+    joinParam.frame.sparkContext.broadcast(broadcastMap)
   }
 }

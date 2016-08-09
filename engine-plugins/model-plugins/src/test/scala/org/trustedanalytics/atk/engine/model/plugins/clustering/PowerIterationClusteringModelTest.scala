@@ -33,7 +33,8 @@ class PowerIterationClusteringModelTest extends TestingSparkContextFlatSpec with
     val edgeList: Array[(Long, Long, Double)] = Array((1L, 2L, 1.0), (1L, 2L, 0.3),
       (2L, 3L, 0.3), (3L, 0L, 0.03), (0L, 5L, 0.01), (5L, 4L, 0.3), (5L, 6L, 1.0), (4L, 6L, 0.3))
     val rdd = sparkContext.parallelize(edgeList)
-    val trainArgs = PowerIterationClusteringArgs(modelRef, frameRef, "Source", "Destination", "Distance", k = 3)
+    val trainArgs = PowerIterationClusteringArgs(modelRef, frameRef, "Source", "Destination",
+      "Distance", k = 3, maxIterations = 10)
 
     val pic = PowerIterationClusteringPlugin.initializePIC(trainArgs)
     val model = pic.run(rdd)

@@ -30,7 +30,7 @@ export YARN_CONF_DIR=$ATK_CONF_DIR
 export HADOOP_CONF_DIR=$YARN_CONF_DIR
 
 
-CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
+CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.5.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.5.jar
 CP=$DIR/../conf/logback.xml:$CP
 CP=$DIR/../conf:$CP
 
@@ -179,7 +179,6 @@ export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
 if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
- echo "Adding Intel DAAL libraries"
  export DAAL_LIB_DIR="$DIR/../lib/daal/intel64_lin"
  export DAAL_GCC_VERSION="gcc4.4"
  export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
