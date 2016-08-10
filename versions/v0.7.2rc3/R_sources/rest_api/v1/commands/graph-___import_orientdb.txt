@@ -1,0 +1,110 @@
+
+
+-----------------------------------------------
+:doc:`Commands <index>` graph:/_import_orientdb
+-----------------------------------------------
+
+Imports a graph from OrientDB database to ATK graph
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:/_import_orientdb
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **graph_name** : unicode
+
+    ..
+
+        OrientDB database name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Connects to the given OrientDB database name using the settings provided in the configurations file.
+       Each imported vertex or edge class from the OrientDB database corresponds to vertex frame RDD or edge frame RDD in ATK.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        ATK graph in Parquet graph format.
+
+
