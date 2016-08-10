@@ -1,0 +1,119 @@
+
+
+---------------------------------------------------
+:doc:`Commands <index>` model:linear_regression/new
+---------------------------------------------------
+
+Create a 'new' instance of a Linear Regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:linear_regression/new
+
+:arguments:
+
+
+    **dummy_model_ref** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Linear Regression [1]_ is used to model the relationship between a scalar
+dependent variable and one or more independent variables.
+The Linear Regression model is initialized, trained on columns of a frame and
+used to predict the value of the dependent variable given the independent
+observations of a frame.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Linear_regression
+.. [2] https://spark.apache.org/docs/1.5.0/ml-linear-methods.html
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Model``
+
+        A new instance of LinearRegressionModel
+
+

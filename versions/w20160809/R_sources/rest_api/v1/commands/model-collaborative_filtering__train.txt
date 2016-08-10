@@ -1,0 +1,205 @@
+
+
+-----------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/train
+-----------------------------------------------------------
+
+Collaborative filtering (ALS) model
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:collaborative_filtering/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **source_column_name** : unicode
+
+    ..
+
+        source column name.
+
+
+
+    **dest_column_name** : unicode
+
+    ..
+
+        destination column name.
+
+
+
+    **weight_column_name** : unicode
+
+    ..
+
+        weight column name.
+
+
+
+    **max_steps** : int32 (default=10)
+
+    ..
+
+        max number of super-steps (max iterations) before the algorithm terminates. Default = 10
+
+
+
+    **regularization** : float32 (default=0.5)
+
+    ..
+
+        float value between 0 .. 1 
+
+
+
+    **alpha** : float64 (default=0.5)
+
+    ..
+
+        double value between 0 .. 1 
+
+
+
+    **num_factors** : int32 (default=3)
+
+    ..
+
+        number of the desired factors (rank)
+
+
+
+    **use_implicit** : bool (default=False)
+
+    ..
+
+        use implicit preference
+
+
+
+    **num_user_blocks** : int32 (default=2)
+
+    ..
+
+        number of user blocks
+
+
+
+    **num_item_block** : int32 (default=3)
+
+    ..
+
+        number of item blocks
+
+
+
+    **checkpoint_iterations** : int32 (default=10)
+
+    ..
+
+        Number of iterations between checkpoints
+
+
+
+    **target_rmse** : float64 (default=0.05)
+
+    ..
+
+        target RMSE
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

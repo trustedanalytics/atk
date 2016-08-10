@@ -1,0 +1,116 @@
+
+:doc:`EdgeFrame <index>`  __init__
+**********************************
+
+------
+
+
+.. function:: __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None)
+
+    Examples
+
+
+    :Parameters:
+
+        **graph** :  (default=None)
+
+        ..
+
+
+
+
+
+        **label** :  (default=None)
+
+        ..
+
+
+
+
+
+        **src_vertex_label** :  (default=None)
+
+        ..
+
+
+
+
+
+        **dest_vertex_label** :  (default=None)
+
+        ..
+
+
+
+
+
+        **directed** :  (default=None)
+
+        ..
+
+
+
+
+    --------
+    Given a data file */movie.csv*, create a frame to match this data and move
+    the data to the frame.
+    Create an empty graph and define some vertex and edge types.
+
+    .. code::
+
+        >>> my_csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32),
+        ...                                     ('user_name', str),
+        ...                                     ('movie_id', int32),
+        ...                                     ('movie_title', str),
+        ...                                     ('rating', str)])
+
+        >>> my_frame = ta.Frame(my_csv)
+        >>> my_graph = ta.Graph()
+        >>> my_graph.define_vertex_type('users')
+        >>> my_graph.define_vertex_type('movies')
+        >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+
+    Add data to the graph from the frame:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
+            >>> my_graph.vertices['movies].add_vertices(my_frame, 'movie_id', ['movie_title])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id',
+            ... ['user_name'])
+            >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
+
+    Create an edge frame from the graph, and add edge data from the frame.
+
+    .. code::
+
+        >>> my_edge_frame = graph.edges['ratings']
+        >>> my_edge_frame.add_edges(my_frame, 'user_id', 'movie_id', ['rating']
+
+    Retrieve a previously defined graph and retrieve an EdgeFrame from it:
+
+    .. code::
+
+        >>> my_old_graph = ta.get_graph("your_graph")
+        >>> my_new_edge_frame = my_old_graph.edges["your_label"]
+
+    Calling methods on an EdgeFrame:
+
+    .. code::
+
+        >>> my_new_edge_frame.inspect(20)
+
+    Copy an EdgeFrame to a frame using the copy method:
+
+    .. code::
+
+        >>> my_new_frame = my_new_edge_frame.copy()
+
+        

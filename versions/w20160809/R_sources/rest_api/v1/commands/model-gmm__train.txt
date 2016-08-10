@@ -1,0 +1,164 @@
+
+
+---------------------------------------
+:doc:`Commands <index>` model:gmm/train
+---------------------------------------
+
+Creates a GMM Model from the train frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:gmm/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Columns containing the observations.
+
+
+
+    **column_scalings** : list
+
+    ..
+
+        Column scalings for each of the observation columns. The scaling value is multiplied by the corresponding value in the
+        observation column.
+
+
+
+    **k** : int32 (default=2)
+
+    ..
+
+        Desired number of clusters. Default is 2.
+
+
+
+    **max_iterations** : int32 (default=100)
+
+    ..
+
+        Number of iterations for which the algorithm should run. Default is 100.
+
+
+
+    **convergence_tol** : float64 (default=0.01)
+
+    ..
+
+        Largest change in log-likelihood at which convergence iis considered to have occurred.
+
+
+
+    **seed** : int64 (default=177062743224439319)
+
+    ..
+
+        Random seed
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+At training the 'k' cluster centers are computed.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dict
+            Returns a dictionary the following fields
+        cluster_size : dict
+            with the key being a string of the form 'Cluster:Id' storing the number of elements in cluster number 'Id'
+        gaussians : dict
+            Stores the 'mu' and 'sigma' corresponding to the Multivariate Gaussian (Normal) Distribution for each Gaussian
+
+
+
