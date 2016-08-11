@@ -41,6 +41,14 @@ import spray.json._
 
 object ScoringEngineHelper extends EventLogging {
 
+  def isModelParameterSame(model: Model, revisedModel: Model): Boolean = {
+    if (model.input().deep == revisedModel.input().deep &&
+      model.output().deep == revisedModel.output().deep) {
+      return true
+    }
+    false
+  }
+
   def getModel(modelFilePath: String): Model = {
     var tempTarFile: File = null
     var tarFilePath = modelFilePath

@@ -149,14 +149,27 @@ class ScoringService(scoringModel: Model) extends Directives {
               args =>
                 try {
                   val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
-                  model = ScoringEngineHelper.getModel(path)
-                  jsonFormat = new DataOutputFormatJsonProtocol(model)
-                  complete { """{"status": "success"}""" }
+                  val revisedModel = ScoringEngineHelper.getModel(path)
+                  if (model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
+                    ScoringEngineHelper.isModelParameterSame(model, revisedModel)) {
+                    model = revisedModel
+                    jsonFormat = new DataOutputFormatJsonProtocol(model)
+                    complete { """{"status": "success"}""" }
+                  }
+                  else {
+                    complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
+                      "different than existing model")
+                  }
                 }
                 catch {
                   case e: Throwable =>
                     e.printStackTrace()
-                    complete(StatusCodes.InternalServerError, e.getMessage)
+                    if (e.getMessage.contains("File does not exist:")) {
+                      complete(StatusCodes.BadRequest, e.getMessage)
+                    }
+                    else {
+                      complete(StatusCodes.InternalServerError, e.getMessage)
+                    }
                 }
             }
           }
