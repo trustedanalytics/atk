@@ -57,7 +57,7 @@ Calcuate the augmented Dickey-Fuller test statistic for column "b" with no lag:
 <progress>
 
 >>> result["p_value"]
-0.18855010602503236
+0.7317795217142998
 
 >>> result["test_stat"]
 -1.0573441288025922
