@@ -37,7 +37,8 @@ class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfiguration) exten
     val edgeBuffer = new ArrayBuffer[Edge]()
     val schemaReader = new SchemaReader(graph)
     val edgeSchema = schemaReader.importEdgeSchema(partition.className)
-    val edges: OrientDynaElementIterable = graph.command(new OCommandSQL(s"select from ${partition.className}")).execute()
+    val edges: OrientDynaElementIterable = graph.command(
+      new OCommandSQL(s"select from cluster:${partition.clusterId} where @class='${partition.className}'")).execute()
     val edgeIterator = edges.iterator().asInstanceOf[java.util.Iterator[BlueprintsEdge]]
     while (edgeIterator.hasNext) {
       val edgeReader = new EdgeReader(graph, edgeSchema)

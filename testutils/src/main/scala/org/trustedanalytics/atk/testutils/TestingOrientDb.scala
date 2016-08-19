@@ -16,6 +16,7 @@
 package org.trustedanalytics.atk.testutils
 
 import java.io.File
+import com.orientechnologies.orient.core.intent.OIntentMassiveInsert
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
 
 /**
@@ -25,7 +26,7 @@ trait TestingOrientDb {
 
   var tmpDir: File = null
   var dbUri: String = null
-  var dbName: String = "OrientDbTest"
+  var dbName: String = "OrientDbTest1"
   var dbUserName = "admin"
   var dbPassword = "admin"
   var rootPassword = "root"
@@ -44,11 +45,12 @@ trait TestingOrientDb {
    * create plocal Orient graph database
    */
   def setupOrientDb(): Unit = {
-
-    tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
-    dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
+    val uuid = java.util.UUID.randomUUID.toString
+    tmpDir = DirectoryUtils.createTempDirectory("orientgraphtests")
+    dbUri = "plocal:" + tmpDir.getAbsolutePath + "/" + dbName + uuid
     val factory = new OrientGraphFactory(dbUri, dbUserName, dbPassword)
     orientFileGraph = factory.getNoTx
+    orientFileGraph.declareIntent(new OIntentMassiveInsert())
   }
 
   /**

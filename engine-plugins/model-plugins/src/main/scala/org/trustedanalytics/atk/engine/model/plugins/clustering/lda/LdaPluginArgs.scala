@@ -65,8 +65,7 @@ time the model is trained, allows LDA to generate the same topic distribution
 if the corpus and LDA parameters are unchanged.""") randomSeed: Option[Long] = None,
                         @ArgDoc("""Period (in iterations) between checkpoints (default = 10). Checkpointing helps with recovery
 * (when nodes fail). It also helps with eliminating temporary shuffle files on disk, which can be
-* important when LDA is run for many iterations. If the checkpoint directory is not set, this setting is ignored.""")
-                        checkPointInterval: Int = 10) {
+* important when LDA is run for many iterations. If the checkpoint directory is not set, this setting is ignored.""") checkPointInterval: Int = 10) {
 
   require(model != null, "model is required")
   require(frame != null, "frame is required")

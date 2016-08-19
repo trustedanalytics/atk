@@ -35,7 +35,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
+      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword,)
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
@@ -56,14 +56,14 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
 
       //exporting the edge frame:
       val eColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
-      val eSchema = new EdgeSchema(eColumns, "label", GraphSchema.labelProperty, GraphSchema.labelProperty)
+      val eSchema = new EdgeSchema(eColumns, "edge_label", GraphSchema.labelProperty, GraphSchema.labelProperty)
       val edges: List[Row] = List(
         new GenericRow(Array(1L, 1L, 2L, "distance1", 100)),
         new GenericRow(Array(2L, 2L, 3L, "distance2", 200)),
         new GenericRow(Array(3L, 3L, 4L, "distance3", 400)))
       val eRowRdd = sparkContext.parallelize(edges)
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
-      val batchSize = 3
+      val batchSize = 4
       if (orientFileGraph.getEdgeType(eSchema.label) == null) {
         val schemaWriter = new SchemaWriter(orientFileGraph)
         val oEdgeType = schemaWriter.createEdgeSchema(eSchema)
