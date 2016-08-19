@@ -1,0 +1,31 @@
+
+:doc:`EdgeFrame <index>`  export_to_hive
+****************************************
+
+------
+
+
+.. function:: export_to_hive(self, table_name)
+
+    Write  current frame to Hive table.
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            The name of the Hive table that will contain the exported frame
+
+
+    Table must not exist in Hive. Hive does not support case sensitive table names and columns names. Hence column names with uppercase letters will be converted to lower case by Hive.
+    Export of Vectors is not currently supported.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_hive('covarianceresults')

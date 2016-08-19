@@ -1,0 +1,60 @@
+
+:doc:`DaalLinearRegressionModel <index>`  train
+***********************************************
+
+------
+
+
+.. function:: train(self, frame, value_column, observation_columns, fit_intercept=True)
+
+    |BETA|
+    Build Intel DAAL linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train or test the model on.
+
+
+
+        **value_column** : unicode
+
+        ..
+
+            Column name containing the value for each observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing the observations.
+
+
+
+        **fit_intercept** : bool (default=True)
+
+        ..
+
+            Parameter for whether to fit an intercept term. Default is true
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Trained Intel DAAL linear regression model
+    Create Intel DAAL LinearRegression Model using the observation column and target column of the train frame
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

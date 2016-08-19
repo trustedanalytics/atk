@@ -1,0 +1,276 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame assign_sample &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame bin_column" href="bin_column.html" >
+    <link rel="prev" title="VertexFrame add_vertices" href="add_vertices.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="add_vertices.html" title="VertexFrame add_vertices"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="bin_column.html" title="VertexFrame bin_column"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-assign-sample">
+<h1><a class="reference internal" href="index.html"><span class="doc">VertexFrame</span></a>  assign_sample<a class="headerlink" href="#vertexframe-assign-sample" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="assign_sample">
+<code class="descname">assign_sample</code><span class="sig-paren">(</span><em>self</em>, <em>sample_percentages</em>, <em>sample_labels=None</em>, <em>output_column=None</em>, <em>random_seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#assign_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Randomly group rows into user-defined classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sample_percentages</strong> : list</p>
+<blockquote>
+<div><p>Entries are non-negative and sum to 1. (See the note below.)
+If the <em>i</em>&#8216;th entry of the  list is <em>p</em>,
+then then each row receives label <em>i</em> with independent probability <em>p</em>.</p>
+</div></blockquote>
+<p><strong>sample_labels</strong> : list (default=None)</p>
+<blockquote>
+<div><p>Names to be used for the split classes.
+Defaults to &#8220;TR&#8221;, &#8220;TE&#8221;, &#8220;VA&#8221; when the length of <em>sample_percentages</em> is 3,
+and defaults to Sample_0, Sample_1, ... otherwise.</p>
+</div></blockquote>
+<p><strong>output_column</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>Name of the new column which holds the labels generated by the
+function.</p>
+</div></blockquote>
+<p><strong>random_seed</strong> : int32 (default=None)</p>
+<blockquote class="last">
+<div><p>Random seed used to generate the labels.
+Defaults to 0.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Randomly assign classes to rows given a vector of percentages.
+The table receives an additional column that contains a random label.
+The random label is generated by a probability distribution function.
+The distribution function is specified by the sample_percentages, a list of
+floating point values, which add up to 1.
+The labels are non-negative integers drawn from the range
+<img class="math" src="../../../R_images/math/a714b05c510a3aa90290c5df30b0ac24159a7eb6.png" alt="[ 0, len(S) - 1]"/> where <img class="math" src="../../../R_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> is the sample_percentages.</p>
+<p><strong>Notes</strong></p>
+<p>The sample percentages provided by the user are preserved to at least eight
+decimal places, but beyond this there may be small changes due to floating
+point imprecision.</p>
+<p>In particular:</p>
+<ol class="arabic simple">
+<li>The engine validates that the sum of probabilities sums to 1.0 within
+eight decimal places and returns an error if the sum falls outside of this
+range.</li>
+<li>The probability of the final class is clamped so that each row receives a
+valid label with probability one.</li>
+</ol>
+<p class="rubric">Examples</p>
+<p>Consider this simple frame.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id</span>
+<span class="go">=============</span>
+<span class="go">[0]  abc    0</span>
+<span class="go">[1]  def    1</span>
+<span class="go">[2]  ghi    2</span>
+<span class="go">[3]  jkl    3</span>
+<span class="go">[4]  mno    4</span>
+<span class="go">[5]  pqr    5</span>
+<span class="go">[6]  stu    6</span>
+<span class="go">[7]  vwx    7</span>
+<span class="go">[8]  yza    8</span>
+<span class="go">[9]  bcd    9</span>
+</pre></div>
+</div>
+<p>We&#8217;ll assign labels to each row according to a rough 40-30-30 split, for
+&#8220;train&#8221;, &#8220;test&#8221;, and &#8220;validate&#8221;.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id  sample_bin</span>
+<span class="go">=========================</span>
+<span class="go">[0]  abc    0  VA</span>
+<span class="go">[1]  def    1  TR</span>
+<span class="go">[2]  ghi    2  TE</span>
+<span class="go">[3]  jkl    3  TE</span>
+<span class="go">[4]  mno    4  TE</span>
+<span class="go">[5]  pqr    5  TR</span>
+<span class="go">[6]  stu    6  TR</span>
+<span class="go">[7]  vwx    7  VA</span>
+<span class="go">[8]  yza    8  VA</span>
+<span class="go">[9]  bcd    9  VA</span>
+</pre></div>
+</div>
+<p>Now the frame  has a new column named &#8220;sample_bin&#8221; with a string label.
+Values in the other columns are unaffected.</p>
+<p>Here it is again, this time specifying labels, output column and random seed</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="p">[</span><span class="s2">&quot;cat1&quot;</span><span class="p">,</span> <span class="s2">&quot;cat2&quot;</span><span class="p">,</span> <span class="s2">&quot;cat3&quot;</span><span class="p">,</span> <span class="s2">&quot;cat4&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">output_column</span><span class="o">=</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">random_seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id  sample_bin  cat</span>
+<span class="go">===============================</span>
+<span class="go">[0]  abc    0  VA          cat4</span>
+<span class="go">[1]  def    1  TR          cat2</span>
+<span class="go">[2]  ghi    2  TE          cat3</span>
+<span class="go">[3]  jkl    3  TE          cat4</span>
+<span class="go">[4]  mno    4  TE          cat1</span>
+<span class="go">[5]  pqr    5  TR          cat3</span>
+<span class="go">[6]  stu    6  TR          cat2</span>
+<span class="go">[7]  vwx    7  VA          cat3</span>
+<span class="go">[8]  yza    8  VA          cat3</span>
+<span class="go">[9]  bcd    9  VA          cat4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Aug 19, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
