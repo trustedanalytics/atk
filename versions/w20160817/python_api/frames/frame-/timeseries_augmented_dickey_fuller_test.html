@@ -1,0 +1,221 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Frame timeseries_augmented_dickey_fuller_test &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames Frame" href="index.html" >
+    <link rel="next" title="Frame timeseries_breusch_godfrey_test" href="timeseries_breusch_godfrey_test.html" >
+    <link rel="prev" title="Frame tally_percent" href="tally_percent.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> Frame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="tally_percent.html" title="Frame tally_percent"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="timeseries_breusch_godfrey_test.html" title="Frame timeseries_breusch_godfrey_test"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="frame-timeseries-augmented-dickey-fuller-test">
+<h1><a class="reference internal" href="index.html"><span class="doc">Frame</span></a>  timeseries_augmented_dickey_fuller_test<a class="headerlink" href="#frame-timeseries-augmented-dickey-fuller-test" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="timeseries_augmented_dickey_fuller_test">
+<code class="descname">timeseries_augmented_dickey_fuller_test</code><span class="sig-paren">(</span><em>self</em>, <em>ts_column</em>, <em>max_lag</em>, <em>regression='c'</em><span class="sig-paren">)</span><a class="headerlink" href="#timeseries_augmented_dickey_fuller_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmented Dickey-Fuller statistics test</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ts_column</strong> : unicode</p>
+<blockquote>
+<div><p>Name of the column that contains the time series values to use with the ADF test.</p>
+</div></blockquote>
+<p><strong>max_lag</strong> : int32</p>
+<blockquote>
+<div><p>The lag order to calculate the test statistic.</p>
+</div></blockquote>
+<p><strong>regression</strong> : unicode (default=c)</p>
+<blockquote>
+<div><p>The method of regression that was used. Following MacKinnon&#8217;s notation, this can be &#8220;c&#8221; for constant, &#8220;nc&#8221; for no constant, &#8220;ct&#8221; for constant and trend, and &#8220;ctt&#8221; for constant, trend, and trend-squared.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>In this example, we have a frame that contains time series values.  The inspect command below shows a snippet of
+what the data looks like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  date                      a    b              c</span>
+<span class="go">================================================================</span>
+<span class="go">[0]  2016-04-29T08:00:00.000Z   50            1.0  30.3600006104</span>
+<span class="go">[1]  2016-05-02T08:00:00.000Z  -50  2.09999990463  30.6100006104</span>
+<span class="go">[2]  2016-05-03T08:00:00.000Z   50            3.0  30.3600006104</span>
+<span class="go">[3]  2016-05-04T08:00:00.000Z  -50  3.90000009537  29.8500003815</span>
+<span class="go">[4]  2016-05-05T08:00:00.000Z   50  4.80000019073  29.8999996185</span>
+<span class="go">[5]  2016-05-06T08:00:00.000Z  -50            6.0  30.0400009155</span>
+<span class="go">[6]  2016-05-09T08:00:00.000Z   50  7.19999980927  29.7999992371</span>
+<span class="go">[7]  2016-05-10T08:00:00.000Z  -50            8.0  30.1399993896</span>
+<span class="go">[8]  2016-05-11T08:00:00.000Z   50  9.10000038147  30.0599994659</span>
+<span class="go">[9]  2016-05-12T08:00:00.000Z  -50  10.1999998093  29.7600002289</span>
+</pre></div>
+</div>
+<p>Perform the augmented Dickey-Fuller test by specifying the name of the column that contains the time series values, the
+max lag, and optionally the method of regression (using MacKinnon&#8217;s notation).  If no regression method is specified,
+it will default constant (&#8220;c&#8221;).</p>
+<p>Calcuate the augmented Dickey-Fuller test statistic for column &#8220;b&#8221; with no lag:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">timeseries_augmented_dickey_fuller_test</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;p_value&quot;</span><span class="p">]</span>
+<span class="go">0.7317795217142998</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;test_stat&quot;</span><span class="p">]</span>
+<span class="go">-1.0573441288025922</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Aug 19, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

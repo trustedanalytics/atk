@@ -1,0 +1,66 @@
+
+:doc:`DaalNaiveBayesModel <index>`  train
+*****************************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, num_classes=2)
+
+    |BETA|
+    Build a multinomial naive bayes model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the label for each
+            observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Column(s) containing the
+            observations.
+
+
+
+        **num_classes** : int32 (default=2)
+
+        ..
+
+            Number of classes
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dictionary
+            A dictionary with trained multinomial naive bayes model with the following keys:
+            'class_log_prior': smoothed empirical log probability for each class
+            'feature_log_prob': empirical log probability of features given a class, P(x_i|y)
+                        
+    Train a DaalNaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

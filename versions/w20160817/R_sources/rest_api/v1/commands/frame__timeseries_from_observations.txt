@@ -1,0 +1,136 @@
+
+
+----------------------------------------------------------
+:doc:`Commands <index>` frame/timeseries_from_observations
+----------------------------------------------------------
+
+Returns a frame that has the observations formatted as a time series.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/timeseries_from_observations
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame of observations to format as a time series
+
+
+
+    **date_time_index** : list
+
+    ..
+
+        DateTimeIndex to conform all series to.
+
+
+
+    **timestamp_column** : unicode
+
+    ..
+
+        The name of the column telling when the observation occurred.
+
+
+
+    **key_column** : unicode
+
+    ..
+
+        The name of the column that contains which string key the observation belongs to.
+
+
+
+    **value_column** : unicode
+
+    ..
+
+        The name of the column that contains the observed value.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Uses the specified timestamp, key, and value columns and the date/time
+                index provided to format the observations as a time series.  The time series
+                frame will have columns for the key and a vector of the observed values that
+                correspond to the date/time index.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+
+
+
