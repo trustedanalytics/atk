@@ -38,7 +38,10 @@ object GraphDbFactory extends EventLogging {
    */
   def graphDbConnector(dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
-    orientDb.setProperty("storage.diskCache.bufferSize", 256)
+    dbConfigurations.dbProperties.foreach(propertyMap => {
+      propertyMap.foreach { case (key, value) => orientDb.setProperty(key, value) }
+    })
+
     val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:")) {
       if (!new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).existsDatabase()) {
         new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).createDatabase("graph", "plocal")

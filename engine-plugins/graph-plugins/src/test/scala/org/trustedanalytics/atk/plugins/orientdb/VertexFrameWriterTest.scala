@@ -20,7 +20,8 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
-import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
+import org.trustedanalytics.atk.plugins.TestingOrientDb
+import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
@@ -33,7 +34,6 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
 
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
-      val dbConfig = new DbConfiguration(dbUri, dbUserName, dbPassword, "port", "host", rootPassword)
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val vertices: List[Row] = List(

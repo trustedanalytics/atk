@@ -20,7 +20,8 @@ import org.apache.spark.atk.graph.Vertex
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
-import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
+import org.trustedanalytics.atk.plugins.TestingOrientDb
+import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
 

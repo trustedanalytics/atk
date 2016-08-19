@@ -19,7 +19,8 @@ import org.apache.spark.atk.graph.{ Edge, Vertex }
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
-import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
+import org.trustedanalytics.atk.plugins.TestingOrientDb
+import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
