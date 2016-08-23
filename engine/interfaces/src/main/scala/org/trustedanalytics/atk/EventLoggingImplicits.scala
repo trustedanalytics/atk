@@ -32,4 +32,12 @@ trait EventLoggingImplicits {
 
   implicit def user[T](implicit inv: Invocation): UserPrincipal = inv.user
 
+  var test0 = "test0"
+  var test1 = "test1"
+  var test2 = "test1"
+  var test3 = "test1"
+  var test4 = "test1"
+  var test5 = "test1"
+  var test6 = "test1"
+  var test7 = "test1"
 }
