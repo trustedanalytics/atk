@@ -34,7 +34,7 @@ object OrientDbTypeConverter {
     case int64 if dataType.equalsDataType(DataTypes.int64) => OType.LONG
     case int32 if dataType.equalsDataType(DataTypes.int32) => OType.INTEGER
     case float32 if dataType.equalsDataType(DataTypes.float32) => OType.FLOAT
-    case float64 if dataType.equalsDataType(DataTypes.float64) => OType.FLOAT
+    case float64 if dataType.equalsDataType(DataTypes.float64) => OType.DOUBLE
     case string if dataType.equalsDataType(DataTypes.string) => OType.STRING
     case _ => throw new IllegalArgumentException(s"Unable to convert $dataType to OrientDB data type")
   }
@@ -47,8 +47,9 @@ object OrientDbTypeConverter {
   def convertOrientDbtoDataType(orientDbType: OType): DataType = orientDbType match {
     case OType.LONG => DataTypes.toDataType("int64")
     case OType.INTEGER => DataTypes.toDataType("int32")
-    case OType.FLOAT => DataTypes.toDataType("float64")
+    case OType.FLOAT => DataTypes.toDataType("float32")
     case OType.STRING => DataTypes.toDataType("string")
+    case OType.DOUBLE => DataTypes.toDataType("float64")
     case _ => throw new IllegalArgumentException(s"Unable to convert $orientDbType to DataType")
   }
 }
