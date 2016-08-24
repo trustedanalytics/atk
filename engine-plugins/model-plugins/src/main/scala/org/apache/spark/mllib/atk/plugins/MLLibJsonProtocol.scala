@@ -19,10 +19,9 @@ package org.apache.spark.mllib.atk.plugins
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, KMeansModel }
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.mllib.regression
+import org.apache.spark.mllib.regression.LassoModel
 import org.apache.spark.mllib.stat.distribution.MultivariateGaussian
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
-import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
@@ -34,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData }
+import org.trustedanalytics.atk.scoring.models.{ SVMData, LassoData, KMeansData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData }
 import spray.json._
 
 /**
@@ -256,6 +255,41 @@ object MLLibJsonProtocol {
       ).get
 
       new SVMModel(weights, intercept)
+    }
+
+  }
+
+  implicit object LassoModelFormat extends JsonFormat[LassoModel] {
+    /**
+     * The write methods converts from LassoModel to JsValue
+     * @param obj LassoModel. Where LassoModel's format is
+     *            LassoModel(val weights: Vector,val intercept: Double)
+     *            and the weights Vector could be either a SparseVector or DenseVector
+     * @return JsValue
+     */
+    override def write(obj: LassoModel): JsValue = {
+      val weights = VectorFormat.write(obj.weights)
+      JsObject(
+        "weights" -> weights,
+        "intercept" -> JsNumber(obj.intercept)
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to LassoModel
+     * @param json JsValue
+     * @return LassoModel with format LassoModel(val weights: Vector,val intercept: Double)
+     *         and the weights Vector could be either a SparseVector or DenseVector
+     */
+    override def read(json: JsValue): LassoModel = {
+      val fields = json.asJsObject.fields
+      val intercept = getOrInvalid(fields, "intercept").asInstanceOf[JsNumber].value.doubleValue()
+      val weights = fields.get("weights").map(v => {
+        VectorFormat.read(v)
+      }
+      ).get
+
+      new LassoModel(weights, intercept)
     }
 
   }
@@ -565,6 +599,8 @@ object MLLibJsonProtocol {
   implicit val classificationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
   implicit val classificationWithSGDPredictFormat = jsonFormat3(ClassificationWithSGDPredictArgs)
   implicit val classificationWithSGDTestFormat = jsonFormat4(ClassificationWithSGDTestArgs)
+  implicit val lassoTrainFormat = jsonFormat9(LassoTrainArgs)
+  implicit val lassoDataFormat = jsonFormat2(LassoData)
   implicit val svmDataFormat = jsonFormat2(SVMData)
   implicit val kmeansDataFormat = jsonFormat3(KMeansData)
   implicit val kmeansModelTrainReturnFormat = jsonFormat2(KMeansTrainReturn)
