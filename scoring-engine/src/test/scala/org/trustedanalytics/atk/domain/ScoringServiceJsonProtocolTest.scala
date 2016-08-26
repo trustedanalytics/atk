@@ -44,7 +44,6 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
   val jsonFormat = new DataOutputFormatJsonProtocol(model)
 
   import jsonFormat.{ DataInputFormat, DataOutputFormat }
-  //import jsonFormat.DataTypeJsonFormat
 
   "DataInputFormat" should {
     "parse JSON input" in {

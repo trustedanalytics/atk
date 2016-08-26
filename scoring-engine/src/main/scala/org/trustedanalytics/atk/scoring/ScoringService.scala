@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.scoring
 
 import akka.actor.Actor
 import akka.event.Logging
+import com.typesafe.config.ConfigFactory
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import spray.http.MediaTypes._
@@ -56,17 +57,8 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
  */
 class ScoringService(scoringModel: Model) extends Directives {
   var model = scoringModel
-  def homepage = {
-    respondWithMediaType(`text/html`) {
-      complete {
-        <html>
-          <body>
-            <h1>Welcome to the Scoring Engine</h1>
-          </body>
-        </html>
-      }
-    }
-  }
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
+  var modelPath = config.getString("trustedanalytics.scoring-engine.archive-tar")
 
   lazy val description = {
     new ServiceDescription(name = "Trusted Analytics",
@@ -86,9 +78,25 @@ class ScoringService(scoringModel: Model) extends Directives {
   val serviceRoute: Route = logRequest("scoring service", Logging.InfoLevel) {
     val prefix = "score"
     val metadataPrefix = "metadata"
+
     path("") {
       get {
-        homepage
+        val md = JsObject("model_details" -> model.modelMetadata().toJson,
+          "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+          "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).prettyPrint
+        respondWithMediaType(`text/html`) {
+          complete(
+            s"""
+              <html>
+                <body>
+                  <h1>Welcome to the Scoring Engine</h1>
+                  <h3>Model details:</h3>
+                  Model Path: $modelPath <br>
+                  Model metadata:<pre> $md </pre>
+                </body>
+              </html>"""
+          )
+        }
       }
     } ~
       path("v2" / prefix) {
@@ -97,7 +105,7 @@ class ScoringService(scoringModel: Model) extends Directives {
             entity(as[String]) {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
-                onComplete(Future { scoreJsonRequest(jsonFormat.DataInputFormat.read(json)) }) {
+                onComplete(Future { scoreJsonRequest(model, jsonFormat.DataInputFormat.read(json)) }) {
                   case Success(output) => complete(jsonFormat.DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -117,7 +125,7 @@ class ScoringService(scoringModel: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(Future { scoreStringRequest(records) }) {
+            onComplete(Future { scoreStringRequest(model, records) }) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -147,13 +155,15 @@ class ScoringService(scoringModel: Model) extends Directives {
           post {
             entity(as[String]) {
               args =>
+                val oldModel = model
+                val oldModelPath = modelPath
                 try {
                   val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
                   val revisedModel = ScoringEngineHelper.getModel(path)
-                  if (model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
-                    ScoringEngineHelper.isModelParameterSame(model, revisedModel)) {
+                  if (ScoringEngineHelper.isModelCompatible(model, revisedModel)) {
                     model = revisedModel
                     jsonFormat = new DataOutputFormatJsonProtocol(model)
+                    modelPath = path
                     complete { """{"status": "success"}""" }
                   }
                   else {
@@ -163,6 +173,9 @@ class ScoringService(scoringModel: Model) extends Directives {
                 }
                 catch {
                   case e: Throwable =>
+                    //Keep the original model and model path if there is any exceptions.
+                    model = oldModel
+                    modelPath = oldModelPath
                     e.printStackTrace()
                     if (e.getMessage.contains("File does not exist:")) {
                       complete(StatusCodes.BadRequest, e.getMessage)
@@ -177,19 +190,25 @@ class ScoringService(scoringModel: Model) extends Directives {
       }
   }
 
-  def scoreStringRequest(records: Seq[Array[Any]]): Array[Any] = {
+  /**
+   * In following scoring methods model object reference is intentionally passed.
+   * The rationale is - passing model object as an argument to method makes it 'val' by default which makes it
+   * immutable. Hence it does not affect in progress scoring (batch or single) if revise-model request is processed
+   * simultaneously modifies the global 'model' object reference.
+   */
+  def scoreStringRequest(m: Model, records: Seq[Array[Any]]): Array[Any] = {
     records.map(row => {
-      val score = model.score(row)
+      val score = m.score(row)
       score(score.length - 1).toString
     }).toArray
   }
 
-  def scoreJsonRequest(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
-    records.map(row => scoreToMap(model.score(row))).toArray
+  def scoreJsonRequest(m: Model, records: Seq[Array[Any]]): Array[Map[String, Any]] = {
+    records.map(row => scoreToMap(m, m.score(row))).toArray
   }
 
-  def scoreToMap(score: Array[Any]): Map[String, Any] = {
-    val outputNames = model.output().map(o => o.name)
+  def scoreToMap(m: Model, score: Array[Any]): Map[String, Any] = {
+    val outputNames = m.output().map(o => o.name)
     require(score.length == outputNames.length, "Length of output values should match the output names")
     val outputMap: Map[String, Any] = outputNames.zip(score).map(combined => (combined._1.name, combined._2)).toMap
     outputMap

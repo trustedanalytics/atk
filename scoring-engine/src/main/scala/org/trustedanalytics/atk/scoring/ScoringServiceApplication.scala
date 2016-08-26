@@ -16,15 +16,15 @@
 
 package org.trustedanalytics.atk.scoring
 
-import java.util.{ArrayList => JArrayList}
+import java.util.{ ArrayList => JArrayList }
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.moduleloader.{ClassLoaderAware, Component}
+import org.trustedanalytics.atk.moduleloader.{ ClassLoaderAware, Component }
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import spray.can.Http
 

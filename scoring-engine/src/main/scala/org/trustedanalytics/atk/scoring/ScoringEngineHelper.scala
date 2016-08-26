@@ -41,8 +41,16 @@ import spray.json._
 
 object ScoringEngineHelper extends EventLogging {
 
-  def isModelParameterSame(model: Model, revisedModel: Model): Boolean = {
-    if (model.input().deep == revisedModel.input().deep &&
+  /**
+   *
+   * @param model        Original model
+   * @param revisedModel Revised model
+   * @return true if model compatible i.e model type is same and model input/output parameters are same
+   *         else returns false
+   */
+  def isModelCompatible(model: Model, revisedModel: Model): Boolean = {
+    if (model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
+      model.input().deep == revisedModel.input().deep &&
       model.output().deep == revisedModel.output().deep) {
       return true
     }
