@@ -173,9 +173,10 @@ class ScoringService(scoringModel: Model) extends Directives {
                 }
                 catch {
                   case e: Throwable =>
-                    //Keep the original model and model path if there is any exceptions.
+                    //Keep the original model, modelPath and jsonFormat if there is any exceptions.
                     model = oldModel
                     modelPath = oldModelPath
+                    jsonFormat = new DataOutputFormatJsonProtocol(model)
                     e.printStackTrace()
                     if (e.getMessage.contains("File does not exist:")) {
                       complete(StatusCodes.BadRequest, e.getMessage)
