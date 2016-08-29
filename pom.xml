@@ -1539,7 +1539,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>com.cloudera.sparkts</groupId>
                 <artifactId>sparkts</artifactId>
-                <version>0.3.3</version>
+                <version>0.3.91</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>breeze_${scala.short.version}</artifactId>
