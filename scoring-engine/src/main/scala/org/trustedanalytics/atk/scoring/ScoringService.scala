@@ -155,35 +155,37 @@ class ScoringService(scoringModel: Model) extends Directives {
           post {
             entity(as[String]) {
               args =>
-                val oldModel = model
-                val oldModelPath = modelPath
-                try {
-                  val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
-                  val revisedModel = ScoringEngineHelper.getModel(path)
-                  if (ScoringEngineHelper.isModelCompatible(model, revisedModel)) {
-                    model = revisedModel
-                    jsonFormat = new DataOutputFormatJsonProtocol(model)
-                    modelPath = path
-                    complete { """{"status": "success"}""" }
-                  }
-                  else {
-                    complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
-                      "different than existing model")
-                  }
-                }
-                catch {
-                  case e: Throwable =>
-                    //Keep the original model, modelPath and jsonFormat if there is any exceptions.
-                    model = oldModel
-                    modelPath = oldModelPath
-                    jsonFormat = new DataOutputFormatJsonProtocol(model)
-                    e.printStackTrace()
-                    if (e.getMessage.contains("File does not exist:")) {
-                      complete(StatusCodes.BadRequest, e.getMessage)
+                this.synchronized {
+                  val oldModel = model
+                  val oldModelPath = modelPath
+                  try {
+                    val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
+                    val revisedModel = ScoringEngineHelper.getModel(path)
+                    if (ScoringEngineHelper.isModelCompatible(model, revisedModel)) {
+                      model = revisedModel
+                      jsonFormat = new DataOutputFormatJsonProtocol(model)
+                      modelPath = path
+                      complete { """{"status": "success"}""" }
                     }
                     else {
-                      complete(StatusCodes.InternalServerError, e.getMessage)
+                      complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
+                        "different than existing model")
                     }
+                  }
+                  catch {
+                    case e: Throwable =>
+                      //Keep the original model, modelPath and jsonFormat if there is any exceptions.
+                      model = oldModel
+                      modelPath = oldModelPath
+                      jsonFormat = new DataOutputFormatJsonProtocol(model)
+                      e.printStackTrace()
+                      if (e.getMessage.contains("File does not exist:")) {
+                        complete(StatusCodes.BadRequest, e.getMessage)
+                      }
+                      else {
+                        complete(StatusCodes.InternalServerError, e.getMessage)
+                      }
+                  }
                 }
             }
           }
