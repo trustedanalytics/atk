@@ -49,12 +49,10 @@ object ScoringEngineHelper extends EventLogging {
    *         else returns false
    */
   def isModelCompatible(model: Model, revisedModel: Model): Boolean = {
-    if (model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
+    model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
       model.input().deep == revisedModel.input().deep &&
-      model.output().deep == revisedModel.output().deep) {
-      return true
-    }
-    false
+      model.output().deep == revisedModel.output().deep
+
   }
 
   def getModel(modelFilePath: String): Model = {
