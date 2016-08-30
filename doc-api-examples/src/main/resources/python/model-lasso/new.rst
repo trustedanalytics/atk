@@ -26,11 +26,9 @@ Consider the following frame containing two columns.
 
 >>> model = ta.LassoModel()
 <progress>
->>> train_output = model.train(frame, 'y', ['x1'])
-<progress>
 
->>> train_output
-blah blah
+>>> model.train(frame, 'y', ['x1'])
+<progress>
 
 >>> predicted_frame = model.predict(frame)
 <progress>
@@ -38,23 +36,21 @@ blah blah
 [#]  x1   y      predicted_value
 ================================
 [0]  0.0    0.0              0.0
-[1]  1.0    2.5    1.00000006998
-[2]  2.0    5.0    2.00000013997
-[3]  3.0    7.5    3.00000020995
-[4]  4.0   10.0    4.00000027993
-[5]  5.0   12.5    5.00000034991
-[6]  6.0   13.0     6.0000004199
-[7]  7.0  17.15    7.00000048988
-[8]  8.0   18.5    8.00000055986
-[9]  9.0   23.5    9.00000062985
-
+[1]  1.0    2.5     2.4387285895
+[2]  2.0    5.0    4.87745717901
+[3]  3.0    7.5    7.31618576851
+[4]  4.0   10.0    9.75491435802
+[5]  5.0   12.5    12.1936429475
+[6]  6.0   13.0     14.632371537
+[7]  7.0  17.15    17.0711001265
+[8]  8.0   18.5     19.509828716
+[9]  9.0   23.5    21.9485573055
 
 >>> test_metrics = model.test(predicted_frame, 'predicted_value')
 <progress>
 
 >>> test_metrics
-{u'mean_squared_error': 0.0, u'r_2': 1.0, u'mean_absolute_error': 0.0, u'explained_variance': 8.25000115471693, u'root_mean_squared_error': 0.0}
-
+{u'mean_squared_error': 0.0, u'r_2': 1.0, u'mean_absolute_error': 0.0, u'explained_variance': 49.066026349445146, u'root_mean_squared_error': 0.0}
 
 >>> model.publish()
 <progress>
