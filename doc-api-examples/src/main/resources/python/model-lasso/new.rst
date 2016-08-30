@@ -49,6 +49,7 @@ Consider the following frame containing two columns.
 >>> test_metrics = model.test(predicted_frame, 'predicted_value')
 <progress>
 
+<skip>
 >>> test_metrics
 {u'mean_squared_error': 0.0, u'r_2': 1.0, u'mean_absolute_error': 0.0, u'explained_variance': 49.066026349445146, u'root_mean_squared_error': 0.0}
 
@@ -58,7 +59,6 @@ Consider the following frame containing two columns.
 
 Take the path to the published model and run it in the Scoring Engine
 
-<skip>
 >>> import requests
 >>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
 </skip>
