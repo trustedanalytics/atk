@@ -66,7 +66,7 @@ class CoxPHMTest extends TestingSparkContextFlatSpec with Matchers {
     val estimatedInformationMatrix = BDM(-54.816326, 67.040816, 67.040816, -511.959183)
 
     val coxAgg = new CoxAggregator(BDV(0.0, 0.0))
-    val computedInformationMatrix = coxAgg.computeInformationaMatrix(data)
+    val computedInformationMatrix = coxAgg.computeInformationMatrix(data)
 
     computedInformationMatrix.toArray should equalWithTolerance(estimatedInformationMatrix.toArray)
   }

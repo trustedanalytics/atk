@@ -129,16 +129,16 @@ class Cox(override val uid: String)
 
     while (iterations < $(maxIter) && (epsilon > $(tol))) {
       val (currentLoss, currentGradient, currentInformationMatrix) = costFun.calculate(previousBeta)
-      val matrixInverse: DenseMatrix[Double] = try { breeze.linalg.inv(currentInformationMatrix) }
-      catch {
-        case e: MatrixSingularException => breeze.linalg.DenseMatrix.ones[Double](numFeatures, numFeatures)
+
+      try {
+        val realMatrix = breeze.linalg.pinv(currentInformationMatrix)
+        val gradientTimesMatrixInverse: DenseMatrix[Double] = currentGradient.toDenseMatrix * realMatrix
+        val updatedBetaAsMatrix: DenseMatrix[Double] = previousBeta.toDenseMatrix - gradientTimesMatrixInverse
+        previousBeta = updatedBetaAsMatrix.toDenseVector
       }
-
-      val realMatrix = if (matrixInverse == matrixInverse) matrixInverse else breeze.linalg.DenseMatrix.ones[Double](numFeatures, numFeatures)
-
-      val gradientTimesMatrixInverse: DenseMatrix[Double] = currentGradient.toDenseMatrix :* realMatrix
-      val updatedBetaAsMatrix: DenseMatrix[Double] = previousBeta.toDenseMatrix - gradientTimesMatrixInverse
-      previousBeta = previousBeta - updatedBetaAsMatrix.toDenseVector
+      catch {
+        case e: MatrixSingularException => throw new MatrixSingularException("Singular Matrix formed, cannot be inverted at iteration:" + iterations)
+      }
       epsilon = math.abs(currentLoss - previousLoss)
       previousLoss = currentLoss
       iterations += 1
@@ -309,12 +309,17 @@ private class CoxAggregator(parameters: BDV[Double])
     if (data.censor != 0.0) {
       lossSum += (betaX - epsilon)
       gradientBetaSum += computeGradientVector(data)
-      matrixSum += computeInformationaMatrix(data)
+      matrixSum += computeInformationMatrix(data)
     }
     totalCnt += 1
     this
   }
 
+  /**
+   * Compute the gradient for the given observation
+   * @param data CoxPointWithMetaData storing the observation with it's risk set values
+   * @return Breeze DenseVector storing the gradient values
+   */
   def computeGradientVector(data: CoxPointWithMetaData): BDV[Double] = {
     val gradientVector = BDV.zeros[Double](beta.length)
 
@@ -327,16 +332,21 @@ private class CoxAggregator(parameters: BDV[Double])
     gradientVector
   }
 
-  def computeInformationaMatrix(data: CoxPointWithMetaData): breeze.linalg.DenseMatrix[Double] = {
+  /**
+   * Compute the information matrix for the given observation
+   * @param data CoxPointWithMetaData storing the observation wuth it's risk set values
+   * @return BreezeDenseMatrix storing the Information Matrix values
+   */
+  def computeInformationMatrix(data: CoxPointWithMetaData): breeze.linalg.DenseMatrix[Double] = {
     val infoMatrix = breeze.linalg.DenseMatrix.zeros[Double](beta.length, beta.length)
 
     for (i <- 0 to beta.length - 1) {
       for (j <- 0 to beta.length - 1) {
         if (data.sumEBetaX != 0) {
-          val nr1 = -(data.sumEBetaX * data.sumXiXjEBetaX(i, j))
-          val nr2 = data.sumXDotEBetaX(i) * data.sumXDotEBetaX(j)
-          val dr = data.sumEBetaX * data.sumEBetaX
-          infoMatrix(i, j) = (nr1 + nr2) / dr
+          val numerator1 = -(data.sumEBetaX * data.sumXiXjEBetaX(i, j))
+          val numerator2 = data.sumXDotEBetaX(i) * data.sumXDotEBetaX(j)
+          val denominator = data.sumEBetaX * data.sumEBetaX
+          infoMatrix(i, j) = (numerator1 + numerator2) / denominator
         }
         else
           infoMatrix(i, j) = 0.0
@@ -351,7 +361,7 @@ private class CoxAggregator(parameters: BDV[Double])
    * (Note that it's in place merging; as a result, `this` object will be modified.)
    *
    * @param other The other CoxAggregator to be merged.
-   * @return This Coxggregator object.
+   * @return This CoxAggregator object.
    */
   def merge(other: CoxAggregator): this.type = {
     totalCnt += other.totalCnt
