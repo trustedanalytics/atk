@@ -89,22 +89,19 @@ class ScoringService(scoringModel: Model) extends Directives {
     val prefix = "score"
     val metadataPrefix = "metadata"
 
+    /**
+     * Note:
+     * 'modelData' varible should not be used directly in any of routes, instead it should be passed to
+     *  a method and then use it. Rationale is - passing model object as an argument to method makes it 'val'
+     *  by default which makes it immutable. Hence it does not get affected if revise model request is made
+     *  simulteniously and modifies the 'modelData' object reference.
+     */
+
     path("") {
       get {
-        val metadata = JsObject("model_details" -> modelData.model.modelMetadata().toJson,
-          "input" -> new JsArray(modelData.model.input.map(input => FieldFormat.write(input)).toList),
-          "output" -> new JsArray(modelData.model.output.map(output => FieldFormat.write(output)).toList)).prettyPrint
         respondWithMediaType(`text/html`) {
           complete(
-            s"""
-              <html>
-                <body>
-                  <h1>Welcome to the Scoring Engine</h1>
-                  <h3>Model details:</h3>
-                  Model Path: ${modelData.modelPath} <br>
-                  Model metadata:<pre> $metadata </pre>
-                </body>
-              </html>"""
+            getHomePage(modelData)
           )
         }
       }
@@ -115,12 +112,7 @@ class ScoringService(scoringModel: Model) extends Directives {
             entity(as[String]) {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
-                onComplete(Future { scoreJsonRequest(modelData, json) }) {
-                  case Success(output) => complete(modelData.jsonFormat.DataOutputFormat.write(output).toString())
-                  case Failure(ex) => ctx => {
-                    ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-                  }
-                }
+                getScore(modelData, json)
             }
           }
         }
@@ -135,32 +127,18 @@ class ScoringService(scoringModel: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(Future { scoreStringRequest(modelData, records) }) {
-              case Success(string) => complete(string.mkString(","))
-              case Failure(ex) => ctx => {
-                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-              }
-            }
+            getScoreV1(modelData, records)
           }
         }
       } ~
       path("v2" / metadataPrefix) {
         requestUri { uri =>
           get {
-            import spray.json._
-            onComplete(Future { modelData.model.modelMetadata() }) {
-              case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
-                "input" -> new JsArray(modelData.model.input.map(input => FieldFormat.write(input)).toList),
-                "output" -> new JsArray(modelData.model.output.map(output => FieldFormat.write(output)).toList)).toString)
-              case Failure(ex) => ctx => {
-                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-
-              }
-            }
+            getMetaData(modelData)
           }
         }
       } ~
-      path("revise") {
+      path("v2" / "revise") {
         requestUri { uri =>
           post {
             entity(as[String]) {
@@ -175,7 +153,53 @@ class ScoringService(scoringModel: Model) extends Directives {
       }
   }
 
-  private def reviseModelData(md: ModelData, modelPath: String): StandardRoute = {
+  private def getScore(md: ModelData, json: JsValue): Route = {
+    onComplete(Future { scoreJsonRequest(md, json) }) {
+      case Success(output) => complete(md.jsonFormat.DataOutputFormat.write(output).toString())
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getScoreV1(md: ModelData, records: Seq[Array[Any]]): Route = {
+    onComplete(Future { scoreStringRequest(md, records) }) {
+      case Success(string) => complete(string.mkString(","))
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getMetaData(md: ModelData): Route = {
+    import spray.json._
+    onComplete(Future { md.model.modelMetadata() }) {
+      case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
+        "input" -> new JsArray(md.model.input.map(input => FieldFormat.write(input)).toList),
+        "output" -> new JsArray(md.model.output.map(output => FieldFormat.write(output)).toList)).toString)
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getHomePage(md: ModelData): String = {
+    val metadata = JsObject("model_details" -> md.model.modelMetadata().toJson,
+      "input" -> new JsArray(md.model.input.map(input => FieldFormat.write(input)).toList),
+      "output" -> new JsArray(md.model.output.map(output => FieldFormat.write(output)).toList)).prettyPrint
+
+    s"""
+      <html>
+        <body>
+          <h1>Welcome to the Scoring Engine</h1>
+          <h3>Model details:</h3>
+          Model Path: ${md.modelPath} <br>
+          Model metadata:<pre> $metadata </pre>
+        </body>
+      </html>"""
+  }
+
+  private def reviseModelData(md: ModelData, modelPath: String): Route = {
     try {
       val revisedModel = ScoringEngineHelper.getModel(modelPath)
       if (ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel)) {
@@ -199,12 +223,7 @@ class ScoringService(scoringModel: Model) extends Directives {
         }
     }
   }
-  /**
-   * In following scoring methods model object reference is intentionally passed.
-   * The rationale is - passing model object as an argument to method makes it 'val' by default which makes it
-   * immutable. Hence it does not affect in progress scoring (batch or single) if revise-model request is processed
-   * simultaneously modifies the global 'model' object reference.
-   */
+
   def scoreStringRequest(modelData: ModelData, records: Seq[Array[Any]]): Array[Any] = {
     records.map(row => {
       val score = modelData.model.score(row)
