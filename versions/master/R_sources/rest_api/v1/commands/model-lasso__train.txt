@@ -1,0 +1,168 @@
+
+
+-----------------------------------------
+:doc:`Commands <index>` model:lasso/train
+-----------------------------------------
+
+Train Lasso Model
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:lasso/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        Handle to the model to be used.
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on
+
+
+
+    **value_column** : unicode
+
+    ..
+
+        Column name containing the value for each observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        List of column(s) containing the observations.
+
+
+
+    **initial_weights** : list (default=None)
+
+    ..
+
+        Initial set of weights to be used. List should be equal in size to the number of features in the data.
+
+
+
+    **num_iterations** : int32 (default=500)
+
+    ..
+
+        Number of iterations of gradient descent to run
+
+
+
+    **step_size** : float64 (default=1.0)
+
+    ..
+
+        Step size scaling to be used for the iterations of gradient descent.
+
+
+
+    **reg_param** : float64 (default=0.01)
+
+    ..
+
+        regParam Regularization parameter.
+
+
+
+    **mini_batch_fraction** : float64 (default=1.0)
+
+    ..
+
+        Fraction of data to be used per iteration.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Train a Lasso model given an RDD of (label, features) pairs. We run a fixed number
+ * of iterations of gradient descent using the specified step size. Each iteration uses
+ * `miniBatchFraction` fraction of the data to calculate a stochastic gradient. The weights used
+ * in gradient descent are initialized using the initial weights provided.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

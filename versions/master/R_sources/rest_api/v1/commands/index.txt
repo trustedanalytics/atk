@@ -139,6 +139,11 @@
     model-k_means__predict
     model-k_means__publish
     model-k_means__train
+    model-lasso__new
+    model-lasso__predict
+    model-lasso__publish
+    model-lasso__test
+    model-lasso__train
     model-lda__new
     model-lda__predict
     model-lda__publish
@@ -310,6 +315,11 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:k_means/predict <model-k_means__predict>`                                                     Predict the cluster assignments for the data points.
 :doc:`model:k_means/publish <model-k_means__publish>`                                                     Creates a tar file that will be used as input to the scoring engine
 :doc:`model:k_means/train <model-k_means__train>`                                                         Creates KMeans Model from train frame.
+:doc:`model:lasso/new <model-lasso__new>`                                                                 Create a 'new' instance of a Lasso Model.
+:doc:`model:lasso/predict <model-lasso__predict>`                                                         Predict the labels for the data points
+:doc:`model:lasso/publish <model-lasso__publish>`                                                         Creates a tar file that will be used as input to the scoring engine
+:doc:`model:lasso/test <model-lasso__test>`                                                               Predict test frame labels and return metrics.
+:doc:`model:lasso/train <model-lasso__train>`                                                             Train Lasso Model
 :doc:`model:lda/new <model-lda__new>`                                                                     Creates Latent Dirichlet Allocation model
 :doc:`model:lda/predict <model-lda__predict>`                                                             Predict conditional probabilities of topics given document.
 :doc:`model:lda/publish <model-lda__publish>`                                                             Creates a tar file that will used as input to the scoring engine
