@@ -24,6 +24,7 @@ import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
+import org.apache.spark.mllib.regression.LassoModel
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
@@ -580,6 +581,71 @@ object ScoringJsonReaderWriters {
       }
       ).get
       new SVMData(model, obsCols)
+    }
+  }
+
+  implicit object LassoModelFormat extends JsonFormat[LassoModel] {
+    /**
+     * The write methods converts from SVMModel to JsValue
+     * @param obj LassoModel. Where LassoModel's format is
+     *            LassoModel(val weights: Vector,val intercept: Double)
+     *            and the weights Vector could be either a SparseVector or DenseVector
+     * @return JsValue
+     */
+    override def write(obj: LassoModel): JsValue = {
+      val weights = VectorFormat.write(obj.weights)
+      JsObject(
+        "weights" -> weights,
+        "intercept" -> JsNumber(obj.intercept)
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to LassoModel
+     * @param json JsValue
+     * @return LassoModel with format LassoModel(val weights: Vector,val intercept: Double)
+     *         and the weights Vector could be either a SparseVector or DenseVector
+     */
+    override def read(json: JsValue): LassoModel = {
+      val fields = json.asJsObject.fields
+      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
+        .asInstanceOf[JsNumber].value.doubleValue()
+
+      val weights = fields.get("weights").map(v => {
+        VectorFormat.read(v)
+      }
+      ).get
+
+      new LassoModel(weights, intercept)
+    }
+
+  }
+
+  implicit object LassoDataFormat extends JsonFormat[LassoData] {
+    /**
+     * The write methods converts from ridem cowboy to JsValue
+     * @param obj LassoData
+     * @return JsValue
+     */
+    override def write(obj: LassoData): JsValue = {
+      val model = LassoModelFormat.write(obj.lassoModel)
+      JsObject("lasso_model" -> model,
+        "observation_columns" -> obj.observationColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to LassoData
+     * @param json JsValue
+     * @return LassoData with format LassoData(lassoModel: LassoModel: SVMModel, observationColumns: List[String])
+     */
+    override def read(json: JsValue): LassoData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val model = fields.get("lasso_model").map(v => {
+        LassoModelFormat.read(v)
+      }
+      ).get
+      new LassoData(model, obsCols)
     }
   }
 
