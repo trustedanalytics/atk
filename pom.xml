@@ -140,7 +140,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
         <dev.spark.hive.version>1.6.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.2.181</dep.daal.version>
-        <dep.orientdb.version>2.1.16</dep.orientdb.version>
+        <dep.orientdb.version>2.2.6</dep.orientdb.version>
 
         <!--START GAO MAVEN -->
 
@@ -307,7 +307,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <filereports>WDF TestSuite.txt</filereports>
                                 <parallel>false</parallel>
                                 <stdout>FTD</stdout>
-                                <argLine>-Xmx512m -XX:PermSize=256m</argLine>
+                                <argLine>-Xmx1024m -XX:PermSize=256m</argLine>
                             </configuration>
                             <executions>
                                 <execution>

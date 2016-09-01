@@ -20,8 +20,8 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.{ Matchers, BeforeAndAfterEach, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.RowWrapper
+import org.trustedanalytics.atk.plugins.TestingOrientDb
 import org.trustedanalytics.atk.plugins.orientdb.{ SchemaWriter, VertexWriter, EdgeWriter }
-import org.trustedanalytics.atk.testutils.TestingOrientDb
 
 class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 

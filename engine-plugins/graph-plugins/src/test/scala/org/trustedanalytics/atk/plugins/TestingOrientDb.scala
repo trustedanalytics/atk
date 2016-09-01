@@ -13,10 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.testutils
+package org.trustedanalytics.atk.plugins
 
 import java.io.File
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
+
+import com.orientechnologies.orient.core.intent.OIntentMassiveInsert
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraphNoTx }
+import org.trustedanalytics.atk.plugins.orientdb.DbConfiguration
+import org.trustedanalytics.atk.testutils.DirectoryUtils
 
 /**
  * setup for testing export to OrientDB plugin functions
@@ -25,12 +29,14 @@ trait TestingOrientDb {
 
   var tmpDir: File = null
   var dbUri: String = null
-  var dbName: String = "OrientDbTest"
+  var dbName: String = "OrientDbTest1"
   var dbUserName = "admin"
   var dbPassword = "admin"
   var rootPassword = "root"
+  var dbConfig: DbConfiguration = null
   var orientMemoryGraph: OrientGraphNoTx = null
   var orientFileGraph: OrientGraphNoTx = null
+  val dbProperties: Map[String, Any] = Map(("storage.diskCache.bufferSize", 256))
 
   /**
    * create in memory Orient graph database
@@ -44,11 +50,13 @@ trait TestingOrientDb {
    * create plocal Orient graph database
    */
   def setupOrientDb(): Unit = {
-
-    tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
-    dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
+    val uuid = java.util.UUID.randomUUID.toString
+    tmpDir = DirectoryUtils.createTempDirectory("orientgraphtests")
+    dbUri = "plocal:" + tmpDir.getAbsolutePath + "/" + dbName + uuid
+    dbConfig = new DbConfiguration(dbUri, dbUserName, dbUserName, "port", "host", rootPassword, Some(dbProperties))
     val factory = new OrientGraphFactory(dbUri, dbUserName, dbPassword)
     orientFileGraph = factory.getNoTx
+    orientFileGraph.declareIntent(new OIntentMassiveInsert())
   }
 
   /**
