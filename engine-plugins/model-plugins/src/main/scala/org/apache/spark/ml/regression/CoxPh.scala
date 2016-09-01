@@ -37,7 +37,7 @@ import org.apache.spark.storage.StorageLevel
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{ Map, mutable }
 
-private[regression] trait CoxParams extends Params
+private[regression] trait CoxPhParams extends Params
     with HasFeaturesCol with HasLabelCol with HasPredictionCol with HasMaxIter
     with HasTol with HasFitIntercept with Logging {
 
@@ -73,11 +73,11 @@ private[regression] trait CoxParams extends Params
   }
 }
 
-class Cox(override val uid: String)
-    extends Estimator[CoxModel] with CoxParams
+class CoxPh(override val uid: String)
+    extends Estimator[CoxPhModel] with CoxPhParams
     with DefaultParamsWritable with Logging {
 
-  def this() = this(Identifiable.randomUID("coxSurvivalModel"))
+  def this() = this(Identifiable.randomUID("coxPhSurvivalModel"))
 
   /** @group setParam */
   def setFeaturesCol(value: String): this.type = set(featuresCol, value)
@@ -111,16 +111,16 @@ class Cox(override val uid: String)
 
   setDefault(tol -> 1E-6)
 
-  override def fit(dataFrame: DataFrame): CoxModel = {
+  override def fit(dataFrame: DataFrame): CoxPhModel = {
     val numFeatures = dataFrame.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
 
     val meanVector = computeFeatureMean(dataFrame)
     import breeze.linalg._
-    val coxPointRdd = extractSortedCoxPointRdd(dataFrame)
+    val coxPhPointRdd = extractSortedCoxPhPointRdd(dataFrame)
 
     val handlePersistence = dataFrame.rdd.getStorageLevel == StorageLevel.NONE
-    if (handlePersistence) coxPointRdd.persist(StorageLevel.MEMORY_AND_DISK)
-    val costFun = new CoxCostFun(coxPointRdd)
+    if (handlePersistence) coxPhPointRdd.persist(StorageLevel.MEMORY_AND_DISK)
+    val costFun = new CoxPhCostFun(coxPhPointRdd)
 
     var previousBeta = DenseVector.zeros[Double](numFeatures)
     var previousLoss = 1E-3
@@ -145,7 +145,7 @@ class Cox(override val uid: String)
     }
 
     val coefficients = Vectors.dense(previousBeta.toArray)
-    val model = new CoxModel(uid, coefficients, meanVector)
+    val model = new CoxPhModel(uid, coefficients, meanVector)
     copyValues(model.setParent(this))
   }
 
@@ -153,17 +153,17 @@ class Cox(override val uid: String)
     validateAndTransformSchema(schema, fitting = true)
   }
 
-  override def copy(extra: ParamMap): Cox = defaultCopy(extra)
+  override def copy(extra: ParamMap): CoxPh = defaultCopy(extra)
 
   /**
    * Extract [[featuresCol]], [[labelCol]] and [[censorCol]] from input dataFrame,
    * and put it in an RDD of CoxPoint sorted in descending order of time.
    */
-  protected[ml] def extractSortedCoxPointRdd(dataFrame: DataFrame): RDD[CoxPoint] = {
+  protected[ml] def extractSortedCoxPhPointRdd(dataFrame: DataFrame): RDD[CoxPhPoint] = {
     val rdd = dataFrame.select($(featuresCol), $(labelCol), $(censorCol)).map {
       case Row(features: Vector, time: Double, censor: Double) =>
 
-        CoxPoint(features, time, censor)
+        CoxPhPoint(features, time, censor)
     }
     rdd.sortBy(_.time, false)
   }
@@ -197,18 +197,18 @@ class Cox(override val uid: String)
   }
 }
 
-object Cox extends DefaultParamsReadable[Cox] {
+object CoxPh extends DefaultParamsReadable[CoxPh] {
 
-  override def load(path: String): Cox = super.load(path)
+  override def load(path: String): CoxPh = super.load(path)
 }
 
 /**
- * Model produced by [[Cox]].
+ * Model produced by [[CoxPh]].
  */
-class CoxModel(override val uid: String,
-               val beta: Vector,
-               val meanVector: Vector)
-    extends Model[CoxModel] with CoxParams with MLWritable {
+class CoxPhModel(override val uid: String,
+                 val beta: Vector,
+                 val meanVector: Vector)
+    extends Model[CoxPhModel] with CoxPhParams with MLWritable {
 
   /** @group setParam */
   def setFeaturesCol(value: String): this.type = set(featuresCol, value)
@@ -233,24 +233,23 @@ class CoxModel(override val uid: String,
     validateAndTransformSchema(schema, fitting = false)
   }
 
-  override def copy(extra: ParamMap): CoxModel = {
-    copyValues(new CoxModel(uid, beta, meanVector), extra)
+  override def copy(extra: ParamMap): CoxPhModel = {
+    copyValues(new CoxPhModel(uid, beta, meanVector), extra)
       .setParent(parent)
   }
 
   override def write: MLWriter =
-    new CoxModel.CoxModelWriter(this)
+    new CoxPhModel.CoxPhModelWriter(this)
 }
 
-object CoxModel extends MLReadable[CoxModel] {
+object CoxPhModel extends MLReadable[CoxPhModel] {
 
-  override def read: MLReader[CoxModel] = new CoxModelReader
+  override def read: MLReader[CoxPhModel] = new CoxPhModelReader
 
-  override def load(path: String): CoxModel = super.load(path)
+  override def load(path: String): CoxPhModel = super.load(path)
 
-  /** [[MLWriter]] instance for [[CoxModel]] */
-  private[CoxModel] class CoxModelWriter(instance: CoxModel) extends MLWriter with Logging {
-
+  /** [[MLWriter]] instance for [[CoxPhModel]] */
+  private[CoxPhModel] class CoxPhModelWriter(instance: CoxPhModel) extends MLWriter with Logging {
     private case class Data(coefficients: Vector)
 
     override protected def saveImpl(path: String): Unit = {
@@ -261,12 +260,12 @@ object CoxModel extends MLReadable[CoxModel] {
     }
   }
 
-  private class CoxModelReader extends MLReader[CoxModel] {
+  private class CoxPhModelReader extends MLReader[CoxPhModel] {
 
     /** Checked against metadata when loading model */
-    private val className = classOf[CoxModel].getName
+    private val className = classOf[CoxPhModel].getName
 
-    override def load(path: String): CoxModel = {
+    override def load(path: String): CoxPhModel = {
       val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
 
       val dataPath = new Path(path, "data").toString
@@ -274,7 +273,7 @@ object CoxModel extends MLReadable[CoxModel] {
         .select("coefficients").head()
       val coefficients = data.getAs[Vector](0)
       val mean = data.getAs[Vector](1)
-      val model = new CoxModel(metadata.uid, coefficients, mean)
+      val model = new CoxPhModel(metadata.uid, coefficients, mean)
 
       DefaultParamsReader.getAndSetParams(model, metadata)
       model
@@ -283,7 +282,7 @@ object CoxModel extends MLReadable[CoxModel] {
 
 }
 
-private class CoxAggregator(parameters: BDV[Double])
+private class CoxPhAggregator(parameters: BDV[Double])
     extends Serializable {
   private val beta = parameters
   private var totalCnt: Long = 0L
@@ -297,12 +296,12 @@ private class CoxAggregator(parameters: BDV[Double])
   def informationMatrix: breeze.linalg.DenseMatrix[Double] = matrixSum
 
   /**
-   * Add a new training data to this CoxAggregator, and update the loss and gradient
+   * Add a new training data to this CoxPhAggregator, and update the loss and gradient
    * of the objective function.
-   * @param data The CoxPoint representation for one data point to be added into this aggregator.
-   * @return This CoxAggregator object.
+   * @param data The CoxPhPoint representation for one data point to be added into this aggregator.
+   * @return This CoxPhAggregator object.
    */
-  def add(data: CoxPointWithMetaData): this.type = {
+  def add(data: CoxPhPointWithMetaData): this.type = {
     val epsilon = math.log(data.sumEBetaX)
     val betaX: Double = beta.dot(data.features.toBreeze)
 
@@ -317,10 +316,10 @@ private class CoxAggregator(parameters: BDV[Double])
 
   /**
    * Compute the gradient for the given observation
-   * @param data CoxPointWithMetaData storing the observation with it's risk set values
+   * @param data CoxPhPointWithMetaData storing the observation with it's risk set values
    * @return Breeze DenseVector storing the gradient values
    */
-  def computeGradientVector(data: CoxPointWithMetaData): BDV[Double] = {
+  def computeGradientVector(data: CoxPhPointWithMetaData): BDV[Double] = {
     val gradientVector = BDV.zeros[Double](beta.length)
 
     for (i <- 0 to beta.length - 1) {
@@ -334,10 +333,10 @@ private class CoxAggregator(parameters: BDV[Double])
 
   /**
    * Compute the information matrix for the given observation
-   * @param data CoxPointWithMetaData storing the observation wuth it's risk set values
+   * @param data CoxPhPointWithMetaData storing the observation wuth it's risk set values
    * @return BreezeDenseMatrix storing the Information Matrix values
    */
-  def computeInformationMatrix(data: CoxPointWithMetaData): breeze.linalg.DenseMatrix[Double] = {
+  def computeInformationMatrix(data: CoxPhPointWithMetaData): breeze.linalg.DenseMatrix[Double] = {
     val infoMatrix = breeze.linalg.DenseMatrix.zeros[Double](beta.length, beta.length)
 
     for (i <- 0 to beta.length - 1) {
@@ -360,10 +359,10 @@ private class CoxAggregator(parameters: BDV[Double])
    * of the objective function.
    * (Note that it's in place merging; as a result, `this` object will be modified.)
    *
-   * @param other The other CoxAggregator to be merged.
-   * @return This CoxAggregator object.
+   * @param other The other CoxPhAggregator to be merged.
+   * @return This CoxPhAggregator object.
    */
-  def merge(other: CoxAggregator): this.type = {
+  def merge(other: CoxPhAggregator): this.type = {
     totalCnt += other.totalCnt
     lossSum += other.lossSum
     gradientBetaSum += other.gradientBetaSum
@@ -373,16 +372,16 @@ private class CoxAggregator(parameters: BDV[Double])
 }
 
 /**
- * CoxCostFun implements our distributed version of Newton Raphson for Cox cost.
+ * CoxPhCostFun implements our distributed version of Newton Raphson for CoxPh cost.
  * It returns the loss, gradient and information matrix at a particular point (parameters).
  * It's used in Breeze's convex optimization routines.
  */
-private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
+private class CoxPhCostFun(coxPhPointRdd: RDD[CoxPhPoint]) {
 
   def calculate(currentBeta: BDV[Double]): (Double, BDV[Double], breeze.linalg.DenseMatrix[Double]) = {
 
-    val coxPointWithCumSumAndBetaX = extractCoxPointsWithMetaData(coxPointRdd, currentBeta)
-    val coxAggregator = coxPointWithCumSumAndBetaX.treeAggregate(new CoxAggregator(currentBeta))(
+    val coxPhPointWithCumSumAndBetaX = extractCoxPhPointsWithMetaData(coxPhPointRdd, currentBeta)
+    val coxPhAggregator = coxPhPointWithCumSumAndBetaX.treeAggregate(new CoxPhAggregator(currentBeta))(
       seqOp = (c, v) => (c, v) match {
         case (aggregator, instance) => aggregator.add(instance)
       },
@@ -390,20 +389,20 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
         case (aggregator1, aggregator2) => aggregator1.merge(aggregator2)
       })
 
-    (coxAggregator.loss, coxAggregator.gradient, coxAggregator.informationMatrix)
+    (coxPhAggregator.loss, coxPhAggregator.gradient, coxPhAggregator.informationMatrix)
 
   }
 
   /**
-   * Computes additional parameters given CoxPoint and intial beta to be used by Newton Raphson to estimate new beta
-   * @param coxPointRdd Rdd storing the CoxPoint containing features, time and censor
+   * Computes additional parameters given CoxPhPoint and intial beta to be used by Newton Raphson to estimate new beta
+   * @param coxPhPointRdd Rdd storing the CoxPhPoint containing features, time and censor
    * @param currentBeta The current value for beta
-   * @return Rdd storing CoxPoint and sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXiXjEBetaX in addition
+   * @return Rdd storing CoxPhPoint and sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXiXjEBetaX in addition
    */
-  protected[ml] def extractCoxPointsWithMetaData(coxPointRdd: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[CoxPointWithMetaData] = {
+  protected[ml] def extractCoxPhPointsWithMetaData(coxPhPointRdd: RDD[CoxPhPoint], currentBeta: BDV[Double]): RDD[CoxPhPointWithMetaData] = {
 
-    val sc = coxPointRdd.sparkContext
-    val riskSetRdd = riskSet(coxPointRdd, currentBeta)
+    val sc = coxPhPointRdd.sparkContext
+    val riskSetRdd = riskSet(coxPhPointRdd, currentBeta)
 
     val rRdd = riskSetRdd.map(x => (x._1, x._4, x._5))
 
@@ -411,9 +410,9 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
     val broadCastCumulativeSum = sc.broadcast(cumulativeSum)
     val finalRisk = computeFinalR(riskSetRdd, broadCastCumulativeSum)
 
-    val updatedCoxPoint = coxPointRdd.zip(finalRisk).map { case (a, (sumR, xR, r, sumS, sumT)) => CoxPointWithMetaData(a.features, a.time, a.censor, sumR, xR, r, sumS, sumT) }
+    val updatedCoxPhPoint = coxPhPointRdd.zip(finalRisk).map { case (a, (sumR, xR, r, sumS, sumT)) => CoxPhPointWithMetaData(a.features, a.time, a.censor, sumR, xR, r, sumS, sumT) }
 
-    updatedCoxPoint
+    updatedCoxPhPoint
   }
 
   /**
@@ -451,12 +450,12 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
   }
 
   /**
-   * Computes meta data using CoxPoint and current beta with one pass over the data
+   * Computes meta data using CoxPhPoint and current beta with one pass over the data
    * @param sortedData Rdd storing the features, time and censor information sorted in decreasing order on time
    * @param currentBeta The current beta value
    * @return Rdd containing the meta data as a tuple with sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXiXjEBetaX
    */
-  def riskSet(sortedData: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double], Double, BDV[Double], breeze.linalg.DenseMatrix[Double])] = {
+  def riskSet(sortedData: RDD[CoxPhPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double], Double, BDV[Double], breeze.linalg.DenseMatrix[Double])] = {
     import breeze.linalg.DenseVector
     val metaData = sortedData.mapPartitionsWithIndex {
       case (i, iter) =>
@@ -524,8 +523,8 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
  * @param censor Indicator of the event has occurred or not. If the value is 1, it means
  *               the event has occurred i.e. uncensored; otherwise censored.
  */
-private[regression] case class CoxPoint(features: Vector, time: Double, censor: Double) {
-  require(censor == 1.0 || censor == 0.0, "censor of class CoxPoint must be 1.0 or 0.0")
+private[regression] case class CoxPhPoint(features: Vector, time: Double, censor: Double) {
+  require(censor == 1.0 || censor == 0.0, "censor of class CoxPhPoint must be 1.0 or 0.0")
 }
 
 /**
@@ -538,12 +537,12 @@ private[regression] case class CoxPoint(features: Vector, time: Double, censor: 
  * @param eBetaX e raised to dot product of beta and features
  * @param sumXDotEBetaX Sum of Dot product of feature and e raised to the dot product of beta and features, for all observations in the risk set of an observation
  */
-case class CoxPointWithMetaData(features: Vector,
-                                time: Double,
-                                censor: Double,
-                                sumEBetaX: Double,
-                                xDotEBetaX: BDV[Double],
-                                eBetaX: Double,
-                                sumXDotEBetaX: BDV[Double],
-                                sumXiXjEBetaX: breeze.linalg.DenseMatrix[Double])
+case class CoxPhPointWithMetaData(features: Vector,
+                                  time: Double,
+                                  censor: Double,
+                                  sumEBetaX: Double,
+                                  xDotEBetaX: BDV[Double],
+                                  eBetaX: Double,
+                                  sumXDotEBetaX: BDV[Double],
+                                  sumXiXjEBetaX: breeze.linalg.DenseMatrix[Double])
 

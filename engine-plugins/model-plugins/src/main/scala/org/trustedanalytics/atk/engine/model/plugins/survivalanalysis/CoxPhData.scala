@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.survivalanalysis
 
-import org.apache.spark.ml.regression.CoxModel
+import org.apache.spark.ml.regression.CoxPhModel
 
-case class CoxPhData(coxModel: CoxModel, featureColumns: List[String], timeColumn: String, censorColumn: String) {
+case class CoxPhData(coxModel: CoxPhModel, featureColumns: List[String], timeColumn: String, censorColumn: String) {
   require(featureColumns != null && featureColumns.nonEmpty, "featureColumns must not be null nor empty")
   require(coxModel != null, "coxModel must not be null")
 }
