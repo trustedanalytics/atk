@@ -34,7 +34,7 @@ object ARIMAXJsonProtocol {
      *            xregMaxLag : scala.Int
      *            coefficients : scala:Array[scala.Double]
      *            includeOriginalXreg : scala.Boolean
-     *            hasIntercept : scala.Boolean
+     *            includeIntercept : scala.Boolean
      * @return JsValue
      */
     override def write(obj: ARIMAXModel): JsValue = {
@@ -42,10 +42,10 @@ object ARIMAXJsonProtocol {
         "p" -> obj.p.toJson,
         "d" -> obj.d.toJson,
         "q" -> obj.q.toJson,
-        "xregMaxLag" -> obj.q.toJson,
+        "xregMaxLag" -> obj.xregMaxLag.toJson,
         "coefficients" -> obj.coefficients.toJson,
-        "includeOriginalXreg" -> obj.includesOriginalXreg.toJson,
-        "hasIntercept" -> obj.includesOriginalXreg.toJson
+        "includeOriginalXreg" -> obj.includeOriginalXreg.toJson,
+        "includeIntercept" -> obj.includeIntercept.toJson
       )
     }
 
@@ -59,7 +59,7 @@ object ARIMAXJsonProtocol {
      *            xregMaxLag : scala.Int
      *            coefficients : scala:Array[scala.Double]
      *            includeOriginalXreg : scala.Boolean
-     *            hasIntercept : scala.Boolean
+     *            includeIntercept : scala.Boolean
      */
     override def read(json: JsValue): ARIMAXModel = {
       val fields = json.asJsObject.fields
@@ -69,9 +69,9 @@ object ARIMAXJsonProtocol {
       val xregMaxLag = getOrInvalid(fields, "xregMaxLag").convertTo[Int]
       val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
       val includeOriginalXreg = getOrInvalid(fields, "includeOriginalXreg").convertTo[Boolean]
-      val hasIntercept = getOrInvalid(fields, "hasIntercept").convertTo[Boolean]
+      val includeIntercept = getOrInvalid(fields, "includeIntercept").convertTo[Boolean]
 
-      new ARIMAXModel(p, d, q, xregMaxLag, coefficients, includeOriginalXreg, hasIntercept)
+      new ARIMAXModel(p, d, q, xregMaxLag, coefficients, includeOriginalXreg, includeIntercept)
     }
   }
 

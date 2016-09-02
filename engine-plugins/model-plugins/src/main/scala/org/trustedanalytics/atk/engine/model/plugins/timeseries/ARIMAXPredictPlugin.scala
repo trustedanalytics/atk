@@ -80,9 +80,6 @@ class ARIMAXPredictPlugin extends SparkCommandPlugin[ARIMAXPredictArgs, FrameRef
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
     val ts = new DenseVector[Double](yVector.toArray)
 
-    // Find the maximum lag and fill that many spots with nulls, followed by the predicted y values
-    val maxLag = max(arimaxModel.p, arimaxModel.q)
-
     val predictions = arimaxModel.predict(ts, xMatrix).toArray
 
     if (predictions.length != frame.rdd.count)

@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARIMAXJsonProtocol._
 
 /**
- * Command for loading model data into existing model in the model database.
+ * Parameters used for predicting future values using the ARIMAX Model
  */
 case class ARIMAXPredictArgs(model: ModelReference,
                              @ArgDoc("""A frame whose values are to be predicted.""") frame: FrameReference,

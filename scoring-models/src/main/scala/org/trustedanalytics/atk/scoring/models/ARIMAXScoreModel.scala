@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaData
 
 class ARIMAXScoreModel(arimaxModel: ARIMAXModel, arimaxData: ARIMAXData)
     extends ARIMAXModel(arimaxModel.p, arimaxModel.d, arimaxModel.q, arimaxModel.xregMaxLag, arimaxModel.coefficients,
-      arimaxModel.includesOriginalXreg, arimaxModel.hasIntercept) with Model {
+      arimaxModel.includeOriginalXreg, arimaxModel.includeIntercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     val xColumnsLength = arimaxData.xColumns.length

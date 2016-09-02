@@ -28,61 +28,6 @@ if ta.server.port != 19099:
 ta.connect()
 
 class ModelArimaxTest(unittest.TestCase):
-    def test_arimax_no_lags(self):
-        print "define csv file"
-        schema = [("y", ta.float64),("visitors", ta.float64),("wkends", ta.float64),("seasonality", ta.float64),("incidentRate", ta.float64), ("holidayFlag", ta.float64),("postHolidayFlag", ta.float64),("mintemp", ta.float64)]
-        csv = ta.CsvFile("/datasets/arx_train.csv", schema=schema, skip_header_lines=1)
-
-        print "create training frame"
-        train_frame = ta.Frame(csv)
-
-        print "Initializing a ArimaxModel object"
-        arimax = ta.ArimaxModel()
-
-        print "Training the model on the Frame"
-        m = arimax.train(train_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"], 1, 1, 1, 0, True)
-
-        expected_coefficients = [{u'ar': [-0.017574956037210644],
-                                  u'c': 0.12555666417755332,
-                                  u'ma': [-0.9175428858996906],
-                                  u'xreg': [2.6856226861751337e-08,
-                                            1.6913274131242466e-06,
-                                            15238.142921221388,
-                                            2.8654054267070586e-07,
-                                            4.860690264967836e-07,
-                                            -1.8374216542147503e-06,
-                                            2.416210415270103e-07]}
-                                 ]
-
-        self.assertEqual(m, expected_coefficients)
-
-
-        print "create test frame"
-        csv2 = ta.CsvFile("/datasets/arx_test.csv", schema=schema, skip_header_lines=1)
-        test_frame = ta.Frame(csv2)
-
-        print "Predicting on the Frame"
-        p = arimax.predict(test_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"])
-        self.assertEqual(p.column_names, ["y","visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp","predicted_y"])
-
-        expected_results = [[115.48893565801859],
-                            [115.28389647706668],
-                            [115.6968122002911],
-                            [115.3086423204453],
-                            [116.7218798474326],
-                            [115.43195223173811],
-                            [115.44677515508538],
-                            [114.2593040359367],
-                            [115.87394727940287],
-                            [117.08366427400865],
-                            [115.69409393002961],
-                            [118.10909177065538],
-                            [117.317403513559],
-                            [116.53135116655103],
-                            [116.74528764137638]]
-
-        self.assertEqual(expected_results, p.take(p.row_count, 1, "predicted_y"))
-
     def test_arimax_with_lag(self):
         print "define csv file"
         schema = [("y", ta.float64),("visitors", ta.float64),("wkends", ta.float64),("seasonality", ta.float64),("incidentRate", ta.float64), ("holidayFlag", ta.float64),("postHolidayFlag", ta.float64),("mintemp", ta.float64)]
@@ -94,88 +39,94 @@ class ModelArimaxTest(unittest.TestCase):
         print "Initializing a ArimaxModel object"
         arimax = ta.ArimaxModel()
 
-        print "Training the model on the Frame with p=1, d=1, q=1, xMaxLag=1"
-        coefficients = arimax.train(train_frame, "y", ["visitors","wkends","seasonality","incidentRate","mintemp"], 1, 1, 1, 1, True)
-        self.assertEqual(coefficients['c'], 0.1255562898081476)
-        self.assertEqual(coefficients['ar'], [-0.017575034130881045])
-        self.assertEqual(coefficients['ma'], [-0.9175428971322549])
-        self.assertEqual(coefficients['xreg'], [-7.873733393546116e-09,
-                                               -1.2205647089417771e-08,
-                                               0.000766029602483627,
-                                               4.592819482753666e-08,
-                                               -1.0927108582888228e-07,
-                                               2.8556704403623667e-08,
-                                               1.9039918852705696e-06,
-                                               15238.143012203698,
-                                               2.509924549203801e-07,
-                                               2.122053751579772e-07])
+        print "Training the model on the Frame"
+        coefficients = arimax.train(train_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"], 1, 1, 1, 1, False)
+
+        expected_coefficients = [{u'ar': [-0.8981279030037268],
+                                  u'c': -0.021231596442917687,
+                                  u'ma': [-0.8543855454206947],
+                                  u'xreg': [0.026948785665512696,
+                                            -0.27509641527217865,
+                                            -30.04399435207178,
+                                            0.23517811763216095,
+                                            6.6167555198084225,
+                                            0.8706683776904101,
+                                            0.20954216832984773]}]
+
+        self.assertEqual(coefficients, expected_coefficients)
+
 
         print "create test frame"
-        csv = ta.CsvFile("/datasets/arx_test.csv", schema=schema, skip_header_lines=1)
-        test_frame = ta.Frame(csv)
+        csv2 = ta.CsvFile("/datasets/arx_test.csv", schema=schema, skip_header_lines=1)
+        test_frame = ta.Frame(csv2)
 
         print "Predicting on the Frame"
-        p = arimax.predict(test_frame, "y", ["visitors","wkends","seasonality","incidentRate","mintemp"])
+        p = arimax.predict(test_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"])
         self.assertEqual(p.column_names, ["y","visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp","predicted_y"])
 
-        expected_results = [[105.55408982267579],
-                            [105.56567132520082],
-                            [105.57820656626446],
-                            [105.5907402301133],
-                            [105.60327385798291],
-                            [105.61580759047929],
-                            [105.62834113774522],
-                            [105.64087466062102],
-                            [105.65340825398481],
-                            [105.66594187906668],
-                            [105.67847553027053],
-                            [105.69100910906367],
-                            [105.7035427046958],
-                            [105.71607637379999],
-                            [105.72860990348767],
-                            [105.7411434939925]]
+        expected_results = [[[105.53001433835563],
+                             [109.89267337675331],
+                             [105.95321596663403],
+                             [109.47012099291403],
+                             [106.29025886015499],
+                             [109.12495017284792],
+                             [106.55780321207322],
+                             [108.84219793221327],
+                             [106.76928769613818],
+                             [108.60979462313634],
+                             [106.93555239988473],
+                             [108.41800446053107],
+                             [107.0653413035563],
+                             [108.25897423175753],
+                             [107.16570759655305]]]
 
-        self.assertEqual(expected_results, p.take(p.row_count, 0, "predicted_y"))
+        self.assertEqual(expected_results, p.take(p.row_count, 1, "predicted_y"))
 
-    def test_arimax_pov(self):
-        print "define csv file"
-        schema = [("SUPPLIER", str),("REF", ta.float64),("DATE", str),("VALUE", ta.float64),("converusd", ta.float64), ("petrole", ta.float64),("petrole_sin", ta.float64),("petrole_log", ta.float64)]
+
+    def test_arimax_air_quality(self):
+        print "Define csv file"
+        schema = [("Date", str),("Time", str),("CO_GT", ta.float64),("PT08_S1_CO", ta.float64),("NMHC_GT", ta.float64), ("C6H6_GT", ta.float64),("PT08_S2_NMHC", ta.float64),("NOx_GT", ta.float64),
+                  ("PT08_S3_NOx", ta.float64),("NO2_GT", ta.float64),("PT08_S4_NO2", ta.float64),("PT08_S5_O3", ta.float64),("T", ta.float64),("RH", ta.float64),("AH", ta.float64)]
         csv = ta.CsvFile("/datasets/arimax_train.csv", schema=schema, skip_header_lines=1)
 
-        print "create training frame"
+        print "Create training frame"
         train_frame = ta.Frame(csv)
 
         print "Initializing a ArimaxModel object"
         arimax = ta.ArimaxModel()
 
         print "Training the model on the Frame"
-        coeff = arimax.train(train_frame, "VALUE", ["converusd", "petrole"], 1, 1, 1, 0, True)
+        arimax.train(train_frame, "CO_GT", ["C6H6_GT","PT08_S2_NMHC", "T"], 1, 1, 1, 2, False, True)
 
-        self.assertEqual(coeff['c'], 0.003381525295695335)
-        self.assertEqual(coeff['ar'], [0.7332052419145086])
-        self.assertEqual(coeff['ma'], [-0.9637250701387984])
-        self.assertEqual(coeff['xreg'], [-2.8629504307261073, -0.010396258294983547])
-
-        print "create test frame"
+        print "Create test frame"
         csv2 = ta.CsvFile("/datasets/arimax_test.csv", schema=schema, skip_header_lines=1)
         test_frame = ta.Frame(csv2)
 
         print "Predicting on the Frame"
-        p = arimax.predict(test_frame, "VALUE", ["converusd","petrole"])
-        self.assertEqual(p.column_names, ["SUPPLIER","REF","DATE","VALUE","converusd","petrole","petrole_sin","petrole_log","predicted_y"])
+        p = arimax.predict(test_frame, "CO_GT", ["C6H6_GT","PT08_S2_NMHC", "T"])
 
-        expected_results = [[41.66384743319339],
-                            [41.298961808947716],
-                            [41.27251949012402],
-                            [41.26850807273888],
-                            [41.265910023852236],
-                            [41.26617299997271],
-                            [41.268592554239326],
-                            [41.26910810975603],
-                            [41.26948406308634],
-                            [41.270954343361005]]
+        expected_results = [[3.9, 3.1898858210811287],
+                            [3.7, 2.2818847734557384],
+                            [6.6, 3.1227047810468007],
+                            [4.4, 2.262430500447906],
+                            [3.5, 3.056826243795137],
+                            [5.4, 2.241709271031164],
+                            [2.7, 2.992180086668445],
+                            [1.9, 2.21978929415812],
+                            [1.6, 2.9286999621926157],
+                            [1.7, 2.1967351066256677],
+                            [-200.0, 2.8663230948330987],
+                            [1.0, 2.1726077707723133],
+                            [1.2, 2.8049900886929],
+                            [1.5, 2.1474650615321003],
+                            [2.7, 2.7446447455635123],
+                            [3.7, 2.121361643418137],
+                            [3.2, 2.6852338927714148],
+                            [4.1, 2.0943492379778874],
+                            [3.6, 2.6267072202927744],
+                            [2.8, 2.066476782233197]]
 
-        self.assertEqual(expected_results, p.take(p.row_count, 0, "predicted_y"))
+        self.assertEqual(expected_results, p.take(20, columns=["CO_GT", "predicted_y"]))
 
 
 if __name__ == "__main__":

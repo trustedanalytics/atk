@@ -37,7 +37,7 @@ case class ARIMAXTrainArgs(model: ModelReference,
                            @ArgDoc("""Moving average order""") q: Int,
                            @ArgDoc("""The maximum lag order for exogenous variables""") xregMaxLag: Int,
                            @ArgDoc("If true, the model is fit with an original exogenous variables (intercept for exogenous variables). Default is True") includeOriginalXreg: Boolean = true,
-                           @ArgDoc("If true, the model is fit with an intercept.  Default is True") includeIntercept: Boolean = true,
+                           @ArgDoc("If true, the model is fit with an intercept. Default is True") includeIntercept: Boolean = true,
                            @ArgDoc("""A set of user provided initial parameters for optimization. If the list is empty
 (default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter should be: intercept term, AR
 parameters (in increasing order of lag), MA parameters (in increasing order of lag)""") userInitParams: Option[List[Double]] = None) {

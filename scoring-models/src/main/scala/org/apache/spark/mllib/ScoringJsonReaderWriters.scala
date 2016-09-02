@@ -1251,8 +1251,8 @@ object ScoringJsonReaderWriters {
         "d" -> obj.d.toJson,
         "q" -> obj.q.toJson,
         "xregMaxLag" -> obj.xregMaxLag.toJson,
-        "includesOriginalXreg" -> obj.includesOriginalXreg.toJson,
-        "hasIntercept" -> obj.hasIntercept.toJson
+        "includesOriginalXreg" -> obj.includeOriginalXreg.toJson,
+        "includeIntercept" -> obj.includeIntercept.toJson
       )
     }
 
@@ -1266,7 +1266,7 @@ object ScoringJsonReaderWriters {
      *              xregMaxLag : scala.Int
      *              coefficients : scala.Array[scala.Double]
      *              includesOriginalXreg : scala.Boolean
-     *              hasIntercept : scala.Boolean
+     *              includeIntercept : scala.Boolean
      */
     override def read(json: JsValue): ARIMAXModel = {
       val fields = json.asJsObject.fields
@@ -1276,9 +1276,9 @@ object ScoringJsonReaderWriters {
       val xregMaxLag = getOrInvalid(fields, "xregMaxLag").convertTo[Int]
       val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
       val includesOriginalXreg = getOrInvalid(fields, "includesOriginalXreg").convertTo[Boolean]
-      val hasIntercept = getOrInvalid(fields, "hasIntercept").convertTo[Boolean]
+      val includeIntercept = getOrInvalid(fields, "includeIntercept").convertTo[Boolean]
 
-      new ARIMAXModel(p, d, q, xregMaxLag, coefficients, includesOriginalXreg, hasIntercept)
+      new ARIMAXModel(p, d, q, xregMaxLag, coefficients, includesOriginalXreg, includeIntercept)
     }
 
   }
