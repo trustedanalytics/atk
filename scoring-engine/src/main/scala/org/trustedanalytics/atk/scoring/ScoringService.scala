@@ -17,18 +17,17 @@
 package org.trustedanalytics.atk.scoring
 
 import akka.actor.Actor
-import spray.json.JsValue
-import spray.routing._
-import spray.http._
-import MediaTypes._
 import akka.event.Logging
-import scala.collection.mutable.ArrayBuffer
-import scala.concurrent._
-import ExecutionContext.Implicits.global
-import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
-import scala.util.{ Failure, Success }
+import com.typesafe.config.ConfigFactory
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import spray.json._
+import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
+import spray.http.MediaTypes._
+import spray.http.{ StatusCodes, _ }
+import spray.routing._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
+import scala.util.{ Failure, Success }
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -56,18 +55,7 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
 /**
  * Defines our service behavior independently from the service actor
  */
-class ScoringService(model: Model) extends Directives {
-  def homepage = {
-    respondWithMediaType(`text/html`) {
-      complete {
-        <html>
-          <body>
-            <h1>Welcome to the Scoring Engine</h1>
-          </body>
-        </html>
-      }
-    }
-  }
+class ScoringService(scoringModel: Model) extends Directives {
 
   lazy val description = {
     new ServiceDescription(name = "Trusted Analytics",
@@ -75,12 +63,24 @@ class ScoringService(model: Model) extends Directives {
       versions = List("v1", "v2"))
   }
 
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
   import AtkDefaultJsonProtocol._
   implicit val descFormat = jsonFormat3(ServiceDescription)
-  val jsonFormat = new ScoringServiceJsonProtocol(model)
-  import jsonFormat._
-
+  import ScoringServiceJsonProtocol._
   import spray.json._
+
+  /**
+   * Case class to hold model, model tar file path and json format protocol object
+   *
+   * @param model Scoring Model
+   * @param modelPath Path of model on filesystem
+   * @param jsonFormat DataOutputFormatJsonProtocol object
+   */
+  case class ModelData(model: Model, modelPath: String, jsonFormat: DataOutputFormatJsonProtocol)
+
+  var modelData = ModelData(scoringModel,
+    config.getString("trustedanalytics.scoring-engine.archive-tar"),
+    new DataOutputFormatJsonProtocol(scoringModel))
 
   /**
    * Main Route entry point to the Scoring Server
@@ -88,9 +88,22 @@ class ScoringService(model: Model) extends Directives {
   val serviceRoute: Route = logRequest("scoring service", Logging.InfoLevel) {
     val prefix = "score"
     val metadataPrefix = "metadata"
+
+    /**
+     * Note:
+     * 'modelData' varible should not be used directly in any of routes, instead it should be passed to
+     *  a method and then use it. Rationale is - passing model object as an argument to method makes it 'val'
+     *  by default which makes it immutable. Hence it does not get affected if revise model request is made
+     *  simulteniously and modifies the 'modelData' object reference.
+     */
+
     path("") {
       get {
-        homepage
+        respondWithMediaType(`text/html`) {
+          complete(
+            getHomePage(modelData)
+          )
+        }
       }
     } ~
       path("v2" / prefix) {
@@ -99,13 +112,7 @@ class ScoringService(model: Model) extends Directives {
             entity(as[String]) {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
-                import jsonFormat.DataOutputFormat
-                onComplete(Future { scoreJsonRequest(DataInputFormat.read(json)) }) {
-                  case Success(output) => complete(DataOutputFormat.write(output).toString())
-                  case Failure(ex) => ctx => {
-                    ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-                  }
-                }
+                getScore(modelData, json)
             }
           }
         }
@@ -120,45 +127,116 @@ class ScoringService(model: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(Future { scoreStringRequest(records) }) {
-              case Success(string) => complete(string.mkString(","))
-              case Failure(ex) => ctx => {
-                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-              }
-            }
+            getScoreV1(modelData, records)
           }
         }
       } ~
       path("v2" / metadataPrefix) {
         requestUri { uri =>
           get {
-            import spray.json._
-            onComplete(Future { model.modelMetadata() }) {
-              case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
-                "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString)
-              case Failure(ex) => ctx => {
-                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
-
-              }
+            getMetaData(modelData)
+          }
+        }
+      } ~
+      path("v2" / "revise") {
+        requestUri { uri =>
+          post {
+            entity(as[String]) {
+              args =>
+                this.synchronized {
+                  val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
+                  reviseModelData(modelData, path)
+                }
             }
           }
         }
       }
   }
 
-  def scoreStringRequest(records: Seq[Array[Any]]): Array[Any] = {
+  private def getScore(md: ModelData, json: JsValue): Route = {
+    onComplete(Future { scoreJsonRequest(md, json) }) {
+      case Success(output) => complete(md.jsonFormat.DataOutputFormat.write(output).toString())
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getScoreV1(md: ModelData, records: Seq[Array[Any]]): Route = {
+    onComplete(Future { scoreStringRequest(md, records) }) {
+      case Success(string) => complete(string.mkString(","))
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getMetaData(md: ModelData): Route = {
+    import spray.json._
+    onComplete(Future { md.model.modelMetadata() }) {
+      case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
+        "input" -> new JsArray(md.model.input.map(input => FieldFormat.write(input)).toList),
+        "output" -> new JsArray(md.model.output.map(output => FieldFormat.write(output)).toList)).toString)
+      case Failure(ex) => ctx => {
+        ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+      }
+    }
+  }
+
+  private def getHomePage(md: ModelData): String = {
+    val metadata = JsObject("model_details" -> md.model.modelMetadata().toJson,
+      "input" -> new JsArray(md.model.input.map(input => FieldFormat.write(input)).toList),
+      "output" -> new JsArray(md.model.output.map(output => FieldFormat.write(output)).toList)).prettyPrint
+
+    s"""
+      <html>
+        <body>
+          <h1>Welcome to the Scoring Engine</h1>
+          <h3>Model details:</h3>
+          Model Path: ${md.modelPath} <br>
+          Model metadata:<pre> $metadata </pre>
+        </body>
+      </html>"""
+  }
+
+  private def reviseModelData(md: ModelData, modelPath: String): Route = {
+    try {
+      val revisedModel = ScoringEngineHelper.getModel(modelPath)
+      if (ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel)) {
+        modelData = ModelData(revisedModel, modelPath, new DataOutputFormatJsonProtocol(revisedModel))
+        complete { """{"status": "success"}""" }
+      }
+      else {
+        complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
+          "different than existing model")
+      }
+    }
+    catch {
+      case e: Throwable =>
+        modelData = md
+        e.printStackTrace()
+        if (e.getMessage.contains("File does not exist:")) {
+          complete(StatusCodes.BadRequest, e.getMessage)
+        }
+        else {
+          complete(StatusCodes.InternalServerError, e.getMessage)
+        }
+    }
+  }
+
+  def scoreStringRequest(modelData: ModelData, records: Seq[Array[Any]]): Array[Any] = {
     records.map(row => {
-      val score = model.score(row)
+      val score = modelData.model.score(row)
       score(score.length - 1).toString
     }).toArray
   }
 
-  def scoreJsonRequest(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
-    records.map(row => scoreToMap(model.score(row))).toArray
+  def scoreJsonRequest(modeldata: ModelData, json: JsValue): Array[Map[String, Any]] = {
+    val records = modeldata.jsonFormat.DataInputFormat.read(json)
+    records.map(row => scoreToMap(modeldata.model, modeldata.model.score(row))).toArray
   }
 
-  def scoreToMap(score: Array[Any]): Map[String, Any] = {
+  def scoreToMap(model: Model, score: Array[Any]): Map[String, Any] = {
     val outputNames = model.output().map(o => o.name)
     require(score.length == outputNames.length, "Length of output values should match the output names")
     val outputMap: Map[String, Any] = outputNames.zip(score).map(combined => (combined._1.name, combined._2)).toMap

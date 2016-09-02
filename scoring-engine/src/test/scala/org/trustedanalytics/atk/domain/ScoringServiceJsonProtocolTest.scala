@@ -16,11 +16,10 @@
 
 package org.trustedanalytics.atk.domain
 
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.scoring.ScoringServiceJsonProtocol
 import org.scalatest.{ Matchers, WordSpec }
+import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
+import org.trustedanalytics.atk.scoring.{ DataOutputFormatJsonProtocol, ScoringServiceJsonProtocol }
 import spray.json._
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Field, Model }
 
 import scala.collection.immutable.Map
 
@@ -41,11 +40,10 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
     override def score(row: Array[Any]): Array[Any] = ???
   }
 
-  val jsonFormat = new ScoringServiceJsonProtocol(model)
+  import ScoringServiceJsonProtocol._
+  val jsonFormat = new DataOutputFormatJsonProtocol(model)
 
-  import jsonFormat.DataInputFormat
-  import jsonFormat.DataOutputFormat
-  import jsonFormat.DataTypeJsonFormat
+  import jsonFormat.{ DataInputFormat, DataOutputFormat }
 
   "DataInputFormat" should {
     "parse JSON input" in {
