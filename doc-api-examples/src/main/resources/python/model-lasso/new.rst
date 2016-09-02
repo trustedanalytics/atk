@@ -27,8 +27,11 @@ Consider the following frame containing two columns.
 >>> model = ta.LassoModel()
 <progress>
 
->>> model.train(frame, 'y', ['x1'])
+>>> results = model.train(frame, 'y', ['x1'])
 <progress>
+
+>>> results
+{u'intercept': 0.0, u'weights': [2.4387285895043913]}
 
 >>> predicted_frame = model.predict(frame)
 <progress>
