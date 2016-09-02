@@ -60,8 +60,11 @@
     >>> model = ta.LassoModel()
     [===Job Progress===]
 
-    >>> model.train(frame, 'y', ['x1'])
+    >>> results = model.train(frame, 'y', ['x1'])
     [===Job Progress===]
+
+    >>> results
+    {u'intercept': 0.0, u'weights': [2.4387285895043913]}
 
     >>> predicted_frame = model.predict(frame)
     [===Job Progress===]

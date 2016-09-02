@@ -75,6 +75,15 @@
             Fraction of data to be used per iteration.
 
 
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
     Train a Lasso model given an RDD of (label, features) pairs. We run a fixed number
      * of iterations of gradient descent using the specified step size. Each iteration uses
      * `miniBatchFraction` fraction of the data to calculate a stochastic gradient. The weights used
