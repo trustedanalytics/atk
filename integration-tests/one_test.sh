@@ -33,7 +33,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 PYTHON_DIR='/usr/lib/python2.7/site-packages'
 TARGET_DIR=$DIR/target
 OUTPUT=$TARGET_DIR/debug_one_test.xml
-export PYTHONPATH=$DIR/../python:$PYTHONPATH:$PYTHON_DIR
+export PYTHONPATH=$DIR/../python-client:$PYTHONPATH:$PYTHON_DIR
 
 echo "$NAME TEST=$TEST"
 echo "$NAME DIR=$DIR"
