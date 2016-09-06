@@ -58,11 +58,10 @@ class ARIMAXTrainPlugin extends SparkCommandPlugin[ARIMAXTrainArgs, ARIMAXTrainR
 
     trainFrameRdd.cache()
 
-    val userInitParams = if (arguments.userInitParams.isDefined) arguments.userInitParams.get.toArray else null
+    val userInitParams: Option[Array[Double]] = if (arguments.userInitParams.isDefined) Some(arguments.userInitParams.get.toArray) else None
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, arguments.timeseriesColumn, arguments.xColumns)
     val timeseries = new DenseVector(yVector.toArray)
-    val arimaxModel = ARIMAX.fitModel(arguments.p, arguments.d, arguments.q, timeseries, xMatrix, arguments.xregMaxLag,
-      arguments.includeOriginalXreg, arguments.includeIntercept, userInitParams)
+    val arimaxModel = ARIMAX.fitModel(arguments.p, arguments.d, arguments.q, timeseries, xMatrix, arguments.xregMaxLag, arguments.includeOriginalXreg, arguments.includeIntercept, userInitParams)
 
     trainFrameRdd.unpersist()
 
