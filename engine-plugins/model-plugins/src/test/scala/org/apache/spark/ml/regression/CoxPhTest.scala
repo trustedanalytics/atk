@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 import breeze.linalg.{ DenseVector => BDV, * }
 import breeze.linalg.{ DenseMatrix => BDM, * }
 
-class CoxPHTest extends TestingSparkContextFlatSpec with Matchers {
+class CoxPhTest extends TestingSparkContextFlatSpec with Matchers {
 
   val sortedCoxPointArray = Array(new CoxPhPoint(new DenseVector(Array(18d, 42d)), 6d, 1d),
     new CoxPhPoint(new DenseVector(Array(19d, 79d)), 5d, 1d),
