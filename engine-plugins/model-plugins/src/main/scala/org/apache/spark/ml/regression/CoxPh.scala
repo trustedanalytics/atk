@@ -282,6 +282,34 @@ object CoxPhModel extends MLReadable[CoxPhModel] {
 
 }
 
+/**
+ * CoxPhAggregator computes the loss, gradient and informationMatrix for a CoxPh loss function as used in CoxPh survival
+ * analysis for samples in a dense vector in an online fashion.
+ *
+ * Two CoxPhAggregator can be merged together to have a summary of loss, gradient and information matrix of the
+ * corresponding joint dataset.
+ *
+ * Given the values of the covariates x^{'}, for random lifetime t_{i} of subjects i = 1, ..., n, with corresponding
+ * censoring censor_i, the log likelihood loss function under the CoxPh model is given as:
+ * {
+ *   L(\beta)=\sum_{i=1}^n[(\beta.x - log{\sum_{j=1}^Re^{\beta.x})})censor_i]
+ * }
+ * where R defines the risk-set R(t) is the set of all individuals i with t_i> t, i.e. the people who haven't died or been censored yet.
+ *
+ * The gradient vector is computed by taking the partial first order derivative of the above function with respect to beta_1, ..., beta_n
+ *
+ * The gradient vector of size 'k' is thus computed as:
+ *   {
+ *   G(\beta_k)=\sum_{i=1}^n[(x_i_k - (\frac{\sum_{j=1}^Re^{\beta_k.x_j_k}x_j_k}
+ *                    {{\sum_{j=1}^Re^{\beta.x})}}))censor_i]
+ *   }
+ * The information matrix of dimensions k*k is given as :
+ *
+ *   I(a,b) = -\sum_{i=1}^n[\frac{(({\sum_{j=1}^Re^{\beta.x}})({\sum_{j=1}^Rx_j_ax_j_be^{\beta.x}}) -
+ * ({\sum_{j=1}^Rx_j_ae^{\beta.x}})({\sum_{j=1}^Rx_j_be^{\beta.x}}))censor_i}{({\sum_{j=1}^Re^{\beta.x}})^2} ]
+ *
+ * @param parameters
+ */
 private class CoxPhAggregator(parameters: BDV[Double])
     extends Serializable {
   private val beta = parameters
@@ -333,7 +361,7 @@ private class CoxPhAggregator(parameters: BDV[Double])
 
   /**
    * Compute the information matrix for the given observation
-   * @param data CoxPhPointWithMetaData storing the observation wuth it's risk set values
+   * @param data CoxPhPointWithMetaData storing the observation with it's risk set values
    * @return BreezeDenseMatrix storing the Information Matrix values
    */
   def computeInformationMatrix(data: CoxPhPointWithMetaData): breeze.linalg.DenseMatrix[Double] = {
@@ -355,7 +383,7 @@ private class CoxPhAggregator(parameters: BDV[Double])
   }
 
   /**
-   * Merge another CoxAggregator, and update the loss and gradient
+   * Merge another CoxAggregator, and update the loss, gradient and information matrix
    * of the objective function.
    * (Note that it's in place merging; as a result, `this` object will be modified.)
    *
