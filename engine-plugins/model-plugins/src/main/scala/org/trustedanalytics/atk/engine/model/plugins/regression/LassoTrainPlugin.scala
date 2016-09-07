@@ -57,12 +57,15 @@ case class LassoTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: 
   require(regParam >= 0, "regParam should be greater than or equal to 0")
 }
 
+case class LassoTrainReturn(@ArgDoc("""A list of n trained weights, where n is the number of features""") weights: List[Double],
+                            @ArgDoc("""float value representing the independent term in decision function of the model""") intercept: Double)
+
 @PluginDoc(oneLine = "Train Lasso Model",
   extended = """Train a Lasso model given an RDD of (label, features) pairs. We run a fixed number
  * of iterations of gradient descent using the specified step size. Each iteration uses
  * `miniBatchFraction` fraction of the data to calculate a stochastic gradient. The weights used
  * in gradient descent are initialized using the initial weights provided.""")
-class LassoTrainPlugin extends SparkCommandPlugin[LassoTrainArgs, UnitReturn] {
+class LassoTrainPlugin extends SparkCommandPlugin[LassoTrainArgs, LassoTrainReturn] {
   /**
    * The name of the command.
    *
@@ -86,7 +89,7 @@ class LassoTrainPlugin extends SparkCommandPlugin[LassoTrainArgs, UnitReturn] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: LassoTrainArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: LassoTrainArgs)(implicit invocation: Invocation): LassoTrainReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
     val weights: Array[Double] = if (arguments.initialWeights.isDefined) {
@@ -109,7 +112,7 @@ class LassoTrainPlugin extends SparkCommandPlugin[LassoTrainArgs, UnitReturn] {
     val j = jsonModel.toJson.toString
     println(s"jsonModel=$j")
     model.data = jsonModel.toJson.asJsObject
-
+    LassoTrainReturn(trainedModel.weights.toArray.toList, trainedModel.intercept)
   }
 
 }
