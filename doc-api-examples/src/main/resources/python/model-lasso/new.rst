@@ -52,9 +52,14 @@ Consider the following frame containing two columns.
 >>> test_metrics = model.test(predicted_frame, 'predicted_value')
 <progress>
 
+<hide>
+>>> sorted(test_metrics.keys())
+[u'mean_absolute_error', u'mean_squared_error', u'r_2', u'root_mean_squared_error']
+</hide>
+
 <skip>
 >>> test_metrics
-{u'mean_squared_error': 0.0, u'r_2': 1.0, u'mean_absolute_error': 0.0, u'explained_variance': 49.066026349445146, u'root_mean_squared_error': 0.0}
+{u'mean_squared_error': 0.0, u'r_2': 1.0, u'mean_absolute_error': 0.0, u'root_mean_squared_error': 0.0}
 
 >>> model.publish()
 <progress>
