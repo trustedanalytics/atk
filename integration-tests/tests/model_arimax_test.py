@@ -28,61 +28,6 @@ if ta.server.port != 19099:
 ta.connect()
 
 class ModelArimaxTest(unittest.TestCase):
-    def test_arimax_with_lag(self):
-        print "define csv file"
-        schema = [("y", ta.float64),("visitors", ta.float64),("wkends", ta.float64),("seasonality", ta.float64),("incidentRate", ta.float64), ("holidayFlag", ta.float64),("postHolidayFlag", ta.float64),("mintemp", ta.float64)]
-        csv = ta.CsvFile("/datasets/arx_train.csv", schema=schema, skip_header_lines=1)
-
-        print "create training frame"
-        train_frame = ta.Frame(csv)
-
-        print "Initializing a ArimaxModel object"
-        arimax = ta.ArimaxModel()
-
-        print "Training the model on the Frame"
-        coefficients = arimax.train(train_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"], 1, 1, 1, 1, False)
-
-        expected_coefficients = [{u'ar': [-0.017383421475889338],
-                                  u'c': 0.12592884652020608,
-                                  u'ma': [-0.9175172681125372],
-                                  u'xreg': [0.026948785665512696,
-                                            -0.27509641527217865,
-                                            -30.04399435207178,
-                                            0.23517811763216095,
-                                            6.6167555198084225,
-                                            0.8706683776904101,
-                                            0.20954216832984773]}]
-
-        self.assertEqual(coefficients, expected_coefficients)
-
-
-        print "create test frame"
-        csv2 = ta.CsvFile("/datasets/arx_test.csv", schema=schema, skip_header_lines=1)
-        test_frame = ta.Frame(csv2)
-
-        print "Predicting on the Frame"
-        p = arimax.predict(test_frame, "y", ["visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp"])
-        self.assertEqual(p.column_names, ["y","visitors","wkends","seasonality","incidentRate","holidayFlag","postHolidayFlag","mintemp","predicted_y"])
-
-        expected_results = [[[107.08170082770327],
-                             [106.14721021492875],
-                             [105.66075720064653],
-                             [104.95697359162283],
-                             [104.88559443691666],
-                             [105.85093277068711],
-                             [106.1696229024144],
-                             [106.70909616071428],
-                             [105.35885193790156],
-                             [105.71779481717215],
-                             [107.09473701831531],
-                             [106.14901905655587],
-                             [107.12955639032205],
-                             [107.4479823114264],
-                             [107.56837582595121]]]
-
-        self.assertEqual(expected_results, p.take(p.row_count, 1, "predicted_y"))
-
-
     def test_arimax_air_quality(self):
         # Data from Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
         print "Define csv file"
