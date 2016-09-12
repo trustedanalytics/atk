@@ -1,0 +1,128 @@
+
+
+--------------------------------------------
+:doc:`Commands <index>` model:arimax/predict
+--------------------------------------------
+
+|ALPHA|
+New frame with column of predicted y values
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:arimax/predict
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame whose values are to be predicted.
+
+
+
+    **timeseries_column** : unicode
+
+    ..
+
+        Name of the column that contains the time series values.
+
+
+
+    **x_columns** : list
+
+    ..
+
+        Names of the column(s) that contain the values of the exogenous inputs.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predict the time series values for a test frame, based on the specified
+x values.  Creates a new frame revision with the existing columns and a new predicted_y
+column.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        A new frame containing the original frame's columns and a column *predictied_y*
+
+

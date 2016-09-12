@@ -102,6 +102,10 @@
     model-arima__predict
     model-arima__publish
     model-arima__train
+    model-arimax__new
+    model-arimax__predict
+    model-arimax__publish
+    model-arimax__train
     model-arx__new
     model-arx__predict
     model-arx__publish
@@ -196,9 +200,9 @@ Command List
 ------------
 
 
-========================================================================================================  ===============================================================================================================
+========================================================================================================  ===================================================================================================================
 Command Name  (explained :doc:`here <about_command_names>`)                                               Description
-========================================================================================================  ===============================================================================================================
+========================================================================================================  ===================================================================================================================
 :doc:`frame/add_columns <frame__add_columns>`                                                             Add columns to current frame.
 :doc:`frame/aggregate_with_udf <frame__aggregate_with_udf>`                                               Combine by key current frame.
 :doc:`frame/assign_sample <frame__assign_sample>`                                                         Randomly group rows into user-defined classes.
@@ -278,6 +282,10 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:arima/predict <model-arima__predict>`                                                         |ALPHA| Forecasts future periods using ARIMA.
 :doc:`model:arima/publish <model-arima__publish>`                                                         |ALPHA| Creates a tar file that will be used as input to the scoring engine
 :doc:`model:arima/train <model-arima__train>`                                                             |ALPHA| Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.
+:doc:`model:arimax/new <model-arimax__new>`                                                               Create a 'new' instance of an Autoregressive Integrated Moving Average with Explanatory Variables (ARIMAX) model.
+:doc:`model:arimax/predict <model-arimax__predict>`                                                       |ALPHA| New frame with column of predicted y values
+:doc:`model:arimax/publish <model-arimax__publish>`                                                       |ALPHA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:arimax/train <model-arimax__train>`                                                           |ALPHA| <Missing Doc>
 :doc:`model:arx/new <model-arx__new>`                                                                     |ALPHA| Create a 'new' instance of a AutoRegressive Exogenous model.
 :doc:`model:arx/predict <model-arx__predict>`                                                             |ALPHA| New frame with column of predicted y values
 :doc:`model:arx/publish <model-arx__publish>`                                                             |ALPHA| Creates a tar file that will be used as input to the scoring engine
@@ -364,4 +372,4 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:svm/publish <model-svm__publish>`                                                             Creates a tar file that will be used as input to the scoring engine
 :doc:`model:svm/test <model-svm__test>`                                                                   Predict test frame labels and return metrics.
 :doc:`model:svm/train <model-svm__train>`                                                                 Build SVM with SGD model
-========================================================================================================  ===============================================================================================================
+========================================================================================================  ===================================================================================================================

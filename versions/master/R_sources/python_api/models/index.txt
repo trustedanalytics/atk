@@ -22,6 +22,7 @@ Models
     LdaModel <model-lda/index.rst>
     LogisticRegressionModel <model-logistic_regression/index.rst>
     LassoModel <model-lasso/index.rst>
+    ArimaxModel <model-arimax/index.rst>
     NaiveBayesModel <model-naive_bayes/index.rst>
     LinearRegressionModel <model-linear_regression/index.rst>
     RandomForestRegressorModel <model-random_forest_regressor/index.rst>
