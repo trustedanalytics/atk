@@ -27,7 +27,7 @@ if ta.server.port != 19099:
     ta.server.port = 19099
 ta.connect()
 
-class ModelArimaxTest(unittest.TestCase):
+class ModelMaxTest(unittest.TestCase):
 
     def test_max_air_quality(self):
         # Data from Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
@@ -39,7 +39,7 @@ class ModelArimaxTest(unittest.TestCase):
         print "Create training frame"
         train_frame = ta.Frame(csv)
 
-        print "Initializing a ArimaxModel object"
+        print "Initializing a MaxModel object"
         max = ta.MaxModel()
 
         print "Training the model on the Frame"

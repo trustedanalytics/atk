@@ -1379,7 +1379,7 @@ object ScoringJsonReaderWriters {
     /**
      * The read method reads a JsValue to MAXData
      * @param json JsValue
-     * @return MAXData with format MAXData(arimaxModel: MAXModel, xColumns: List[String])
+     * @return MAXData with format MAXData(maxModel: MAXModel, xColumns: List[String])
      */
     override def read(json: JsValue): MAXData = {
       val fields = json.asJsObject.fields
