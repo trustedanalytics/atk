@@ -80,14 +80,14 @@ Data from Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ic
 [8]    0.9      2.3         609.0  10.7
 [9]    0.6      1.7         561.0  10.3
 
->>> model = ta.ArimaxModel()
+>>> model = ta.MaxModel()
 <progress>
 
->>> train_output = model.train(frame, "CO_GT", ["C6H6_GT","PT08_S2_NMHC","T"],  2, 2, 1, 0, True, True)
+>>> train_output = model.train(frame, "CO_GT", ["C6H6_GT","PT08_S2_NMHC","T"],  3, 0, True, False)
 <progress>
 
 >>> train_output
-{u'c': -0.9075493080767927, u'ar': [-0.6876349849133049, -0.33038065385185783], u'ma': [-1.283039752947022], u'xreg': [-1.0326823408073342, 0.08721820267076823, -1.8741776454756058]}
+{u'c': -0.015810846625808755, u'ar': [], u'ma': [-0.006660356395570438, -0.005292835493585051, -0.06161070314834268], u'xreg': [-16.614401259906035, 0.4329581171119422, 0.41537792101978993]}
 
 >>> test_frame = ta.Frame(ta.UploadRows([[3.9, 19.3, 1277.0, 15.1],
 ...                                      [3.7, 18.2, 1246.0, 14.4],
@@ -111,17 +111,17 @@ Data from Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ic
 
 >>> predicted_frame.inspect(columns=("CO_GT","predicted_y"))
 [#]  CO_GT  predicted_y
-=========================
-[0]    3.9  1.47994006475
-[1]    3.7  6.77881520875
-[2]    6.6  6.16894546356
-[3]    4.4  7.45349002663
-[4]    3.5  8.85479025637
-[5]    5.4  6.58078264909
-[6]    2.7  6.26275769839
-[7]    1.9  4.71901417682
-[8]    1.6  3.77627384099
-[9]    1.7  1.91766708341
+==========================
+[0]    3.9  0.155146460184
+[1]    3.7   6.40639271956
+[2]    6.6   5.98144206268
+[3]    4.4   5.35837518116
+[4]    3.5   5.02607284434
+[5]    5.4   4.56915713122
+[6]    2.7   4.02916583389
+[7]    1.9   3.94609024969
+[8]    1.6   3.77993908128
+[9]    1.7   3.65532570497
 
 >>> model.publish()
 <progress>
@@ -138,7 +138,7 @@ Post a request to get the metadata about the model
 <skip>
 >>> r = requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
 >>> r.text
-u'{"model_details":{"model_type":"ARIMAX Model","model_class":"com.cloudera.sparkts.models.ARIMAXModel","model_reader":"org.trustedanalytics.atk.scoring.models.ARIMAXModelReaderPlugin","custom_values":{}},"input":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"}],"output":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"},{"name":"score","value":"Array[Double]"}]}'
+u'{"model_details":{"model_type":"MAX Model","model_class":"com.cloudera.sparkts.models.ARIMAXModel","model_reader":"org.trustedanalytics.atk.scoring.models.MAXModelReaderPlugin","custom_values":{}},"input":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"}],"output":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"},{"name":"score","value":"Array[Double]"}]}'
 </skip>
 
 The ARIMAX model only supports version 2 of the scoring engine.  In the following example, we are using the ARIMAX model
@@ -153,5 +153,5 @@ The 'score' value contains an array of predicted y values.
 
 <skip>
 >>> r.text
-u'{"data":[{"y":[3.9,3.7,6.6],"x_values":[19.3,18.2,32.6,1277.0,1246.0,1610.0,15.1,14.4,12.9],"score":[1.47994006475, 6.77881520875, 6.16894546356]}]}'
+u'{"data":[{"y":[3.9,3.7,6.6],"x_values":[19.3,18.2,32.6,1277.0,1246.0,1610.0,15.1,14.4,12.9],"score":[0.155146460184, 6.40639271956, 5.98144206268]}]}'
 </skip>

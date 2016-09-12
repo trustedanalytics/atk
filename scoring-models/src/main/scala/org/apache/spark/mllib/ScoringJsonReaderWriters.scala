@@ -1311,6 +1311,86 @@ object ScoringJsonReaderWriters {
       new ARIMAXData(model, xCols)
     }
   }
+
+  implicit object MAXModelFormat extends JsonFormat[ARIMAXModel] {
+    /**
+     * The write methods converts from MAXModel to JsValue
+     * @param obj MAXModel. Where MAXModel's format is
+     *              p : scala.Int
+     *              d : scala.Int
+     *              q : scala.Int
+     *              xregMaxLag : scala.Int
+     *              coefficients : scala.Array[scala.Double]
+     *              includeOriginalXreg : scala.Boolean
+     *              includeIntercept : scala.Boolean
+     * @return JsValue
+     */
+    override def write(obj: ARIMAXModel): JsValue = {
+      JsObject(
+        "p" -> obj.p.toJson,
+        "d" -> obj.d.toJson,
+        "q" -> obj.q.toJson,
+        "xregMaxLag" -> obj.xregMaxLag.toJson,
+        "includeOriginalXreg" -> obj.includeOriginalXreg.toJson,
+        "includeIntercept" -> obj.includeIntercept.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to MAXModel
+     * @param json JsValue
+     * @return MAXModel with format
+     *              p : scala.Int
+     *              d : scala.Int
+     *              q : scala.Int
+     *              xregMaxLag : scala.Int
+     *              coefficients : scala.Array[scala.Double]
+     *              includeOriginalXreg : scala.Boolean
+     *              includeIntercept : scala.Boolean
+     */
+    override def read(json: JsValue): ARIMAXModel = {
+      val fields = json.asJsObject.fields
+      val p = getOrInvalid(fields, "p").convertTo[Int]
+      val d = getOrInvalid(fields, "d").convertTo[Int]
+      val q = getOrInvalid(fields, "q").convertTo[Int]
+      val xregMaxLag = getOrInvalid(fields, "xregMaxLag").convertTo[Int]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val includeOriginalXreg = getOrInvalid(fields, "includeOriginalXreg").convertTo[Boolean]
+      val includeIntercept = getOrInvalid(fields, "includeIntercept").convertTo[Boolean]
+
+      new ARIMAXModel(p, d, q, xregMaxLag, coefficients, includeOriginalXreg, includeIntercept)
+    }
+
+  }
+
+  implicit object MAXDataFormat extends JsonFormat[MAXData] {
+    /**
+     * The write methods converts from MAXData to JsValue
+     * @param obj MAXData. Where MAXData format is:
+     *            MAXData(maxModel: MAXModel, xColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: MAXData): JsValue = {
+      val model = MAXModelFormat.write(obj.maxModel)
+      JsObject("arimax_model" -> model,
+        "x_columns" -> obj.xColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to MAXData
+     * @param json JsValue
+     * @return MAXData with format MAXData(arimaxModel: MAXModel, xColumns: List[String])
+     */
+    override def read(json: JsValue): MAXData = {
+      val fields = json.asJsObject.fields
+      val xCols = getOrInvalid(fields, "x_columns").convertTo[List[String]]
+      val model = fields.get("max_model").map(v => {
+        MAXModelFormat.read(v)
+      }
+      ).get
+      new MAXData(model, xCols)
+    }
+  }
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
