@@ -27,40 +27,8 @@ class ColumnTest extends WordSpec {
       Column("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_", str)
     }
 
-    "not allow - in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a-b", str)
-      }
-    }
-
-    "not allow ' in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a'b", str)
-      }
-    }
-
-    "not allow ? in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a?b", str)
-      }
-    }
-
-    "not allow | in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a|b", str)
-      }
-    }
-
-    "not allow . in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a.b", str)
-      }
-    }
-
-    "not allow ~ in column names" in {
-      intercept[IllegalArgumentException] {
-        Column("a~b", str)
-      }
+    "allow alpha-numeric with a1-?'|.~ for column names" in {
+        Column("a1-?'|.~", str)
     }
 
     "not allow spaces in column names" in {
