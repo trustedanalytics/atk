@@ -8,6 +8,7 @@ Consider the following frame with column named 'input' storing numerical values
 -etc-
 
 >>> frame = ta.Frame(ta.UploadRows([[7.7132064326674596],[0.207519493594015],[6.336482349262754],[7.4880388253861181],[4.9850701230259045]],[("input", ta.float64)]))
+-etc-
 
 </hide>
 
