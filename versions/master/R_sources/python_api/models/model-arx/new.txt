@@ -34,56 +34,115 @@
     Examples
     --------
     Consider the following model trained and tested on the sample data set in *frame* 'frame'.
-    The frame has five columns where "y" is the time series value and "vistors", "wkends",
-    "incidentRate", and "seasonality" are exogenous inputs.
+    The frame has a snippet of air quality data from:
+
+    https://archive.ics.uci.edu/ml/datasets/Air+Quality.
+
+    Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
+    Irvine, CA: University of California, School of Information and Computer Science.
 
 
     >>> frame.inspect()
-    [#]  y      visitors  wkends  incidentRate  seasonality
-    ===========================================================
-    [0]   68.0     278.0     0.0          28.0  0.0151327580791
-    [1]   89.0     324.0     0.0          28.0  0.0115112433251
-    [2]   96.0     318.0     0.0          28.0  0.0190129524584
-    [3]   98.0     347.0     0.0          28.0  0.0292307976571
-    [4]   70.0     345.0     1.0          28.0  0.0232811662756
-    [5]   88.0     335.0     1.0          29.0  0.0306535355962
-    [6]   76.0     309.0     0.0          29.0   0.027808059718
-    [7]  104.0     318.0     0.0          29.0  0.0305241957835
-    [8]   64.0     308.0     0.0          29.0  0.0247039042146
-    [9]   89.0     320.0     0.0          29.0  0.0269026810295
+    [#]  Date        Time      CO_GT           PT08_S1_CO  NMHC_GT  C6H6_GT
+    =============================================================================
+    [0]  10/03/2004  18.00.00   2.59999990463        1360      150  11.8999996185
+    [1]  10/03/2004  19.00.00             2.0        1292      112  9.39999961853
+    [2]  10/03/2004  20.00.00   2.20000004768        1402       88            9.0
+    [3]  10/03/2004  21.00.00   2.20000004768        1376       80  9.19999980927
+    [4]  10/03/2004  22.00.00   1.60000002384        1272       51            6.5
+    [5]  10/03/2004  23.00.00   1.20000004768        1197       38  4.69999980927
+    [6]  11/03/2004  00.00.00   1.20000004768        1185       31  3.59999990463
+    [7]  11/03/2004  01.00.00             1.0        1136       31  3.29999995232
+    [8]  11/03/2004  02.00.00  0.899999976158        1094       24  2.29999995232
+    [9]  11/03/2004  03.00.00  0.600000023842        1010       19  1.70000004768
+    <BLANKLINE>
+    [#]  PT08_S2_NMHC  NOx_GT  PT08_S3_NOx  NO2_GT  PT08_S4_NO2  PT08_S5_O3
+    =======================================================================
+    [0]          1046     166         1056     113         1692        1268
+    [1]           955     103         1174      92         1559         972
+    [2]           939     131         1140     114         1555        1074
+    [3]           948     172         1092     122         1584        1203
+    [4]           836     131         1205     116         1490        1110
+    [5]           750      89         1337      96         1393         949
+    [6]           690      62         1462      77         1333         733
+    [7]           672      62         1453      76         1333         730
+    [8]           609      45         1579      60         1276         620
+    [9]           561    -200         1705    -200         1235         501
+    <BLANKLINE>
+    [#]  Temp           RH             AH
+    =================================================
+    [0]  13.6000003815  48.9000015259  0.757799983025
+    [1]  13.3000001907  47.7000007629  0.725499987602
+    [2]  11.8999996185           54.0  0.750199973583
+    [3]           11.0           60.0    0.7867000103
+    [4]  11.1999998093  59.5999984741  0.788800001144
+    [5]  11.1999998093  59.2000007629  0.784799993038
+    [6]  11.3000001907  56.7999992371   0.76029998064
+    [7]  10.6999998093           60.0  0.770200014114
+    [8]  10.6999998093  59.7000007629  0.764800012112
+    [9]  10.3000001907  60.2000007629  0.751699984074
 
     >>> model = ta.ArxModel()
     [===Job Progress===]
 
-    >>> train_output = model.train(frame, "y", ["visitors", "wkends", "incidentRate", "seasonality"], 0, 0, True)
+    We will be using the column "Temp" (temperature in Celsius) as our time series value:
+
+    >>> y_column = "Temp"
+
+    The sensor values will be used as our exogenous variables:
+
+    >>> x_columns = ['CO_GT','PT08_S1_CO','NMHC_GT','C6H6_GT','PT08_S2_NMHC','NOx_GT','PT08_S3_NOx','NO2_GT','PT08_S4_NO2','PT08_S5_O3']
+
+    >>> train_output = model.train(frame, y_column, x_columns, 0, 0, True)
     [===Job Progress===]
 
     >>> train_output
     {u'c': 0.0,
-     u'coefficients': [0.27583285049358186,
-      -13.096710518563603,
-      -0.030872283789462572,
-      -103.8264674349643]}
+     u'coefficients': [0.005567992923907625,
+      -0.010969068059453009,
+      0.012556586798371176,
+      -0.39792503380811506,
+      0.04289162879826746,
+      -0.012253952164677924,
+      0.01192148525581035,
+      0.014100699808650077,
+      -0.021091473795935345,
+      0.007622676727420039]}
 
-    >>> predicted_frame = model.predict(frame, "y", ["visitors", "wkends", "incidentRate", "seasonality"])
+    >>> predicted_frame = model.predict(frame, y_column, x_columns)
     [===Job Progress===]
 
     >>> predicted_frame.column_names
-    [u'y', u'visitors', u'wkends', u'incidentRate', u'seasonality', u'predicted_y']
+    [u'Date',
+     u'Time',
+     u'CO_GT',
+     u'PT08_S1_CO',
+     u'NMHC_GT',
+     u'C6H6_GT',
+     u'PT08_S2_NMHC',
+     u'NOx_GT',
+     u'PT08_S3_NOx',
+     u'NO2_GT',
+     u'PT08_S4_NO2',
+     u'PT08_S5_O3',
+     u'Temp',
+     u'RH',
+     u'AH',
+     u'predicted_y']
 
-    >>> predicted_frame.inspect(columns=("y","predicted_y"))
-    [#]  y      predicted_y
-    =========================
-    [0]   68.0  74.2459276772
-    [1]   89.0  87.3102478836
-    [2]   96.0  84.8763748216
-    [3]   98.0  91.8146447141
-    [4]   70.0  78.7839977035
-    [5]   88.0  75.2293498516
-    [6]   76.0  81.4498419659
-    [7]  104.0  83.6503308076
-    [8]   64.0  81.4963026157
-    [9]   89.0  84.5780055922
+    >>> predicted_frame.inspect(columns=("Temp","predicted_y"))
+    [#]  Temp           predicted_y
+    =================================
+    [0]  13.6000003815   13.236459938
+    [1]  13.3000001907  13.0250130899
+    [2]  11.8999996185  11.4147282294
+    [3]           11.0  11.3157457822
+    [4]  11.1999998093  11.3982074883
+    [5]  11.1999998093  11.7079198051
+    [6]  11.3000001907  10.7879916472
+    [7]  10.6999998093   10.527428478
+    [8]  10.6999998093  10.4439615476
+    [9]  10.3000001907   10.276662138
 
     >>> model.publish()
     [===Job Progress===]
@@ -101,12 +160,12 @@
 
     The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
     that was trained and published in the example above.  To keep things simple, we just send the first three rows of
-    'y' values and the corresponding 'x_values' (visitors, wkends, incidentRate, and seasonality).
+    'y' values and the corresponding 'x_values'.
 
-    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[13.6000003815,13.3000001907,11.8999996185],"x_values":[2.6,2.0,2.2,1360,1292,1402,150,112,88,11.9,9.4,9.0,1046,955,939,166,103,131,1056,1174,1140,113,92,114,1692,1559,1555,1268,972,1074]}]})
 
     The 'score' value contains an array of predicted y values.
 
     >>> r.text
-    u'{"data":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],"score":[74.24592767720993,87.31024788358613,84.8763748215895]}]}'
+    u'{"data":[{"y":[13.6000003815,13.3000001907,11.8999996185],"x_values":[13.6000003815,13.3000001907,11.8999996185],"x_values":[2.6,2.0,2.2,1360,1292,1402,150,112,88,11.9,9.4,9.0,1046,955,939,166,103,131,1056,1174,1140,113,92,114,1692,1559,1555,1268,972,1074],"score":[13.2364599379956,13.02501308994565,11.414728229443007]}]}'
 
