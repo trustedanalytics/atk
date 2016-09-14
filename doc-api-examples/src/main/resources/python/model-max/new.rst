@@ -141,9 +141,9 @@ Post a request to get the metadata about the model
 u'{"model_details":{"model_type":"MAX Model","model_class":"com.cloudera.sparkts.models.ARIMAXModel","model_reader":"org.trustedanalytics.atk.scoring.models.MAXModelReaderPlugin","custom_values":{}},"input":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"}],"output":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"},{"name":"score","value":"Array[Double]"}]}'
 </skip>
 
-The ARIMAX model only supports version 2 of the scoring engine.  In the following example, we are using the ARIMAX model
+The MAX model only supports version 2 of the scoring engine.  In the following example, we are using the MAX model
 that was trained and published in the example above.  To keep things simple, we just send the first three rows of
-'y' values and the corresponding 'x_values' (visitors, wkends, incidentRate, and seasonality).
+'y' values (CO_GT) and the corresponding 'x_values' (C6H6_GT,PT08_S2_NMHC,T).
 
 <skip>
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[3.9,3.7,6.6],"x_values":[19.3,18.2,32.6,1277.0,1246.0,1610.0,15.1,14.4,12.9]}]})
