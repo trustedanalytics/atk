@@ -23,38 +23,59 @@ import org.scalatest.WordSpec
 class ARXScoreModelTest extends WordSpec {
 
   "ARXScoreModel" should {
+    /**
+     * Tests using snippets of air quality data from: https://archive.ics.uci.edu/ml/datasets/Air+Quality.
+     *
+     * Lichman, M. (2013). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
+     * Irvine, CA: University of California, School of Information and Computer Science.
+     */
     val c = 0
-    val coefficients = Array[Double](-1.136026484226831e-08,
-      8.637677568908233e-07,
-      15238.143039368977,
-      -7.993535860373772e-09,
-      -5.198597570089805e-07,
-      1.5691547009557947e-08,
-      7.409621376205488e-08)
+    val coefficients = Array[Double](0.005567992923907625,
+      -0.010969068059453009,
+      0.012556586798371176,
+      -0.39792503380811506,
+      0.04289162879826746,
+      -0.012253952164677924,
+      0.01192148525581035,
+      0.014100699808650077,
+      -0.021091473795935345,
+      0.007622676727420039)
     val yMaxLag = 0
     val xMaxLag = 0
     val includesOriginalX = true
     val arxModel = new ARXModel(c, coefficients, yMaxLag, xMaxLag, includesOriginalX)
-    val xColumns = List("visitors", "wkends", "seasonality", "incidentRate", "holidayFlag", "postHolidayFlag", "mintemp")
+    val xColumns = List("CO_GT", "PT08_S1_CO", "NMHC_GT", "C6H6_GT", "PT08_S2_NMHC", "NOx_GT", "PT08_S3_NOx", "NO2_GT", "PT08_S4_NO2", "PT08_S5_O3_")
     val arxData = new ARXData(arxModel, xColumns)
     val arxScoreModel = new ARXScoreModel(arxModel, arxData)
 
-    // [#]  y      visitors  wkends  seasonality  incidentRate  holidayFlag  postHolidayFlag  mintemp
-    //===============================================================================================
-    // [0]  100.0     465.0     1.0  0.006562479          24.0          1.0              0.0     51.0
-    // [1]   98.0     453.0     1.0   0.00643123          24.0          0.0              1.0     54.0
-    // [2]  102.0     472.0     0.0  0.006693729          25.0          0.0              0.0     49.0
-    // [3]   98.0     454.0     0.0   0.00643123          25.0          0.0              0.0     46.0
-    // [4]  112.0     432.0     0.0  0.007349977          25.0          0.0              0.0     42.0
+    //  [#]  Date        Time      CO_GT  PT08_S1_CO  NMHC_GT  C6H6_GT  PT08_S2_NMHC
+    //============================================================================
+    //  [0]  10/03/2004  18.00.00    2.6        1360      150     11.9          1046
+    //  [1]  10/03/2004  19.00.00    2.0        1292      112      9.4           955
+    //  [2]  10/03/2004  20.00.00    2.2        1402       88      9.0           939
+    //  [3]  10/03/2004  21.00.00    2.2        1376       80      9.2           948
+    //  [4]  10/03/2004  22.00.00    1.6        1272       51      6.5           836
+    //<BLANKLINE>
+    //  [#]  NOx_GT  PT08_S3_NOx  NO2_GT  PT08_S4_NO2  PT08_S5_O3_  T     RH    AH
+    //  ==============================================================================
+    //  [0]     166         1056     113         1692         1268  13.6  48.9  0.7578
+    //  [1]     103         1174      92         1559          972  13.3  47.7  0.7255
+    //  [2]     131         1140     114         1555         1074  11.9  54.0  0.7502
+    //  [3]     172         1092     122         1584         1203  11.0  60.0  0.7867
+    //  [4]     131         1205     116         1490         1110  11.2  59.6  0.7888
+
     var input = new Array[Any](2)
-    input(0) = List[Double](100, 98, 102, 98, 112)
-    input(1) = List[Double](465.0, 453.0, 472.0, 454.0, 432.0,
-      1.0, 1.0, 0.0, 0.0, 0.0,
-      0.006562479, 0.00643123, 0.006693729, 0.00643123, 0.007349977,
-      24.0, 24.0, 25.0, 25.0, 25.0,
-      1.0, 0.0, 0.0, 0.0, 0.0,
-      0.0, 1.0, 0.0, 0.0, 0.0,
-      51.0, 54.0, 49.0, 46.0, 42.0)
+    input(0) = List[Double](13.6, 13.3, 11.9, 11.0, 11.2)
+    input(1) = List[Double](2.6, 2.0, 2.2, 2.2, 1.6,
+      1360, 1292, 1402, 1376, 1272,
+      150, 112, 88, 80, 51,
+      11.9, 9.4, 9.0, 9.2, 6.5,
+      1046, 955, 939, 948, 836,
+      166, 103, 131, 172, 131,
+      1056, 1174, 1140, 1092, 1205,
+      113, 92, 114, 122, 116,
+      1692, 1559, 1555, 1584, 1490,
+      1268, 972, 1074, 1203, 1110)
 
     "throw an exception when attempting to score null data" in {
       ScoringModelTestUtils.nullDataTest(arxScoreModel)
@@ -83,26 +104,32 @@ class ARXScoreModelTest extends WordSpec {
       assert(output(output.length - 1).isInstanceOf[Array[Double]])
       val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
       assert(predictions.length == 5) // we should get one y prediction per row
-      assert(predictions.sameElements(List[Double](99.99999234330198, 98.00000220169095, 101.99999803760333, 98.00000071010813, 111.99999886664024)))
+      assert(predictions.sameElements(List[Double](13.2364599379956, 13.02501308994565, 11.414728229443007, 11.315745782218174, 11.398207488344449)))
     }
 
     "successfully score a model with lag values specified" in {
       // Coefficients when using an x and y lag of 1
-      val coeffWithLag = Array[Double](-0.04170711405501422,
-        -2.774914598250982e-08,
-        -1.7345090462674217e-06,
-        635.539347392918,
-        -2.9524612183525024e-08,
-        -42204874328.51074,
-        2.38013965984125e-06,
-        -6.428834547691361e-08,
-        1.143198952375539e-08,
-        1.5028156352801287e-06,
-        15238.142968296446,
-        3.627119251425612e-08,
-        -5.299360567706624e-07,
-        42204874328.51075,
-        1.336808143003387e-07)
+      val coeffWithLag = Array[Double](0.9881422741282173,
+        -0.004072936796109567,
+        0.008612711321998763,
+        0.0007219897811913594,
+        0.4591790086176684,
+        -0.052997815147511014,
+        0.017571292898042712,
+        -0.009805576804183673,
+        -0.04407984827826915,
+        0.026804775025487535,
+        0.00026476585578707963,
+        0.03216813521172987,
+        0.011204577049556986,
+        0.01967677582534916,
+        -0.8264926308110153,
+        0.01866078611542236,
+        0.0034239209773078622,
+        0.0015717072750842942,
+        -0.0034352968450718146,
+        -0.01538437870160126,
+        3.719728134292509e-05)
 
       val arxModelWithLag = new ARXModel(c, coeffWithLag, 1, 1, includesOriginalX)
       val arxDataWithLag = new ARXData(arxModelWithLag, xColumns)
@@ -111,7 +138,7 @@ class ARXScoreModelTest extends WordSpec {
       assert(output(output.length - 1).isInstanceOf[Array[Double]])
       val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
       assert(predictions.length == 4) // we should get one y prediction per row, minus the lag
-      assert(predictions.sameElements(List[Double](98.00000721876397, 101.99999878091927, 97.99999998905012, 111.99999804593499)))
+      assert(predictions.sameElements(List[Double](13.278950799529294, 11.895832885423557, 11.031422453460186, 11.064013498766611)))
     }
 
   }
