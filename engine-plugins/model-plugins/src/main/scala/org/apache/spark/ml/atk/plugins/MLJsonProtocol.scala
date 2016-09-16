@@ -90,6 +90,7 @@ object MLJsonProtocol {
   implicit val linearRegressionMlModelPredictArgs = jsonFormat3(LinearRegressionPredictArgs)
   implicit val linearRegressionMlModelTestArgs = jsonFormat4(LinearRegressionTestArgs)
   implicit val linearRegressionMlModelTestReturn = jsonFormat5(LinearRegressionTestReturn)
+  implicit val lassoModelTestReturnFormat = jsonFormat4(LassoTestReturn)
 
   implicit val coxMlModelTrainArgs = jsonFormat7(CoxPhTrainArgs)
   implicit val coxMlModelTrainReturn = jsonFormat2(CoxPhTrainReturn)

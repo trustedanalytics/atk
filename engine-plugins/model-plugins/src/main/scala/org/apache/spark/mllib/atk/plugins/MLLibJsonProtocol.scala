@@ -601,6 +601,7 @@ object MLLibJsonProtocol {
   implicit val classificationWithSGDTestFormat = jsonFormat4(ClassificationWithSGDTestArgs)
   implicit val lassoTrainFormat = jsonFormat9(LassoTrainArgs)
   implicit val lassoTrainReturnFormat = jsonFormat2(LassoTrainReturn)
+  implicit val lassoTestReturnFormat = jsonFormat4(LassoTestReturn)
   implicit val lassoDataFormat = jsonFormat2(LassoData)
   implicit val svmDataFormat = jsonFormat2(SVMData)
   implicit val kmeansDataFormat = jsonFormat3(KMeansData)
