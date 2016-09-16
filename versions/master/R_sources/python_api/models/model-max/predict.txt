@@ -1,0 +1,54 @@
+
+:doc:`MaxModel <index>`  predict
+********************************
+
+------
+
+
+.. function:: predict(self, frame, timeseries_column, x_columns)
+
+    |ALPHA|
+    New frame with column of predicted y values
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose values are to be predicted.
+
+
+
+        **timeseries_column** : unicode
+
+        ..
+
+            Name of the column that contains the time series values.
+
+
+
+        **x_columns** : list
+
+        ..
+
+            Names of the column(s) that contain the values of the exogenous inputs.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new frame containing the original frame's columns and a column *predictied_y*
+    Predict the time series values for a test frame, based on the specified
+    x values.  Creates a new frame revision with the existing columns and a new predicted_y
+    column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

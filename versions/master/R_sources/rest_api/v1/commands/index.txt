@@ -167,6 +167,10 @@
     model-logistic_regression__predict
     model-logistic_regression__test
     model-logistic_regression__train
+    model-max__new
+    model-max__predict
+    model-max__publish
+    model-max__train
     model-naive_bayes__new
     model-naive_bayes__predict
     model-naive_bayes__publish
@@ -347,6 +351,10 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:logistic_regression/predict <model-logistic_regression__predict>`                             Predict labels for data points using trained logistic regression model.
 :doc:`model:logistic_regression/test <model-logistic_regression__test>`                                   Predict test frame labels and return metrics.
 :doc:`model:logistic_regression/train <model-logistic_regression__train>`                                 Build logistic regression model.
+:doc:`model:max/new <model-max__new>`                                                                     Create a 'new' instance of Moving Average with Explanatory Variables (MAX) model.
+:doc:`model:max/predict <model-max__predict>`                                                             |ALPHA| New frame with column of predicted y values
+:doc:`model:max/publish <model-max__publish>`                                                             |ALPHA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:max/train <model-max__train>`                                                                 |ALPHA| <Missing Doc>
 :doc:`model:naive_bayes/new <model-naive_bayes__new>`                                                     Create a 'new' instance of a Naive Bayes model
 :doc:`model:naive_bayes/predict <model-naive_bayes__predict>`                                             Predict labels for data points using trained Naive Bayes model.
 :doc:`model:naive_bayes/publish <model-naive_bayes__publish>`                                             Creates a scoring engine tar file.

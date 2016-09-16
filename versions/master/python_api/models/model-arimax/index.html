@@ -291,7 +291,7 @@ T - Temperature in C</p>
 <p>The ARIMAX model only supports version 2 of the scoring engine.  In the following example, we are using the ARIMAX model
 that was trained and published in the example above.  To keep things simple, we just send the first three rows of
 &#8216;y&#8217; values and the corresponding &#8216;x_values&#8217; (visitors, wkends, incidentRate, and seasonality).</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;y&quot;</span><span class="p">:[</span><span class="mf">100.0</span><span class="p">,</span><span class="mf">98.0</span><span class="p">,</span><span class="mf">102.0</span><span class="p">],</span><span class="s2">&quot;x_values&quot;</span><span class="p">:[</span><span class="mf">465.0</span><span class="p">,</span><span class="mf">453.0</span><span class="p">,</span><span class="mf">472.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.006562479</span><span class="p">,</span><span class="mf">0.00643123</span><span class="p">,</span><span class="mf">0.006693729</span><span class="p">,</span><span class="mf">24.0</span><span class="p">,</span><span class="mf">24.0</span><span class="p">,</span><span class="mf">25.0</span><span class="p">]}]})</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;y&quot;</span><span class="p">:[</span><span class="mf">3.9</span><span class="p">,</span><span class="mf">3.7</span><span class="p">,</span><span class="mf">6.6</span><span class="p">],</span><span class="s2">&quot;x_values&quot;</span><span class="p">:[</span><span class="mf">19.3</span><span class="p">,</span><span class="mf">18.2</span><span class="p">,</span><span class="mf">32.6</span><span class="p">,</span><span class="mf">1277.0</span><span class="p">,</span><span class="mf">1246.0</span><span class="p">,</span><span class="mf">1610.0</span><span class="p">,</span><span class="mf">15.1</span><span class="p">,</span><span class="mf">14.4</span><span class="p">,</span><span class="mf">12.9</span><span class="p">]}]})</span>
 </pre></div>
 </div>
 <p>The &#8216;score&#8217; value contains an array of predicted y values.</p>
@@ -324,7 +324,7 @@ that was trained and published in the example above.  To keep things simple, we 
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 13, 2016.
+      Last updated on Sep 16, 2016.
       </li>
     </ul>
     </div>

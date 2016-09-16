@@ -118,7 +118,7 @@
     that was trained and published in the example above.  To keep things simple, we just send the first three rows of
     'y' values and the corresponding 'x_values' (visitors, wkends, incidentRate, and seasonality).
 
-    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[100.0,98.0,102.0],"x_values":[465.0,453.0,472.0,1.0,1.0,1.0,0.006562479,0.00643123,0.006693729,24.0,24.0,25.0]}]})
+    >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[3.9,3.7,6.6],"x_values":[19.3,18.2,32.6,1277.0,1246.0,1610.0,15.1,14.4,12.9]}]})
 
     The 'score' value contains an array of predicted y values.
 

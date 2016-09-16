@@ -21,6 +21,7 @@ Models
     SvmModel <model-svm/index.rst>
     LdaModel <model-lda/index.rst>
     LogisticRegressionModel <model-logistic_regression/index.rst>
+    MaxModel <model-max/index.rst>
     LassoModel <model-lasso/index.rst>
     ArimaxModel <model-arimax/index.rst>
     NaiveBayesModel <model-naive_bayes/index.rst>
