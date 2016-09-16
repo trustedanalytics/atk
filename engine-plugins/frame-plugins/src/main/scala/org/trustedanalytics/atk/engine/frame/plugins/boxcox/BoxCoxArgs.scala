@@ -28,8 +28,8 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  *
  */
 case class BoxCoxArgs(frame: FrameReference,
-                      @ArgDoc("""Names of column to perform transformation on""") columnName: String,
-                      @ArgDoc("""Lambda""") lambdaValue: Double = 0d,
+                      @ArgDoc("""Name of column to perform transformation on""") columnName: String,
+                      @ArgDoc("""Lambda power paramater""") lambdaValue: Double = 0d,
                       @ArgDoc("""Name of column used to store the transformation""") boxCoxColumnName: Option[String] = None) {
   require(frame != null, "frame is required")
   require(columnName.nonEmpty, "number of left columns cannot be zero")

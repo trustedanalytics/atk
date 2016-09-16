@@ -50,7 +50,7 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     boxCox should equalWithTolerance(Array(2.81913279907, -1.25365381375, 2.46673638752, 2.76469126003, 2.06401101556))
   }
 
-  "boxCox" should "create a new column in the frame storing the box-cox computation" in {
+  "boxCox" should "create a new column in the frame storing the box-cox computation with lambda 0.3" in {
     val rdd = sparkContext.parallelize(boxCoxRows)
     val frameRdd = new FrameRdd(boxCoxSchema, rdd)
     val result = BoxCoxFunctions.boxCox(frameRdd, "A", 0.3).collect()
@@ -62,6 +62,21 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     result.apply(3) shouldBe Row(7.48803882539, 4.5, 2.7646912600285254)
     result.apply(4) shouldBe Row(4.98507012303, 5.6, 2.064011015565803)
   }
+
+
+  "boxCox" should "create a new column in the frame storing the box-cox computation with lambda 0.0" in {
+    val rdd = sparkContext.parallelize(boxCoxRows)
+    val frameRdd = new FrameRdd(boxCoxSchema, rdd)
+    val result = BoxCoxFunctions.boxCox(frameRdd, "A", 0.0).collect()
+
+    result.length shouldBe 5
+    result.apply(0) shouldBe Row(7.71320643267, 1.2, 2.04293398084497)
+    result.apply(1) shouldBe Row(0.207519493594, 2.3, -1.572529998692617)
+    result.apply(2) shouldBe Row(6.33648234926, 3.4, 1.846323779969938)
+    result.apply(3) shouldBe Row(7.48803882539, 4.5, 2.013306924176539)
+    result.apply(4) shouldBe Row(4.98507012303, 5.6, 1.6064474701212843)
+  }
+
 
   "reverseBoxCox" should "compute the reverse box-cox transformation for the given column" in {
     val rdd = sparkContext.parallelize(reverseBoxCoxRows)
@@ -85,7 +100,7 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     result.apply(4) shouldBe Row(2.064011015565803, 5.6, 4.98507012303)
   }
 
-  "computeDotProduct" should "computeBoxCox transformation" in {
+  "computeDotProduct" should "computeBoxCox transformation with lambda 0.0" in {
     val input = 4.98507012303
     val lambda = 0.3
     val boxCoxTransform = BoxCoxFunctions.computeBoxCoxTransformation(input, lambda)
@@ -93,7 +108,7 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     boxCoxTransform shouldBe 2.064011015565803
   }
 
-  "reverseBoxCox" should "computeReverseBoxCox transformation" in {
+  "reverseBoxCox" should "computeReverseBoxCox transformation with lambda 0.3" in {
     val input = 2.8191327990706947
     val lambda = 0.3
     val reverseBoxCoxTransform = BoxCoxFunctions.computeReverseBoxCoxTransformation(input, lambda)
@@ -101,5 +116,12 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     reverseBoxCoxTransform shouldBe 7.713206432669999
   }
 
-}
+  "reverseBoxCox" should "computeReverseBoxCox transformation with lambda 0.0" in {
+    val input = 1.6064474701212843
+    val lambda = 0.0
+    val reverseBoxCoxTransform = BoxCoxFunctions.computeReverseBoxCoxTransformation(input, lambda)
 
+    reverseBoxCoxTransform shouldBe 4.98507012303
+  }
+
+}

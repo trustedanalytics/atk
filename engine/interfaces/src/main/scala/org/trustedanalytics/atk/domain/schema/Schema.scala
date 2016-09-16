@@ -33,7 +33,7 @@ case class Column(name: String, dataType: DataType,
   require(name != null, "column name is required")
   require(dataType != null, "column data type is required")
   require(name != "", "column name can't be empty")
-  require(Column.isValidColumnName(name), "column must be alphanumeric with valid symbols")
+  require(Column.isValidColumnName(name), "column name must be alphanumeric with valid symbols")
 }
 
 object Column {

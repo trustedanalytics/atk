@@ -38,7 +38,7 @@ object BoxCoxFunctions extends Serializable {
    */
   def boxCox(frameRdd: FrameRdd, columnName: String, lambdaValue: Double): RDD[Row] = {
     frameRdd.mapRows(row => {
-      val y = DataTypes.toDouble(row.value(columnName))
+      val y = row.doubleValue(columnName)
       val boxCox = computeBoxCoxTransformation(y, lambdaValue)
       new GenericRow(row.valuesAsArray() :+ boxCox)
     })
@@ -53,7 +53,7 @@ object BoxCoxFunctions extends Serializable {
    */
   def reverseBoxCox(frameRdd: FrameRdd, columnName: String, lambdaValue: Double): RDD[Row] = {
     frameRdd.mapRows(row => {
-      val boxCox = DataTypes.toDouble(row.value(columnName))
+      val boxCox = row.doubleValue(columnName)
       val y = computeReverseBoxCoxTransformation(boxCox, lambdaValue)
       new GenericRow(row.valuesAsArray() :+ y)
     })
