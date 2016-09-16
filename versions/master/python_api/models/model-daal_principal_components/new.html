@@ -148,37 +148,37 @@ Create a &#8216;new&#8217; instance of an Intel DAAL Principal Components model.
 </tr>
 </tbody>
 </table>
-<p>Principal component analysis <a class="reference internal" href="../model-svm/new.html#r6" id="id1">[R6]</a> is a statistical algorithm
+<p>Principal component analysis <a class="reference internal" href="../model-power_iteration_clustering/index.html#r4" id="id1">[R4]</a> is a statistical algorithm
 that converts possibly correlated features to linearly uncorrelated variables
 called principal components.
 The number of principal components is less than or equal to the number of
 original variables.
 This implementation of computing Principal Components is done by Singular
-Value Decomposition <a class="reference internal" href="../model-power_iteration_clustering/new.html#r7" id="id2">[R7]</a> of the data, providing the user with an option to
+Value Decomposition <a class="reference internal" href="../model-power_iteration_clustering/new.html#r5" id="id2">[R5]</a> of the data, providing the user with an option to
 mean center the data.
 The Principal Components model is initialized; trained on
 specifying the observation columns of the frame and the number of components;
 used to predict principal components.
-The Intel DAAL Singular Value Decomposition <a class="reference internal" href="../model-power_iteration_clustering/new.html#r8" id="id3">[R8]</a> implementation has been used for
+The Intel DAAL Singular Value Decomposition <a class="reference internal" href="../model-power_iteration_clustering/new.html#r6" id="id3">[R6]</a> implementation has been used for
 this, with additional features to 1) mean center the data during train and
 predict and 2) compute the t-squared index during prediction.</p>
 <p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R4]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R5]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="r6" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R6]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r7" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R7]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r8" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R8]</a></td><td><a class="reference external" href="https://software.intel.com/en-us/daal">https://software.intel.com/en-us/daal</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R6]</a></td><td><a class="reference external" href="https://software.intel.com/en-us/daal">https://software.intel.com/en-us/daal</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>

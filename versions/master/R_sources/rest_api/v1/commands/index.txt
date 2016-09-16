@@ -38,6 +38,7 @@
     frame__bin_column
     frame__bin_column_equal_depth
     frame__bin_column_equal_width
+    frame__box_cox
     frame__categorical_summary
     frame__classification_metrics
     frame__column_median
@@ -67,6 +68,7 @@
     frame__histogram
     frame__quantiles
     frame__rename
+    frame__reverse_box_cox
     frame__sort
     frame__sorted_k
     frame__tally
@@ -213,6 +215,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/bin_column <frame__bin_column>`                                                               Classify data into user-defined groups.
 :doc:`frame/bin_column_equal_depth <frame__bin_column_equal_depth>`                                       Classify column into groups with the same frequency.
 :doc:`frame/bin_column_equal_width <frame__bin_column_equal_width>`                                       Classify column into same-width groups.
+:doc:`frame/box_cox <frame__box_cox>`                                                                     Calculate the box-cox transformation for each row in current frame.
 :doc:`frame/categorical_summary <frame__categorical_summary>`                                             Build summary of the data.
 :doc:`frame/classification_metrics <frame__classification_metrics>`                                       Model statistics of accuracy, precision, and others.
 :doc:`frame/column_median <frame__column_median>`                                                         Calculate the (weighted) median of a column.
@@ -242,6 +245,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/histogram <frame__histogram>`                                                                 Compute the histogram for a column in a frame.
 :doc:`frame/quantiles <frame__quantiles>`                                                                 New frame with Quantiles and their values.
 :doc:`frame/rename <frame__rename>`                                                                       Change the name of the current frame.
+:doc:`frame/reverse_box_cox <frame__reverse_box_cox>`                                                     Calculate the reverse box-cox transformation for each row in current frame.
 :doc:`frame/sort <frame__sort>`                                                                           Sort by one or more columns.
 :doc:`frame/sorted_k <frame__sorted_k>`                                                                   Get a sorted subset of the data.
 :doc:`frame/tally <frame__tally>`                                                                         Count number of times a value is seen.

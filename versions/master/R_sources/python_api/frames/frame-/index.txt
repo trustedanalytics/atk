@@ -16,6 +16,7 @@
     bin_column
     bin_column_equal_depth
     bin_column_equal_width
+    box_cox
     categorical_summary
     classification_metrics
     column_median
@@ -54,6 +55,7 @@
     name
     quantiles
     rename_columns
+    reverse_box_cox
     row_count
     schema
     sort
@@ -100,6 +102,7 @@
     :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
     :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.
     :doc:`bin_column_equal_width <bin_column_equal_width>`\ (self, column_name[, num_bins, ...])          Classify column into same-width groups.
+    :doc:`box_cox <box_cox>`\ (self, column_name[, lambda_value, box_cox_column_name])                    Calculate the box-cox transformation for each row in current frame.
     :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             Compute a summary of the data in a column(s) for categorical or numerical data types.
     :doc:`classification_metrics <classification_metrics>`\ (self, label_column, pred_column[, ...])      Model statistics of accuracy, precision, and others.
     :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
@@ -135,6 +138,7 @@
     :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     Join operation on one or two frames, creating a new frame.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns
+    :doc:`reverse_box_cox <reverse_box_cox>`\ (self, column_name[, lambda_value, box_cox_column_name])    Calculate the reverse box-cox transformation for each row in current frame.
     :doc:`sort <sort>`\ (self, columns[, ascending])                                                      Sort the data in a frame.
     :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                Get a sorted subset of the data.
     :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.

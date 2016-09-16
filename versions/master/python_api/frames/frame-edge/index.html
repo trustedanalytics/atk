@@ -209,110 +209,116 @@ Edges</li>
 <tr class="row-odd"><td><a class="reference internal" href="bin_column_equal_width.html"><span class="doc">bin_column_equal_width</span></a>(self, column_name[, num_bins, ...])</td>
 <td>Classify column into same-width groups.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="categorical_summary.html"><span class="doc">categorical_summary</span></a>(self, *column_inputs)</td>
+<tr class="row-even"><td><a class="reference internal" href="box_cox.html"><span class="doc">box_cox</span></a>(self, column_name[, lambda_value, box_cox_column_name])</td>
+<td>Calculate the box-cox transformation for each row in current frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="categorical_summary.html"><span class="doc">categorical_summary</span></a>(self, *column_inputs)</td>
 <td>Compute a summary of the data in a column(s) for categorical or numerical data types.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="classification_metrics.html"><span class="doc">classification_metrics</span></a>(self, label_column, pred_column[, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="classification_metrics.html"><span class="doc">classification_metrics</span></a>(self, label_column, pred_column[, ...])</td>
 <td>Model statistics of accuracy, precision, and others.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="column_median.html"><span class="doc">column_median</span></a>(self, data_column[, weights_column])</td>
+<tr class="row-odd"><td><a class="reference internal" href="column_median.html"><span class="doc">column_median</span></a>(self, data_column[, weights_column])</td>
 <td>Calculate the (weighted) median of a column.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="column_mode.html"><span class="doc">column_mode</span></a>(self, data_column[, weights_column, max_modes_returned])</td>
+<tr class="row-even"><td><a class="reference internal" href="column_mode.html"><span class="doc">column_mode</span></a>(self, data_column[, weights_column, max_modes_returned])</td>
 <td>Evaluate the weights assigned to rows.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="column_summary_statistics.html"><span class="doc">column_summary_statistics</span></a>(self, data_column[, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="column_summary_statistics.html"><span class="doc">column_summary_statistics</span></a>(self, data_column[, ...])</td>
 <td>Calculate multiple statistics for a column.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="copy.html"><span class="doc">copy</span></a>(self[, columns, where, name])</td>
+<tr class="row-even"><td><a class="reference internal" href="copy.html"><span class="doc">copy</span></a>(self[, columns, where, name])</td>
 <td>Create new frame from current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="correlation.html"><span class="doc">correlation</span></a>(self, data_column_names)</td>
+<tr class="row-odd"><td><a class="reference internal" href="correlation.html"><span class="doc">correlation</span></a>(self, data_column_names)</td>
 <td>Calculate correlation for two columns of current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="correlation_matrix.html"><span class="doc">correlation_matrix</span></a>(self, data_column_names[, matrix_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="correlation_matrix.html"><span class="doc">correlation_matrix</span></a>(self, data_column_names[, matrix_name])</td>
 <td>Calculate correlation matrix for two or more columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="count.html"><span class="doc">count</span></a>(self, where)</td>
+<tr class="row-odd"><td><a class="reference internal" href="count.html"><span class="doc">count</span></a>(self, where)</td>
 <td>Counts the number of rows which meet given criteria.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="covariance.html"><span class="doc">covariance</span></a>(self, data_column_names)</td>
+<tr class="row-even"><td><a class="reference internal" href="covariance.html"><span class="doc">covariance</span></a>(self, data_column_names)</td>
 <td>Calculate covariance for exactly two columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="covariance_matrix.html"><span class="doc">covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="covariance_matrix.html"><span class="doc">covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
 <td>Calculate covariance matrix for two or more columns.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="cumulative_percent.html"><span class="doc">cumulative_percent</span></a>(self, sample_col)</td>
+<tr class="row-even"><td><a class="reference internal" href="cumulative_percent.html"><span class="doc">cumulative_percent</span></a>(self, sample_col)</td>
 <td>Add column to frame with cumulative percent sum.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="cumulative_sum.html"><span class="doc">cumulative_sum</span></a>(self, sample_col)</td>
+<tr class="row-odd"><td><a class="reference internal" href="cumulative_sum.html"><span class="doc">cumulative_sum</span></a>(self, sample_col)</td>
 <td>Add column to frame with cumulative percent sum.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="daal_covariance_matrix.html"><span class="doc">daal_covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="daal_covariance_matrix.html"><span class="doc">daal_covariance_matrix</span></a>(self, data_column_names[, matrix_name])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Calculate covariance matrix for two or more columns.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="dot_product.html"><span class="doc">dot_product</span></a>(self, left_column_names, right_column_names, ...[, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="dot_product.html"><span class="doc">dot_product</span></a>(self, left_column_names, right_column_names, ...[, ...])</td>
 <td>Calculate dot product for each row in current frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="download.html"><span class="doc">download</span></a>(self[, n, offset, columns])</td>
+<tr class="row-even"><td><a class="reference internal" href="download.html"><span class="doc">download</span></a>(self[, n, offset, columns])</td>
 <td>Download frame data from the server into client workspace as a pandas dataframe</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="drop_columns.html"><span class="doc">drop_columns</span></a>(self, columns)</td>
+<tr class="row-odd"><td><a class="reference internal" href="drop_columns.html"><span class="doc">drop_columns</span></a>(self, columns)</td>
 <td>Remove columns from the frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="drop_duplicates.html"><span class="doc">drop_duplicates</span></a>(self[, unique_columns])</td>
+<tr class="row-even"><td><a class="reference internal" href="drop_duplicates.html"><span class="doc">drop_duplicates</span></a>(self[, unique_columns])</td>
 <td>Modify the current frame, removing duplicate rows.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="drop_rows.html"><span class="doc">drop_rows</span></a>(self, predicate)</td>
+<tr class="row-odd"><td><a class="reference internal" href="drop_rows.html"><span class="doc">drop_rows</span></a>(self, predicate)</td>
 <td>Erase any row in the current frame which qualifies.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="ecdf.html"><span class="doc">ecdf</span></a>(self, column[, result_frame_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="ecdf.html"><span class="doc">ecdf</span></a>(self, column[, result_frame_name])</td>
 <td>Builds new frame with columns for data and distribution.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="entropy.html"><span class="doc">entropy</span></a>(self, data_column[, weights_column])</td>
+<tr class="row-odd"><td><a class="reference internal" href="entropy.html"><span class="doc">entropy</span></a>(self, data_column[, weights_column])</td>
 <td>Calculate the Shannon entropy of a column.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_csv.html"><span class="doc">export_to_csv</span></a>(self, folder_name[, separator, count, offset])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_csv.html"><span class="doc">export_to_csv</span></a>(self, folder_name[, separator, count, offset])</td>
 <td>Write current frame to HDFS in csv format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_hbase.html"><span class="doc">export_to_hbase</span></a>(self, table_name[, key_column_name, family_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_hbase.html"><span class="doc">export_to_hbase</span></a>(self, table_name[, key_column_name, family_name])</td>
 <td>Write current frame to HBase table.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_hive.html"><span class="doc">export_to_hive</span></a>(self, table_name)</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_hive.html"><span class="doc">export_to_hive</span></a>(self, table_name)</td>
 <td>Write  current frame to Hive table.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_jdbc.html"><span class="doc">export_to_jdbc</span></a>(self, table_name[, connector_type])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_jdbc.html"><span class="doc">export_to_jdbc</span></a>(self, table_name[, connector_type])</td>
 <td>Write current frame to JDBC table.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_json.html"><span class="doc">export_to_json</span></a>(self, folder_name[, count, offset])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_json.html"><span class="doc">export_to_json</span></a>(self, folder_name[, count, offset])</td>
 <td>Write current frame to HDFS in JSON format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="filter.html"><span class="doc">filter</span></a>(self, predicate)</td>
+<tr class="row-odd"><td><a class="reference internal" href="filter.html"><span class="doc">filter</span></a>(self, predicate)</td>
 <td>Select all rows which satisfy a predicate.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="flatten_columns.html"><span class="doc">flatten_columns</span></a>(self, columns[, delimiters])</td>
+<tr class="row-even"><td><a class="reference internal" href="flatten_columns.html"><span class="doc">flatten_columns</span></a>(self, columns[, delimiters])</td>
 <td>Spread data to multiple rows based on cell data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="get_error_frame.html"><span class="doc">get_error_frame</span></a>(self)</td>
+<tr class="row-odd"><td><a class="reference internal" href="get_error_frame.html"><span class="doc">get_error_frame</span></a>(self)</td>
 <td>Get a frame with error recordings.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="group_by.html"><span class="doc">group_by</span></a>(self, group_by_columns, *aggregation_arguments)</td>
+<tr class="row-even"><td><a class="reference internal" href="group_by.html"><span class="doc">group_by</span></a>(self, group_by_columns, *aggregation_arguments)</td>
 <td>Create summarized frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="histogram.html"><span class="doc">histogram</span></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
+<tr class="row-odd"><td><a class="reference internal" href="histogram.html"><span class="doc">histogram</span></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
 <td>Compute the histogram for a column in a frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><span class="doc">inspect</span></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="inspect.html"><span class="doc">inspect</span></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
 <td>Pretty-print of the frame data</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="join.html"><span class="doc">join</span></a>(self, right, left_on[, right_on, how, name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="join.html"><span class="doc">join</span></a>(self, right, left_on[, right_on, how, name])</td>
 <td>Join operation on one or two frames, creating a new frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="quantiles.html"><span class="doc">quantiles</span></a>(self, column_name, quantiles)</td>
+<tr class="row-even"><td><a class="reference internal" href="quantiles.html"><span class="doc">quantiles</span></a>(self, column_name, quantiles)</td>
 <td>New frame with Quantiles and their values.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="rename_columns.html"><span class="doc">rename_columns</span></a>(self, names)</td>
+<tr class="row-odd"><td><a class="reference internal" href="rename_columns.html"><span class="doc">rename_columns</span></a>(self, names)</td>
 <td>Rename columns for edge frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="reverse_box_cox.html"><span class="doc">reverse_box_cox</span></a>(self, column_name[, lambda_value, box_cox_column_name])</td>
+<td>Calculate the reverse box-cox transformation for each row in current frame.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="sort.html"><span class="doc">sort</span></a>(self, columns[, ascending])</td>
 <td>Sort the data in a frame.</td>
