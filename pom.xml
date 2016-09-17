@@ -141,7 +141,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dev.spark.hive.version>1.6.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.2.181</dep.daal.version>
         <dep.orientdb.version>2.1.16</dep.orientdb.version>
-
+        <dep.h20.sparkling-water.version>1.6.7</dep.h20.sparkling-water.version>
+        <dep.h20.version>3.10.0.6</dep.h20.version>
         <!--START GAO MAVEN -->
 
         <scala.long.version>2.10.5</scala.long.version>
@@ -761,6 +762,34 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
     <dependencyManagement>
         <dependencies>
+            <!-- START H2O dependencies -->
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>sparkling-water-core_2.10</artifactId>
+                <version>${dep.h20.sparkling-water.version}</version>
+                <!--<exclusions>
+                    <exclusion>
+                        <groupId>ai.h2o</groupId>
+                        <artifactId>sparkling-water-repl_2.10</artifactId>
+                    </exclusion>
+                </exclusions> -->
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-genmodel</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-core</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-algos</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <!-- END H2O dependencies -->
             <!-- START Intel DAAL dependencies -->
             <dependency>
                 <groupId>com.intel.daal</groupId>
