@@ -83,9 +83,6 @@ object ModelPublishFormat extends EventLogging {
     var byteArray: Array[Byte] = null
     var libraryPaths: Set[String] = Set.empty[String]
 
-    //Delete old temp directory if exists where model tar was extracted.
-    FileUtils.deleteQuietly(new File(tempModelDir))
-
     try {
       // Extract files to temporary directory so that dynamic library names are not changed
       val tempDirectory = getTemporaryDirectory
@@ -204,6 +201,9 @@ object ModelPublishFormat extends EventLogging {
 
   private def getTemporaryDirectory: Path = {
     try {
+      //Delete old temp directory if exists where model tar was extracted.
+      FileUtils.deleteQuietly(new File(tempModelDir))
+
       val config = ConfigFactory.load(this.getClass.getClassLoader)
       val configKey = "atk.scoring-engine.tmpdir"
 
