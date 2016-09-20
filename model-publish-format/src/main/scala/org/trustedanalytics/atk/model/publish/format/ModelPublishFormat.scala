@@ -33,6 +33,7 @@ object ModelPublishFormat extends EventLogging {
 
   val modelDataString = "modelData"
   val modelReaderString = "modelReader"
+  var tempModelDir = ""
 
   /**
    * Write a Model to a our special format that can be read later by a Scoring Engine.
@@ -82,9 +83,13 @@ object ModelPublishFormat extends EventLogging {
     var byteArray: Array[Byte] = null
     var libraryPaths: Set[String] = Set.empty[String]
 
+    //Delete old temp directory if exists where model tar was extracted.
+    FileUtils.deleteQuietly(new File(tempModelDir))
+
     try {
       // Extract files to temporary directory so that dynamic library names are not changed
       val tempDirectory = getTemporaryDirectory
+      tempModelDir = tempDirectory.toString
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
