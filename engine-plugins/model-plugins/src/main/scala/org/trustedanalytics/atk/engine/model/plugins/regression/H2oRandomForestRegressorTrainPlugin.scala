@@ -17,24 +17,22 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import hex.ModelMetricsRegression
-import hex.genmodel.GenModel
 import hex.tree.drf.DRF
 import hex.tree.drf.DRFModel.DRFParameters
-import org.apache.spark.h2o.{ AtkH2OContext, H2OConf, H2OFrame, H2OContext }
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import org.apache.spark.h2o._
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin._
+import water.{ UDPRebooted, H2O }
+
+//json implicits
+//Implicits for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.h2o.H2oJsonProtocol._
-import water.{ UDPRebooted, H2O }
-
-import scala.util.Try
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 
 case class H2oRandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                              @ArgDoc("""A frame to train the model on""") frame: FrameReference,
@@ -167,7 +165,8 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
       varImpMap
     )
 
-    model.writeToStorage(drfModel.toJson.asJsObject)
+    val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
+    model.writeToStorage(modelData.toJson.asJsObject)
     //h2oContext.stop(stopSparkContext = false)
     // sc.stop()
     H2O.orderlyShutdown()

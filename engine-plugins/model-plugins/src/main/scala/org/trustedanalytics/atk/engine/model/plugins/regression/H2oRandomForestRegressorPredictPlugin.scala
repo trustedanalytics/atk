@@ -16,11 +16,9 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import hex.tree.drf.DRFModel
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.h2o._
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
@@ -30,23 +28,29 @@ import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.trustedanalytics.atk.scoring.models.RandomForestRegressorData
+import scala.collection.JavaConverters._
+
+//Implicits for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.h2o.H2oJsonProtocol._
-import water.H2O
+
+import scala.collection.mutable.ArrayBuffer
 
 case class H2oRandomForestRegressorPredictArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
                                                @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
-trained.""") frame: FrameReference) {
+trained.""") frame: FrameReference,
+                                               @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
+By default, we predict the labels over columns the Random Forest model
+was trained on. """) observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
 }
 
 /** Json conversion for arguments and return value case classes */
 object H2oRandomForestRegressorPredictJsonFormat {
-  implicit val drfPredictFormat = jsonFormat2(H2oRandomForestRegressorPredictArgs)
+  implicit val drfPredictFormat = jsonFormat3(H2oRandomForestRegressorPredictArgs)
 }
 import H2oRandomForestRegressorPredictJsonFormat._
 
@@ -78,18 +82,31 @@ class H2oRandomForestRegressorPredictPlugin extends SparkCommandPlugin[H2oRandom
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
-    implicit val sqlContext = SQLContext.getOrCreate(sc)
-    val h2oContext = H2OContext.getOrCreate(sc)
-    import h2oContext._
-    import h2oContext.implicits._
+    val h2oModelData = model.readFromStorage().convertTo[H2oModelData]
+    if (arguments.observationColumns.isDefined) {
+      require(h2oModelData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
+    }
+    val obsColumns = arguments.observationColumns.getOrElse(h2oModelData.observationColumns)
 
-    val drfModel = model.readFromStorage().convertTo[DRFModel]
-    val h2oFrame: H2OFrame = h2oContext.asH2OFrame(frame.rdd.toDataFrame)
-    val h2oPredictFrame = drfModel.score(h2oFrame)
-    val predictFrame = FrameRdd.toFrameRdd(h2oContext.asDataFrame(h2oPredictFrame))
+    //predicting a label for the observation columns
+    val predictColumn = Column("predicted_value", DataTypes.float64)
+    val predictRows = frame.rdd.mapPartitionRows(rows => {
+      val genModel = h2oModelData.toGenModel
+      val scores = new ArrayBuffer[Row]()
+      val preds: Array[Double] = new Array[Double](1)
 
-    H2O.orderlyShutdown()
-    H2O.closeAll()
+      while (rows.hasNext) {
+        val row = rows.next()
+        val point = row.valuesAsDenseVector(obsColumns).toArray
+        val fields = obsColumns.zip(point).map { case (name, value) => (name, double2Double(value)) }.toMap
+        val score = genModel.score0(fields.asJava, preds)
+        scores += row.addValue(score(0))
+      }
+      scores.toIterator
+    })
+
+    val predictFrame = new FrameRdd(frame.schema.addColumn(predictColumn), predictRows)
+
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by H2O RandomForests as a regressor predict operation"))) {
       newPredictedFrame: FrameEntity =>
         newPredictedFrame.save(predictFrame)

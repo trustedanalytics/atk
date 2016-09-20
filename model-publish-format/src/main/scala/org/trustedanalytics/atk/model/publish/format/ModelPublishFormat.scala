@@ -99,6 +99,11 @@ object ModelPublishFormat extends EventLogging {
           val url = file.toURI.toURL
           urls = urls :+ url
         }
+        else if (individualFile.contains(".class")) {
+          val file = writeTempFile(tempDirectory, content, individualFile, ".class")
+          val url = file.getParentFile.toURI.toURL
+          urls = urls :+ url
+        }
         else if (individualFile.contains(".so")) {
           val file = writeTempFile(tempDirectory, content, individualFile, ".so")
           libraryPaths += getDirectoryPath(file)

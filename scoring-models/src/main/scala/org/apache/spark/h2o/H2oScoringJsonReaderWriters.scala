@@ -16,28 +16,28 @@
 
 package org.apache.spark.h2o
 
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.apache.spark.mllib.atk.plugins.InvalidJsonException
+import org.apache.spark.ml.InvalidJsonException
 import spray.json._
+import DefaultJsonProtocol._
 
-object H2oJsonProtocol {
+object H2oScoringJsonReaderWriters {
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
-  implicit object H2oModelFormat extends JsonFormat[H2oModelData] {
-    override def read(json: JsValue): H2oModelData = {
+  implicit object H2oModelFormat extends JsonFormat[H2oScoringModelData] {
+    override def read(json: JsValue): H2oScoringModelData = {
       val fields = json.asJsObject.fields
       val modelName = getOrInvalid(fields, "model_name").convertTo[String]
       val pojo = getOrInvalid(fields, "pojo").convertTo[String]
       val labelColumn = getOrInvalid(fields, "label_column").convertTo[String]
       val observationColumns = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      H2oModelData(modelName, pojo, labelColumn, observationColumns)
+      H2oScoringModelData(modelName, pojo, labelColumn, observationColumns)
     }
 
-    override def write(obj: H2oModelData): JsValue = {
+    override def write(obj: H2oScoringModelData): JsValue = {
       JsObject(
         "model_name" -> obj.modelName.toJson,
         "pojo" -> obj.pojo.toJson,

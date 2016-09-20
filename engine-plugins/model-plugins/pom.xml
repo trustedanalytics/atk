@@ -158,7 +158,7 @@
             <groupId>ai.h2o</groupId>
             <artifactId>h2o-algos</artifactId>
         </dependency>
-        <!-- END H2O dependencies -->
+         <!-- END H2O dependencies -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
