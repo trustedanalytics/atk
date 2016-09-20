@@ -15,4 +15,12 @@
  */
 package org.apache.spark.h2o
 
+/**
+ * Trained H2O model data
+ *
+ * @param modelName H2O model name
+ * @param pojo POJO (Plain Old Java Object)
+ * @param labelColumn Label column in train frame
+ * @param observationColumns Observation columns in train frame
+ */
 case class H2oScoringModelData(modelName: String, pojo: String, labelColumn: String, observationColumns: List[String])

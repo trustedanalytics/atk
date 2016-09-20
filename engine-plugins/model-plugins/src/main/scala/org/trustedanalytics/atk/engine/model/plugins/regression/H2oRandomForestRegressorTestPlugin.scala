@@ -15,21 +15,13 @@
  */
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.h2o.H2oModelData
 import org.apache.spark.mllib.evaluation.RegressionMetrics
-import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column }
-import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, SparkCommandPlugin }
-import org.trustedanalytics.atk.scoring.models.LinearRegressionData
-import scala.collection.JavaConverters._
-import scala.collection.mutable.ArrayBuffer
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ArgDoc, Invocation, SparkCommandPlugin }
 
 //Implicits for JSON conversion
 import spray.json._
@@ -38,37 +30,40 @@ import org.apache.spark.h2o.H2oJsonProtocol._
 
 /**
  * Arguments to H2O Random Forest Regression test plugin
- * @param model The trained random forest regression model to run test on
- * @param frame The frame to test the random forest regression model on
- * @param valueColumn Frame's column containing the value for the observation
- * @param observationColumns Frame's column(s) containing the observations
  */
 case class H2oRandomForestRegressorTestArgs(model: ModelReference,
                                             @ArgDoc("""The frame to test the random forest regression model on""") frame: FrameReference,
                                             @ArgDoc("""Column name containing the value of each observation""") valueColumn: String,
-                                            @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]])
+                                            @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]] = None)
 
 /**
- * Return of random forest Regression test plugin
- * @param explainedVariance The explained variance regression score
- * @param meanAbsoluteError The risk function corresponding to the expected value of the absolute error loss or l1-norm loss
- * @param meanSquaredError The risk function corresponding to the expected value of the squared error loss or quadratic loss
- * @param r2 The coefficient of determination
- * @param rootMeanSquaredError The square root of the mean squared error
+ * Return of H2O random forest Regression test plugin
  */
-case class H2oRandomForestRegressorTestReturn(@ArgDoc("""The explained variance regression score""") explainedVariance: Double,
-                                              @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
-                                              @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
-                                              @ArgDoc("""The unadjusted coefficient of determination""") r2: Double,
-                                              @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double)
+case class H2oRandomForestRegressorTestReturn(@ArgDoc("""Mean squared error""") mse: Double,
+                                              @ArgDoc("""The square root of the mean squared error""") rmse: Double,
+                                              @ArgDoc("""r-squared or coefficient of determination""") r2: Double)
 
 /** Json conversion for arguments and return value case classes */
 object H2oRandomForestRegressorTestJsonFormat {
   implicit val drfTestArgsFormat = jsonFormat4(H2oRandomForestRegressorTestArgs)
-  implicit val drfTestReturnFormat = jsonFormat5(H2oRandomForestRegressorTestReturn)
+  implicit val drfTestReturnFormat = jsonFormat3(H2oRandomForestRegressorTestReturn)
 }
 import H2oRandomForestRegressorTestJsonFormat._
 
+/* Run the  H2O random forest Regression model on the test frame*/
+@PluginDoc(oneLine = "Predict test frame values and return metrics.",
+  extended = """Predict the labels for a test frame and run regresssion metrics on predicted
+and target labels.""",
+  returns =
+    """object
+      An object with the results of the trained Random Forest Regressor:
+      |mse : double
+      |Mean squared error
+      |rmse : double
+      |Root mean squared error
+      |r2: double
+      |R-squared
+    """)
 class H2oRandomForestRegressorTestPlugin extends SparkCommandPlugin[H2oRandomForestRegressorTestArgs, H2oRandomForestRegressorTestReturn] {
   /**
    * The name of the command.
@@ -99,27 +94,12 @@ class H2oRandomForestRegressorTestPlugin extends SparkCommandPlugin[H2oRandomFor
     val obsColumns = arguments.observationColumns.getOrElse(h2oModelData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictColumn = Column("predicted_value", DataTypes.float64)
-    val predictRows = frame.rdd.mapPartitionRows(rows => {
-      val genModel = h2oModelData.toGenModel
-      val scores = new ArrayBuffer[Row]()
-      val preds: Array[Double] = new Array[Double](1)
-
-      while (rows.hasNext) {
-        val row = rows.next()
-        val point = row.valuesAsDenseVector(obsColumns).toArray
-        val fields = obsColumns.zip(point).map { case (name, value) => (name, double2Double(value)) }.toMap
-        val score = genModel.score0(fields.asJava, preds)
-        scores += row.addValue(score(0))
-      }
-      scores.toIterator
+    val predictFrame = H2oRandomForestRegressorFunctions.predict(frame.rdd, h2oModelData, obsColumns)
+    val predictionLabelRdd = predictFrame.mapRows(row => {
+      (row.doubleValue("predicted_value"), row.doubleValue(arguments.valueColumn))
     })
-
-    val predictFrame = new FrameRdd(frame.schema.addColumn(predictColumn), predictRows)
-
-    val predictionLabelRdd = predictFrame.mapRows(row => (row.doubleValue("predicted_value"), row.doubleValue(arguments.valueColumn)))
     val metrics = new RegressionMetrics(predictionLabelRdd)
 
-    new H2oRandomForestRegressorTestReturn(metrics.explainedVariance, metrics.meanAbsoluteError, metrics.meanSquaredError, metrics.r2, metrics.rootMeanSquaredError)
+    new H2oRandomForestRegressorTestReturn(metrics.meanSquaredError, metrics.rootMeanSquaredError, metrics.r2)
   }
 }

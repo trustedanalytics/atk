@@ -16,34 +16,30 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.h2o._
-import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import scala.collection.JavaConverters._
 
 //Implicits for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.h2o.H2oJsonProtocol._
 
-import scala.collection.mutable.ArrayBuffer
-
+/**
+ * Arguments to H2O Random Forest Regression predict plugin
+ */
 case class H2oRandomForestRegressorPredictArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
-                                               @ArgDoc("""A frame whose labels are to be predicted.
+                                               @ArgDoc("""A frame whose values are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
-                                               @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
+                                               @ArgDoc("""Column(s) containing the observations whose values are to be predicted.
 By default, we predict the labels over columns the Random Forest model
-was trained on. """) observationColumns: Option[List[String]]) {
+was trained on. """) observationColumns: Option[List[String]] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
 }
@@ -56,7 +52,7 @@ import H2oRandomForestRegressorPredictJsonFormat._
 
 @PluginDoc(oneLine = "Predict the values for the data points.",
   extended =
-    """Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+    """Predict the values for a test frame using trained H2O Random Forest Regression model, and create a new frame revision with
 existing columns and a new predicted value's column.""",
   returns = """A new frame consisting of the existing columns of the frame and
 a new column with predicted value for each observation.""")
@@ -86,31 +82,13 @@ class H2oRandomForestRegressorPredictPlugin extends SparkCommandPlugin[H2oRandom
     if (arguments.observationColumns.isDefined) {
       require(h2oModelData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
+
     val obsColumns = arguments.observationColumns.getOrElse(h2oModelData.observationColumns)
-
-    //predicting a label for the observation columns
-    val predictColumn = Column("predicted_value", DataTypes.float64)
-    val predictRows = frame.rdd.mapPartitionRows(rows => {
-      val genModel = h2oModelData.toGenModel
-      val scores = new ArrayBuffer[Row]()
-      val preds: Array[Double] = new Array[Double](1)
-
-      while (rows.hasNext) {
-        val row = rows.next()
-        val point = row.valuesAsDenseVector(obsColumns).toArray
-        val fields = obsColumns.zip(point).map { case (name, value) => (name, double2Double(value)) }.toMap
-        val score = genModel.score0(fields.asJava, preds)
-        scores += row.addValue(score(0))
-      }
-      scores.toIterator
-    })
-
-    val predictFrame = new FrameRdd(frame.schema.addColumn(predictColumn), predictRows)
+    val predictFrame = H2oRandomForestRegressorFunctions.predict(frame.rdd, h2oModelData, obsColumns)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by H2O RandomForests as a regressor predict operation"))) {
       newPredictedFrame: FrameEntity =>
         newPredictedFrame.save(predictFrame)
     }
   }
-
 }

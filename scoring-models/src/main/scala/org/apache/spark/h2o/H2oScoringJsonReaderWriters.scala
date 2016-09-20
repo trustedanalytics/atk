@@ -20,6 +20,9 @@ import org.apache.spark.ml.InvalidJsonException
 import spray.json._
 import DefaultJsonProtocol._
 
+/**
+ * Implicit conversions for H2O scoring model objects to/from JSON
+ */
 object H2oScoringJsonReaderWriters {
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {

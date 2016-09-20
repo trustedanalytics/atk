@@ -22,8 +22,8 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaData
 import scala.collection.JavaConverters._
 
 /**
- * Scoring model for H2O's RandomForest
- * @param genModel H2O scoring model
+ * Scoring model for H2O's Random forest regression model
+ * @param genModel Generated model
  */
 class H2oRandomForestRegressorScoreModel(h2oModelData: H2oScoringModelData, genModel: GenModel) extends Model {
 
@@ -49,6 +49,9 @@ class H2oRandomForestRegressorScoreModel(h2oModelData: H2oScoringModelData, genM
     input
   }
 
+  /**
+   * @return Metadata for H2O's Random forest regression model
+   */
   override def modelMetadata(): ModelMetaDataArgs = {
     new ModelMetaDataArgs("H2O Random Forest Regressor Model", classOf[H2oRandomForestRegressorScoreModel].getName, classOf[H2oRandomForestRegressorModelReaderPlugin].getName, Map())
   }

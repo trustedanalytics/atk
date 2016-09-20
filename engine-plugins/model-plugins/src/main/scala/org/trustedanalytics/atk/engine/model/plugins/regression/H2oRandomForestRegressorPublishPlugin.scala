@@ -31,7 +31,7 @@ import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
- * Publish a Random Forest Regressor Model for scoring
+ * Publish a H2O andom Forest Regressor Model for scoring
  */
 @PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
   extended =
@@ -50,7 +50,7 @@ class H2oRandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishAr
   override def name: String = "model:h2o_random_forest_regressor/publish"
 
   /**
-   * Get the predictions for observations in a test frame
+   * Publish H2O andom Forest Regressor Model
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that

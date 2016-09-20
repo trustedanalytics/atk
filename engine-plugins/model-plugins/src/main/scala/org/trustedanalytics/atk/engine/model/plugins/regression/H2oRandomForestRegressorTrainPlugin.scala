@@ -19,21 +19,23 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import hex.ModelMetricsRegression
 import hex.tree.drf.DRF
 import hex.tree.drf.DRFModel.DRFParameters
+import water.H2O
 import org.apache.spark.h2o._
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
-import water.{ UDPRebooted, H2O }
 
-//json implicits
 //Implicits for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.h2o.H2oJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 
+/**
+ * Arguments to H2O Random Forest Regression train plugin
+ */
 case class H2oRandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                              @ArgDoc("""A frame to train the model on""") frame: FrameReference,
                                              @ArgDoc("""Column name containing the value for each observation""") valueColumn: String,
@@ -53,7 +55,39 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   require(numTrees > 0, "numTrees must be greater than 0")
   require(maxDepth > 0, "maxDepth must be non negative")
 
-  def getMtries(): Int = {
+  /**
+   * Get H2O random forest model parameters
+   *
+   * @param h2oFrame Training frame
+   * @return Model parameters
+   */
+  def getDrfParameters(h2oFrame: H2OFrame): DRFParameters = {
+    val forestParams = new DRFParameters()
+    val ncols = observationColumns.length
+    val ignoredCols = getIgnoredColumns(h2oFrame.names())
+    forestParams._train = h2oFrame._key
+    forestParams._response_column = valueColumn
+    if (ignoredCols.size > 0) {
+      forestParams._ignored_columns = ignoredCols
+    }
+    forestParams._ntrees = numTrees
+    forestParams._max_depth = maxDepth
+    forestParams._nbins = numBins
+    forestParams._min_rows = minRows
+    forestParams._mtries = getMtries
+    if (seed.isDefined) {
+      forestParams._seed = seed.get
+    }
+    if (sampleRate.isDefined) {
+      forestParams._sample_rate = sampleRate.get
+    }
+    forestParams
+  }
+
+  /**
+   * Get the number of variables randomly sampled as candidates at each split
+   */
+  private def getMtries: Int = {
     val ncols = observationColumns.length
     featureSubsetCategory match {
       case "auto" => -1
@@ -64,14 +98,18 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
     }
   }
 
-  def getIgnoredColumns(frameColumns: Array[String]): Array[String] = {
+  /**
+   * Get columns to ignore during training
+   * @param frameColumns Columns in training frame
+   * @return Columns to ignore
+   */
+  private def getIgnoredColumns(frameColumns: Array[String]): Array[String] = {
     frameColumns.diff(observationColumns :+ valueColumn)
   }
 }
 
 /**
- * Results for Random Forest Classifier Train plugin
- *
+ * Results for H2O Random Forest Regression Train plugin
  */
 case class H2oRandomForestRegressorTrainReturn(mse: Double, rmse: Double, r2: Double, varimp: Map[String, Float])
 
@@ -85,17 +123,16 @@ import H2oRandomForestRegressorTrainJsonFormat._
 @PluginDoc(oneLine = "Build Random Forests Regressor model.",
   extended = """Creating a Random Forests Regressor Model using the observation columns and target column.""",
   returns =
-    """dictionary
-      |A dictionary with trained Random Forest Regressor model with the following keys\:
-      |'observation_columns': the list of observation columns on which the model was trained
-      |'label_columns': the column name containing the labels of the observations
-      |'num_trees': the number of decision trees in the random forest
-      |'num_nodes': the number of nodes in the random forest
-      |'categorical_features_info': the map storing arity of categorical features
-      |'impurity': the criterion used for information gain calculation
-      |'max_depth': the maximum depth of the tree
-      |'max_bins': the maximum number of bins used for splitting features
-      |'seed': the random seed used for bootstrapping and choosing featur subset
+    """object
+      An object with the results of the trained Random Forest Regressor:
+      |mse : double
+      |Mean squared error
+      |rmse : double
+      |Root mean squared error
+      |r2: double
+      |R-squared
+      |varimp: Pandas frame
+      |Variable importances
     """)
 class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomForestRegressorTrainArgs, H2oRandomForestRegressorTrainReturn] {
   /**
@@ -121,39 +158,16 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
 
     // Run H2O cluster inside Spark cluster
     val h2oContext = H2OContext.getOrCreate(sc)
-    //val h2oContext = AtkH2OContext.create(sc)
-    //UDPRebooted.T.reboot.send(H2O.SELF)
-    //val h2oContext = Try(h2oContextTemp.init()).getOrElse(h2oContextTemp)
-
     import h2oContext._
     import h2oContext.implicits._
 
-    val h20Frame: H2OFrame = h2oContext.asH2OFrame(frame.rdd.toDataFrame) /*Try(h2oContext.asH2OFrame(frame.rdd.toDataFrame)).getOrElse({
-      val c2 = AtkH2OContext.create(sc)
-      c2.asH2OFrame(frame.rdd.toDataFrame)
-    })   */
-    val forestParams = new DRFParameters()
-    val ncols = arguments.observationColumns.length
-    val ignoredCols = arguments.getIgnoredColumns(frame.schema.columnNames.toArray)
-    forestParams._train = h20Frame._key
-    forestParams._response_column = arguments.valueColumn
-    if (ignoredCols.size > 0) {
-      forestParams._ignored_columns = ignoredCols
-    }
-    forestParams._ntrees = arguments.numTrees
-    forestParams._max_depth = arguments.maxDepth
-    forestParams._nbins = arguments.numBins
-    forestParams._min_rows = arguments.minRows
-    forestParams._mtries = arguments.getMtries()
-    if (arguments.seed.isDefined) {
-      forestParams._seed = arguments.seed.get
-    }
-    if (arguments.sampleRate.isDefined) {
-      forestParams._sample_rate = arguments.sampleRate.get
-    }
-
-    val drfJob = new DRF(forestParams)
+    // Train model
+    val h2oFrame: H2OFrame = h2oContext.asH2OFrame(frame.rdd.toDataFrame)
+    val drfParams = arguments.getDrfParameters(h2oFrame)
+    val drfJob = new DRF(drfParams)
     val drfModel = drfJob.trainModel().get()
+
+    // Get training metrics
     val regressionMetrics = drfModel._output._training_metrics.asInstanceOf[ModelMetricsRegression]
     val varImp = drfModel._output._varimp
     val varImpMap = varImp._names.zip(varImp._varimp).map { case (name, imp) => (name, imp) }.toMap
@@ -168,7 +182,6 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
     val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
     model.writeToStorage(modelData.toJson.asJsObject)
     //h2oContext.stop(stopSparkContext = false)
-    // sc.stop()
     H2O.orderlyShutdown()
     H2O.closeAll()
 

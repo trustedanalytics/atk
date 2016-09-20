@@ -27,12 +27,12 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of a Random Forest Regressor model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of a Random Forest Regressor model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a H2O Random Forest Regressor model.",
   extended = """Random Forest [1]_ is a supervised ensemble learning algorithm
 used to perform regression.
 A Random Forest Regressor model is initialized, trained on columns of a frame,
 and used to predict the value of each observation in the frame.
-This model runs the MLLib implementation of Random Forest [2]_.
+This model runs the H20 implementation of Random Forest [2]_.
 During training, the decision trees are trained in parallel.
 During prediction, the average over-all tree's predicted value is the predicted
 value of the random forest.
@@ -40,8 +40,8 @@ value of the random forest.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
-.. [2] https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests""",
-  returns = """A new instance of RandomForestRegressor Model""")
+.. [2] http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/drf.html""",
+  returns = """A new instance of H2O RandomForestRegressor Model""")
 class H2oRandomForestRegressorNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

@@ -20,6 +20,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.InvalidJsonException
 import spray.json._
 
+/**
+ * Implicit conversions for H2O model objects to/from JSON
+ */
 object H2oJsonProtocol {
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
