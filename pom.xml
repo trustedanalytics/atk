@@ -789,11 +789,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>h2o-algos</artifactId>
                 <version>${dep.h20.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.mdkt.compiler</groupId>
-                <artifactId>InMemoryJavaCompiler</artifactId>
-                <version>1.2</version>
-            </dependency>
             <!-- END H2O dependencies -->
             <!-- START Intel DAAL dependencies -->
             <dependency>
