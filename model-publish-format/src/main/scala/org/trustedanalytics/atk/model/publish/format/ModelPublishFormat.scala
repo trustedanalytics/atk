@@ -81,10 +81,11 @@ object ModelPublishFormat extends EventLogging {
     var urls = Array.empty[URL]
     var byteArray: Array[Byte] = null
     var libraryPaths: Set[String] = Set.empty[String]
+    var tempDirectory: Path = null
 
     try {
       // Extract files to temporary directory so that dynamic library names are not changed
-      val tempDirectory = getTemporaryDirectory
+      tempDirectory = getTemporaryDirectory
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
@@ -130,6 +131,8 @@ object ModelPublishFormat extends EventLogging {
     }
     finally {
       IOUtils.closeQuietly(tarFile)
+      //Delete old temp directory if exists where model tar was extracted.
+      FileUtils.deleteQuietly(new File(tempDirectory.toString))
     }
 
   }
@@ -199,6 +202,7 @@ object ModelPublishFormat extends EventLogging {
 
   private def getTemporaryDirectory: Path = {
     try {
+
       val config = ConfigFactory.load(this.getClass.getClassLoader)
       val configKey = "atk.scoring-engine.tmpdir"
 
