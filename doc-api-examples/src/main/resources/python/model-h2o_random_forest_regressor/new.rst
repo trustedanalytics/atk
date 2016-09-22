@@ -55,6 +55,7 @@ varimp:
 [4]      0  44.3117586448  3.3458963222              0.0
 [5]      0  34.6334526911  3.6429838715              0.0
 >>> test_output = model.test(frame, 'Value')
+<progress>
 <skip>
 >>> test_output
 mse: 0.0
