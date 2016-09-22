@@ -37,9 +37,9 @@ object H2oRandomForestRegressorFunctions extends Serializable {
   def predict(trainFrame: FrameRdd, h2oModelData: H2oModelData, obsColumns: List[String]): FrameRdd = {
     val predictColumn = Column("predicted_value", DataTypes.float64)
     val predictRows = trainFrame.mapPartitionRows(rows => {
-      val genModel = h2oModelData.toGenModel
       val scores = new ArrayBuffer[Row]()
       val preds: Array[Double] = new Array[Double](1)
+      val genModel = h2oModelData.toGenModel
 
       while (rows.hasNext) {
         val row = rows.next()

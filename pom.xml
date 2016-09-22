@@ -767,12 +767,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>ai.h2o</groupId>
                 <artifactId>sparkling-water-core_2.10</artifactId>
                 <version>${dep.h20.sparkling-water.version}</version>
-                <!--<exclusions>
-                    <exclusion>
-                        <groupId>ai.h2o</groupId>
-                        <artifactId>sparkling-water-repl_2.10</artifactId>
-                    </exclusion>
-                </exclusions> -->
             </dependency>
             <dependency>
                 <groupId>ai.h2o</groupId>

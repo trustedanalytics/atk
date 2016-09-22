@@ -105,7 +105,8 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
     // compile pojo
     val pojoDir = pojoFile.getParentFile
     val compiler = ToolProvider.getSystemJavaCompiler
-    val paths = Module.libs.map(_.getPath).filter(_.contains("h2o")).mkString(":")
+    val libs = this.getClass.getClassLoader.asInstanceOf[URLClassLoader].getURLs
+    val paths = libs.map(_.getPath).filter(_.contains("h2o")).mkString(":")
     compiler.run(null, null, null, "-cp", paths, pojoFile.getPath)
     pojoDir
   }

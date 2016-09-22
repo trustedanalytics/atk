@@ -157,9 +157,7 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
     val model: Model = arguments.model
 
     // Run H2O cluster inside Spark cluster
-    //val h2oContext = AtkH2OContext.forceInit(sc)
-    val h2oContext1 = H2OContext.getOrCreate(sc)
-    val h2oContext = AtkH2OContext.resetSparkContext(h2oContext1, sc)
+    val h2oContext = AtkH2OContext.init(sc)
     import h2oContext._
     import h2oContext.implicits._
 
@@ -183,9 +181,6 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
 
     val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
     model.writeToStorage(modelData.toJson.asJsObject)
-    //h2oContext.stop(stopSparkContext = false)
-    //H2O.orderlyShutdown()
-    //H2O.closeAll()
 
     results
   }

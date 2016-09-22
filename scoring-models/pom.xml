@@ -117,19 +117,7 @@
         <!-- START H2O dependencies -->
         <dependency>
             <groupId>ai.h2o</groupId>
-            <artifactId>sparkling-water-core_2.10</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.h2o</groupId>
             <artifactId>h2o-genmodel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.h2o</groupId>
-            <artifactId>h2o-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.h2o</groupId>
-            <artifactId>h2o-algos</artifactId>
         </dependency>
         <!-- END H2O dependencies -->
         <dependency>
