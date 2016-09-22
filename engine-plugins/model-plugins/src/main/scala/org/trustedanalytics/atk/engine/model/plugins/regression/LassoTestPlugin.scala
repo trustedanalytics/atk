@@ -40,6 +40,18 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
+/**
+ * Return of Linear Regression test plugin
+ * @param meanAbsoluteError The risk function corresponding to the expected value of the absolute error loss or l1-norm loss
+ * @param meanSquaredError The risk function corresponding to the expected value of the squared error loss or quadratic loss
+ * @param r2 The coefficient of determination
+ * @param rootMeanSquaredError The square root of the mean squared error
+ */
+case class LassoTestReturn(@ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
+                           @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
+                           @ArgDoc("""The unadjusted coefficient of determination""") r2: Double,
+                           @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double)
+
 /* Run the Lasso model on the test frame*/
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
@@ -57,7 +69,7 @@ The data returned is composed of the following keys\:
               |  The proportion of predicted positive instances that are correctly identified
               |  'recall' : double
               |  The proportion of positive instances that are correctly identified.""")
-class LassoTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, LinearRegressionTestReturn] {
+class LassoTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, LassoTestReturn] {
   /**
    * The name of the command.
    *
@@ -81,7 +93,7 @@ class LassoTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, 
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation): LinearRegressionTestReturn = {
+  override def execute(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation): LassoTestReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
@@ -103,7 +115,7 @@ class LassoTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, 
 
     val metrics = new RegressionMetrics(predictionLabelRdd)
 
-    LinearRegressionTestReturn(metrics.explainedVariance, metrics.meanAbsoluteError, metrics.meanSquaredError, metrics.r2, metrics.rootMeanSquaredError)
+    LassoTestReturn(metrics.meanAbsoluteError, metrics.meanSquaredError, metrics.r2, metrics.rootMeanSquaredError)
   }
 }
 

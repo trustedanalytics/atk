@@ -14,24 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk
+package org.trustedanalytics.atk.scoring.models
 
-/**
- * String Utility methods
- */
-object StringUtils {
+import org.apache.spark.mllib.ScoringJsonReaderWriters.MAXDataFormat
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
 
-  /**
-   * Check if the supplied string is alpha numeric with underscores (used for column names, etc)
-   */
-  def isAlphanumericUnderscore(str: String): Boolean = {
-    for (c <- str.iterator) {
-      // Not sure if this is great but it is probably faster than regex
-      // http://stackoverflow.com/questions/12831719/fastest-way-to-check-a-string-is-alphanumeric-in-java
-      if (c < 0x30 || (c >= 0x3a && c <= 0x40) || (c > 0x5a && c < 0x5f) || (c > 0x5f && c <= 0x60) || c > 0x7a) {
-        return false
-      }
-    }
-    true
+class MAXModelReaderPlugin() extends ModelLoader {
+
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    val maxData = str.parseJson.convertTo[MAXData]
+    val maxModel = maxData.maxModel
+    new MAXScoreModel(maxModel, maxData).asInstanceOf[Model]
   }
 }
