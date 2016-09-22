@@ -8,14 +8,14 @@ Consider the following model trained and tested on the sample data set in *frame
 >>> frame = ta.Frame(ta.UploadRows([[1,19.8446136104,2.2985856384],[1,16.8973559126,2.6933495054],
 ...                                 [1,5.5548729596,2.7777687995],[0,46.1810010826,3.1611961917],
 ...                                 [0,44.3117586448,3.3458963222],[0,34.6334526911,3.6429838715]],
-...                                 [('Class', int), ('Dim_1', ta.float64), ('Dim_2',ta.float64)]))
+...                                 [('Value', int), ('Dim_1', ta.float64), ('Dim_2',ta.float64)]))
 -etc-
 
 </hide>
 Consider the following frame containing three columns.
 
 >>> frame.inspect()
-[#]  Class  Dim_1          Dim_2
+[#]  Value  Dim_1          Dim_2
 =======================================
 [0]      1  19.8446136104  2.2985856384
 [1]      1  16.8973559126  2.6933495054
@@ -23,29 +23,46 @@ Consider the following frame containing three columns.
 [3]      0  46.1810010826  3.1611961917
 [4]      0  44.3117586448  3.3458963222
 [5]      0  34.6334526911  3.6429838715
->>> model = ta.RandomForestRegressorModel()
+>>> model = ta.H2oRandomForestRegressorModel()
 <progress>
->>> train_output = model.train(frame, 'Class', ['Dim_1', 'Dim_2'], num_trees=1, impurity="variance", max_depth=4, max_bins=100)
+>>> train_output = model.train(frame, 'Value', ['Dim_1', 'Dim_2'], num_trees=1, max_depth=4, num_bins=2)
 <progress>
 <skip>
 >>> train_output
-{u'impurity': u'variance', u'max_bins': 100, u'observation_columns': [u'Dim_1', u'Dim_2'], u'num_nodes': 3, u'max_depth': 4, u'seed': -1632404927, u'num_trees': 1, u'label_column': u'Class', u'feature_subset_category': u'all'}
+mse: 0.0
+rmse: 0.0
+r2: 1.0
+varimp:
+{u'Dim_2': 1.5, u'Dim_1': 0.0}
 </skip>
->>> train_output['num_nodes']
-3
->>> train_output['label_column']
-u'Class'
+>>> train_output.mse
+0.0
+<skip>
+>>> train_output.varimp_as_pandas()
+ 	variable 	importance
+0 	Dim_2 	1.5
+1 	Dim_1 	0.0
+</skip>
 >>> predicted_frame = model.predict(frame, ['Dim_1', 'Dim_2'])
 <progress>
 >>> predicted_frame.inspect()
-[#]  Class  Dim_1          Dim_2         predicted_value
+[#]  Value  Dim_1          Dim_2         predicted_value
 ========================================================
-[0]      1  19.8446136104  2.2985856384                1.0
-[1]      1  16.8973559126  2.6933495054                1.0
-[2]      1   5.5548729596  2.7777687995                1.0
-[3]      0  46.1810010826  3.1611961917                0.0
-[4]      0  44.3117586448  3.3458963222                0.0
-[5]      0  34.6334526911  3.6429838715                0.0
+[0]      1  19.8446136104  2.2985856384              1.0
+[1]      1  16.8973559126  2.6933495054              1.0
+[2]      1   5.5548729596  2.7777687995              1.0
+[3]      0  46.1810010826  3.1611961917              0.0
+[4]      0  44.3117586448  3.3458963222              0.0
+[5]      0  34.6334526911  3.6429838715              0.0
+>>> test_output = model.test(frame, 'Value')
+<skip>
+>>> test_output
+mse: 0.0
+rmse: 0.0
+r2: 1.0
+</skip>
+>>> test_output.r2
+1.0
 >>> model.publish()
 <progress>
 
@@ -61,13 +78,13 @@ Posting a request to get the metadata about the model
 <skip>
 >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
 >>> r.text
-u'{"model_details":{"model_type":"Random Forest Regressor Model","model_class":"org.trustedanalytics.atk.scoring.models.RandomForestRegressorScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.RandomForestRegressorModelReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+u'{"model_details":{"model_type":"H2O Random Forest Regressor Model","model_class":"org.trustedanalytics.atk.scoring.models.H2oRandomForestRegressorScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.H2oRandomForestRegressorModelReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"Prediction","value":"Double"}]}'
 </skip>
 
 Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
 
 <skip>
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446136, 2.2985856384', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446136,2.2985856384', headers=headers)
 >>> r.text
 u'1.0'
 </skip>
@@ -75,7 +92,7 @@ u'1.0'
 Posting a request to version 1 with multiple records to score:
 
 <skip>
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446136, 2.2985856384&data=46.1810010826, 3.1611961917', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446136,2.2985856384&data=46.1810010826,3.1611961917', headers=headers)
 >>> r.text
 u'1.0,0.0'
 </skip>
