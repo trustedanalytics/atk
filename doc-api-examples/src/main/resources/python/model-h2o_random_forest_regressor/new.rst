@@ -34,10 +34,8 @@ rmse: 0.0
 r2: 1.0
 varimp:
 {u'Dim_2': 1.5, u'Dim_1': 0.0}
-</skip>
 >>> train_output.mse
 0.0
-<skip>
 >>> train_output.varimp_as_pandas()
  	variable 	importance
 0 	Dim_2 	1.5
@@ -45,6 +43,7 @@ varimp:
 </skip>
 >>> predicted_frame = model.predict(frame, ['Dim_1', 'Dim_2'])
 <progress>
+<skip>
 >>> predicted_frame.inspect()
 [#]  Value  Dim_1          Dim_2         predicted_value
 ========================================================
@@ -54,6 +53,7 @@ varimp:
 [3]      0  46.1810010826  3.1611961917              0.0
 [4]      0  44.3117586448  3.3458963222              0.0
 [5]      0  34.6334526911  3.6429838715              0.0
+</skip>
 >>> test_output = model.test(frame, 'Value')
 <progress>
 <skip>
@@ -61,9 +61,9 @@ varimp:
 mse: 0.0
 rmse: 0.0
 r2: 1.0
-</skip>
 >>> test_output.r2
 1.0
+</skip>
 >>> model.publish()
 <progress>
 
