@@ -39,14 +39,16 @@ case class H2oRandomForestRegressorTestArgs(model: ModelReference,
 /**
  * Return of H2O random forest Regression test plugin
  */
-case class H2oRandomForestRegressorTestReturn(@ArgDoc("""Mean squared error""") mse: Double,
+case class H2oRandomForestRegressorTestReturn(@ArgDoc("""Mean absolute error""") mae: Double,
+                                              @ArgDoc("""Mean squared error""") mse: Double,
                                               @ArgDoc("""The square root of the mean squared error""") rmse: Double,
-                                              @ArgDoc("""r-squared or coefficient of determination""") r2: Double)
+                                              @ArgDoc("""r-squared or coefficient of determination""") r2: Double,
+                                              @ArgDoc("""Explained variance score""") explainedVarianceScore: Double)
 
 /** Json conversion for arguments and return value case classes */
 object H2oRandomForestRegressorTestJsonFormat {
   implicit val drfTestArgsFormat = jsonFormat4(H2oRandomForestRegressorTestArgs)
-  implicit val drfTestReturnFormat = jsonFormat3(H2oRandomForestRegressorTestReturn)
+  implicit val drfTestReturnFormat = jsonFormat5(H2oRandomForestRegressorTestReturn)
 }
 import H2oRandomForestRegressorTestJsonFormat._
 
@@ -94,12 +96,6 @@ class H2oRandomForestRegressorTestPlugin extends SparkCommandPlugin[H2oRandomFor
     val obsColumns = arguments.observationColumns.getOrElse(h2oModelData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictFrame = H2oRandomForestRegressorFunctions.predict(frame.rdd, h2oModelData, obsColumns)
-    val predictionLabelRdd = predictFrame.mapRows(row => {
-      (row.doubleValue("predicted_value"), row.doubleValue(arguments.valueColumn))
-    })
-    val metrics = new RegressionMetrics(predictionLabelRdd)
-
-    new H2oRandomForestRegressorTestReturn(metrics.meanSquaredError, metrics.rootMeanSquaredError, metrics.r2)
+    H2oRandomForestRegressorFunctions.getRegressionMetrics(frame.rdd, h2oModelData, obsColumns, arguments.valueColumn)
   }
 }

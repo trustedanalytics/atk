@@ -18,6 +18,10 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.h2o.H2oModelData
+import org.apache.spark.mllib.evaluation.RegressionMetrics
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.stat.MultivariateOnlineSummarizer
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column }
 import scala.collection.JavaConverters._
@@ -29,14 +33,14 @@ object H2oRandomForestRegressorFunctions extends Serializable {
   /**
    * Predict value for the observation columns using trained random forest model
    *
-   * @param trainFrame Training frame
+   * @param inputFrame Training frame
    * @param h2oModelData Trained model
    * @param obsColumns Observation columns
    * @return Frame with predicted value
    */
-  def predict(trainFrame: FrameRdd, h2oModelData: H2oModelData, obsColumns: List[String]): FrameRdd = {
+  def predict(inputFrame: FrameRdd, h2oModelData: H2oModelData, obsColumns: List[String]): FrameRdd = {
     val predictColumn = Column("predicted_value", DataTypes.float64)
-    val predictRows = trainFrame.mapPartitionRows(rows => {
+    val predictRows = inputFrame.mapPartitionRows(rows => {
       val scores = new ArrayBuffer[Row]()
       val preds: Array[Double] = new Array[Double](1)
       val genModel = h2oModelData.toGenModel
@@ -51,6 +55,33 @@ object H2oRandomForestRegressorFunctions extends Serializable {
       scores.toIterator
     })
 
-    new FrameRdd(trainFrame.frameSchema.addColumn(predictColumn), predictRows)
+    new FrameRdd(inputFrame.frameSchema.addColumn(predictColumn), predictRows)
+  }
+
+  def getRegressionMetrics(inputFrame: FrameRdd,
+                           h2oModelData: H2oModelData,
+                           obsColumns: List[String],
+                           valueColumn: String): H2oRandomForestRegressorTestReturn = {
+    val predictFrame = H2oRandomForestRegressorFunctions.predict(inputFrame, h2oModelData, obsColumns)
+    val predictionLabelRdd = predictFrame.mapRows(row => {
+      (row.doubleValue("predicted_value"), row.doubleValue(valueColumn))
+    })
+
+    val metrics = new RegressionMetrics(predictionLabelRdd)
+    val explainedVarianceScore = getExplainedVarianceScore(predictionLabelRdd)
+    H2oRandomForestRegressorTestReturn(metrics.meanAbsoluteError, metrics.meanSquaredError,
+      metrics.rootMeanSquaredError, metrics.r2, explainedVarianceScore)
+  }
+
+  def getExplainedVarianceScore(predictionLabelRdd: RDD[(Double, Double)]): Double = {
+    val summary = predictionLabelRdd.aggregate(new MultivariateOnlineSummarizer())(
+      (summary, predLabel) => {
+        val (prediction, label) = predLabel
+        summary.add(Vectors.dense(label, label - prediction))
+      },
+      (sum1, sum2) => sum1.merge(sum2))
+    val variance = summary.variance
+    val score = 1d - (variance(1) / variance(0))
+    score
   }
 }

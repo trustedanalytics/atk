@@ -24,13 +24,15 @@ class H2oRandomForestRegressorTrainResult(object):
     """ Defines the results for H2O random forest regression training  """
 
     def __init__(self, json_result):
+        self.mae = json_result['mae'] # Mean absolute error
         self.mse = json_result['mse']   #Mean squared error
         self.rmse = json_result['rmse'] #Root mean squared error
         self.r2 = json_result['r_2']     #R-squared or coefficient of determination
+        self.explained_variance_score = json_result['explained_variance_score']
         self.varimp = json_result['varimp']  #Variable importances
 
     def __repr__(self):
-        return "mse: {0}\nrmse: {1}\nr2: {2}\nvarimp: \n{3}".format(self.mse, self.rmse, self.r2, self.varimp)
+        return "mae:{0}\nmse: {1}\nrmse: {2}\nr2: {3}\nexplained_variance_score: {4}\nvarimp: \n{5}".format(self.mae, self.mse, self.rmse, self.r2, self.explained_variance_score, self.varimp)
 
     def varimp_as_pandas(self):
         """get the Variable Importances as a pandas DataFrame"""
@@ -42,10 +44,12 @@ class H2oRandomForestRegressorTestResult(object):
     """ Defines the results for H2O random forest regression test  """
 
     def __init__(self, json_result):
+        self.mae = json_result['mae'] # Mean absolute error
         self.mse = json_result['mse']   #Mean squared error
         self.rmse = json_result['rmse'] #Root mean squared error
         self.r2 = json_result['r_2']     #R-squared or coefficient of determination
+        self.explained_variance_score = json_result['explained_variance_score']
 
     def __repr__(self):
-        return "mse: {0}\nrmse: {1}\nr2: {2}".format(self.mse, self.rmse, self.r2)
+        return "mae:{0}\nmse: {1}\nrmse: {2}\nr2: {3}\nexplained_variance_score: {4}".format(self.mae, self.mse, self.rmse, self.r2, self.explained_variance_score)
 

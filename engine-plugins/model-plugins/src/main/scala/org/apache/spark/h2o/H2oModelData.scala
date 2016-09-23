@@ -15,13 +15,15 @@
  */
 package org.apache.spark.h2o
 
-import java.io.{ FilenameFilter, FileWriter, BufferedWriter, File }
+import java.io.{ BufferedWriter, File, FileWriter, FilenameFilter }
 import java.net.{ URL, URLClassLoader }
 import java.nio.file.Files
 import javax.tools.ToolProvider
+
+import com.google.common.cache.{ CacheBuilder, CacheLoader, RemovalListener, RemovalNotification }
 import hex.genmodel.GenModel
 import hex.tree.drf.DRFModel
-import org.trustedanalytics.atk.moduleloader.Module
+import org.apache.commons.io.FileUtils
 import water.util.JCodeGen
 
 /**
@@ -50,19 +52,7 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
    * @return Generated model
    */
   def toGenModel: GenModel = {
-    var genModel: GenModel = null
-    try {
-      val pojoUrl = compilePojo.toURI.toURL
-      val classLoader = new URLClassLoader(Array[URL](pojoUrl), this.getClass.getClassLoader)
-      val clz = Class.forName(modelName, true, classLoader)
-      genModel = clz.newInstance.asInstanceOf[GenModel]
-    }
-    catch {
-      case e: Exception => {
-        throw new RuntimeException("Could not compile H2O model pojo:", e)
-      }
-    }
-    genModel
+    H2oModelCache.getGenmodel(this)
   }
 
   /**
@@ -70,9 +60,58 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
    * @return Class files
    */
   def getModelClassFiles: List[File] = {
+    H2oModelCache.getClassFiles(this)
+  }
+}
+
+object H2oModelCache {
+
+  case class GeneratedClass(genModel: GenModel, genModelDir: File)
+
+  /**
+   * A cache of generated classes.
+   *
+   * From the Guava Docs: A Cache is similar to ConcurrentMap, but not quite the same. The most
+   * fundamental difference is that a ConcurrentMap persists all elements that are added to it until
+   * they are explicitly removed. A Cache on the other hand is generally configured to evict entries
+   * automatically, in order to constrain its memory footprint.  Note that this cache does not use
+   * weak keys/values and thus does not respond to memory pressure.
+   */
+  private val cache = CacheBuilder.newBuilder()
+    .maximumSize(20)
+    .removalListener(new RemovalListener[H2oModelData, GeneratedClass] {
+      override def onRemoval(rm: RemovalNotification[H2oModelData, GeneratedClass]): Unit = {
+        deleteDir(rm.getValue.genModelDir)
+      }
+    })
+    .build(
+      new CacheLoader[H2oModelData, GeneratedClass]() {
+        override def load(data: H2oModelData): GeneratedClass = {
+          var genModelDir: File = null
+          var genModel: GenModel = null
+          try {
+            genModelDir = compilePojo(data)
+            val pojoUrl = genModelDir.toURI.toURL
+            val classLoader = new URLClassLoader(Array[URL](pojoUrl), this.getClass.getClassLoader)
+            val clz = Class.forName(data.modelName, true, classLoader)
+            genModel = clz.newInstance.asInstanceOf[GenModel]
+            GeneratedClass(genModel, genModelDir)
+          }
+          catch {
+            case e: Exception => {
+              deleteDir(genModelDir)
+              throw new RuntimeException("Could not compile H2O model pojo:", e)
+            }
+          }
+        }
+      })
+
+  def getGenmodel(data: H2oModelData): GenModel = cache.get(data).genModel
+
+  def getClassFiles(data: H2oModelData): List[File] = {
     var files = Array.empty[File]
     try {
-      val pojoDir = compilePojo
+      val pojoDir = cache.get(data).genModelDir
       files = pojoDir.listFiles(new FilenameFilter() {
         @Override
         def accept(dir: File, name: String): Boolean = {
@@ -88,18 +127,26 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
     files.toList
   }
 
+  private def deleteDir(file: File): Unit = {
+    if (file == null) return
+    val contents = file.listFiles()
+    if (contents != null) {
+      contents.foreach(f => deleteDir(f))
+    }
+    FileUtils.deleteQuietly(file)
+  }
+
   /**
    * Compile POJO
    * @return Directory with compiled classes
    */
-  private def compilePojo: File = {
-    val tmpDir = Files.createTempDirectory(modelName)
-    tmpDir.toFile.deleteOnExit()
+  private def compilePojo(data: H2oModelData): File = {
+    val tmpDir = Files.createTempDirectory(data.modelName)
 
     // write pojo to temporary file
-    val pojoFile = new File(tmpDir + "/" + modelName + ".java")
+    val pojoFile = new File(tmpDir + "/" + data.modelName + ".java")
     val pojoOutput = new BufferedWriter(new FileWriter(pojoFile))
-    pojoOutput.write(pojo)
+    pojoOutput.write(data.pojo)
     pojoOutput.close()
 
     // compile pojo

@@ -108,6 +108,11 @@ def return_logistic_regression_train(json_result):
 @postprocessor('model:h2o_random_forest_regressor/train')
 def return_h2o_random_forest_regressor_train(json_result):
     from trustedanalytics.core.h2omodels import H2oRandomForestRegressorTrainResult
+    # Freeing the Spark context after every H2O train to work-around an error that arises
+    # when the H2O context dies due to error but spark context is still alive. H2O does not support
+    # re-initialization of H2O context as it is implemented as a singleton object that can only be initialized once
+    import trustedanalytics as ta
+    #ta.release()
     return H2oRandomForestRegressorTrainResult(json_result)
 
 @postprocessor('model:h2o_random_forest_regressor/test')

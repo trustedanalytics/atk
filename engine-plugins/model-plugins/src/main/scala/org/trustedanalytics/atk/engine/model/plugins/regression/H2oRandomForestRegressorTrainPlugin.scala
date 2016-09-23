@@ -13,25 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import hex.ModelMetricsRegression
 import hex.tree.drf.DRF
 import hex.tree.drf.DRFModel.DRFParameters
-import water.H2O
 import org.apache.spark.h2o._
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
+import water.{ H2O, UDPRebooted }
 
 //Implicits for JSON conversion
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
 import org.apache.spark.h2o.H2oJsonProtocol._
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import spray.json._
 
 /**
  * Arguments to H2O Random Forest Regression train plugin
@@ -44,7 +43,8 @@ case class H2oRandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to b
                                              @ArgDoc("""Maximum depth of the tree.""") maxDepth: Int = 20,
                                              @ArgDoc("""For numerical columns (real/int), build a histogram of (at least) this many bins.""") numBins: Int = 20,
                                              @ArgDoc("""Minimum number of rows to assign to terminal nodes.""") minRows: Int = 1,
-                                             @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt", "onethird".
+                                             @ArgDoc(
+                                               """Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt", "onethird".
 If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".""") featureSubsetCategory: String = "auto",
                                              @ArgDoc("""Seed for random numbers (affects sampling) - Note: only reproducible when running single threaded.""") seed: Option[Int] = None,
                                              @ArgDoc("""Row sample rate per tree (from 0.0 to 1.0).""") sampleRate: Option[Double] = None) {
@@ -111,13 +111,19 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
 /**
  * Results for H2O Random Forest Regression Train plugin
  */
-case class H2oRandomForestRegressorTrainReturn(mse: Double, rmse: Double, r2: Double, varimp: Map[String, Float])
+case class H2oRandomForestRegressorTrainReturn(@ArgDoc("""Mean absolute error""") mae: Double,
+                                               @ArgDoc("""Mean squared error""") mse: Double,
+                                               @ArgDoc("""The square root of the mean squared error""") rmse: Double,
+                                               @ArgDoc("""r-squared or coefficient of determination""") r2: Double,
+                                               @ArgDoc("""Explained variance score""") explainedVarianceScore: Double,
+                                               @ArgDoc("""Variable importances""") varimp: Map[String, Float])
 
 /** Json conversion for arguments and return value case classes */
 object H2oRandomForestRegressorTrainJsonFormat {
   implicit val drfFormat = jsonFormat11(H2oRandomForestRegressorTrainArgs)
-  implicit val drfResultFormat = jsonFormat4(H2oRandomForestRegressorTrainReturn)
+  implicit val drfResultFormat = jsonFormat6(H2oRandomForestRegressorTrainReturn)
 }
+
 import H2oRandomForestRegressorTrainJsonFormat._
 
 @PluginDoc(oneLine = "Build Random Forests Regressor model.",
@@ -158,30 +164,32 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
 
     // Run H2O cluster inside Spark cluster
     val h2oContext = AtkH2OContext.init(sc)
-    import h2oContext._
-    import h2oContext.implicits._
 
     // Train model
     val h2oFrame: H2OFrame = h2oContext.asH2OFrame(frame.rdd.toDataFrame)
     val drfParams = arguments.getDrfParameters(h2oFrame)
     val drfJob = new DRF(drfParams)
     val drfModel = drfJob.trainModel().get()
+    val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
 
     // Get training metrics
-    val regressionMetrics = drfModel._output._training_metrics.asInstanceOf[ModelMetricsRegression]
+    val regressionMetrics = H2oRandomForestRegressorFunctions.getRegressionMetrics(frame.rdd,
+      modelData, arguments.observationColumns, arguments.valueColumn)
+
     val varImp = drfModel._output._varimp
     val varImpMap = varImp._names.zip(varImp._varimp).map { case (name, imp) => (name, imp) }.toMap
 
     val results = H2oRandomForestRegressorTrainReturn(
-      regressionMetrics.mse(),
-      regressionMetrics.mse(),
-      regressionMetrics.r2(),
+      regressionMetrics.mae,
+      regressionMetrics.mse,
+      regressionMetrics.rmse,
+      regressionMetrics.r2,
+      regressionMetrics.explainedVarianceScore,
       varImpMap
     )
 
-    val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
     model.writeToStorage(modelData.toJson.asJsObject)
-
     results
+
   }
 }
