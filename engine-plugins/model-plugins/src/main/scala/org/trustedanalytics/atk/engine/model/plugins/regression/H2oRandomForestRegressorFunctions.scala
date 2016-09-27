@@ -58,6 +58,14 @@ object H2oRandomForestRegressorFunctions extends Serializable {
     new FrameRdd(inputFrame.frameSchema.addColumn(predictColumn), predictRows)
   }
 
+  /**
+   * Get regression metrics using trained model
+   * @param inputFrame Input frame with predicted and labeled data
+   * @param h2oModelData Trained random forest regression model
+   * @param obsColumns List of observation columns
+   * @param valueColumn Name of value column
+   * @return Regression metrics
+   */
   def getRegressionMetrics(inputFrame: FrameRdd,
                            h2oModelData: H2oModelData,
                            obsColumns: List[String],
@@ -73,6 +81,13 @@ object H2oRandomForestRegressorFunctions extends Serializable {
       metrics.rootMeanSquaredError, metrics.r2, explainedVarianceScore)
   }
 
+  /**
+   * Get explained variance score
+   *
+   * Explained variance score = 1 - (variance(label-prediction)/variance(label))
+   * @param predictionLabelRdd RDD of predicted and label values
+   * @return Explained variance score
+   */
   def getExplainedVarianceScore(predictionLabelRdd: RDD[(Double, Double)]): Double = {
     val summary = predictionLabelRdd.aggregate(new MultivariateOnlineSummarizer())(
       (summary, predLabel) => {

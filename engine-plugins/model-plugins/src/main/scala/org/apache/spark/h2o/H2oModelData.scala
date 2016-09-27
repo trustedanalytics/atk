@@ -19,7 +19,6 @@ import java.io.{ BufferedWriter, File, FileWriter, FilenameFilter }
 import java.net.{ URL, URLClassLoader }
 import java.nio.file.Files
 import javax.tools.ToolProvider
-
 import com.google.common.cache.{ CacheBuilder, CacheLoader, RemovalListener, RemovalNotification }
 import hex.genmodel.GenModel
 import hex.tree.drf.DRFModel
@@ -66,7 +65,9 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
 
 object H2oModelCache {
 
-  case class GeneratedClass(genModel: GenModel, genModelDir: File)
+  //Object with cached class
+  private case class GeneratedClass(genModel: GenModel, genModelDir: File)
+  private val maxCacheSize = 10
 
   /**
    * A cache of generated classes.
@@ -78,7 +79,7 @@ object H2oModelCache {
    * weak keys/values and thus does not respond to memory pressure.
    */
   private val cache = CacheBuilder.newBuilder()
-    .maximumSize(20)
+    .maximumSize(maxCacheSize)
     .removalListener(new RemovalListener[H2oModelData, GeneratedClass] {
       override def onRemoval(rm: RemovalNotification[H2oModelData, GeneratedClass]): Unit = {
         deleteDir(rm.getValue.genModelDir)
@@ -106,8 +107,14 @@ object H2oModelCache {
         }
       })
 
+  /**
+   * Get generated H2O model from cache
+   */
   def getGenmodel(data: H2oModelData): GenModel = cache.get(data).genModel
 
+  /**
+   * Get class files for generated H2O model from cache
+   */
   def getClassFiles(data: H2oModelData): List[File] = {
     var files = Array.empty[File]
     try {
@@ -127,7 +134,10 @@ object H2oModelCache {
     files.toList
   }
 
-  private def deleteDir(file: File): Unit = {
+  /**
+   * Recursively delete files
+   */
+  def deleteDir(file: File): Unit = {
     if (file == null) return
     val contents = file.listFiles()
     if (contents != null) {

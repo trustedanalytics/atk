@@ -25,21 +25,29 @@ Consider the following frame containing three columns.
 [5]      0  34.6334526911  3.6429838715
 >>> model = ta.H2oRandomForestRegressorModel()
 <progress>
->>> train_output = model.train(frame, 'Value', ['Dim_1', 'Dim_2'], num_trees=1, max_depth=4, num_bins=2)
+>>> train_output = model.train(frame, 'Value', ['Dim_1', 'Dim_2'], num_trees=1, max_depth=4, min_rows=2)
 <progress>
 <skip>
 >>> train_output
-mse: 0.0
-rmse: 0.0
-r2: 1.0
+value_column: Value
+observation_columns: [u'Dim_1', u'Dim_2']
+num_trees: 1
+max_depth: 4
+num_bins: 20
+min_rows: 2
+feature_subset_category: auto
+tree_stats:
+{u'min_leaves': 2.0, u'mean_depth': 1.0, u'max_leaves': 2.0, u'min_depth': 1.0, u'mean_leaves': 2.0, u'max_depth': 1.0}
 varimp:
-{u'Dim_2': 1.5, u'Dim_1': 0.0}
->>> train_output.mse
-0.0
+{u'Dim_2': 0.0, u'Dim_1': 1.5}
+</skip>
+>>> train_output.varimp['Dim_1']
+1.5
+<skip>
 >>> train_output.varimp_as_pandas()
- 	variable 	importance
-0 	Dim_2 	1.5
-1 	Dim_1 	0.0
+ 	 	variable 	importance
+0 	Dim_2 	0.0
+1 	Dim_1 	1.5
 </skip>
 >>> predicted_frame = model.predict(frame, ['Dim_1', 'Dim_2'])
 <progress>
@@ -58,12 +66,16 @@ varimp:
 <progress>
 <skip>
 >>> test_output
+mae:0.0
 mse: 0.0
 rmse: 0.0
 r2: 1.0
+explained_variance_score: 1.0
+</skip>
 >>> test_output.r2
 1.0
-</skip>
+>>> test_output.explained_variance_score
+1.0
 >>> model.publish()
 <progress>
 

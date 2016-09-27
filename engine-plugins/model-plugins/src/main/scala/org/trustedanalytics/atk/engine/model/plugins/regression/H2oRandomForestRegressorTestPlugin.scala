@@ -16,7 +16,6 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.h2o.H2oModelData
-import org.apache.spark.mllib.evaluation.RegressionMetrics
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -59,12 +58,11 @@ and target labels.""",
   returns =
     """object
       An object with the results of the trained Random Forest Regressor:
-      |mse : double
-      |Mean squared error
-      |rmse : double
-      |Root mean squared error
-      |r2: double
-      |R-squared
+      |'mae' : Mean absolute error
+      |'mse' : Mean squared error
+      |'rmse' : Root mean squared error
+      |'r2': R-squared
+      |'explained_variance_score': Explained variance score
     """)
 class H2oRandomForestRegressorTestPlugin extends SparkCommandPlugin[H2oRandomForestRegressorTestArgs, H2oRandomForestRegressorTestReturn] {
   /**

@@ -31,8 +31,6 @@ object AtkH2OContext extends org.apache.spark.Logging with Serializable {
    */
   def init(sc: SparkContext): H2OContext = synchronized {
     val h2oContext = H2OContext.getOrCreate(sc)
-    //return h2oContext
-    val h2oConf = new H2OConf(sc)
     val sqlContext = SQLContext.getOrCreate(sc)
 
     //Re-set spark context reference in H2O context to prevent stale references
@@ -48,10 +46,8 @@ object AtkH2OContext extends org.apache.spark.Logging with Serializable {
 
     //Set spark-related variables
     sparkContextField.set(h2oContext, sc)
-    h2oConfField.set(h2oContext, h2oConf)
     sqlContextField.set(h2oContext, sqlContext)
 
     h2oContext
   }
-
 }
