@@ -17,7 +17,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import hex.tree.TreeStats
 import hex.VarImp
-import hex.tree.drf.{ DRFModel, DRF }
+import hex.tree.drf.{ AtkTreeJCodeGen, DRFModel, DRF }
 import hex.tree.drf.DRFModel.DRFParameters
 import org.apache.spark.h2o._
 import org.trustedanalytics.atk.domain.frame.FrameReference
@@ -54,7 +54,7 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   require(valueColumn != null && valueColumn.trim != "", "valueColumn must not be null nor empty")
   require(numTrees > 0, "numTrees must be greater than 0")
   //Max-depth is based on the private variable for hex.tree.TreeJCodeGen.MAX_DEPTH for generating POJOs
-  require(maxDepth > 0 && maxDepth <= 70, "maxDepth must be greater than 0 and less than 70")
+  require(maxDepth > 0 && maxDepth <= 200, "maxDepth must be greater than 0 and less than 200")
 
   /**
    * Get H2O random forest model parameters

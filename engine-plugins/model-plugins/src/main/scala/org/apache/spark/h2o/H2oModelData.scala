@@ -21,7 +21,7 @@ import java.nio.file.Files
 import javax.tools.ToolProvider
 import com.google.common.cache.{ CacheBuilder, CacheLoader, RemovalListener, RemovalNotification }
 import hex.genmodel.GenModel
-import hex.tree.drf.DRFModel
+import hex.tree.drf.{ AtkDrfModel, DRFModel }
 import org.apache.commons.io.FileUtils
 import water.util.JCodeGen
 
@@ -43,7 +43,7 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
    * @param observationColumns Observation columns in train frame
    */
   def this(drfModel: DRFModel, labelColumn: String, observationColumns: List[String]) = {
-    this(JCodeGen.toJavaId(drfModel._key.toString), drfModel.toJava(false, false), labelColumn, observationColumns)
+    this(JCodeGen.toJavaId(drfModel._key.toString), new AtkDrfModel(drfModel).toJava(false, false), labelColumn, observationColumns)
   }
 
   /**
