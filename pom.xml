@@ -40,15 +40,25 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
 
     <repositories>
-        <repository>
-            <id>atk</id>
-            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
+         <repository>
+            <id>tap</id>
+            <url>https://tap.jfrog.io/tap/public</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>tap-snapshots</id>
+            <url>https://tap.jfrog.io/tap/public-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
             </releases>
         </repository>
         <repository>
