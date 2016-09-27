@@ -106,7 +106,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     </repositories>
 
     <pluginRepositories>
-        <repository>
+        <pluginRepository>
             <id>tap</id>
             <url>https://tap.jfrog.io/tap/public</url>
             <snapshots>
@@ -116,8 +116,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <releases>
                 <enabled>true</enabled>
             </releases>
-        </repository>
-        <repository>
+        </pluginRepository>
+        <pluginRepository>
             <id>tap-snapshots</id>
             <url>https://tap.jfrog.io/tap/public-snapshots</url>
             <snapshots>
@@ -126,7 +126,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <releases>
                 <enabled>false</enabled>
             </releases>
-        </repository>
+        </pluginRepository>
     </pluginRepositories>
 
     <distributionManagement>
