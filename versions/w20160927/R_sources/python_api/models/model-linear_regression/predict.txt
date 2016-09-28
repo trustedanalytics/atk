@@ -1,0 +1,38 @@
+
+:doc:`LinearRegressionModel <index>`  predict
+*********************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            The frame to predict on
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            List of column(s) containing the observations
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+

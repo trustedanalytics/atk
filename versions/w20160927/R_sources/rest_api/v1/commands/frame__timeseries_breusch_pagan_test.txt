@@ -1,0 +1,117 @@
+
+
+-----------------------------------------------------------
+:doc:`Commands <index>` frame/timeseries_breusch_pagan_test
+-----------------------------------------------------------
+
+Breusch-Pagan statistics test
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/timeseries_breusch_pagan_test
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame of time series data
+
+
+
+    **residuals** : unicode
+
+    ..
+
+        Name of the column that contains residual values
+
+
+
+    **factors** : list
+
+    ..
+
+        Name of the column(s) that contain factors 
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Performs the Breusch-Pagan test for heteroskedasticity.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

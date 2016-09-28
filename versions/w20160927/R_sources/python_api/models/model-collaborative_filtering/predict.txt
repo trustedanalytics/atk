@@ -1,0 +1,93 @@
+
+:doc:`CollaborativeFilteringModel <index>`  predict
+***************************************************
+
+------
+
+
+.. function:: predict(self, frame, input_source_column_name, input_dest_column_name, output_user_column_name='user', output_product_column_name='product', output_rating_column_name='rating')
+
+    Collaborative Filtering Predict (ALS).
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+
+
+
+
+        **input_source_column_name** : unicode
+
+        ..
+
+            source column name.
+
+
+
+        **input_dest_column_name** : unicode
+
+        ..
+
+            destination column name.
+
+
+
+        **output_user_column_name** : unicode (default=user)
+
+        ..
+
+            A user column name for the output frame
+
+
+
+        **output_product_column_name** : unicode (default=product)
+
+        ..
+
+            A product  column name for the output frame
+
+
+
+        **output_rating_column_name** : unicode (default=rating)
+
+        ..
+
+            A rating column name for the output frame
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            Returns a double representing the probability if the user(i) to like product (j)
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.
+
+    Examples
+    --------
+    >>> model = ta.CollaborativeFilteringModel()
+    [===Job Progress===]
+    >>> model.train(edge_frame, 'source', 'dest', 'weight')
+    [===Job Progress===]
+
+    >>> result = model.predict(edge_frame_predict, 'source', 'dest')
+    [===Job Progress===]
+    >>> result.inspect()
+        [#]  user  product  rating
+        ====================================
+        [0]     1        4   0.0485403053463
+        [1]     1        5   0.0300555229187
+        [2]     2        5  0.00397346867248
+        [3]     1        3   0.0404502525926
+
+
+    [===Job Progress===]
+

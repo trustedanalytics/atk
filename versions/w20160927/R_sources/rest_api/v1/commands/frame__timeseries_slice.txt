@@ -1,0 +1,125 @@
+
+
+----------------------------------------------
+:doc:`Commands <index>` frame/timeseries_slice
+----------------------------------------------
+
+Returns a frame that is a sub-slice of the given series.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/timeseries_slice
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame formatted as a time series (must have a string key column and a vector column that contains the values that correspond to the specified DateTimeIndex.
+
+
+
+    **date_time_index** : list
+
+    ..
+
+        DateTimeIndex to conform all series to.
+
+
+
+    **start** : datetime
+
+    ..
+
+        The start date for the slice in the ISO 8601 format, like: yyyy-MM-dd'T'HH:mm:ss.SSSZ 
+
+
+
+    **end** : datetime
+
+    ..
+
+        The end date for the slice (inclusive) in the ISO 8601 format, like: yyyy-MM-dd'T'HH:mm:ss.SSSZ.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Splits a time series frame on the specified start and end date/times.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+
+
+

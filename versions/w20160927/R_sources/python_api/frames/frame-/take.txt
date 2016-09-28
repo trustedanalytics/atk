@@ -1,0 +1,58 @@
+
+:doc:`Frame <index>`  take
+**************************
+
+------
+
+
+.. function:: take(self, n, offset=0, columns=None)
+
+    Get data subset.
+
+
+    :Parameters:
+
+        **n** : int
+
+        ..
+
+            The number of rows to copy to this client from the frame (warning: do not overwhelm this client by downloading too much)
+
+
+
+        **offset** : int (default=0)
+
+        ..
+
+            The number of rows to skip before starting to copy
+
+
+
+        **columns** : str | iterable of str (default=None)
+
+        ..
+
+            If not None, only the given columns' data will be provided.  By default, all columns are included
+
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            A list of lists, where each contained list is the data for one row.
+    Take a subset of the currently active Frame.
+
+    Examples
+    --------
+    .. code::
+
+        >>> frame.take(2)
+        [[u'Fred', 39, 16, u'555-1234'], [u'Susan', 33, 3, u'555-0202']]
+
+        >>> frame.take(2, offset=2)
+        [[u'Thurston', 65, 26, u'555-4510'], [u'Judy', 44, 14, u'555-2183']]
+
