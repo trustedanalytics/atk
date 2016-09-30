@@ -89,7 +89,8 @@ def get_H2oRandomForestRegressorModel_installation(baseclass):
 
             H2O's implementation of distributed random forest is slow for large trees due to the
             overhead of shipping histograms across the network. This plugin runs H2O random forest
-            in a single node for small datasets, and multiple nodes for large datasets.
+            in a single node for small datasets, and multiple nodes for large datasets. The Spark
+            context is released to cleanly shutdown the H2O Sparkling Water context.
 
             :param frame: A frame to train the model on
             :type frame: Frame
@@ -143,11 +144,13 @@ def get_H2oRandomForestRegressorModel_installation(baseclass):
                          'sample_rate': sample_rate}
             release()
             print "Training H2O random forest regression model..."
-            if frame.row_count < 100000:
-                result = executor.execute("model:h2o_random_forest_regressor_private/_local_train", item, arguments)
-            else:
-                result = executor.execute("model:h2o_random_forest_regressor_private/_distributed_train", item, arguments)
-            release()
+            try:
+                if frame.row_count < 100000:
+                    result = executor.execute("model:h2o_random_forest_regressor_private/_local_train", baseclass, arguments)
+                else:
+                    result = executor.execute("model:h2o_random_forest_regressor_private/_distributed_train", baseclass, arguments)
+            finally:
+                release()
             return H2oRandomForestRegressorTrainResult(result)
 
     set_installation(H2oRandomForestRegressorModel, CommandInstallation("model:h2o_random_forest_regressor_private", host_class_was_created=True))
