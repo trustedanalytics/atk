@@ -16,19 +16,63 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
+import hex.tree.drf.{ DRF, DRFModel }
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.h2o.H2oModelData
+import org.apache.spark.h2o._
 import org.apache.spark.mllib.evaluation.RegressionMetrics
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.stat.MultivariateOnlineSummarizer
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column }
+import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes, Column }
+import org.trustedanalytics.atk.engine.model.Model
+import water.H2O
 import scala.collection.JavaConverters._
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import scala.collection.mutable.ArrayBuffer
 
+//Implicits for JSON conversion
+import org.apache.spark.h2o.H2oJsonProtocol._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import spray.json._
+
 object H2oRandomForestRegressorFunctions extends Serializable {
+
+  def train(inputFrame: FrameRdd, args: H2oRandomForestRegressorTrainArgs, model: Model): H2oRandomForestRegressorTrainReturn = {
+    val h2oContext = AtkH2OContext.init(inputFrame.sparkContext)
+    var h2oFrame: H2OFrame = null
+    var drfModel: DRFModel = null
+
+    import h2oContext.implicits._
+
+    try {
+      //Convert to H2O Frame
+      val columns = args.valueColumn +: args.observationColumns
+      val rowRdd = inputFrame.mapRows(row => {
+        Row.fromSeq(row.valuesAsDoubleArray(columns).toSeq)
+      })
+      val schema = FrameSchema(columns.map(col => Column(col, DataTypes.float64)))
+      val trainFrame = new FrameRdd(schema, rowRdd)
+      h2oFrame = trainFrame.toDataFrame
+
+      //Train model
+      val drfParams = args.getDrfParameters(h2oFrame)
+      val drfJob = new DRF(drfParams)
+      drfModel = drfJob.trainModel().get()
+      val drfModelOutput = drfModel._output
+      val modelData = new H2oModelData(drfModel, args.valueColumn, args.observationColumns)
+      model.writeToStorage(modelData.toJson.asJsObject)
+      H2oRandomForestRegressorTrainReturn(args, drfModelOutput._varimp, drfModelOutput._treeStats)
+    }
+    catch {
+      case e: Exception => throw new RuntimeException("Error training random forest model: " + e.getMessage(), e)
+    }
+    finally {
+      if (h2oFrame != null) h2oFrame.remove()
+      if (drfModel != null) drfModel.delete()
+      H2O.orderlyShutdown(1000)
+    }
+  }
 
   /**
    * Predict value for the observation columns using trained random forest model

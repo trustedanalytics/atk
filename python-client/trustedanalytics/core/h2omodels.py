@@ -20,6 +20,7 @@
 Post Processing of H2O model results
 """
 
+
 class H2oRandomForestRegressorTrainResult(object):
     """ Defines the results for H2O random forest regression training  """
     """object
@@ -70,4 +71,5 @@ class H2oRandomForestRegressorTestResult(object):
 
     def __repr__(self):
         return "mae: {0}\nmse: {1}\nrmse: {2}\nr2: {3}\nexplained_variance_score: {4}".format(self.mae, self.mse, self.rmse, self.r2, self.explained_variance_score)
+
 

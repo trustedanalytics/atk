@@ -43,13 +43,11 @@ value of the random forest.
 .. [2] http://docs.h2o.ai/h2o/latest-stable/h2o-docs/data-science/drf.html""",
   returns = """A new instance of H2O RandomForestRegressor Model""")
 class H2oRandomForestRegressorNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
-  /**
-   * The name of the command.
-   *
-   * The format of the name determines how the plugin gets "installed" in the client layer
-   * e.g Python client via code generation.
-   */
-  override def name: String = "model:h2o_random_forest_regressor/new"
+  //The Python API for this plugin is made available through the H2oRandomForestRegressor Python wrapper class
+  //The H2oRandomForestRegressor wrapper has a train() method that calls a local or distributed train
+  //depending on the size of the data since H2O's distributed random forest is slow for large trees
+  //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
+  override def name: String = "model:h2o_random_forest_regressor_private/new"
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:h2o_random_forest_regressor")))

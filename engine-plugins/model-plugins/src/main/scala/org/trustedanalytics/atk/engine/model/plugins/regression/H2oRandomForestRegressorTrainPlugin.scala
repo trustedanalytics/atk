@@ -15,11 +15,20 @@
  */
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
+import java.io.File
+import java.nio.file.{ Paths, Files }
+import java.util.Date
+
 import hex.tree.TreeStats
 import hex.VarImp
-import hex.tree.drf.{ AtkTreeJCodeGen, DRFModel, DRF }
 import hex.tree.drf.DRFModel.DRFParameters
-import org.apache.spark.h2o._
+import org.apache.commons.io.FileUtils
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.sql.SQLContext
+import org.apache.spark.{ SparkConf, SparkContext }
+import org.apache.spark.h2o.H2OFrame
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.frame.Frame
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -156,8 +165,14 @@ object H2oRandomForestRegressorTrainJsonFormat {
 }
 import H2oRandomForestRegressorTrainJsonFormat._
 
-@PluginDoc(oneLine = "Build Random Forests Regressor model.",
-  extended = """Creating a Random Forests Regressor Model using the observation columns and target column.""",
+@PluginDoc(oneLine = "Build H2O Random Forests Regressor.",
+  extended =
+    """Creating a Random Forests Regressor Model using the observation columns and target column.
+      H2O's implementation of distributed random forest is slow for large trees due to the
+      overhead of shipping histograms across the network. This plugin runs H2O random forest
+      on a multiple nodes for larger datasets.
+      https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
+    """,
   returns =
     """object
       An object with the results of the trained Random Forest Regressor:
@@ -171,14 +186,12 @@ import H2oRandomForestRegressorTrainJsonFormat._
       |'tree_stats': dictionary with tree statistics for trained model,
       |'varimp': variable importances
     """)
-class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomForestRegressorTrainArgs, H2oRandomForestRegressorTrainReturn] {
-  /**
-   * The name of the command.
-   *
-   * The format of the name determines how the plugin gets "installed" in the client layer
-   * e.g Python client via code generation.
-   */
-  override def name: String = "model:h2o_random_forest_regressor/train"
+class H2oRandomForestRegressorDistributedTrainPlugin extends SparkCommandPlugin[H2oRandomForestRegressorTrainArgs, H2oRandomForestRegressorTrainReturn] {
+  //The Python API for this plugin is made available through the H2oRandomForestRegressor Python wrapper class
+  //The H2oRandomForestRegressor wrapper has a train() method that calls a local or distributed train
+  //depending on the size of the data since H2O's distributed random forest is slow for large trees
+  //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
+  override def name: String = "model:h2o_random_forest_regressor_private/_distributed_train"
 
   /**
    * Run H2O's RandomForest trainRegressor on the training frame and create a Model for it.
@@ -193,31 +206,98 @@ class H2oRandomForestRegressorTrainPlugin extends SparkCommandPlugin[H2oRandomFo
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
-    // Run H2O cluster inside Spark cluster
-    val h2oContext = AtkH2OContext.init(sc)
-    var h2oFrame: H2OFrame = null
-    var drfModel: DRFModel = null
+    H2oRandomForestRegressorFunctions.train(frame.rdd, arguments, model)
+  }
+}
 
-    import h2oContext.implicits._
+@PluginDoc(oneLine = "Build H2O Random Forests Regressor model using local Spark context.",
+  extended =
+    """Creating a Random Forests Regressor Model using the observation columns and target column.
+       H2O's implementation of distributed random forest is slow for large trees due to the
+       overhead of shipping histograms across the network. This plugin runs H2O random forest
+       in a single node for small datasets.
+      https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
+    """,
+  returns =
+    """object
+      An object with the results of the trained Random Forest Regressor:
+      |'value_column': the column name containing the value of each observation,
+      |'observation_columns': the list of observation columns on which the model was trained,
+      |'num_trees': the number of decision trees in the random forest,
+      |'max_depth': the maximum depth of the tree,
+      |'num_bins': for numerical columns, build a histogram of at least this many bins
+      |'min_rows': number of features to consider for splits at each node
+      |'feature_subset_category': number of features to consider for splits at each node,
+      |'tree_stats': dictionary with tree statistics for trained model,
+      |'varimp': variable importances
+    """)
+class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomForestRegressorTrainArgs, H2oRandomForestRegressorTrainReturn] {
+  //The Python API for this plugin is made available through the H2oRandomForestRegressor Python wrapper class
+  //The H2oRandomForestRegressor wrapper has a train() method that calls a local or distributed train
+  //depending on the size of the data since H2O's distributed random forest is slow for large trees
+  //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
+  override def name: String = "model:h2o_random_forest_regressor_private/_local_train"
 
-    // Train model
+  /**
+   * Run H2O's RandomForest trainRegressor on the training frame and create a Model for it.
+   *
+   * @param invocation information about the user and the circumstances at the time of the call,
+   *                   as well as a function that can be called to produce a SparkContext that
+   *                   can be used during this invocation.
+   * @param arguments user supplied arguments to running this plugin
+   * @return a value of type declared as the Return type.
+   */
+  override def execute(arguments: H2oRandomForestRegressorTrainArgs)(implicit invocation: Invocation): H2oRandomForestRegressorTrainReturn = {
+    val frame: Frame = arguments.frame
+    val model: Model = arguments.model
+
+    val sc = createLocalSparkContext()
+    val sqlContext = new SQLContext(sc)
+    val dataframe = sqlContext.read.load(frame.entity.getStorageLocation)
+
+    val result = H2oRandomForestRegressorFunctions.train(FrameRdd.toFrameRdd(dataframe), arguments, model)
+    cleanupSpark(sc)
+    result
+  }
+
+  private def createLocalSparkContext(): SparkContext = {
+    // LogUtils.silenceSpark()
+    val appName = this.getClass.getSimpleName + "_" + new Date()
+    val tmpDir = System.getProperty("java.io.tmpdir")
+    val sparkLocalDir = tmpDir + "/" + appName + "/spark-local"
+    val h2oLogDir = tmpDir + "/" + appName + "/h2o-logs"
+    val conf = new SparkConf()
+      .setMaster("local")
+      .setAppName(this.getClass.getSimpleName + " " + new Date())
+    conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+    conf.set("spark.ext.h2o.repl.enabled", "false")
+    conf.set("spark.local.dir", sparkLocalDir)
+    conf.set("spark.ext.h2o.client.log.dir", h2oLogDir)
+    conf.set("spark.driver.memory", EngineConfig.sparkConfProperties("spark.driver.memory"))
+
+    new SparkContext(conf)
+  }
+
+  /**
+   * Shutdown spark and release the lock
+   */
+  private def cleanupSpark(sc: SparkContext): Unit = {
     try {
-      h2oFrame = frame.rdd.toDataFrame
-      val drfParams = arguments.getDrfParameters(h2oFrame)
-      val drfJob = new DRF(drfParams)
-      drfModel = drfJob.trainModel().get()
-      val drfModelOutput = drfModel._output
-      val modelData = new H2oModelData(drfModel, arguments.valueColumn, arguments.observationColumns)
-      model.writeToStorage(modelData.toJson.asJsObject)
-      H2oRandomForestRegressorTrainReturn(arguments, drfModelOutput._varimp, drfModelOutput._treeStats)
-    }
-    catch {
-      case e: Exception => throw new RuntimeException("Error training random forest model: " + e.getMessage(), e)
+      if (sc != null) {
+        val conf = sc.getConf
+        sc.stop()
+        if (Files.isDirectory(Paths.get(conf.get("spark.local.dir")))) {
+          FileUtils.deleteDirectory(new File(conf.get("spark.local.dir")))
+        }
+        if (Files.isDirectory(Paths.get(conf.get("spark.ext.h2o.client.log.dir")))) {
+          FileUtils.deleteDirectory(new File(conf.get("spark.ext.h2o.client.log.dir")))
+        }
+      }
     }
     finally {
-      if (h2oFrame != null) h2oFrame.remove()
-      if (drfModel != null) drfModel.delete()
-      H2O.orderlyShutdown(1000)
+      // To avoid Akka rebinding to the same port, since it doesn't unbind immediately on shutdown
+      System.clearProperty("spark.driver.port")
     }
   }
+
 }
