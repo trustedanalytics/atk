@@ -250,14 +250,16 @@ class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomFo
   override def execute(arguments: H2oRandomForestRegressorTrainArgs)(implicit invocation: Invocation): H2oRandomForestRegressorTrainReturn = {
     val frame: Frame = arguments.frame
     val model: Model = arguments.model
-
-    val sc = createLocalSparkContext()
-    val sqlContext = new SQLContext(sc)
-    val dataframe = sqlContext.read.load(frame.entity.getStorageLocation)
-
-    val result = H2oRandomForestRegressorFunctions.train(FrameRdd.toFrameRdd(dataframe), arguments, model)
-    cleanupSpark(sc)
-    result
+    var sc: SparkContext = null
+    try {
+      sc = createLocalSparkContext()
+      val sqlContext = new SQLContext(sc)
+      val dataframe = sqlContext.read.load(frame.entity.getStorageLocation)
+      H2oRandomForestRegressorFunctions.train(FrameRdd.toFrameRdd(dataframe), arguments, model)
+    }
+    finally {
+      cleanupSpark(sc)
+    }
   }
 
   private def createLocalSparkContext(): SparkContext = {
@@ -269,6 +271,7 @@ class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomFo
     val conf = new SparkConf()
       .setMaster("local")
       .setAppName(this.getClass.getSimpleName + " " + new Date())
+    conf.set("spark.driver.allowMultipleContexts", "true")
     conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
     conf.set("spark.ext.h2o.repl.enabled", "false")
     conf.set("spark.local.dir", sparkLocalDir)

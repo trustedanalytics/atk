@@ -34,6 +34,8 @@ from trustedanalytics.meta.metaprog import CommandInstallable, CommandInstallati
 
 ATTR_DOC_STUB = '_doc_stub'
 
+exclude_classes_list = ['H2oRandomForestRegressorPrivateModel']
+
 
 def doc_stub(item):
     """Doc stub decorator"""
@@ -256,7 +258,7 @@ def get_doc_stub_modules_text(class_to_member_text_dict, import_return_types):
         installation = get_installation(cls, None)
         if installation:
             class_name, baseclass_name = installation.install_path.get_class_and_baseclass_names()
-            if class_name != "H2oRandomForestRegressorPrivateModel":
+            if class_name not in exclude_classes_list:
                 if class_name != cls.__name__:
                     raise RuntimeError("Internal Error: class name mismatch generating docstubs (%s != %s)" % (class_name, cls.__name__))
                 if installation.host_class_was_created and installation.install_path.is_entity:
