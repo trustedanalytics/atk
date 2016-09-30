@@ -39,7 +39,7 @@ import spray.json._
 object H2oRandomForestRegressorFunctions extends Serializable {
 
   def train(inputFrame: FrameRdd, args: H2oRandomForestRegressorTrainArgs, model: Model): H2oRandomForestRegressorTrainReturn = {
-    val h2oContext = H2OContext.getOrCreate(inputFrame.sparkContext)
+    val h2oContext = AtkH2oContext.init(inputFrame.sparkContext)
     var h2oFrame: H2OFrame = null
     var drfModel: DRFModel = null
 
