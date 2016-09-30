@@ -20,6 +20,7 @@
 trustedanalytics package init, public API
 """
 import sys
+
 if not sys.version_info[:2] == (2, 7):
     raise EnvironmentError("Python 2.7 required.  Detected version: %s.%s.%s" % tuple(sys.version_info[:3]))
 del sys
@@ -57,9 +58,12 @@ def _refresh_api_namespace():
     for item in api_globals:
         #globals()[item.__name__] = item
         if item.__name__ == "H2oRandomForestRegressorPrivateModel":
-
+            from trustedanalytics.meta.metaprog import set_installation, CommandInstallation
             class H2oRandomForestRegressorModel(item):
-
+                """
+                Wrapper class for H2O random forest regression
+                :return:
+                """
                 def train(self, frame, value_column, observation_columns, num_trees=50, max_depth=20, num_bins=20, min_rows=10, feature_subset_category='auto', seed=None, sample_rate=None):
                     """
                     Build H2O Random Forests Regressor model using the observation columns and target column.
@@ -126,7 +130,7 @@ def _refresh_api_namespace():
                         result = executor.execute("model:h2o_random_forest_regressor_private/_distributed_train", item, arguments)
                     release()
                     return H2oRandomForestRegressorTrainResult(result)
-
+            set_installation(H2oRandomForestRegressorModel, CommandInstallation("model:h2o_random_forest_regressor_private", host_class_was_created=True))
             globals()["H2oRandomForestRegressorModel"] = H2oRandomForestRegressorModel
 
         else:

@@ -256,20 +256,21 @@ def get_doc_stub_modules_text(class_to_member_text_dict, import_return_types):
         installation = get_installation(cls, None)
         if installation:
             class_name, baseclass_name = installation.install_path.get_class_and_baseclass_names()
-            if class_name != cls.__name__:
-                raise RuntimeError("Internal Error: class name mismatch generating docstubs (%s != %s)" % (class_name, cls.__name__))
-            if installation.host_class_was_created and installation.install_path.is_entity:
-                lines = module2_lines
-                module2_all.append(class_name)
-            else:
-                if not installation.host_class_was_created:
-                    class_name = get_doc_stub_class_name(class_name)
-                lines = module1_lines
+            if class_name != "H2oRandomForestRegressorPrivateModel":
+                if class_name != cls.__name__:
+                    raise RuntimeError("Internal Error: class name mismatch generating docstubs (%s != %s)" % (class_name, cls.__name__))
+                if installation.host_class_was_created and installation.install_path.is_entity:
+                    lines = module2_lines
+                    module2_all.append(class_name)
+                else:
+                    if not installation.host_class_was_created:
+                        class_name = get_doc_stub_class_name(class_name)
+                    lines = module1_lines
 
-            lines.append(get_doc_stubs_class_text(class_name,
-                                                 "object",  # no inheritance for docstubs, just define all explicitly
-                                                 "Auto-generated to contain doc stubs for static program analysis",
-                                                 indent("\n\n".join(text))))
+                lines.append(get_doc_stubs_class_text(class_name,
+                                                     "object",  # no inheritance for docstubs, just define all explicitly
+                                                     "Auto-generated to contain doc stubs for static program analysis",
+                                                     indent("\n\n".join(text))))
         elif cls.__name__ == "trustedanalytics":
             module2_lines.extend(list(text))
             module2_all.extend(list(names))
