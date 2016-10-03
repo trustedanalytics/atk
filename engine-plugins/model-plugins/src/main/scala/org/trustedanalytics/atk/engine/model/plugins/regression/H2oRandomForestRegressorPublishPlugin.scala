@@ -47,6 +47,7 @@ class H2oRandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishAr
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/publish"
 
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
   /**
    * Publish H2O andom Forest Regressor Model
    *

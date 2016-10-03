@@ -21,9 +21,8 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 //Implicits for JSON conversion
 import spray.json._
@@ -62,6 +61,8 @@ class H2oRandomForestRegressorPredictPlugin extends SparkCommandPlugin[H2oRandom
   //depending on the size of the data since H2O's distributed random forest is slow for large trees
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/predict"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame

@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -48,6 +48,8 @@ class H2oRandomForestRegressorNewPlugin extends CommandPlugin[GenericNewModelArg
   //depending on the size of the data since H2O's distributed random forest is slow for large trees
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/new"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:h2o_random_forest_regressor")))

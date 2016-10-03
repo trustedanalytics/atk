@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ArgDoc, Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin._
 
 //Implicits for JSON conversion
 import spray.json._
@@ -70,6 +70,8 @@ class H2oRandomForestRegressorTestPlugin extends SparkCommandPlugin[H2oRandomFor
   //depending on the size of the data since H2O's distributed random forest is slow for large trees
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/test"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Run Spark ML's H2oRandomForestRegressor() on the training frame and create a Model for it.

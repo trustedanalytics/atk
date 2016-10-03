@@ -193,6 +193,8 @@ class H2oRandomForestRegressorDistributedTrainPlugin extends SparkCommandPlugin[
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/_distributed_train"
 
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+
   /**
    * Run H2O's RandomForest trainRegressor on the training frame and create a Model for it.
    *
@@ -238,6 +240,8 @@ class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomFo
   //https://groups.google.com/forum/#!searchin/h2ostream/histogram%7Csort:relevance/h2ostream/bnyhPyxftX8/0d1ItQiyH98J
   override def name: String = "model:h2o_random_forest_regressor_private/_local_train"
 
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+
   /**
    * Run H2O's RandomForest trainRegressor on the training frame and create a Model for it.
    *
@@ -276,7 +280,7 @@ class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomFo
     conf.set("spark.ext.h2o.repl.enabled", "false")
     conf.set("spark.local.dir", sparkLocalDir)
     conf.set("spark.ext.h2o.client.log.dir", h2oLogDir)
-    conf.set("spark.driver.memory", EngineConfig.sparkConfProperties("spark.driver.memory"))
+    conf.set("spark.driver.memory", EngineConfig.sparkConfProperties.getOrElse("spark.driver.memory", "1g"))
 
     new SparkContext(conf)
   }
