@@ -1,0 +1,168 @@
+
+
+---------------------------------------
+:doc:`Commands <index>` model:max/train
+---------------------------------------
+
+|ALPHA|
+<Missing Doc>
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:max/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **timeseries_column** : unicode
+
+    ..
+
+        Name of the column that contains the time series values.
+
+
+
+    **x_columns** : list
+
+    ..
+
+        Names of the column(s) that contain the values of previous exogenous regressors.
+
+
+
+    **q** : int32
+
+    ..
+
+        Moving average order
+
+
+
+    **xreg_max_lag** : int32
+
+    ..
+
+        The maximum lag order for exogenous variables
+
+
+
+    **include_original_xreg** : bool (default=True)
+
+    ..
+
+        If true, the model is fit with an original exogenous variables (intercept for exogenous variables). Default is True
+
+
+
+    **include_intercept** : bool (default=True)
+
+    ..
+
+        If true, the model is fit with an intercept. Default is True
+
+
+
+    **user_init_params** : list (default=None)
+
+    ..
+
+        A set of user provided initial parameters for optimization. If the list is empty
+        (default), initialized using Hannan-Rissanen algorithm. If provided, order of parameter should be: intercept term, AR
+        parameters (in increasing order of lag), MA parameters (in increasing order of lag)
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

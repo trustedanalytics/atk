@@ -1,0 +1,122 @@
+
+:doc:`CollaborativeFilteringModel <index>`  train
+*************************************************
+
+------
+
+
+.. function:: train(self, frame, source_column_name, dest_column_name, weight_column_name, max_steps=10, regularization=0.5, alpha=0.5, num_factors=3, use_implicit=False, num_user_blocks=2, num_item_block=3, checkpoint_iterations=10, target_rmse=0.05)
+
+    Collaborative filtering (ALS) model
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+
+
+
+
+        **source_column_name** : unicode
+
+        ..
+
+            source column name.
+
+
+
+        **dest_column_name** : unicode
+
+        ..
+
+            destination column name.
+
+
+
+        **weight_column_name** : unicode
+
+        ..
+
+            weight column name.
+
+
+
+        **max_steps** : int32 (default=10)
+
+        ..
+
+            max number of super-steps (max iterations) before the algorithm terminates. Default = 10
+
+
+
+        **regularization** : float32 (default=0.5)
+
+        ..
+
+            float value between 0 .. 1 
+
+
+
+        **alpha** : float64 (default=0.5)
+
+        ..
+
+            double value between 0 .. 1 
+
+
+
+        **num_factors** : int32 (default=3)
+
+        ..
+
+            number of the desired factors (rank)
+
+
+
+        **use_implicit** : bool (default=False)
+
+        ..
+
+            use implicit preference
+
+
+
+        **num_user_blocks** : int32 (default=2)
+
+        ..
+
+            number of user blocks
+
+
+
+        **num_item_block** : int32 (default=3)
+
+        ..
+
+            number of item blocks
+
+
+
+        **checkpoint_iterations** : int32 (default=10)
+
+        ..
+
+            Number of iterations between checkpoints
+
+
+
+        **target_rmse** : float64 (default=0.05)
+
+        ..
+
+            target RMSE
+
+
+
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.

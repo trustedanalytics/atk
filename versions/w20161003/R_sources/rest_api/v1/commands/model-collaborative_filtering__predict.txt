@@ -1,0 +1,150 @@
+
+
+-------------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/predict
+-------------------------------------------------------------
+
+Collaborative Filtering Predict (ALS).
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:collaborative_filtering/predict
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **input_source_column_name** : unicode
+
+    ..
+
+        source column name.
+
+
+
+    **input_dest_column_name** : unicode
+
+    ..
+
+        destination column name.
+
+
+
+    **output_user_column_name** : unicode (default=user)
+
+    ..
+
+        A user column name for the output frame
+
+
+
+    **output_product_column_name** : unicode (default=product)
+
+    ..
+
+        A product  column name for the output frame
+
+
+
+    **output_rating_column_name** : unicode (default=rating)
+
+    ..
+
+        A rating column name for the output frame
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        Returns a double representing the probability if the user(i) to like product (j)
+
+

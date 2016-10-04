@@ -1,0 +1,56 @@
+
+:doc:`H2oRandomForestRegressorModel <index>`  test
+**************************************************
+
+------
+
+
+.. function:: test(self, frame, value_column, observation_columns=None)
+
+    |BETA|
+    Predict test frame values and return metrics.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            The frame to test the random forest regression model on
+
+
+
+        **value_column** : unicode
+
+        ..
+
+            Column name containing the value of each observation
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            List of column(s) containing the observations
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            object
+                  An object with the results of the trained Random Forest Regressor:
+                  |'mae' : Mean absolute error
+                  |'mse' : Mean squared error
+                  |'rmse' : Root mean squared error
+                  |'r2': R-squared
+                  |'explained_variance_score': Explained variance score
+                
+    Predict the labels for a test frame and run regresssion metrics on predicted
+    and target labels.

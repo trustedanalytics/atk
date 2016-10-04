@@ -1,0 +1,45 @@
+
+:doc:`Frame <index>`  box_cox
+*****************************
+
+------
+
+
+.. function:: box_cox(self, column_name, lambda_value=0.0, box_cox_column_name=None)
+
+    Calculate the box-cox transformation for each row in current frame.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            Name of column to perform transformation on
+
+
+
+        **lambda_value** : float64 (default=0.0)
+
+        ..
+
+            Lambda power paramater
+
+
+
+        **box_cox_column_name** : unicode (default=None)
+
+        ..
+
+            Name of column used to store the transformation
+
+
+    Calculate the box-cox transformation for each row in a frame using the given lambda value or default 0.0.
+
+    The box-cox transformation is computed by the following formula, where yt is a single entry value(row):
+
+     wt = log(yt); if lambda=0,
+     wt = (yt^lambda -1)/lambda ; else
+
+    where log is the natural log.

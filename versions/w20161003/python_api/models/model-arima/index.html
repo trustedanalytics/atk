@@ -1,0 +1,358 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Models ArimaModel &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models" href="../index.html" >
+    <link rel="next" title="ArimaModel __init__" href="new.html" >
+    <link rel="prev" title="ArxModel train" href="../model-arx/train.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" accesskey="U">Models</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../model-arx/train.html" title="ArxModel train"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="new.html" title="ArimaModel __init__"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="models-arimamodel">
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> ArimaModel<a class="headerlink" href="#models-arimamodel" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="ArimaModel">
+<em class="property">class </em><code class="descname">ArimaModel</code><a class="headerlink" href="#ArimaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entity ArimaModel</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
+<td>Read-only property - Last time this model&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
+<td>Set or get the name of the model object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
+<td>Read-only property - Current model life cycle status.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#arimamodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
+<td>Create a &#8216;new&#8217; instance of an Autoregressive Integrated Moving Average (ARIMA) model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, future_periods[, timeseries_values])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Forecasts future periods using ARIMA.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, timeseries_values, p, d, q[, include_intercept, method, ...])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="arimamodel-init"></span><dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a &#8216;new&#8217; instance of an Autoregressive Integrated Moving Average (ARIMA) model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of ARIMAModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>An autoregressive integrated moving average (ARIMA) <a class="reference internal" href="../model-naive_bayes/new.html#r3" id="id1">[R3]</a> model is a
+generalization of an autoregressive moving average (ARMA) model.
+These models are fitted to time series data either to better understand
+the data or to predict future points in the series (forecasting).
+Non-seasonal ARIMA models are generally denoted ARIMA (p,d,q) where
+parameters p, d, and q are non-negative integers, p is the order of the
+Autoregressive model, d is the degree of differencing, and q is the order
+of the Moving-average model.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average">https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Consider the following frame of observations collected over seven days.</p>
+<p>The frame has three columns: timestamp, name, and value.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  timestamp                 name   value</span>
+<span class="go">=================================================</span>
+<span class="go">[0]  2015-01-01T00:00:00.000Z  Sarah  12.88969427</span>
+<span class="go">[1]  2015-01-02T00:00:00.000Z  Sarah  13.54964408</span>
+<span class="go">[2]  2015-01-03T00:00:00.000Z  Sarah   13.8432745</span>
+<span class="go">[3]  2015-01-04T00:00:00.000Z  Sarah  12.13843611</span>
+<span class="go">[4]  2015-01-05T00:00:00.000Z  Sarah  12.81156092</span>
+<span class="go">[5]  2015-01-06T00:00:00.000Z  Sarah   14.2499628</span>
+<span class="go">[6]  2015-01-07T00:00:00.000Z  Sarah  15.12102595</span>
+</pre></div>
+</div>
+<p>Define the date time index:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">datetimeindex</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2015-01-01T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-02T00:00:00.000Z&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="s1">&#39;2015-01-03T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-04T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-05T00:00:00.000Z&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="s1">&#39;2015-01-06T00:00:00.000Z&#39;</span><span class="p">,</span><span class="s1">&#39;2015-01-07T00:00:00.000Z&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Then, create a time series frame from the frame of observations, since the ARIMA model
+expects data to be in a time series format (where the time series values are in a
+vector column).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">timeseries_from_observations</span><span class="p">(</span><span class="n">datetimeindex</span><span class="p">,</span> <span class="s2">&quot;timestamp&quot;</span><span class="p">,</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name</span>
+<span class="go">==========</span>
+<span class="go">[0]  Sarah</span>
+
+<span class="go">[#]  value</span>
+<span class="go">================================================================================</span>
+<span class="go">[0]  [12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 15.12102595]</span>
+</pre></div>
+</div>
+<p>Use the frame take function to get one row of data with just the &#8220;value&#8221; column</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_frame_data</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>From the ts_frame_data, get the first row and first column to extract out just the time series values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span> <span class="o">=</span> <span class="n">ts_frame_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ts_values</span>
+<span class="go">[12.88969427,</span>
+<span class="go"> 13.54964408,</span>
+<span class="go"> 13.8432745,</span>
+<span class="go"> 12.13843611,</span>
+<span class="go"> 12.81156092,</span>
+<span class="go"> 14.2499628,</span>
+<span class="go"> 15.12102595]</span>
+</pre></div>
+</div>
+<p>Create an ARIMA model:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArimaModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Train the model using the timeseries frame:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">ts_values</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="go">{u&#39;coefficients&#39;: [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}</span>
+</pre></div>
+</div>
+<p>Call predict to forecast values by passing the number of future periods to predict beyond the length of the time series.
+Since the parameter in this example is 0, predict will forecast 7 values (the same number of values that were in the
+original time series vector).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="go">{u&#39;forecasted&#39;: [12.674342627141744,</span>
+<span class="go">  13.638048984791693,</span>
+<span class="go">  13.682219498657313,</span>
+<span class="go">  13.883970022400577,</span>
+<span class="go">  12.49564914570843,</span>
+<span class="go">  13.66340392811346,</span>
+<span class="go">  14.201275185574925]}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Take the path to the published model and run it in the Scoring Engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Post a request to get the metadata about the model.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARIMA Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARIMAModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARIMAModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;timeseries&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;future&quot;,&quot;value&quot;:&quot;Int&quot;},{&quot;name&quot;:&quot;predicted_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>ARIMA model support started in version 2 of the scoring engine REST API. We send the number of values to forecast
+beyond the length of the time series (in this example we are passing 0). This means that since 7 historical time series
+values were provided, 7 future periods will be forecasted.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;future&quot;</span><span class="p">:</span><span class="mi">0</span><span class="p">}]})</span>
+</pre></div>
+</div>
+<p>The &#8216;predicted_values&#8217; array contains the future values, which have been forecasted based on the historical data.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;future&quot;:0.0,&quot;predicted_values&quot;:[12.674342627141744,13.638048984791693,13.682219498657313,13.883970022400577,12.49564914570843,13.66340392811346,14.201275185574925]}]}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 04, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

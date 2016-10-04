@@ -1,0 +1,324 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>ArxModel __init__ &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models ArxModel" href="index.html" >
+    <link rel="next" title="ArxModel last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="Models ArxModel" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Models</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Models</span></code> ArxModel</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Models ArxModel"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="last_read_date.html" title="ArxModel last_read_date"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="arxmodel-init">
+<h1><a class="reference internal" href="index.html"><span class="doc">ArxModel</span></a>  __init__<a class="headerlink" href="#arxmodel-init" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+Create a &#8216;new&#8217; instance of a AutoRegressive Exogenous model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of ARXModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.
+The frame has a snippet of air quality data from:</p>
+<p><a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Air+Quality">https://archive.ics.uci.edu/ml/datasets/Air+Quality</a>.</p>
+<p>Lichman, M. (2013). UCI Machine Learning Repository [<a class="reference external" href="http://archive.ics.uci.edu/ml">http://archive.ics.uci.edu/ml</a>].
+Irvine, CA: University of California, School of Information and Computer Science.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  Date        Time      CO_GT           PT08_S1_CO  NMHC_GT  C6H6_GT</span>
+<span class="go">=============================================================================</span>
+<span class="go">[0]  10/03/2004  18.00.00   2.59999990463        1360      150  11.8999996185</span>
+<span class="go">[1]  10/03/2004  19.00.00             2.0        1292      112  9.39999961853</span>
+<span class="go">[2]  10/03/2004  20.00.00   2.20000004768        1402       88            9.0</span>
+<span class="go">[3]  10/03/2004  21.00.00   2.20000004768        1376       80  9.19999980927</span>
+<span class="go">[4]  10/03/2004  22.00.00   1.60000002384        1272       51            6.5</span>
+<span class="go">[5]  10/03/2004  23.00.00   1.20000004768        1197       38  4.69999980927</span>
+<span class="go">[6]  11/03/2004  00.00.00   1.20000004768        1185       31  3.59999990463</span>
+<span class="go">[7]  11/03/2004  01.00.00             1.0        1136       31  3.29999995232</span>
+<span class="go">[8]  11/03/2004  02.00.00  0.899999976158        1094       24  2.29999995232</span>
+<span class="go">[9]  11/03/2004  03.00.00  0.600000023842        1010       19  1.70000004768</span>
+
+<span class="go">[#]  PT08_S2_NMHC  NOx_GT  PT08_S3_NOx  NO2_GT  PT08_S4_NO2  PT08_S5_O3</span>
+<span class="go">=======================================================================</span>
+<span class="go">[0]          1046     166         1056     113         1692        1268</span>
+<span class="go">[1]           955     103         1174      92         1559         972</span>
+<span class="go">[2]           939     131         1140     114         1555        1074</span>
+<span class="go">[3]           948     172         1092     122         1584        1203</span>
+<span class="go">[4]           836     131         1205     116         1490        1110</span>
+<span class="go">[5]           750      89         1337      96         1393         949</span>
+<span class="go">[6]           690      62         1462      77         1333         733</span>
+<span class="go">[7]           672      62         1453      76         1333         730</span>
+<span class="go">[8]           609      45         1579      60         1276         620</span>
+<span class="go">[9]           561    -200         1705    -200         1235         501</span>
+
+<span class="go">[#]  Temp           RH             AH</span>
+<span class="go">=================================================</span>
+<span class="go">[0]  13.6000003815  48.9000015259  0.757799983025</span>
+<span class="go">[1]  13.3000001907  47.7000007629  0.725499987602</span>
+<span class="go">[2]  11.8999996185           54.0  0.750199973583</span>
+<span class="go">[3]           11.0           60.0    0.7867000103</span>
+<span class="go">[4]  11.1999998093  59.5999984741  0.788800001144</span>
+<span class="go">[5]  11.1999998093  59.2000007629  0.784799993038</span>
+<span class="go">[6]  11.3000001907  56.7999992371   0.76029998064</span>
+<span class="go">[7]  10.6999998093           60.0  0.770200014114</span>
+<span class="go">[8]  10.6999998093  59.7000007629  0.764800012112</span>
+<span class="go">[9]  10.3000001907  60.2000007629  0.751699984074</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">ArxModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>We will be using the column &#8220;Temp&#8221; (temperature in Celsius) as our time series value:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y_column</span> <span class="o">=</span> <span class="s2">&quot;Temp&quot;</span>
+</pre></div>
+</div>
+<p>The sensor values will be used as our exogenous variables:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CO_GT&#39;</span><span class="p">,</span><span class="s1">&#39;PT08_S1_CO&#39;</span><span class="p">,</span><span class="s1">&#39;NMHC_GT&#39;</span><span class="p">,</span><span class="s1">&#39;C6H6_GT&#39;</span><span class="p">,</span><span class="s1">&#39;PT08_S2_NMHC&#39;</span><span class="p">,</span><span class="s1">&#39;NOx_GT&#39;</span><span class="p">,</span><span class="s1">&#39;PT08_S3_NOx&#39;</span><span class="p">,</span><span class="s1">&#39;NO2_GT&#39;</span><span class="p">,</span><span class="s1">&#39;PT08_S4_NO2&#39;</span><span class="p">,</span><span class="s1">&#39;PT08_S5_O3&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">y_column</span><span class="p">,</span> <span class="n">x_columns</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{u&#39;c&#39;: 0.0,</span>
+<span class="go"> u&#39;coefficients&#39;: [0.005567992923907625,</span>
+<span class="go">  -0.010969068059453009,</span>
+<span class="go">  0.012556586798371176,</span>
+<span class="go">  -0.39792503380811506,</span>
+<span class="go">  0.04289162879826746,</span>
+<span class="go">  -0.012253952164677924,</span>
+<span class="go">  0.01192148525581035,</span>
+<span class="go">  0.014100699808650077,</span>
+<span class="go">  -0.021091473795935345,</span>
+<span class="go">  0.007622676727420039]}</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">y_column</span><span class="p">,</span> <span class="n">x_columns</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">column_names</span>
+<span class="go">[u&#39;Date&#39;,</span>
+<span class="go"> u&#39;Time&#39;,</span>
+<span class="go"> u&#39;CO_GT&#39;,</span>
+<span class="go"> u&#39;PT08_S1_CO&#39;,</span>
+<span class="go"> u&#39;NMHC_GT&#39;,</span>
+<span class="go"> u&#39;C6H6_GT&#39;,</span>
+<span class="go"> u&#39;PT08_S2_NMHC&#39;,</span>
+<span class="go"> u&#39;NOx_GT&#39;,</span>
+<span class="go"> u&#39;PT08_S3_NOx&#39;,</span>
+<span class="go"> u&#39;NO2_GT&#39;,</span>
+<span class="go"> u&#39;PT08_S4_NO2&#39;,</span>
+<span class="go"> u&#39;PT08_S5_O3&#39;,</span>
+<span class="go"> u&#39;Temp&#39;,</span>
+<span class="go"> u&#39;RH&#39;,</span>
+<span class="go"> u&#39;AH&#39;,</span>
+<span class="go"> u&#39;predicted_y&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Temp&quot;</span><span class="p">,</span><span class="s2">&quot;predicted_y&quot;</span><span class="p">))</span>
+<span class="go">[#]  Temp           predicted_y</span>
+<span class="go">=================================</span>
+<span class="go">[0]  13.6000003815   13.236459938</span>
+<span class="go">[1]  13.3000001907  13.0250130899</span>
+<span class="go">[2]  11.8999996185  11.4147282294</span>
+<span class="go">[3]           11.0  11.3157457822</span>
+<span class="go">[4]  11.1999998093  11.3982074883</span>
+<span class="go">[5]  11.1999998093  11.7079198051</span>
+<span class="go">[6]  11.3000001907  10.7879916472</span>
+<span class="go">[7]  10.6999998093   10.527428478</span>
+<span class="go">[8]  10.6999998093  10.4439615476</span>
+<span class="go">[9]  10.3000001907   10.276662138</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Take the path to the published model and run it in the Scoring Engine:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Post a request to get the metadata about the model</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/metadata&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;ARX Model&quot;,&quot;model_class&quot;:&quot;com.cloudera.sparkts.models.ARXModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;y&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;x_values&quot;,&quot;value&quot;:&quot;Array[Double]&quot;},{&quot;name&quot;:&quot;score&quot;,&quot;value&quot;:&quot;Array[Double]&quot;}]}&#39;</span>
+</pre></div>
+</div>
+<p>The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
+that was trained and published in the example above.  To keep things simple, we just send the first three rows of
+&#8216;y&#8217; values and the corresponding &#8216;x_values&#8217;.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://mymodel.demotrustedanalytics.com/v2/score&#39;</span><span class="p">,</span><span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;records&quot;</span><span class="p">:[{</span><span class="s2">&quot;y&quot;</span><span class="p">:[</span><span class="mf">13.6000003815</span><span class="p">,</span><span class="mf">13.3000001907</span><span class="p">,</span><span class="mf">11.8999996185</span><span class="p">],</span><span class="s2">&quot;x_values&quot;</span><span class="p">:[</span><span class="mf">2.6</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mi">1360</span><span class="p">,</span><span class="mi">1292</span><span class="p">,</span><span class="mi">1402</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">112</span><span class="p">,</span><span class="mi">88</span><span class="p">,</span><span class="mf">11.9</span><span class="p">,</span><span class="mf">9.4</span><span class="p">,</span><span class="mf">9.0</span><span class="p">,</span><span class="mi">1046</span><span class="p">,</span><span class="mi">955</span><span class="p">,</span><span class="mi">939</span><span class="p">,</span><span class="mi">166</span><span class="p">,</span><span class="mi">103</span><span class="p">,</span><span class="mi">131</span><span class="p">,</span><span class="mi">1056</span><span class="p">,</span><span class="mi">1174</span><span class="p">,</span><span class="mi">1140</span><span class="p">,</span><span class="mi">113</span><span class="p">,</span><span class="mi">92</span><span class="p">,</span><span class="mi">114</span><span class="p">,</span><span class="mi">1692</span><span class="p">,</span><span class="mi">1559</span><span class="p">,</span><span class="mi">1555</span><span class="p">,</span><span class="mi">1268</span><span class="p">,</span><span class="mi">972</span><span class="p">,</span><span class="mi">1074</span><span class="p">]}]})</span>
+</pre></div>
+</div>
+<p>The &#8216;score&#8217; value contains an array of predicted y values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
+<span class="go">u&#39;{&quot;data&quot;:[{&quot;y&quot;:[13.6000003815,13.3000001907,11.8999996185],&quot;x_values&quot;:[13.6000003815,13.3000001907,11.8999996185],&quot;x_values&quot;:[2.6,2.0,2.2,1360,1292,1402,150,112,88,11.9,9.4,9.0,1046,955,939,166,103,131,1056,1174,1140,113,92,114,1692,1559,1555,1268,972,1074],&quot;score&quot;:[13.2364599379956,13.02501308994565,11.414728229443007]}]}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 04, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
