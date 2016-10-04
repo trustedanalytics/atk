@@ -100,6 +100,14 @@ class ApiInstalledError(RuntimeError):
     def __init__(self):
         RuntimeError.__init__(self, "Illegal operation, API is already installed.  Must restart session.")
 
+def filter_item_for_globals(item):
+    # special filter code for workarounds
+    if item.__name__ == "H2oRandomForestRegressorPrivateModel":
+        from trustedanalytics.core.h2omodels import get_H2oRandomForestRegressorModel_installation
+        return get_H2oRandomForestRegressorModel_installation(item)
+
+    return item
+
 
 api_status = _ApiStatus()  # singleton
 
