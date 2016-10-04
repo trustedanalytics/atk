@@ -1,0 +1,44 @@
+
+:doc:`Models<../index>` H2oRandomForestRegressorModel
+*****************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    publish
+    status
+    test
+    train
+
+.. class:: H2oRandomForestRegressorModel
+
+
+            Wrapper class for H2O random forest regression
+            :return:
+            
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Read-only property - Last time this model's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Read-only property - Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <H2oRandomForestRegressorModel__init__>`\ (self[, name, _info])                        |BETA| Create a 'new' instance of a H2O Random Forest Regressor model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |BETA| Predict the values for the data points.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`test <test>`\ (self, frame, value_column[, observation_columns])                                |BETA| Predict test frame values and return metrics.
+    :doc:`train <train>`\ (self, frame, value_column, observation_columns[, num_trees, max_depth, ...])   Build H2O Random Forests Regressor model using the observation columns and target column.
+    ====================================================================================================  ====================================================================================================
