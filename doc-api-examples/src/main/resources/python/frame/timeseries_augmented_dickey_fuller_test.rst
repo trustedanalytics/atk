@@ -56,8 +56,17 @@ Calcuate the augmented Dickey-Fuller test statistic for column "b" with no lag:
 >>> result = frame.timeseries_augmented_dickey_fuller_test("b", 0)
 <progress>
 
+<skip>
 >>> result["p_value"]
 0.8318769375509645
 
 >>> result["test_stat"]
 -0.7553870955614206
+</skip>
+
+<hide>
+>>> # Check if p-value and test statistic are almost equal
+>>> tolerance = 0.0001
+>>> assert(abs(result["p_value"] - 0.8318769375509645) < tolerance)
+>>> assert(abs(result["test_stat"] - -0.7553870955614206) < tolerance)
+</hide>
