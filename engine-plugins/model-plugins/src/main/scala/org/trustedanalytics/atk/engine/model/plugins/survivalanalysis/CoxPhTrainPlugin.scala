@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.survivalanalysis
 
-import org.apache.spark.ml.regression.{ Cox }
+import org.apache.spark.ml.regression.CoxPh
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
@@ -74,8 +74,8 @@ object CoxPhTrainPlugin {
    * @param arguments Arguments passed for training the LinearRegression model
    * @return Initialized Cox model with training arguments
    */
-  def initializeCoxModel(arguments: CoxPhTrainArgs): Cox = {
-    val cox = new Cox()
+  def initializeCoxModel(arguments: CoxPhTrainArgs): CoxPh = {
+    val cox = new CoxPh()
     cox.setLabelCol("time")
     cox.setFeaturesCol("features")
     cox.setCensorCol("censor")

@@ -110,6 +110,7 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
     val frameRdd = FrameRdd.toFrameRdd(schema, rdd)
     val frameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by PIC operation"))) { newPredictedFrame: FrameEntity =>
       newPredictedFrame.save(frameRdd)
+
     }
     val k = output.k
     val clusterSize = rdd.map(row => ("Cluster:" + row(1).toString, 1)).reduceByKey(_ + _).collect().toMap
