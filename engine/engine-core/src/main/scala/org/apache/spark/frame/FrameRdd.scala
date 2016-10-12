@@ -210,6 +210,13 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     })
   }
 
+  /**
+   * Spark mapPartition with a rowWrapper
+   */
+  def mapPartitionRows[U: ClassTag](mapPartitionFunction: Iterator[RowWrapper] => Iterator[U]): RDD[U] = {
+    this.map(data => rowWrapper(data)).mapPartitions(mapPartitionFunction)
+  }
+
   def selectColumn(columnName: String): FrameRdd = {
     selectColumns(List(columnName))
   }

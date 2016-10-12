@@ -40,15 +40,25 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
 
     <repositories>
-        <repository>
-            <id>atk</id>
-            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
+         <repository>
+            <id>tap</id>
+            <url>https://tap.jfrog.io/tap/public</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
                 <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>tap-snapshots</id>
+            <url>https://tap.jfrog.io/tap/public-snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
             </releases>
         </repository>
         <repository>
@@ -97,13 +107,24 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
     <pluginRepositories>
         <pluginRepository>
-            <id>atk</id>
-            <url>http://maven.trustedanalytics.org/content/repositories/public/</url>
+            <id>tap</id>
+            <url>https://tap.jfrog.io/tap/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>daily</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>tap-snapshots</id>
+            <url>https://tap.jfrog.io/tap/public-snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
             <releases>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </releases>
         </pluginRepository>
     </pluginRepositories>
@@ -141,7 +162,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dev.spark.hive.version>1.6.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.2.181</dep.daal.version>
         <dep.orientdb.version>2.1.16</dep.orientdb.version>
-
+        <dep.h20.sparkling-water.version>1.6.7</dep.h20.sparkling-water.version>
+        <dep.h20.version>3.10.0.6</dep.h20.version>
         <!--START GAO MAVEN -->
 
         <scala.long.version>2.10.5</scala.long.version>
@@ -761,6 +783,34 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
     <dependencyManagement>
         <dependencies>
+            <!-- START H2O dependencies -->
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>sparkling-water-core_2.10</artifactId>
+                <version>${dep.h20.sparkling-water.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-genmodel</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-core</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>h2o-algos</artifactId>
+                <version>${dep.h20.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ai.h2o</groupId>
+                <artifactId>google-analytics-java</artifactId>
+                <version>1.1.2-H2O-CUSTOM</version>
+            </dependency>
+
+            <!-- END H2O dependencies -->
             <!-- START Intel DAAL dependencies -->
             <dependency>
                 <groupId>com.intel.daal</groupId>
@@ -1539,7 +1589,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>com.cloudera.sparkts</groupId>
                 <artifactId>sparkts</artifactId>
-                <version>0.3.4</version>
+                <version>0.3.5</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>breeze_${scala.short.version}</artifactId>
