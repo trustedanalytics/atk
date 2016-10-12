@@ -63,7 +63,6 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     result.apply(4) shouldBe Row(4.98507012303, 5.6, 2.064011015565803)
   }
 
-
   "boxCox" should "create a new column in the frame storing the box-cox computation with lambda 0.0" in {
     val rdd = sparkContext.parallelize(boxCoxRows)
     val frameRdd = new FrameRdd(boxCoxSchema, rdd)
@@ -76,7 +75,6 @@ class BoxCoxFunctionsTest extends TestingSparkContextFlatSpec with Matchers {
     result.apply(3) shouldBe Row(7.48803882539, 4.5, 2.013306924176539)
     result.apply(4) shouldBe Row(4.98507012303, 5.6, 1.6064474701212843)
   }
-
 
   "reverseBoxCox" should "compute the reverse box-cox transformation for the given column" in {
     val rdd = sparkContext.parallelize(reverseBoxCoxRows)

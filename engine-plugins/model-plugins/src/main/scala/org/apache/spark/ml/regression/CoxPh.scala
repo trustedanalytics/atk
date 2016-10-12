@@ -38,8 +38,13 @@ import scala.collection.mutable.ArrayBuffer
 import scala.collection.{ Map, mutable }
 
 private[regression] trait CoxPhParams extends Params
-    with HasFeaturesCol with HasLabelCol with HasPredictionCol with HasMaxIter
-    with HasTol with HasFitIntercept with Logging {
+    with HasFeaturesCol
+    with HasLabelCol
+    with HasPredictionCol
+    with HasMaxIter
+    with HasTol
+    with HasFitIntercept
+    with Logging {
 
   /**
    * Param for censor column name.
