@@ -13,12 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.apache.spark.ml.util
 
-package org.trustedanalytics.atk.engine.model.plugins.survivalanalysis
+import org.apache.spark.ml.Model
+import org.apache.spark.ml.param.ParamMap
 
-import org.apache.spark.ml.regression.CoxPhModel
-
-case class CoxPhData(coxModel: CoxPhModel, featureColumns: List[String], timeColumn: String, censorColumn: String) {
-  require(featureColumns != null && featureColumns.nonEmpty, "featureColumns must not be null nor empty")
-  require(coxModel != null, "coxModel must not be null")
+object MLTestingUtils {
+  def checkCopy(model: Model[_]): Unit = {
+    val copied = model.copy(ParamMap.empty)
+      .asInstanceOf[Model[_]]
+    assert(copied.parent.uid == model.parent.uid)
+    assert(copied.parent == model.parent)
+  }
 }
