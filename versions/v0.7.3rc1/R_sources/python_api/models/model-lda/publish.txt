@@ -1,0 +1,29 @@
+
+:doc:`LdaModel <index>`  publish
+********************************
+
+------
+
+
+.. function:: publish(self)
+
+    Creates a tar file that will used as input to the scoring engine
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns the HDFS path to the trained model's tar file
+    Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
+                  The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

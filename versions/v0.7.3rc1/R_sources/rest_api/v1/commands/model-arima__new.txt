@@ -1,0 +1,121 @@
+
+
+---------------------------------------
+:doc:`Commands <index>` model:arima/new
+---------------------------------------
+
+Create a 'new' instance of an Autoregressive Integrated Moving Average (ARIMA) model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:arima/new
+
+:arguments:
+
+
+    **dummy_model_ref** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+An autoregressive integrated moving average (ARIMA) [1]_ model is a
+generalization of an autoregressive moving average (ARMA) model.
+These models are fitted to time series data either to better understand
+the data or to predict future points in the series (forecasting).
+Non-seasonal ARIMA models are generally denoted ARIMA (p,d,q) where
+parameters p, d, and q are non-negative integers, p is the order of the
+Autoregressive model, d is the degree of differencing, and q is the order
+of the Moving-average model.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Autoregressive_integrated_moving_average
+    
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Model``
+
+        A new instance of ARIMAModel
+
+

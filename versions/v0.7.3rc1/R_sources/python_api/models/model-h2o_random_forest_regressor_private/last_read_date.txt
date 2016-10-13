@@ -1,0 +1,23 @@
+
+:doc:`H2oRandomForestRegressorModel <index>`  last_read_date
+************************************************************
+
+------
+
+
+.. attribute:: last_read_date
+
+    Read-only property - Last time this model's data was accessed.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Date string of the last time this model's data was accessed

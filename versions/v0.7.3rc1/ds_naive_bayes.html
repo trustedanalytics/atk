@@ -1,0 +1,230 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Naive Bayes &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="Process Flow Examples" href="ds_pflw.html" >
+    <link rel="next" title="Latent Dirichlet Allocation" href="ds_lda.html" >
+    <link rel="prev" title="Cumulative Sum" href="ds_cumulsum.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ds_over.html" >User Manual</a></li>
+          <li class="active"><a href="ds_pflw.html" accesskey="U">Process Flow Examples</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ds_cumulsum.html" title="Cumulative Sum"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_lda.html" title="Latent Dirichlet Allocation"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ds_pflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="naive-bayes">
+<span id="ds-naive-bayes"></span><h1>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Permalink to this headline">¶</a></h1>
+<p>Naive Bayes is a basic classifier.</p>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>Establish a connection to the ATK REST Server.
+This handle will be used for the remainder of the script.</p>
+<p>Get your server URL and credentials file from the TAP administrator.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">atk_server_uri</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_SERVER_URI&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Set the server, and use the credentials to connect to the ATK REST server.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">atk_server_uri</span>
+<span class="n">ia</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="workflow">
+<h3>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h3>
+<p>The general workflow will be build a frame, build a model, train the model on the frame, predict using the model, evaluate the results using classification metrics.</p>
+</div>
+</div>
+<div class="section" id="build-a-frame">
+<h2>Build a Frame<a class="headerlink" href="#build-a-frame" title="Permalink to this headline">¶</a></h2>
+<p>Construct a frame to be uploaded, this is done using Python lists uploaded to the server.</p>
+<p>Each row represents a sample from a probability distribution, with a vector associated with a category. For the purposes of this example there are two categories and three features to indicate whether the sample is a cat or a dog (weight, height, fur type).</p>
+<p>The frame has the schema Class, feature 1, feature 2, feature 3, where class is the category that the sample belongs to.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
+                           <span class="p">[(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f3&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
+
+<span class="n">frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">rows_frame</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-a-model">
+<h2>Build a Model<a class="headerlink" href="#build-a-model" title="Permalink to this headline">¶</a></h2>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">nb_model</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">NaiveBayesModel</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Train the model on the frame. This is supervised training technique so the category is used in the training process. Note the feature vector is represented as a list of column names.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">nb_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;f3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Predict assigns a category to a sample in the feature space
+For the purposes of illustrating the workflow, I am predicting on the
+same frame used to train, normally you would predict on a different
+frame representing data that didn&#8217;t have a category assigned to it
+again note the feature vector is a python list of column names.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">nb_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;f3&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The result is a frame with a new &#8220;predicted_class&#8221; column.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="n">result</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Run classification metrics on the resultant frame to understand
+model performance.</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">classification_metrics</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted_class&quot;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">cm</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 13, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

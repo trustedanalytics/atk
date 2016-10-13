@@ -1,0 +1,253 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Graph annotate_weighted_degrees &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Graphs Graph" href="index.html" >
+    <link rel="next" title="Graph clustering_coefficient" href="clustering_coefficient.html" >
+    <link rel="prev" title="Graph annotate_degrees" href="annotate_degrees.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Graphs</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Graphs</span></code> Graph</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="annotate_degrees.html" title="Graph annotate_degrees"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="clustering_coefficient.html" title="Graph clustering_coefficient"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="graph-annotate-weighted-degrees">
+<h1><a class="reference internal" href="index.html"><span class="doc">Graph</span></a>  annotate_weighted_degrees<a class="headerlink" href="#graph-annotate-weighted-degrees" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="annotate_weighted_degrees">
+<code class="descname">annotate_weighted_degrees</code><span class="sig-paren">(</span><em>self</em>, <em>output_property_name</em>, <em>degree_option=None</em>, <em>input_edge_labels=None</em>, <em>edge_weight_property=None</em>, <em>edge_weight_default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#annotate_weighted_degrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the weighted degree of each vertex with respect to an (optional) set of labels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_property_name</strong> : unicode</p>
+<blockquote>
+<div><p>property name of where to store output</p>
+</div></blockquote>
+<p><strong>degree_option</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>choose from &#8216;out&#8217;, &#8216;in&#8217;, &#8216;undirected&#8217;</p>
+</div></blockquote>
+<p><strong>input_edge_labels</strong> : list (default=None)</p>
+<blockquote>
+<div><p>labels of edge types that should be included</p>
+</div></blockquote>
+<p><strong>edge_weight_property</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>property name of edge weight, if not provided all edges are weighted equally</p>
+</div></blockquote>
+<p><strong>edge_weight_default</strong> : float64 (default=None)</p>
+<blockquote>
+<div><p>default edge weight</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><p>Dictionary containing the vertex type as the key and the corresponding
+vertex&#8217;s frame with a column storing the annotated weighted degree for the vertex
+in a user specified property.
+Call dictionary_name[&#8216;vertex type&#8217;] to get the handle to frame of that &#8216;vertex type&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Pulls graph from underlying store, calculates weighted degrees and writes them into the property
+specified, and then writes the output graph to the underlying store.</p>
+<p><strong>Degree Calculation</strong></p>
+<p>A fundamental quantity in graph analysis is the degree of a vertex:
+The degree of a vertex is the number of edges adjacent to it.</p>
+<p>For a directed edge relation, a vertex has both an out-degree (the number of
+edges leaving the vertex) and an in-degree (the number of edges entering the
+vertex).</p>
+<p>The toolkit provides a routine <span class="xref std std-ref">annotate_degrees</span>
+for calculating the degrees of vertices.
+The Trusted Analytics Platform routine <code class="docutils literal"><span class="pre">annotate_degrees</span></code> can be executed at distributed scale.</p>
+<p>In the presence of edge weights, vertices can have weighted degrees: The
+weighted degree of a vertex is the sum of weights of edges adjacent to it.
+Analogously, the weighted in-degree of a vertex is the sum of the weights of
+the edges entering it, and the weighted out-degree is the sum
+of the weights of the edges leaving the vertex.</p>
+<p>The toolkit provides this routine for the distributed calculation of weighted
+vertex degrees.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s1">&#39;source&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;label&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s1">&#39;edges&#39;</span><span class="p">,</span><span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">,</span> <span class="s1">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_weighted_degrees</span><span class="p">(</span><span class="s2">&quot;outEdgesCount&quot;</span><span class="p">,</span><span class="n">edge_weight_property</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">degree_option</span><span class="o">=</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  source  label  outEdgesCount</span>
+<span class="go">===============================================</span>
+<span class="go">[0]     1  source       1    1.0            3.0</span>
+<span class="go">[1]     2  source       2    1.0            2.0</span>
+<span class="go">[2]     3  source       3    5.0            2.0</span>
+<span class="go">[3]     4  source       4    5.0            2.0</span>
+<span class="go">[4]     5  source       5    5.0            1.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">annotate_weighted_degrees</span><span class="p">(</span><span class="s2">&quot;inEdgesCount&quot;</span><span class="p">,</span><span class="n">edge_weight_property</span><span class="o">=</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">degree_option</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  source  label  inEdgesCount</span>
+<span class="go">==============================================</span>
+<span class="go">[0]     1  source       1    1.0           3.0</span>
+<span class="go">[1]     2  source       2    1.0           2.0</span>
+<span class="go">[2]     3  source       3    5.0           2.0</span>
+<span class="go">[3]     4  source       4    5.0           2.0</span>
+<span class="go">[4]     5  source       5    5.0           1.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 13, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

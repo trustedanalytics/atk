@@ -1,0 +1,83 @@
+
+:doc:`Frame <index>`  timeseries_breusch_godfrey_test
+*****************************************************
+
+------
+
+
+.. function:: timeseries_breusch_godfrey_test(self, residuals, factors, max_lag)
+
+    Breusch-Godfrey statistics test
+
+
+    :Parameters:
+
+        **residuals** : unicode
+
+        ..
+
+            Name of the column that contains residual (y) values
+
+
+
+        **factors** : list
+
+        ..
+
+            Name of the column(s) that contain factors (x) values 
+
+
+
+        **max_lag** : int32
+
+        ..
+
+            The lag order to calculate the test statistic. 
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Calculates the Breusch-Godfrey test statistic for serial correlation.
+
+    Examples
+    --------
+
+
+    Consider the following frame:
+
+    >>> frame.inspect()
+    [#]  date                      y  x1  x2    x3   x4  x5  x6
+    =============================================================
+    [0]  2004-10-03T18:00:00.000Z  2   6  1360  150  11   9  1046
+    [1]  2004-10-03T20:00:00.000Z  2   2  1402   88   9   0   939
+    [2]  2004-10-03T21:00:00.000Z  2   2  1376   80   9   2   948
+    [3]  2004-10-03T22:00:00.000Z  1   6  1272   51   6   5   836
+    [4]  2004-10-03T23:00:00.000Z  1   2  1197   38   4   7   750
+    [5]  2004-11-03T00:00:00.000Z  1   2  1185   31   3   6   690
+    [6]  2004-11-03T02:00:00.000Z  0   9  1094   24   2   3   609
+    [7]  2004-11-03T03:00:00.000Z  0   6  1010   19   1   7   561
+    [8]  2004-11-03T05:00:00.000Z  0   7  1066    8   1   1   512
+    [9]  2004-11-03T06:00:00.000Z  0   7  1052   16   1   6   553
+
+    Calcuate the Breusch-Godfrey test result:
+
+    >>> y_column = "y"
+    >>> x_columns = ['x1','x2','x3','x4','x5','x6']
+    >>> max_lag = 1
+
+    >>> result = frame.timeseries_breusch_godfrey_test(y_column, x_columns, max_lag)
+    [===Job Progress===]
+
+    >>> result["p_value"]
+    0.0015819480233076888
+
+    >>> result["test_stat"]
+    9.980638692819744
+

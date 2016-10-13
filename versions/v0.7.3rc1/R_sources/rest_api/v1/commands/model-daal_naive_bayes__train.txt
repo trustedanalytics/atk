@@ -1,0 +1,140 @@
+
+
+----------------------------------------------------
+:doc:`Commands <index>` model:daal_naive_bayes/train
+----------------------------------------------------
+
+|BETA|
+Build a multinomial naive bayes model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:daal_naive_bayes/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column containing the label for each
+        observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Column(s) containing the
+        observations.
+
+
+
+    **num_classes** : int32 (default=2)
+
+    ..
+
+        Number of classes
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Train a DaalNaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dictionary
+        A dictionary with trained multinomial naive bayes model with the following keys:
+        'class_log_prior': smoothed empirical log probability for each class
+        'feature_log_prob': empirical log probability of features given a class, P(x_i|y)
+                    
+
+

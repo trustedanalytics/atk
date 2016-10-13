@@ -1,0 +1,220 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>EdgeFrame quantiles &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames EdgeFrame" href="index.html" >
+    <link rel="next" title="EdgeFrame rename_columns" href="rename_columns.html" >
+    <link rel="prev" title="EdgeFrame name" href="name.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> EdgeFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="name.html" title="EdgeFrame name"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="rename_columns.html" title="EdgeFrame rename_columns"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="edgeframe-quantiles">
+<h1><a class="reference internal" href="index.html"><span class="doc">EdgeFrame</span></a>  quantiles<a class="headerlink" href="#edgeframe-quantiles" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="quantiles">
+<code class="descname">quantiles</code><span class="sig-paren">(</span><em>self</em>, <em>column_name</em>, <em>quantiles</em><span class="sig-paren">)</span><a class="headerlink" href="#quantiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>New frame with Quantiles and their values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_name</strong> : unicode</p>
+<blockquote>
+<div><p>The column to calculate quantiles.</p>
+</div></blockquote>
+<p><strong>quantiles</strong> : list</p>
+<blockquote>
+<div><p>What is being requested.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>A new frame with two columns (float64): requested Quantiles and their respective values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Calculate quantiles on the given column.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
+column <em>final_sale_price</em>:</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  final_sale_price</span>
+<span class="go">=====================</span>
+<span class="go">[0]               100</span>
+<span class="go">[1]               250</span>
+<span class="go">[2]                95</span>
+<span class="go">[3]               179</span>
+<span class="go">[4]               315</span>
+<span class="go">[5]               660</span>
+<span class="go">[6]               540</span>
+<span class="go">[7]               420</span>
+<span class="go">[8]               250</span>
+<span class="go">[9]               335</span>
+</pre></div>
+</div>
+<p>To calculate 10th, 50th, and 100th quantile:</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">quantiles</span><span class="p">(</span><span class="s1">&#39;final_sale_price&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>A new Frame containing the requested Quantiles and their respective values
+will be returned :</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  Quantiles  final_sale_price_QuantileValue</span>
+<span class="go">==============================================</span>
+<span class="go">[0]       10.0                            95.0</span>
+<span class="go">[1]       50.0                           250.0</span>
+<span class="go">[2]      100.0                           660.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 13, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
