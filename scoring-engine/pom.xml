@@ -62,6 +62,12 @@
             <groupId>org.trustedanalytics</groupId>
             <artifactId>hadoop-utils</artifactId>
             <version>0.6.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.stream</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
