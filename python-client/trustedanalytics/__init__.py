@@ -20,6 +20,7 @@
 trustedanalytics package init, public API
 """
 import sys
+
 if not sys.version_info[:2] == (2, 7):
     raise EnvironmentError("Python 2.7 required.  Detected version: %s.%s.%s" % tuple(sys.version_info[:3]))
 del sys
@@ -37,6 +38,7 @@ from trustedanalytics.core.model import _BaseModel
 from trustedanalytics.core.ui import inspect_settings
 from trustedanalytics.core.admin import release
 
+
 from trustedanalytics.rest.atkserver import server
 connect = server.connect
 
@@ -51,9 +53,12 @@ except Exception as e:
 
 
 def _refresh_api_namespace():
-    from trustedanalytics.core.api import api_globals
+    from trustedanalytics.core.api import api_globals, filter_item_for_globals
     for item in api_globals:
-        globals()[item.__name__] = item
+        x = filter_item_for_globals(item)
+        if x:
+            globals()[x.__name__] = x
+
     del api_globals
 
 _refresh_api_namespace()

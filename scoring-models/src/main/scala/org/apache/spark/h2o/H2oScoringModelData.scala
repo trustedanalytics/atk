@@ -14,11 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.survivalanalysis
+package org.apache.spark.h2o
 
-import org.apache.spark.ml.regression.CoxPhModel
-
-case class CoxPhData(coxModel: CoxPhModel, featureColumns: List[String], timeColumn: String, censorColumn: String) {
-  require(featureColumns != null && featureColumns.nonEmpty, "featureColumns must not be null nor empty")
-  require(coxModel != null, "coxModel must not be null")
-}
+/**
+ * Trained H2O model data
+ *
+ * @param modelName H2O model name
+ * @param pojo POJO (Plain Old Java Object)
+ * @param labelColumn Label column in train frame
+ * @param observationColumns Observation columns in train frame
+ */
+case class H2oScoringModelData(modelName: String, pojo: String, labelColumn: String, observationColumns: List[String])

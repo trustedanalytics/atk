@@ -28,7 +28,7 @@ class ColumnTest extends WordSpec {
     }
 
     "allow alpha-numeric with a1-?'|.~ for column names" in {
-        Column("a1-?'|.~", str)
+      Column("a1-?'|.~", str)
     }
 
     "not allow spaces in column names" in {

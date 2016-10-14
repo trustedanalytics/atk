@@ -34,6 +34,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Collaborative filtering predict
+ *
  */
 @PluginDoc(oneLine = "Collaborative Filtering Predict (ALS).",
   extended = """See :ref:`Collaborative Filtering Train
