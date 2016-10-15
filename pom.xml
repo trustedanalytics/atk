@@ -1299,6 +1299,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.beanshell</groupId>
                         <artifactId>bsh-core</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>xom</groupId>
+                        <artifactId>xom</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.beanshell</groupId>
+                        <artifactId>bsh-core</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
