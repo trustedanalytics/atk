@@ -51,7 +51,7 @@ case class H2oRandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to b
                                              @ArgDoc("""Number of trees in the random forest.""") numTrees: Int = 50,
                                              @ArgDoc("""Maximum depth of the tree.""") maxDepth: Int = 20,
                                              @ArgDoc("""For numerical columns (real/int), build a histogram of (at least) this many bins.""") numBins: Int = 20,
-                                             @ArgDoc("""Minimum number of rows to assign to terminal nodes.""") minRows: Int = 10,
+                                             @ArgDoc("""Minimum number of rows to assign to terminal nodes.""") minRows: Int = 2,
                                              @ArgDoc(
                                                """Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt", "onethird".
 If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".""") featureSubsetCategory: String = "auto",
@@ -96,14 +96,15 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   /**
    * Get the number of variables randomly sampled as candidates at each split
    */
-  private def getMtries: Int = {
+  def getMtries: Int = {
     val ncols = observationColumns.length
     featureSubsetCategory match {
       case "auto" => -1
-      case "sqrt" => Math.max(Math.sqrt(ncols).toInt, 1)
-      case "onethird" => Math.max(ncols / 3, 1)
+      case "sqrt" => Math.max(Math.sqrt(ncols).ceil.toInt, 1)
+      case "onethird" => Math.max((ncols / 3.0).ceil.toInt, 1)
+      case "log2" => Math.max((math.log(ncols) / math.log(2)).ceil.toInt, 1)
       case "all" => ncols
-      case _ => throw new IllegalArgumentException("""Feature subset category must be "auto", "all", "sqrt", "onethird"""")
+      case _ => throw new IllegalArgumentException("""Feature subset category must be "auto", "all", "sqrt", "log2", "onethird"""")
     }
   }
 
@@ -112,7 +113,7 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
    * @param frameColumns Columns in training frame
    * @return Columns to ignore
    */
-  private def getIgnoredColumns(frameColumns: Array[String]): Array[String] = {
+  def getIgnoredColumns(frameColumns: Array[String]): Array[String] = {
     frameColumns.diff(observationColumns :+ valueColumn)
   }
 }
