@@ -87,7 +87,7 @@ Request
 
 
 
-    **min_rows** : int32 (default=10)
+    **min_rows** : int32 (default=2)
 
     ..
 
