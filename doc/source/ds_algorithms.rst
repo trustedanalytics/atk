@@ -39,7 +39,8 @@ Timeseries Algorithms
 =====================
 -   `Autoregressive Exogenous Model (ARX)  <python_api/models/model-arx/index.html>`_
 -   `Autoregressive Integrated Moving Average Model (ARIMA) <python_api/models/model-arima/index.html>`_
-
+-   `Autoregressive Integrated Moving Average with Exogenous variables Model (ARIMAX) <python_api/models/model-arimax/index.html>`_
+-   `Moving Average with Exogenous variables Model (MAX) <python_api/models/model-max/index.html>`_
 
 Graph Algorithms
 ================
