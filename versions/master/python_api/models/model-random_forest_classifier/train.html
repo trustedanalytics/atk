@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestClassifierModel" href="index.html" >
-    <link rel="next" title="Models LassoModel" href="../model-lasso/index.html" >
+    <link rel="next" title="Models CoxPhModel" href="../model-cox_ph/index.html" >
     <link rel="prev" title="RandomForestClassifierModel test" href="test.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="../model-lasso/index.html" title="Models LassoModel"
+        <a href="../model-cox_ph/index.html" title="Models CoxPhModel"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -127,7 +127,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=1329666772</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-1103116499</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build Random Forests Classifier model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -165,7 +165,7 @@
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=1329666772)</p>
+<p><strong>seed</strong> : int32 (default=-1103116499)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -229,7 +229,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 18, 2016.
+      Last updated on Oct 20, 2016.
       </li>
     </ul>
     </div>

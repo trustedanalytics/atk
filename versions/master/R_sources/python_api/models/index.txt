@@ -5,30 +5,30 @@ Models
 **Classes**
 
 .. toctree::
-    GmmModel <model-gmm/index.rst>
-    LinearRegressionModel <model-linear_regression/index.rst>
-    PrincipalComponentsModel <model-principal_components/index.rst>
+    LibsvmModel <model-libsvm/index.rst>
+    DaalLinearRegressionModel <model-daal_linear_regression/index.rst>
+    H2oRandomForestRegressorPrivateModel <model-h2o_random_forest_regressor_private/index.rst>
+    RandomForestClassifierModel <model-random_forest_classifier/index.rst>
     CoxPhModel <model-cox_ph/index.rst>
+    GmmModel <model-gmm/index.rst>
+    ArxModel <model-arx/index.rst>
+    ArimaModel <model-arima/index.rst>
+    DaalKMeansModel <model-daal_k_means/index.rst>
+    DaalNaiveBayesModel <model-daal_naive_bayes/index.rst>
+    PrincipalComponentsModel <model-principal_components/index.rst>
+    CollaborativeFilteringModel <model-collaborative_filtering/index.rst>
+    KMeansModel <model-k_means/index.rst>
+    DaalPrincipalComponentsModel <model-daal_principal_components/index.rst>
+    SvmModel <model-svm/index.rst>
+    LdaModel <model-lda/index.rst>
     LogisticRegressionModel <model-logistic_regression/index.rst>
     MaxModel <model-max/index.rst>
-    KMeansModel <model-k_means/index.rst>
-    DaalLinearRegressionModel <model-daal_linear_regression/index.rst>
-    ArimaxModel <model-arimax/index.rst>
-    DaalKMeansModel <model-daal_k_means/index.rst>
-    CollaborativeFilteringModel <model-collaborative_filtering/index.rst>
-    NaiveBayesModel <model-naive_bayes/index.rst>
-    H2oRandomForestRegressorPrivateModel <model-h2o_random_forest_regressor_private/index.rst>
-    RandomForestRegressorModel <model-random_forest_regressor/index.rst>
-    LdaModel <model-lda/index.rst>
-    DaalNaiveBayesModel <model-daal_naive_bayes/index.rst>
-    LibsvmModel <model-libsvm/index.rst>
-    PowerIterationClusteringModel <model-power_iteration_clustering/index.rst>
-    RandomForestClassifierModel <model-random_forest_classifier/index.rst>
     LassoModel <model-lasso/index.rst>
-    SvmModel <model-svm/index.rst>
-    ArxModel <model-arx/index.rst>
-    DaalPrincipalComponentsModel <model-daal_principal_components/index.rst>
-    ArimaModel <model-arima/index.rst>
+    ArimaxModel <model-arimax/index.rst>
+    NaiveBayesModel <model-naive_bayes/index.rst>
+    LinearRegressionModel <model-linear_regression/index.rst>
+    RandomForestRegressorModel <model-random_forest_regressor/index.rst>
+    PowerIterationClusteringModel <model-power_iteration_clustering/index.rst>
 
 .. toctree::
     :hidden:
