@@ -81,11 +81,10 @@ object ModelPublishFormat extends EventLogging {
     var urls = Array.empty[URL]
     var byteArray: Array[Byte] = null
     var libraryPaths: Set[String] = Set.empty[String]
-    var tempDirectory: Path = null
 
     try {
       // Extract files to temporary directory so that dynamic library names are not changed
-      tempDirectory = getTemporaryDirectory
+      val tempDirectory = getTemporaryDirectory
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
@@ -136,7 +135,6 @@ object ModelPublishFormat extends EventLogging {
     }
     finally {
       IOUtils.closeQuietly(tarFile)
-      FileUtils.deleteQuietly(new File(tempDirectory.toString))
     }
 
   }
