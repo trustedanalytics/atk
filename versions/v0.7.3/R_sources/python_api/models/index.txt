@@ -7,7 +7,6 @@ Models
 .. toctree::
     LibsvmModel <model-libsvm/index.rst>
     DaalLinearRegressionModel <model-daal_linear_regression/index.rst>
-    H2oRandomForestRegressorPrivateModel <model-h2o_random_forest_regressor_private/index.rst>
     RandomForestClassifierModel <model-random_forest_classifier/index.rst>
     CoxPhModel <model-cox_ph/index.rst>
     GmmModel <model-gmm/index.rst>
