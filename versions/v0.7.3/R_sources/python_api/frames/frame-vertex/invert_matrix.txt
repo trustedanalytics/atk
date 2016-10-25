@@ -1,0 +1,38 @@
+
+:doc:`VertexFrame <index>`  invert_matrix
+*****************************************
+
+------
+
+
+.. function:: invert_matrix(self, column_names)
+
+    |ALPHA|
+    Inverts a matrix.
+
+
+    :Parameters:
+
+        **column_names** : list
+
+        ..
+
+            The list of columns of the matrix to be inverted.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A pseudo-inverted matrix or runtime exception if the matrix is singular and cannot be inverted.
+    The algorithm consists of the following steps:
+
+    1. Load the matrix data from HDFS into a frame
+    2. Convert the frame into a RowMatrix
+    2. Invert the RowMatrix generating a DenseMatrix object
+    3. Convert the DenseMatrix matrix into a frame
+    4. Save the frame to HDFS

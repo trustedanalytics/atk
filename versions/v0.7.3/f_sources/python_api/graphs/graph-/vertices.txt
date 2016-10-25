@@ -1,0 +1,19 @@
+.. _python_api/graphs/graph-/vertices:
+
+
+:doc:`Graph <index>`  vertices
+******************************
+
+------
+
+
+.. attribute:: vertices
+
+    Vertex frame collection
+
+
+    :Parameters:
+
+    Examples
+    --------
+    See :doc:`here <__init__>` for example usage in graph construction.

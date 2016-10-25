@@ -1,0 +1,32 @@
+
+:doc:`GiraphCollaborativeFilteringModel <index>`  __init__
+**********************************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a new Collaborative Filtering Recommend model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+
+    For details about Collaborative Filter Recommend modelling,
+    see :ref:`Collaborative Filter <CollaborativeFilteringNewPlugin_Summary>`.

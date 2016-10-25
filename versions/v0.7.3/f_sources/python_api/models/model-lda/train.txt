@@ -1,0 +1,138 @@
+.. _python_api/models/model-lda/train:
+
+
+:doc:`LdaModel <index>`  train
+******************************
+
+------
+
+
+.. function:: train(self, frame, document_column_name, word_column_name, word_count_column_name, max_iterations=20, alpha=1.10000002384, beta=1.10000002384, num_topics=10, random_seed=None)
+
+    |ALPHA|
+    Creates Latent Dirichlet Allocation model
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            Input frame data.
+
+
+
+        **document_column_name** : unicode
+
+        ..
+
+            Column Name for documents.
+            Column should contain a str value.
+
+
+
+        **word_column_name** : unicode
+
+        ..
+
+            Column name for words.
+            Column should contain a str value.
+
+
+
+        **word_count_column_name** : unicode
+
+        ..
+
+            Column name for word count.
+            Column should contain an int32 or int64 value.
+
+
+
+        **max_iterations** : int32 (default=20)
+
+        ..
+
+            The maximum number of iterations that the algorithm will execute.
+            The valid value range is all positive int.
+            Default is 20.
+
+
+
+        **alpha** : float32 (default=1.10000002384)
+
+        ..
+
+            The :term:`hyperparameter` for document-specific distribution over topics.
+            Mainly used as a smoothing parameter in :term:`Bayesian inference`.
+            Larger value implies that documents are assumed to cover all topics
+            more uniformly; smaller value implies that documents are more
+            concentrated on a small subset of topics.
+            Valid value range is all positive float greater than or equal to 1.
+             Default is 0.1.
+
+
+
+        **beta** : float32 (default=1.10000002384)
+
+        ..
+
+            The :term:`hyperparameter` for word-specific distribution over topics.
+            Mainly used as a smoothing parameter in :term:`Bayesian inference`.
+            Larger value implies that topics contain all words more uniformly and
+            smaller value implies that topics are more concentrated on a small
+            subset of words.
+            Valid value range is all positive float greater than or equal to 1.
+            Default is 0.1.
+
+
+
+        **num_topics** : int32 (default=10)
+
+        ..
+
+            The number of topics to identify in the LDA model.
+            Using fewer topics will speed up the computation, but the extracted topics
+            might be more abstract or less specific; using more topics will
+            result in more computation but lead to more specific topics.
+            Valid value range is all positive int.
+            Default is 10.
+
+
+
+        **random_seed** : int64 (default=None)
+
+        ..
+
+            An optional random seed.
+            The random seed is used to initialize the pseudorandom number generator
+            used in the LDA model. Setting the random seed to the same value every
+            time the model is trained, allows LDA to generate the same topic distribution
+            if the corpus and LDA parameters are unchanged.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            The data returned is composed of multiple components\:
+
+                          |   **Frame** : *topics_given_doc*
+                          |       Conditional probabilities of topic given document.
+                          |   **Frame** : *word_given_topics*
+                          |       Conditional probabilities of word given topic.
+                          |   **Frame** : *topics_given_word*
+                          |       Conditional probabilities of topic given word.
+                          |   **str** : *report*
+                          |       The configuration and learning curve report for Latent Dirichlet
+            Allocation as a multiple line str.
+    See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

@@ -1,0 +1,47 @@
+.. _python_api/models/model-lda/predict:
+
+
+:doc:`LdaModel <index>`  predict
+********************************
+
+------
+
+
+.. function:: predict(self, document)
+
+    |ALPHA|
+    Predict conditional probabilities of topics given document.
+
+
+    :Parameters:
+
+        **document** : list
+
+        ..
+
+            Document whose topics are to be predicted. 
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Dictionary containing predicted topics.
+            The data returned is composed of multiple keys\:
+
+            |   **list of doubles** | *topics_given_doc*
+            |       List of conditional probabilities of topics given document.
+            |   **int** : *new_words_count*
+            |       Count of new words in test document not present in training set.
+            |   **double** | *new_words_percentage*
+            |       Percentage of new words in test document.
+    Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
+    The input document is represented as a list of strings
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

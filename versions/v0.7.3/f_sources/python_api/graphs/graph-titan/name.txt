@@ -1,0 +1,33 @@
+.. _python_api/graphs/graph-titan/name:
+
+
+:doc:`TitanGraph <index>`  name
+*******************************
+
+------
+
+
+.. attribute:: name
+
+    Set or get the name of the graph object.
+
+
+    :Parameters:
+
+    Change or retrieve graph object identification.
+    Identification names must start with a letter and are limited to
+    alphanumeric characters and the ``_`` character.
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> my_graph.name
+        "abc"
+
+        >>> my_graph.name = "xyz"
+        >>> my_graph.name
+        "xyz"
+

@@ -1,0 +1,28 @@
+.. _python_api/models/model-naive_bayes/publish:
+
+
+:doc:`NaiveBayesModel <index>`  publish
+***************************************
+
+------
+
+
+.. function:: publish(self)
+
+    |ALPHA|
+    Creates a scoring engine tar file.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            The HDFS path to the tar file.
+    Creates a tar file with the trained Naive Bayes Model
+    The tar file is used as input to the scoring engine to predict the class of an observation.

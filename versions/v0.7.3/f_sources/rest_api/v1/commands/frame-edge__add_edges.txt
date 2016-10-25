@@ -1,0 +1,150 @@
+.. _rest_api/v1/commands/frame-edge__add_edges:
+
+
+
+--------------------------------------------
+:doc:`Commands <index>` frame:edge/add_edges
+--------------------------------------------
+
+Add edges to a graph.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame:edge/add_edges
+
+:arguments:
+
+
+    **edge_frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **source_frame** : Frame
+
+    ..
+
+        Frame that will be the source of
+        the edge data.
+
+
+
+    **column_name_for_source_vertex_id** : unicode
+
+    ..
+
+        column name for a unique id for
+        each source vertex (this is not the system defined _vid).
+
+
+
+    **column_name_for_dest_vertex_id** : unicode
+
+    ..
+
+        column name for a unique id for
+        each destination vertex (this is not the system defined _vid).
+
+
+
+    **column_names** : list (default=None)
+
+    ..
+
+        Column names to be used as properties for each vertex,
+        None means use all columns,
+        empty list means use none.
+
+
+
+    **create_missing_vertices** : bool (default=False)
+
+    ..
+
+        True to create missing vertices for edge (slightly slower),
+        False to drop edges pointing to missing vertices.
+        Defaults to False.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Includes appending to a list of existing edges.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

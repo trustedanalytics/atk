@@ -1,0 +1,306 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Models DaalKMeansModel &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models" href="../index.html" >
+    <link rel="next" title="DaalKMeansModel __init__" href="new.html" >
+    <link rel="prev" title="ArimaModel train" href="../model-arima/train.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" accesskey="U">Models</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../model-arima/train.html" title="ArimaModel train"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="new.html" title="DaalKMeansModel __init__"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="models-daalkmeansmodel">
+<h1><a class="reference internal" href="../index.html"><span class="doc">Models</span></a> DaalKMeansModel<a class="headerlink" href="#models-daalkmeansmodel" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="DaalKMeansModel">
+<em class="property">class </em><code class="descname">DaalKMeansModel</code><a class="headerlink" href="#DaalKMeansModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entity DaalKMeansModel</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><span class="doc">last_read_date</span></a></td>
+<td>Read-only property - Last time this model&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><span class="doc">name</span></a></td>
+<td>Set or get the name of the model object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><span class="doc">status</span></a></td>
+<td>Read-only property - Current model life cycle status.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#daalkmeansmodel-init"><span class="std std-ref">__init__</span></a>(self[, name, _info])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Create a &#8216;new&#8217; instance of a DAAL k-means model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><span class="doc">predict</span></a>(self, frame[, observation_columns, label_column])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Predict the cluster assignments for the data points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><span class="doc">publish</span></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><span class="doc">train</span></a>(self, frame, observation_columns[, column_scalings, k, max_iterations, ...])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates DAAL KMeans Model from train frame.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="daalkmeansmodel-init"></span><dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+Create a &#8216;new&#8217; instance of a DAAL k-means model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of DaalKMeansModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>k-means <a class="reference internal" href="../model-random_forest_regressor/new.html#r1" id="id1">[R1]</a> is an unsupervised algorithm used to partition
+the data into &#8216;k&#8217; clusters.
+Each observation can belong to only one cluster, the cluster with the nearest
+mean.
+The k-means model is initialized, trained on columns of a frame, and used to
+predict cluster assignments for a frame.</p>
+<p>This model runs the DAAL implementation of k-means[R2]_. The K-Means clustering
+algorithm computes centroids using the Lloyd method[R3]_</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/K-means_clustering">https://en.wikipedia.org/wiki/K-means_clustering</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R2]</td><td><a class="reference external" href="https://software.intel.com/en-us/daal">https://software.intel.com/en-us/daal</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R3]</td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Lloyd%27s_algorithm">https://en.wikipedia.org/wiki/Lloyd%27s_algorithm</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
+<p>Consider the following frame containing two columns.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data   name</span>
+<span class="go">===================</span>
+<span class="go">[0]    2.0  ab</span>
+<span class="go">[1]    1.0  cd</span>
+<span class="go">[2]    7.0  ef</span>
+<span class="go">[3]    1.0  gh</span>
+<span class="go">[4]    9.0  ij</span>
+<span class="go">[5]    2.0  kl</span>
+<span class="go">[6]    0.0  mn</span>
+<span class="go">[7]    6.0  op</span>
+<span class="go">[8]    5.0  qr</span>
+<span class="go">[9]  120.0  outlier</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">DaalKMeansModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>  <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{u&#39;centroids&#39;: {u&#39;Cluster:0&#39;: [120.0], u&#39;Cluster:1&#39;: [3.6666666666666665]},</span>
+<span class="go"> u&#39;cluster_size&#39;: {u&#39;Cluster:0&#39;: 1, u&#39;Cluster:1&#39;: 9}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data   name     distance_from_cluster_0  distance_from_cluster_1  predicted_cluster</span>
+<span class="go">========================================================================================</span>
+<span class="go">[0]    2.0  ab                       13924.0            2.77777777778        1</span>
+<span class="go">[1]    1.0  cd                       14161.0            7.11111111111        1</span>
+<span class="go">[2]    7.0  ef                       12769.0            11.1111111111        1</span>
+<span class="go">[3]    1.0  gh                       14161.0            7.11111111111        1</span>
+<span class="go">[4]    9.0  ij                       12321.0            28.4444444444        1</span>
+<span class="go">[5]    2.0  kl                       13924.0            2.77777777778        1</span>
+<span class="go">[6]    0.0  mn                       14400.0            13.4444444444        1</span>
+<span class="go">[7]    6.0  op                       12996.0            5.44444444444        1</span>
+<span class="go">[8]    5.0  qr                       13225.0            1.77777777778        1</span>
+<span class="go">[9]  120.0  outlier                      0.0            13533.4444444        0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 20, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

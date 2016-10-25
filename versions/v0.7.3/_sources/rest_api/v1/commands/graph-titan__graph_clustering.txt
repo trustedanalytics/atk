@@ -1,0 +1,109 @@
+
+
+----------------------------------------------------
+:doc:`Commands <index>` graph:titan/graph_clustering
+----------------------------------------------------
+
+Performs graph clustering over an initial titan graph.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:titan/graph_clustering
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **edge_distance** : unicode
+
+    ..
+
+        Column name for the edge distance.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Performs graph clustering over an initial titan graph using a distributed edge collapse algorithm.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

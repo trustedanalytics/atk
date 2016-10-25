@@ -1,0 +1,120 @@
+.. _rest_api/v1/commands/graph__graphx_label_propagation:
+
+
+
+------------------------------------------------------
+:doc:`Commands <index>` graph/graphx_label_propagation
+------------------------------------------------------
+
+|ALPHA|
+Implements the label propagation computation on a graph by invoking graphx api.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/graphx_label_propagation
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **max_steps** : int32 (default=10)
+
+    ..
+
+        Number of super-steps before the algorithm terminates. Default = 10
+
+
+
+    **output_vertex_property_name** : unicode (default=propagatedLabel)
+
+    ..
+
+        The name of the column containing the propagated label value.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+For detailed information on the algorithm, please see: http://arxiv.org/abs/0709.2938
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        The original graph with the additional label for each vertex
+
+

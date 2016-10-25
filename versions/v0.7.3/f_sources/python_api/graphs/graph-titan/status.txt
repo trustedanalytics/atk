@@ -1,0 +1,29 @@
+.. _python_api/graphs/graph-titan/status:
+
+
+:doc:`TitanGraph <index>`  status
+*********************************
+
+------
+
+
+.. attribute:: status
+
+    Read-only property - Current graph life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the graph.
+    One of three statuses: Active, Dropped, Finalized
+    -   Active:    Entity is available for use
+    -   Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+    -   Finalized: Entity's data has been deleted

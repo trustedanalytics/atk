@@ -1,0 +1,33 @@
+.. _python_api/frames/frame-vertex/loadhive:
+
+
+:doc:`VertexFrame <index>`  loadhive
+************************************
+
+------
+
+
+.. function:: loadhive(self, query)
+
+    Append data from a hive table into an existing (possibly empty) frame
+
+
+    :Parameters:
+
+        **query** : unicode
+
+        ..
+
+            Initial query to run at load time
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            the initial frame with the hive data appended
+    Append data from a hive table into an existing (possibly empty) frame

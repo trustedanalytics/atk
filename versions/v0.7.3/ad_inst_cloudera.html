@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Cloudera Hadoop 5 Configuration &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="System Requirements" href="ad_reqs.html" >
+    <link rel="next" title="Package Installation" href="ad_inst_ta1.html" >
+    <link rel="prev" title="Physical Machine Configuration" href="ad_inst_pre_cloudera.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_reqs.html" accesskey="U">System Requirements</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_inst_pre_cloudera.html" title="Physical Machine Configuration"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_inst_ta1.html" title="Package Installation"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="cloudera-hadoop-5-configuration">
+<span id="ad-inst-cloudera"></span><h1>Cloudera Hadoop 5 Configuration<a class="headerlink" href="#cloudera-hadoop-5-configuration" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#install-cloudera-manager" id="id19">Install Cloudera Manager</a></li>
+<li><a class="reference internal" href="#proxy-and-parcel-info-in-cloudera-manager" id="id20">Proxy and Parcel Info in Cloudera Manager</a></li>
+<li><a class="reference internal" href="#submit-license-file" id="id21">Submit License File</a></li>
+<li><a class="reference internal" href="#specifying-hosts" id="id22">Specifying Hosts</a></li>
+<li><a class="reference internal" href="#cdh-parcel-repository" id="id23"><abbr title="Cloudera Hadoop">CDH</abbr> Parcel Repository</a></li>
+<li><a class="reference internal" href="#java-encryption" id="id24">Java Encryption</a></li>
+<li><a class="reference internal" href="#ssh-login-credentials" id="id25">SSH Login Credentials</a></li>
+<li><a class="reference internal" href="#cluster-installation" id="id26">Cluster Installation</a></li>
+<li><a class="reference internal" href="#host-configuration" id="id27">Host Configuration</a></li>
+<li><a class="reference internal" href="#cdh-services-to-install" id="id28"><abbr title="Cloudera Hadoop">CDH</abbr> Services to Install</a></li>
+<li><a class="reference internal" href="#customize-role-assignments" id="id29">Customize Role Assignments</a></li>
+<li><a class="reference internal" href="#database-setup" id="id30">Database Setup</a></li>
+<li><a class="reference internal" href="#review-changes" id="id31">Review Changes</a></li>
+<li><a class="reference internal" href="#finishing-up-in-cloudera-manager" id="id32">Finishing Up In Cloudera Manager</a></li>
+<li><a class="reference internal" href="#final-settings-and-tests" id="id33">Final Settings and Tests</a></li>
+</ul>
+</div>
+<p>This guide discusses the process of configuring Cloudera Hadoop 5
+on a physical or virtual cluster.</p>
+<div class="section" id="install-cloudera-manager">
+<h2>Install Cloudera Manager<a class="headerlink" href="#install-cloudera-manager" title="Permalink to this headline">¶</a></h2>
+<p>The Cloudera Manager must be downloaded and installed.
+For instructions, see the Cloudera website
+(<a class="reference external" href="http://www.cloudera.com/content/support/en/downloads/cloudera_manager/cm-5-1-0.html">http://www.cloudera.com/content/support/en/downloads/cloudera_manager/cm-5-1-0.html</a>).</p>
+</div>
+<div class="section" id="proxy-and-parcel-info-in-cloudera-manager">
+<span id="index-0"></span><h2>Proxy and Parcel Info in Cloudera Manager<a class="headerlink" href="#proxy-and-parcel-info-in-cloudera-manager" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>On a web browser, go to the Cloudera Manager.</li>
+<li>Click the <em>Cloudera Manager</em> hyperlink graphic on the top left portion of
+the window</li>
+<li>Click the <em>Administration</em> drop-down along the top of the window, then
+select <em>Settings</em></li>
+<li>Select the <em>Network</em> button along the menu pane to the left</li>
+<li>In the <em>Proxy Server</em> field, enter the proxy qualified name, for example,
+<code class="docutils literal"><span class="pre">proxy.my.company.com</span></code></li>
+<li>In the <em>Proxy Port</em> field, enter the proxy port number</li>
+<li>Select the <em>Parcels</em> button along the menu pane to the left<ol class="loweralpha">
+<li>Overwrite the field that says
+<code class="docutils literal"><span class="pre">http://archive.cloudera.com/cdh5/parcels/latest/</span></code> with
+<code class="docutils literal"><span class="pre">http//archive.cloudera.com/cdh5/parcels/5.3.1/</span></code></li>
+</ol>
+</li>
+<li>Hit the <em>Save Changes</em> button to the top right of the active menu</li>
+<li>Hit the admin drop-down menu at the top right corner of the window and
+logout</li>
+<li>Log back in using the same admin username password combo</li>
+</ol>
+</div>
+<div class="section" id="submit-license-file">
+<h2>Submit License File<a class="headerlink" href="#submit-license-file" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Acquire the Cloudera license file.</li>
+<li>Under the <em>Cloudera Enterprise</em> column, click on the empty text field to
+the left of the Upload button</li>
+<li>Select the license file</li>
+<li>Hit the <em>Upload</em> button</li>
+<li>Hit <em>Continue</em> on the bottom right of the window</li>
+</ol>
+</div>
+<div class="section" id="specifying-hosts">
+<span id="index-1"></span><h2>Specifying Hosts<a class="headerlink" href="#specifying-hosts" title="Permalink to this headline">¶</a></h2>
+<p>This step connects the master node to the rest of the cluster.
+The syntax used to search for hostnames is identical to what can be found in
+the <code class="docutils literal"><span class="pre">/etc/hosts</span></code> file or by <abbr title="Domain Name Service">DNS</abbr> lookup.</p>
+<p>Hit <em>Continue</em> through the &#8220;Thank you for choosing Cloudera Manager and <abbr title="Cloudera Hadoop">CDH</abbr>&#8221;
+window.
+In the text field presented, enter the hostnames of each node in the following
+syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">master</span><span class="o">.</span><span class="n">clustername</span><span class="o">.</span><span class="n">cluster</span>
+<span class="n">node</span><span class="p">[</span><span class="mo">01</span><span class="o">-</span><span class="mo">03</span><span class="p">]</span><span class="o">.</span><span class="n">clustername</span><span class="o">.</span><span class="n">cluster</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal"><span class="pre">clustername</span></code> is the name of the cluster, and <code class="docutils literal"><span class="pre">[01-03]</span></code> is the range
+of slave nodes in the cluster (<code class="docutils literal"><span class="pre">[01-07]</span></code> for an 8 node cluster,
+<code class="docutils literal"><span class="pre">[01-15]</span></code> for a 16 node cluster).</p>
+<p>Hit <em>Search</em>, and make sure that the computer detects as many hosts as there
+are nodes in the cluster.
+See <a class="reference internal" href="#fig-11-01"><span>Fig. 11.1</span></a> for examples.
+If all correct hosts are selected, hit <em>Continue</em>.
+Otherwise, click <em>New Search</em>.</p>
+<div class="figure align-center" id="id1">
+<span id="fig-11-01"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_specify_host.png"><img alt="R_images/ad_inst_cloudera_specify_host.png" src="R_images/ad_inst_cloudera_specify_host.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.1
+Specify hosts for your CDH cluster installation.</span></p>
+</div>
+</div>
+<div class="section" id="cdh-parcel-repository">
+<span id="index-2"></span><h2><abbr title="Cloudera Hadoop">CDH</abbr> Parcel Repository<a class="headerlink" href="#cdh-parcel-repository" title="Permalink to this headline">¶</a></h2>
+<p>The repository/proxy information should populate the parcel list in a minute.
+If not, click on <em>More Options</em> field to reconfigure.
+Make sure <code class="docutils literal"><span class="pre">CDH-5.3.1-1.cdh5.3.1.p).3</span></code> is selected under <em>Remote Parcel
+Repository</em> (see <a class="reference internal" href="#fig-11-02"><span>Fig. 11.2</span></a>) and then hit
+<em>Continue</em>.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-11-02"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_select_repo.png"><img alt="R_images/ad_inst_cloudera_select_repo.png" src="R_images/ad_inst_cloudera_select_repo.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.2
+Select Repository</span></p>
+</div>
+</div>
+<div class="section" id="java-encryption">
+<span id="index-3"></span><h2>Java Encryption<a class="headerlink" href="#java-encryption" title="Permalink to this headline">¶</a></h2>
+<p>Java encryption is not currently supported.</p>
+</div>
+<div class="section" id="ssh-login-credentials">
+<h2>SSH Login Credentials<a class="headerlink" href="#ssh-login-credentials" title="Permalink to this headline">¶</a></h2>
+<p>Fill out appropriate login information for <abbr title="Cloudera Hadoop">CDH</abbr> administrator user.</p>
+</div>
+<div class="section" id="cluster-installation">
+<span id="index-4"></span><h2>Cluster Installation<a class="headerlink" href="#cluster-installation" title="Permalink to this headline">¶</a></h2>
+<p>The next couple of windows are just progress bars.
+If any of them fail and turn red, sometimes just hitting <em>Retry</em> will fix the
+problem nodes. See <a class="reference internal" href="#fig-11-03"><span>Fig 11.3</span></a>.</p>
+<p>Hit <em>Continue</em> button when it lights up after the progress bar fills.
+You will be greeted by more progress bars.
+Wait and hit <em>Continue</em> when they finish too.</p>
+<div class="figure align-center" id="id5">
+<span id="fig-11-03"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_cluster_installation.png"><img alt="R_images/ad_inst_cloudera_cluster_installation.png" src="R_images/ad_inst_cloudera_cluster_installation.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.3
+Cluster Installation</span></p>
+</div>
+</div>
+<div class="section" id="host-configuration">
+<span id="index-5"></span><h2>Host Configuration<a class="headerlink" href="#host-configuration" title="Permalink to this headline">¶</a></h2>
+<p>When the cluster installation finishes, look for any critical errors.
+Take note of anything that doesn&#8217;t have a green check mark next to it and
+resolve the issue. See <a class="reference internal" href="#fig-11-4"><span>Fig. 11.4</span></a>.</p>
+<p>Click <em>Finish</em></p>
+<div class="figure align-center" id="id7">
+<span id="fig-11-4"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_validations.png"><img alt="R_images/ad_inst_cloudera_validations.png" src="R_images/ad_inst_cloudera_validations.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.4
+Host Configuration</span></p>
+</div>
+</div>
+<div class="section" id="cdh-services-to-install">
+<span id="index-6"></span><h2><abbr title="Cloudera Hadoop">CDH</abbr> Services to Install<a class="headerlink" href="#cdh-services-to-install" title="Permalink to this headline">¶</a></h2>
+<p>Choose the <abbr title="Cloudera Hadoop">CDH</abbr> 5 services to install on your cluster.
+The following windows will show the process of installing services
+and roles on each node in the cluster.
+This is the Trusted Analytics Platform default setup.</p>
+<p>In the &#8220;Choose a combination of services to install&#8221; dialogue, select the
+&#8220;Custom Services&#8221; button.
+In the drop-down menu, mark the following boxes:</p>
+<ul class="simple">
+<li>HBase</li>
+<li>HDFS</li>
+<li>Spark</li>
+<li>YARN (MR2 Included)</li>
+<li>ZooKeeper</li>
+</ul>
+<p>See <a class="reference internal" href="#fig-11-05"><span>Fig. 11.5</span></a>.
+Click <em>Continue</em>.</p>
+<div class="figure align-center" id="id9">
+<span id="fig-11-05"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_cdh_services.png"><img alt="R_images/ad_inst_cloudera_cdh_services.png" src="R_images/ad_inst_cloudera_cdh_services.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.5
+Custom CDH Services</span></p>
+</div>
+</div>
+<div class="section" id="customize-role-assignments">
+<span id="index-7"></span><h2>Customize Role Assignments<a class="headerlink" href="#customize-role-assignments" title="Permalink to this headline">¶</a></h2>
+<p>This page allows designation of which roles the different nodes will take up.
+In a default loadout, almost all of these fields will be left to their default,
+but there are four that need to be changed.</p>
+<ol class="arabic simple">
+<li>Under the HBase section, click on the <em>HBase Thrift Server</em> dialogue and
+select the &#8220;master&#8221; node of the cluster</li>
+<li>Under the <abbr title="Hadoop Distributed File System">HDFS</abbr> section, click on the <em>Secondary Name Node</em> dialogue and
+select &#8220;node01&#8221; of the cluster</li>
+<li>Under the <em>YARN</em> section, click on the <em>Job History Server</em> dialogue and
+select &#8220;node01&#8221; of the cluster</li>
+<li>Under the <em>ZooKeeper</em> section, click on the <em>Server</em> dialogue and select
+&#8220;node01&#8221;, &#8220;node02&#8221; and &#8220;node03&#8221; of the cluster</li>
+</ol>
+<p>Leave all other fields in their default values and click <em>Continue</em>.</p>
+<p>See <a class="reference internal" href="#fig-11-06"><span>Fig. 11.6</span></a> for changes to make near the top:</p>
+<div class="figure align-center" id="id11">
+<span id="fig-11-06"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_hbase.png"><img alt="R_images/ad_inst_cloudera_hbase.png" src="R_images/ad_inst_cloudera_hbase.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.6
+Hbase</span></p>
+</div>
+<p>See <a class="reference internal" href="#fig-11-07"><span>Fig. 11.7</span></a> for changes to make near the bottom:</p>
+<div class="figure align-center" id="id13">
+<span id="fig-11-07"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_yarn.png"><img alt="R_images/ad_inst_cloudera_yarn.png" src="R_images/ad_inst_cloudera_yarn.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.7
+Yarn</span></p>
+</div>
+</div>
+<div class="section" id="database-setup">
+<span id="index-8"></span><h2>Database Setup<a class="headerlink" href="#database-setup" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;Database Host Name&#8221; field should auto-populate with the hostname of the
+system on which Cloudera Manager is installed.
+If not, fill that in.</p>
+<p>Click <em>Test Connection</em>.
+See <a class="reference internal" href="#fig-11-08"><span>Fig 11.8</span></a>.
+If successful, click <em>Continue</em>.</p>
+<div class="figure align-center" id="id15">
+<span id="fig-11-08"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_database_setup.png"><img alt="R_images/ad_inst_cloudera_database_setup.png" src="R_images/ad_inst_cloudera_database_setup.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.8
+Database Setup</span></p>
+</div>
+</div>
+<div class="section" id="review-changes">
+<h2>Review Changes<a class="headerlink" href="#review-changes" title="Permalink to this headline">¶</a></h2>
+<p>In the &#8220;Review Changes&#8221; window, all fields should remain their default values.</p>
+<p>Click <em>Continue</em>.</p>
+</div>
+<div class="section" id="finishing-up-in-cloudera-manager">
+<h2>Finishing Up In Cloudera Manager<a class="headerlink" href="#finishing-up-in-cloudera-manager" title="Permalink to this headline">¶</a></h2>
+<p>The next page requires no interaction. Just more loading bars.</p>
+<ol class="arabic simple">
+<li>Wait for all services to start up, then hit <em>Continue</em>.</li>
+<li>In the <em>Congratulations!</em> window, click <em>Finish</em>.</li>
+<li>Some of the health indicators may be orange or red in the first few moments
+of the cluster&#8217;s life.
+Wait a minute for them to all turn green.</li>
+<li>In the Cloudera Manager page, change the name of the cluster by hitting the
+drop down arrow to the right of the <em>Cluster 1</em> heading then clicking
+<em>Rename Cluster</em>.
+See <a class="reference internal" href="#fig-11-09"><span>Fig. 11.9</span></a>.</li>
+<li>In the Cloudera Manager, hit the admin drop-down at the top right corner of
+the screen and select <em>Change Password</em>.
+Change the password as desired.</li>
+<li>Select the Spark service from the homescreen.<ol class="arabic">
+<li>Select <em>Configuration</em> along the top Spark menu.</li>
+<li>Select <em>Worker Default Group</em> along the left side menu pane.</li>
+<li>Select the <em>Work Directory</em> field and change the value to a directory
+with the capacity to store lots of temporaty data (the /mnt directory
+for virtual clusers).</li>
+</ol>
+</li>
+</ol>
+<div class="figure align-center" id="id17">
+<span id="fig-11-09"></span><a class="reference internal image-reference" href="R_images/ad_inst_cloudera_finishing.png"><img alt="R_images/ad_inst_cloudera_finishing.png" src="R_images/ad_inst_cloudera_finishing.png" style="width: 40%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 11.9
+Finishing Up In Cloudera Manager</span></p>
+</div>
+</div>
+<div class="section" id="final-settings-and-tests">
+<h2>Final Settings and Tests<a class="headerlink" href="#final-settings-and-tests" title="Permalink to this headline">¶</a></h2>
+<p>Test functionality of <abbr title="Hadoop Distributed File System">HDFS</abbr>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 12, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

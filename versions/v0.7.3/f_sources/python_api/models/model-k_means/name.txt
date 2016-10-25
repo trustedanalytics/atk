@@ -1,0 +1,33 @@
+.. _python_api/models/model-k_means/name:
+
+
+:doc:`KMeansModel <index>`  name
+********************************
+
+------
+
+
+.. attribute:: name
+
+    Set or get the name of the model object.
+
+
+    :Parameters:
+
+    Change or retrieve model object identification.
+    Identification names must start with a letter and are limited to
+    alphanumeric characters and the ``_`` character.
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> my_model.name
+        "abc"
+
+        >>> my_model.name = "xyz"
+        >>> my_model.name
+        "xyz"
+

@@ -1,0 +1,33 @@
+.. _python_api/frames/frame-edge/last_read_date:
+
+
+:doc:`EdgeFrame <index>`  last_read_date
+****************************************
+
+------
+
+
+.. attribute:: last_read_date
+
+    Last time this frame's data was accessed.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Date string of the last time this frame's data was accessed
+    Examples
+    --------
+
+    .. code::
+
+        >>> frame.last_read_date
+        datetime.datetime(2015, 10, 8, 15, 48, 8, 791000, tzinfo=tzoffset(None, -25200))
+

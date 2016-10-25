@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-edge/filter:
+
+
+:doc:`EdgeFrame <index>`  filter
+********************************
+
+------
+
+
+.. function:: filter(self, predicate)
+
+    Select all rows which satisfy a predicate.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row to a boolean; rows that answer False are dropped from the Frame
+
+
+    Modifies the current frame to save defined rows and delete everything
+    else.
+
+    Examples
+    --------
+
+        >>> frame.inspect()
+        [#]  name      age  tenure  phone
+        ====================================
+        [0]  Fred       39      16  555-1234
+        [1]  Susan      33       3  555-0202
+        [2]  Thurston   65      26  555-4510
+        [3]  Judy       44      14  555-2183
+        >>> frame.filter(lambda row: row.tenure >= 15)  # keep only people with 15 or more years tenure
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  name      age  tenure  phone
+        ====================================
+        [0]  Fred       39      16  555-1234
+        [1]  Thurston   65      26  555-4510
+
+    More information on a |UDF| can be found at :doc:`/ds_apir`.

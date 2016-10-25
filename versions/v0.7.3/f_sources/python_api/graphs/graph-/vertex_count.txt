@@ -1,0 +1,25 @@
+.. _python_api/graphs/graph-/vertex_count:
+
+
+:doc:`Graph <index>`  vertex_count
+**********************************
+
+------
+
+
+.. attribute:: vertex_count
+
+    Get the total number of vertices in the graph.
+
+
+    :Parameters:
+
+    Returns
+    -------
+    int32
+        The number of vertices in the graph.
+
+
+    Examples
+    --------
+    See :doc:`here <__init__>` for example usage in graph construction.

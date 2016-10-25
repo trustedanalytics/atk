@@ -1,0 +1,73 @@
+
+:doc:`TitanGraph <index>`  graphx_label_propagation
+***************************************************
+
+------
+
+
+.. function:: graphx_label_propagation(self, max_steps=10, output_vertex_property_name='propagatedLabel')
+
+    |ALPHA|
+    Implements the label propagation computation on a graph by invoking graphx api.
+
+
+    :Parameters:
+
+        **max_steps** : int32 (default=10)
+
+        ..
+
+            Number of super-steps before the algorithm terminates. Default = 10
+
+
+
+        **output_vertex_property_name** : unicode (default=propagatedLabel)
+
+        ..
+
+            The name of the column containing the propagated label value.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            The original graph with the additional label for each vertex
+    For detailed information on the algorithm, please see: http://arxiv.org/abs/0709.2938
+
+    Examples
+    --------
+    >>> graph = ta.Graph()
+
+    >>> graph.define_vertex_type('source')
+    [===Job Progress===]
+    >>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
+    [===Job Progress===]
+    >>> graph.define_edge_type('edges','source', 'source', directed=False)
+    [===Job Progress===]
+    >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
+    [===Job Progress===]
+    >>> result = graph.graphx_label_propagation()
+    [===Job Progress===]
+    >>> result['source'].inspect()
+        [#]  _vid  _label  source  label  propagatedLabel
+        =================================================
+        [0]     5  source       5    5.0                5
+        [1]     1  source       1    1.0                1
+        [2]     2  source       2    1.0                2
+        [3]     3  source       3    5.0                2
+        [4]     4  source       4    5.0                4
+
+    >>> graph.edges['edges'].inspect()
+        [#]  _eid  _src_vid  _dest_vid  _label  weight
+        ==============================================
+        [0]     6         1          2  edges        1
+        [1]     7         1          3  edges        1
+        [2]     9         1          4  edges        1
+        [3]     8         2          3  edges        1
+        [4]    10         4          5  edges        1
+

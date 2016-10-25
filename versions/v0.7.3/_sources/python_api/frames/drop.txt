@@ -1,0 +1,69 @@
+
+:doc:`trustedanalytics <index>`  drop
+*************************************
+
+------
+
+
+.. function:: drop(items=None)
+
+    drop() serves as an alias to drop_frames, drop_graphs, and drop_models.
+
+
+    :Parameters:
+
+        **items** : List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself). (default=None)
+
+        ..
+
+            Deletes the specified frames, graphs, and models from the server.
+
+
+
+
+    :Returns:
+
+        : int
+
+        ..
+
+            Number of items deleted.
+    It accepts multiple parameters, which can contain strings (the name of the frame, graph, or model),
+    proxy objects (the frame, graph, or model object itself), or a list of strings and/or proxy objects.
+    If the item provided is a string and no frame, graph, or model is found with the specified name,
+    no action is taken.
+
+    If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
+
+    Examples
+    --------
+
+    Given a frame, model, and graph like:
+
+        .. code::
+
+            >>> my_frame = ta.Frame()
+
+            >>> my_model = ta.KMeansModel()
+            [===Job Progress===]
+
+            >>> my_graph = ta.Graph()
+            -etc-
+
+    The drop() command can be used to delete the frame, model, and graph from the server.  It returns the number
+    of items that have been deleted.
+
+        .. code::
+
+            >>> ta.drop(my_frame, my_model, my_graph)
+            3
+
+    Alternatively, we can pass the object's string name to drop() like:
+
+    .. code::
+
+            >>> my_frame = ta.Frame(name='example_frame')
+
+            >>> ta.drop('example_frame')
+            1
+

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Physical Machine Configuration &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="System Requirements" href="ad_reqs.html" >
+    <link rel="next" title="Cloudera Hadoop 5 Configuration" href="ad_inst_cloudera.html" >
+    <link rel="prev" title="System Requirements" href="ad_reqs.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_reqs.html" accesskey="U">System Requirements</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_reqs.html" title="System Requirements"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_inst_cloudera.html" title="Cloudera Hadoop 5 Configuration"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="physical-machine-configuration">
+<span id="ad-inst-pre-cloudera"></span><h1>Physical Machine Configuration<a class="headerlink" href="#physical-machine-configuration" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pre-configuration" id="id1">Pre-Configuration</a></li>
+<li><a class="reference internal" href="#base-configuration" id="id2">Base Configuration</a><ul>
+<li><a class="reference internal" href="#client-side-dns" id="id3">1. Client-side <abbr title="Domain Name Service">DNS</abbr></a></li>
+<li><a class="reference internal" href="#firewall" id="id4">2. Firewall</a></li>
+<li><a class="reference internal" href="#selinux" id="id5">3. SELINUX</a></li>
+<li><a class="reference internal" href="#default-repositories" id="id6">4. Default Repositories</a></li>
+<li><a class="reference internal" href="#proxy-settings" id="id7">5. Proxy Settings</a></li>
+<li><a class="reference internal" href="#syncronize-system-packages" id="id8">6. Syncronize System Packages</a></li>
+<li><a class="reference internal" href="#primary-cdh-user" id="id9">7. Primary <abbr title="Cloudera Hadoop">CDH</abbr> User</a></li>
+<li><a class="reference internal" href="#ssh-connections" id="id10">8. <em>ssh</em> Connections</a></li>
+<li><a class="reference internal" href="#system-hostname" id="id11">9. System Hostname</a></li>
+<li><a class="reference internal" href="#ulimits" id="id12">10. Ulimits</a></li>
+<li><a class="reference internal" href="#ntp" id="id13">11. NTP</a></li>
+<li><a class="reference internal" href="#reboot" id="id14">12. Reboot</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The following tutorial goes through configuring a new physical machine
+from scratch.
+The first section, called &#8220;Pre-Configuration&#8221;, is a little vague because
+the information can vary between machines.
+The second section, called &#8220;Base Configuration&#8221;, will usually be identical for
+all machines.</p>
+<div class="section" id="pre-configuration">
+<h2>Pre-Configuration<a class="headerlink" href="#pre-configuration" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Configure basic network connectivity.</li>
+<li>Turn off IPV6 (many different ways to do this).</li>
+<li>If applicable, mount any large volume to /mnt* (hint: vi /etc/fstab).</li>
+</ol>
+</div>
+<div class="section" id="base-configuration">
+<h2>Base Configuration<a class="headerlink" href="#base-configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="client-side-dns">
+<h3>1. Client-side <abbr title="Domain Name Service">DNS</abbr><a class="headerlink" href="#client-side-dns" title="Permalink to this headline">¶</a></h3>
+<p>All systems in the cluster must be reachable by <abbr title="Domain Name Service">DNS</abbr>
+or by data in &#8216;/etc/hosts&#8217;.</p>
+</div>
+<div class="section" id="firewall">
+<h3>2. Firewall<a class="headerlink" href="#firewall" title="Permalink to this headline">¶</a></h3>
+<p>The firewall must be disabled:</p>
+<div class="highlight-python"><div class="highlight"><pre>service iptables stop
+chkconfig iptables off
+</pre></div>
+</div>
+</div>
+<div class="section" id="selinux">
+<h3>3. SELINUX<a class="headerlink" href="#selinux" title="Permalink to this headline">¶</a></h3>
+<p>SELINUX must be disabled:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vi</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">selinux</span><span class="o">/</span><span class="n">config</span>
+</pre></div>
+</div>
+<p>Change:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SELINUX</span><span class="o">=</span><span class="n">enforcing</span>
+</pre></div>
+</div>
+<p>To:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SELINUX</span><span class="o">=</span><span class="n">disabled</span>
+</pre></div>
+</div>
+<p>Or:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SELINUX</span><span class="o">=</span><span class="n">permissive</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Systems will need full reboot before changes take effect.</p>
+</div>
+</div>
+<div class="section" id="default-repositories">
+<h3>4. Default Repositories<a class="headerlink" href="#default-repositories" title="Permalink to this headline">¶</a></h3>
+<p>System default yum repos must be functional.</p>
+</div>
+<div class="section" id="proxy-settings">
+<span id="index-0"></span><h3>5. Proxy Settings<a class="headerlink" href="#proxy-settings" title="Permalink to this headline">¶</a></h3>
+<p>If working behind a proxy, system proxy settings must be configured.</p>
+</div>
+<div class="section" id="syncronize-system-packages">
+<h3>6. Syncronize System Packages<a class="headerlink" href="#syncronize-system-packages" title="Permalink to this headline">¶</a></h3>
+<p>System packages must be syncronized with default repositories:</p>
+<div class="highlight-python"><div class="highlight"><pre>yum clean all
+yum distro-sync
+</pre></div>
+</div>
+</div>
+<div class="section" id="primary-cdh-user">
+<h3>7. Primary <abbr title="Cloudera Hadoop">CDH</abbr> User<a class="headerlink" href="#primary-cdh-user" title="Permalink to this headline">¶</a></h3>
+<p>Cloudera supports use of root or sudo user as administration user.
+If using sudo, user must have full nopassword sudo privileges.</p>
+</div>
+<div class="section" id="ssh-connections">
+<h3>8. <em>ssh</em> Connections<a class="headerlink" href="#ssh-connections" title="Permalink to this headline">¶</a></h3>
+<p>Using the primary <abbr title="Cloudera Hadoop">CDH</abbr> user, every system in the cluster must be able to
+communicate via <em>ssh</em> to all other systems in the cluster.</p>
+</div>
+<div class="section" id="system-hostname">
+<h3>9. System Hostname<a class="headerlink" href="#system-hostname" title="Permalink to this headline">¶</a></h3>
+<p>Set the hostname for each system in the cluster.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Limiting host names to lower-case alphanumeric characters is recommended.</p>
+</div>
+</div>
+<div class="section" id="ulimits">
+<h3>10. Ulimits<a class="headerlink" href="#ulimits" title="Permalink to this headline">¶</a></h3>
+<p>The following definitions must exist in /etc/security/limits.conf</p>
+<div class="highlight-python"><div class="highlight"><pre>vi /etc/security/limits.conf
+
+*                soft    nofile          32768
+*                hard    nofile          32768
+hadoop           -       nofile          32768
+hadoop           -       nproc           unlimited
+hdfs             -       nofile          32768
+hbase            -       nofile          32768
+spark            soft    nofile          65535
+spark            hard    nofile          65535
+spark            -       nproc           32768
+</pre></div>
+</div>
+</div>
+<div class="section" id="ntp">
+<h3>11. NTP<a class="headerlink" href="#ntp" title="Permalink to this headline">¶</a></h3>
+<p>NTP must be installed and properly configured on all cluster systems.
+Also NTP services should start on system boot:</p>
+<div class="highlight-python"><div class="highlight"><pre>service ntpd start
+chkconfig ntpd on
+</pre></div>
+</div>
+<p>All systems in cluster must be in time-sync with one-another.</p>
+</div>
+<div class="section" id="reboot">
+<h3>12. Reboot<a class="headerlink" href="#reboot" title="Permalink to this headline">¶</a></h3>
+<p>Once all configuration has been done, rebooting all cluster systems is
+recommended to properly activate all of the changes.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 12, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+
+:doc:`CollaborativeFilteringModel <index>`  score
+*************************************************
+
+------
+
+
+.. function:: score(self, user_id, item_id)
+
+    |BETA|
+    Collaborative Filtering Predict (ALS).
+
+
+    :Parameters:
+
+        **user_id** : int32
+
+        ..
+
+            A user id from the first column of the input frame
+
+
+
+        **item_id** : int32
+
+        ..
+
+            An item id from the first column of the input frame
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns a double representing the probability if the user(i) to like product (j)
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.

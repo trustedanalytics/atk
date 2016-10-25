@@ -1,0 +1,25 @@
+.. _python_api/graphs/graph-/last_read_date:
+
+
+:doc:`Graph <index>`  last_read_date
+************************************
+
+------
+
+
+.. attribute:: last_read_date
+
+    Read-only property - Last time this frame's data was accessed.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Date string of the last time this frame's data was accessed

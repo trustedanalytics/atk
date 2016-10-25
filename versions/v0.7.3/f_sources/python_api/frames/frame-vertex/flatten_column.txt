@@ -1,0 +1,39 @@
+.. _python_api/frames/frame-vertex/flatten_column:
+
+
+:doc:`VertexFrame <index>`  flatten_column
+******************************************
+
+------
+
+
+.. function:: flatten_column(self, column, delimiter=None)
+
+    |DEPRECATED|
+    Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
+
+
+    :Parameters:
+
+        **column** : str
+
+        ..
+
+            The name of the column to be flattened.
+
+
+
+        **delimiter** : str (default=None)
+
+        ..
+
+            The delimiter string for the column to flatten. The default is to use a ',' delimiter.
+
+
+    Spread data to multiple rows based on cell data.
+
+    Splits cells in the specified column into multiple rows according to a string
+    delimiter.
+    New rows are a full copy of the original row, but the specified column only
+    contains one value.
+    The original row is deleted.

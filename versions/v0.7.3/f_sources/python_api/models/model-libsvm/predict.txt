@@ -1,0 +1,51 @@
+.. _python_api/models/model-libsvm/predict:
+
+
+:doc:`LibsvmModel <index>`  predict
+***********************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    New frame with new predicted label column.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose labels are to be
+            predicted.
+            Default is the columns the LIBSVM model was trained on.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new frame containing the original frame's columns and a column
+            *predicted_label* containing the label calculated for each observation.
+    Predict the labels for a test frame and create a new frame revision with
+    existing columns and a new predicted label's column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
+

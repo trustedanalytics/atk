@@ -1,0 +1,68 @@
+.. _python_api/frames/frame-edge/covariance:
+
+
+:doc:`EdgeFrame <index>`  covariance
+************************************
+
+------
+
+
+.. function:: covariance(self, data_column_names)
+
+    Calculate covariance for exactly two columns.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of two columns from which
+            to compute the covariance.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Covariance of the two columns.
+    Notes
+    -----
+    This method applies only to columns containing numerical data.
+
+    Examples
+    --------
+    Consider Frame *my_frame*, which contains the data
+
+        >>> my_frame.inspect()
+        [#]  idnum  x1   x2   x3   x4
+        ===============================
+        [0]      0  1.0  4.0  0.0  -1.0
+        [1]      1  2.0  3.0  0.0  -1.0
+        [2]      2  3.0  2.0  1.0  -1.0
+        [3]      3  4.0  1.0  2.0  -1.0
+        [4]      4  5.0  0.0  2.0  -1.0
+
+
+    my_frame.covariance computes the covariance on the pair of columns provided.
+
+        >>> my_frame.covariance(["x1", "x2"])
+        [===Job Progress===]
+
+            -2.5
+        >>> my_frame.covariance(["x1", "x4"])
+        [===Job Progress===]
+
+            0.0
+        >>> my_frame.covariance(["x2", "x3"])
+        [===Job Progress===]
+
+            -1.5
+
+
+

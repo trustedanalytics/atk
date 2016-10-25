@@ -1,0 +1,36 @@
+.. _python_api/frames/frame-edge/row_count:
+
+
+:doc:`EdgeFrame <index>`  row_count
+***********************************
+
+------
+
+
+.. attribute:: row_count
+
+    Number of rows in the current frame.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : int
+
+        ..
+
+            The number of rows in the frame
+    Counts all of the rows in the frame.
+
+    Examples
+    --------
+    Get the number of rows:
+
+    .. code::
+
+        >>> frame.row_count
+        4
+
