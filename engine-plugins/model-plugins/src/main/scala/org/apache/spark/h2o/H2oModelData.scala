@@ -51,7 +51,7 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
    * @return Generated model
    */
   def toGenModel: GenModel = {
-    H2oModelCache.getGenmodel(this)
+    H2oModelCache.getCachedGenmodel(this)
   }
 
   /**
@@ -59,12 +59,12 @@ case class H2oModelData(modelName: String, pojo: String, labelColumn: String, ob
    * @return Class files
    */
   def getModelClassFiles: List[File] = {
-    H2oModelCache.getClassFiles(this)
+    H2oModelCache.getCachedClassFiles(this)
   }
 }
 
 object H2oModelCache {
-
+  import H2oModelClassLoader._
   //Object with cached class
   private case class GeneratedClass(genModel: GenModel, genModelDir: File)
   private val maxCacheSize = 10
@@ -110,15 +110,18 @@ object H2oModelCache {
   /**
    * Get generated H2O model from cache
    */
-  def getGenmodel(data: H2oModelData): GenModel = cache.get(data).genModel
+  def getCachedGenmodel(data: H2oModelData): GenModel = cache.get(data).genModel
 
+  def getCachedClassFiles(data: H2oModelData): List[File] = getClassFiles(cache.get(data).genModelDir)
+}
+
+object H2oModelClassLoader {
   /**
    * Get class files for generated H2O model from cache
    */
-  def getClassFiles(data: H2oModelData): List[File] = {
+  def getClassFiles(pojoDir: File): List[File] = {
     var files = Array.empty[File]
     try {
-      val pojoDir = cache.get(data).genModelDir
       files = pojoDir.listFiles(new FilenameFilter() {
         @Override
         def accept(dir: File, name: String): Boolean = {
@@ -150,7 +153,7 @@ object H2oModelCache {
    * Compile POJO
    * @return Directory with compiled classes
    */
-  private def compilePojo(data: H2oModelData): File = {
+  def compilePojo(data: H2oModelData): File = {
     val tmpDir = Files.createTempDirectory(data.modelName)
 
     // write pojo to temporary file
