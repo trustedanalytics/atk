@@ -67,7 +67,7 @@ object H2oModelCache {
   import H2oModelClassLoader._
   //Object with cached class
   private case class GeneratedClass(genModel: GenModel, genModelDir: File)
-  private val maxCacheSize = 10
+  private val maxCacheSize = 100
 
   /**
    * A cache of generated classes.
@@ -80,6 +80,7 @@ object H2oModelCache {
    */
   private val cache = CacheBuilder.newBuilder()
     .maximumSize(maxCacheSize)
+    .weakValues()
     .removalListener(new RemovalListener[H2oModelData, GeneratedClass] {
       override def onRemoval(rm: RemovalNotification[H2oModelData, GeneratedClass]): Unit = {
         deleteDir(rm.getValue.genModelDir)
