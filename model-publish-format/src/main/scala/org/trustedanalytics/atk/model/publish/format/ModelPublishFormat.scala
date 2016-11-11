@@ -136,7 +136,7 @@ object ModelPublishFormat extends EventLogging {
     }
     finally {
       IOUtils.closeQuietly(tarFile)
-      FileUtils.deleteQuietly(new File(tempDirectory.toString))
+      //FileUtils.deleteQuietly(new File(tempDirectory.toString))
     }
 
   }
