@@ -144,8 +144,15 @@ class ScoringService(scoringModel: Model) extends Directives {
             entity(as[String]) {
               args =>
                 this.synchronized {
-                  val path = args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
-                  reviseModelData(modelData, path)
+                  val path = if (args.parseJson.asJsObject.getFields("model-path").size == 1) {
+                    args.parseJson.asJsObject.getFields("model-path")(0).convertTo[String]
+                  }
+                  else {
+                    null
+                  }
+                  //if data contains "force" parameter, then force switch shoudl be true, else false
+                  val force = if (args.parseJson.asJsObject.getFields("force").size == 1) true else false
+                  reviseModelData(modelData, path, force)
                 }
             }
           }
@@ -199,28 +206,33 @@ class ScoringService(scoringModel: Model) extends Directives {
       </html>"""
   }
 
-  private def reviseModelData(md: ModelData, modelPath: String): Route = {
-    try {
-      val revisedModel = ScoringEngineHelper.getModel(modelPath)
-      if (ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel)) {
-        modelData = ModelData(revisedModel, modelPath, new DataOutputFormatJsonProtocol(revisedModel))
-        complete { """{"status": "success"}""" }
-      }
-      else {
-        complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
-          "different than existing model")
-      }
+  private def reviseModelData(md: ModelData, modelPath: String, force: Boolean): Route = {
+    if (modelPath == null) {
+      complete(StatusCodes.BadRequest, "'model-path' is not present in request!")
     }
-    catch {
-      case e: Throwable =>
-        modelData = md
-        e.printStackTrace()
-        if (e.getMessage.contains("File does not exist:")) {
-          complete(StatusCodes.BadRequest, e.getMessage)
+    else {
+      try {
+        val revisedModel = ScoringEngineHelper.getModel(modelPath)
+        if (ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel, force)) {
+          modelData = ModelData(revisedModel, modelPath, new DataOutputFormatJsonProtocol(revisedModel))
+          complete { """{"status": "success"}""" }
         }
         else {
-          complete(StatusCodes.InternalServerError, e.getMessage)
+          complete(StatusCodes.BadRequest, "Revised Model type or input-output parameters names are " +
+            "different than existing model")
         }
+      }
+      catch {
+        case e: Throwable =>
+          modelData = md
+          e.printStackTrace()
+          if (e.getMessage.contains("File does not exist:")) {
+            complete(StatusCodes.BadRequest, e.getMessage)
+          }
+          else {
+            complete(StatusCodes.InternalServerError, e.getMessage)
+          }
+      }
     }
   }
 
