@@ -150,8 +150,13 @@ class ScoringService(scoringModel: Model) extends Directives {
                   else {
                     null
                   }
-                  //if data contains "force" parameter, then force switch shoudl be true, else false
-                  val force = if (args.parseJson.asJsObject.getFields("force").size == 1) true else false
+                  //if request data contains "force = true" , then force switch should be true, else false
+                  val force = if (args.parseJson.asJsObject.getFields("force").size == 1) {
+                    if (args.parseJson.asJsObject.getFields("force")(0).convertTo[String].toLowerCase == "true") true else false
+                  }
+                  else {
+                    false
+                  }
                   reviseModelData(modelData, path, force)
                 }
             }
