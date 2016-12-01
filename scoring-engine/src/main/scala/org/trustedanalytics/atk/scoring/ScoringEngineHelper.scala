@@ -52,7 +52,6 @@ object ScoringEngineHelper extends EventLogging {
     model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
       model.input().deep == revisedModel.input().deep &&
       model.output().deep == revisedModel.output().deep
-
   }
 
   def getModel(modelFilePath: String): Model = {
