@@ -211,14 +211,14 @@ class ScoringService(scoringModel: Model) extends Directives {
       </html>"""
   }
 
-  private def reviseModelData(md: ModelData, modelPath: String, force: Boolean): Route = {
+  private def reviseModelData(md: ModelData, modelPath: String, force: Boolean = false): Route = {
     if (modelPath == null) {
       complete(StatusCodes.BadRequest, "'model-path' is not present in request!")
     }
     else {
       try {
         val revisedModel = ScoringEngineHelper.getModel(modelPath)
-        if (ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel, force)) {
+        if (force || ScoringEngineHelper.isModelCompatible(modelData.model, revisedModel)) {
           modelData = ModelData(revisedModel, modelPath, new DataOutputFormatJsonProtocol(revisedModel))
           complete { """{"status": "success"}""" }
         }

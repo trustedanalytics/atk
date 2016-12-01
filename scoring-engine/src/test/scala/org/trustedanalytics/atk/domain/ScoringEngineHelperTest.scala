@@ -97,13 +97,6 @@ class ScoringEngineHelperTest extends WordSpec with Matchers {
   }
 
   "ScoringEngineHelper" should {
-    "successfully compare two models with difference input output parameters when force=true" in {
-      val force = true
-      assert(ScoringEngineHelper.isModelCompatible(oldModel, revisedModelDifferentParam, force))
-    }
-  }
-
-  "ScoringEngineHelper" should {
     "fail on comparing two models with difference model type" in {
       assert(!ScoringEngineHelper.isModelCompatible(oldModel, revisedModelDifferentModelType))
     }

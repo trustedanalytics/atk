@@ -48,17 +48,10 @@ object ScoringEngineHelper extends EventLogging {
    * @return true if model compatible i.e model type is same and model input/output parameters are same
    *         else returns false
    */
-  def isModelCompatible(model: Model, revisedModel: Model, force: Boolean = false): Boolean = {
-    if (force) {
-      warn("Revising model in 'force' mode, model will revised despite of different input/ouput")
-      model.modelMetadata().modelType == revisedModel.modelMetadata().modelType
-    }
-    else {
-      info("Revising model in 'force=false' mode, model type and input/ouput should be matched with existing model.")
-      model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
-        model.input().deep == revisedModel.input().deep &&
-        model.output().deep == revisedModel.output().deep
-    }
+  def isModelCompatible(model: Model, revisedModel: Model): Boolean = {
+    model.modelMetadata().modelType == revisedModel.modelMetadata().modelType &&
+      model.input().deep == revisedModel.input().deep &&
+      model.output().deep == revisedModel.output().deep
   }
 
   def getModel(modelFilePath: String): Model = {
