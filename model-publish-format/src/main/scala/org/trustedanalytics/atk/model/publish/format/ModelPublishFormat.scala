@@ -138,11 +138,11 @@ object ModelPublishFormat extends EventLogging {
       IOUtils.closeQuietly(tarFile)
 
       /**
-        * Following code for temp dirctory deletion is commented because:
-        *   H2O models failing due to deletion of temp file, as it mightbe loading libraries dynamically.
-        *   Users may need to clean up temp directories to address the disc space issues,
-        *   if revise model functionality is used several time creating several temp directories.
-        */
+       * Following code for temp dirctory deletion is commented because:
+       *   H2O models failing due to deletion of temp file, as it mightbe loading libraries dynamically.
+       *   Users may need to clean up temp directories to address the disc space issues,
+       *   if revise model functionality is used several time creating several temp directories.
+       */
       //FileUtils.deleteQuietly(new File(tempDirectory.toString))
     }
 
