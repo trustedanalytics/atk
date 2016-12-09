@@ -141,7 +141,8 @@ def return_loopy_belief_propagation(json_result):
 @postprocessor('frame/export_to_csv','frame/export_to_json','model:libsvm/publish',
                'model:random_forest_regressor/publish','model:random_forest_classifier/publish',
                'model:k_means/publish', 'model:lda/publish', 'model:naive_bayes/publish',
-               'model:linear_regression/publish', 'model:principal_components/publish', 'model:svm/publish')
+               'model:linear_regression/publish', 'model:principal_components/publish', 'model:svm/publish',
+               'model:h2o_random_forest_regressor_private/publish')
 def return_export_metadata(export_metadata):
     from trustedanalytics import data_catalog
     return data_catalog.publish(export_metadata)['value']
