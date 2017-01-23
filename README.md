@@ -1,5 +1,6 @@
 TAP Analytics Toolkit (AT)
 ==========================
+NOTICE: This project has been deprecated and a majority of it's functionality has been ported to [spark-tk](https://github.com/trustedanalytics/spark-tk).
 
 ## End User Documentation
 
