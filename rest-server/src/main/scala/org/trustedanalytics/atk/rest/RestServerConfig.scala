@@ -89,7 +89,7 @@ object RestServerConfig {
   val serviceMode: String = config.getString("trustedanalytics.atk.api.service-mode")
 
   /** Scheme for Rest Service to bind with (http or https) */
-  val schemeIsHttps: Boolean = config.getBoolean("spray.can.server.ssl-encryption")
+  val schemeIsHttps: Boolean = config.getBoolean("trustedanalytics.atk.spray.can.server.ssl-encryption")
 
   /** Location of the Java keystore file */
   val keyStoreFile: String = config.getString("trustedanalytics.atk.component.archives.rest-server.key-store-file")
