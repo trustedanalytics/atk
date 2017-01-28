@@ -16,7 +16,9 @@
 package org.trustedanalytics.atk.engine.command.mgmt
 
 import java.util.concurrent.TimeUnit
+import java.net._
 
+import org.joda.time.{ DateTimeZone, LocalDateTime }
 import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine.{ EngineConfig, Engine }
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -28,15 +30,20 @@ import org.trustedanalytics.atk.event.EventLogging
 class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends Runnable with EventLogging {
 
   lazy val timeoutMinutes: Long = EngineConfig.yarnMonitorTaskTimeout
+  lazy val timeoutMillis: Long = timeoutMinutes * 60 * 1000
 
   def run(): Unit = {
-    info(s"YarnJobsMonitor started.  Task timeout is $timeoutMinutes minutes.")
+    val localHost = InetAddress.getLocalHost
+    val nowMillis = System.currentTimeMillis()
+    info(s"YarnJobsMonitor started on $localHost at $nowMillis total ms.  Task timeout is $timeoutMinutes minutes (or $timeoutMillis ms).")
     while (true) {
       engine.getCommandsNotComplete().foreach { command =>
         engine.getCommandJobContext(command) match {
-          case Some(context) => if (hasStaleContext(context)) {
-            engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes.  This may indicate that a task is running for a very long time.  Try increasing the 'trustedanalytics.atk.engine.yarn-monitor-task-timeout' config setting."))
-          }
+          case Some(context) =>
+            val (answer, msg) = hasStaleContext(context)
+            if (answer) {
+              engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes.  This may indicate that a task is running for a very long time.  Try increasing the 'trustedanalytics.atk.engine.yarn-monitor-task-timeout' config setting.  Details: $msg"))
+            }
           case None => ; // there is no know YARN job to shutdown (command remains not complete, but this is not the responsibility of a YARN jobs monitor
         }
       }
@@ -44,6 +51,16 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
     }
   }
 
-  def hasStaleContext(context: JobContext): Boolean =
-    System.currentTimeMillis() - context.modifiedOn.getMillis > timeoutMinutes * 60 * 1000
+  def hasStaleContext(context: JobContext): (Boolean, String) = {
+    val localHost = InetAddress.getLocalHost
+    //val nowMillis = System.currentTimeMillis()
+    val now = new LocalDateTime().toDateTime(DateTimeZone.UTC)
+    val nowMillis = now.getMillis
+    val lastModMillis = context.modifiedOn.getMillis
+    val msg = s"YarnJobsMonitor hasStaleContext check called by $localHost: $nowMillis - $lastModMillis > $timeoutMillis"
+    info(msg)
+    //System.currentTimeMillis() - context.modifiedOn.getMillis > timeoutMinutes * 60 * 1000
+    val answer = nowMillis - lastModMillis > timeoutMillis
+    (answer, msg)
+  }
 }

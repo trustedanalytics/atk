@@ -17,12 +17,13 @@
 package org.trustedanalytics.atk.repository
 
 import org.apache.commons.dbcp.BasicDataSource
+import java.net._
 import com.github.tototoshi.slick.GenericJodaSupport
 
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntryTemplate, GarbageCollectionEntry, GarbageCollection, GarbageCollectionTemplate }
 import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.domain.schema.Schema
-import org.joda.time.DateTime
+import org.joda.time.{ LocalDateTime, DateTimeZone, DateTime }
 import scala.slick.driver.JdbcDriver
 import org.flywaydb.core.Flyway
 import spray.json._
@@ -57,6 +58,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
   val genericJodaSupport = new GenericJodaSupport(profile.profile.asInstanceOf[JdbcDriver])
   // Different versions of implicits are imported here based on the driver
   import genericJodaSupport._
+
+  def getNowTime(): DateTime = new LocalDateTime().toDateTime(DateTimeZone.UTC)
 
   // Defining mappings for custom column types
   implicit val schemaColumnType = MappedColumnType.base[Schema, String](
@@ -1230,7 +1233,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     override def insert(jobContext: JobContextTemplate)(implicit session: Session): Try[JobContext] = Try {
-      val m = JobContext(1, jobContext.userId, None, None, jobContext.clientId, new DateTime(), new DateTime(), None, None)
+      val m = JobContext(1, jobContext.userId, None, None, jobContext.clientId, getNowTime(), getNowTime(), None, None)
       jobContextAutoInc.insert(m)
     }
 
@@ -1244,18 +1247,24 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def updateJobServerUri(id: Long, uri: String)(implicit session: Session): Unit = {
       val columns = for (c <- jobContextTable if c.id === id) yield (c.jobServerUri, c.modifiedOn)
-      columns.update(Some(uri), new DateTime)
+      columns.update(Some(uri), getNowTime())
     }
 
     override def updateProgress(id: Long, progress: String)(implicit session: Session): Unit = {
       val columns = for (c <- jobContextTable if c.id === id) yield (c.progress, c.modifiedOn)
-      columns.update(Some(progress), new DateTime)
+      val localHost = InetAddress.getLocalHost
+      //val now = new DateTime
+      val now = getNowTime()
+      val nowMillis = now.getMillis
+      info(s"JobContextTable.updateProgress from host $localHost at $now ($nowMillis)")
+      columns.update(Some(progress), now)
+      //columns.update(Some(progress), new DateTime)
 
     }
 
     override def updateYarnAppName(id: Long, yarnAppName: String)(implicit session: Session): Unit = {
       val columns = for (c <- jobContextTable if c.id === id) yield (c.yarnAppName, c.modifiedOn)
-      columns.update(Some(yarnAppName), new DateTime)
+      columns.update(Some(yarnAppName), getNowTime)
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {
@@ -1278,7 +1287,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     override def lookupRecentlyActive(seconds: Int)(implicit session: Session): Seq[JobContext] = {
-      val recentTime = (new DateTime).minusSeconds(seconds)
+      val recentTime = (getNowTime()).minusSeconds(seconds)
       jobContextTable.where(_.modifiedOn >= recentTime).list
     }
 
