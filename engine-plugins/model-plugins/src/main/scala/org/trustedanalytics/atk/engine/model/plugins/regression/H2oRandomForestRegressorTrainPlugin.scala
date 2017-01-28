@@ -274,7 +274,7 @@ class H2oRandomForestRegressorLocalTrainPlugin extends CommandPlugin[H2oRandomFo
     val sparkLocalDir = tmpDir + "/" + appName + "/spark-local"
     val h2oLogDir = tmpDir + "/" + appName + "/h2o-logs"
     val conf = new SparkConf()
-      .setMaster("local")
+      .setMaster("local[*]")
       .setAppName(this.getClass.getSimpleName + " " + new Date())
     conf.set("spark.driver.allowMultipleContexts", "true")
     conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
